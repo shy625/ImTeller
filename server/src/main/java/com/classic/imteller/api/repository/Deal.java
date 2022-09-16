@@ -8,6 +8,4 @@ import javax.persistence.Entity;
 @Entity
 public class Deal extends BaseEntity {
 
-
-
 }

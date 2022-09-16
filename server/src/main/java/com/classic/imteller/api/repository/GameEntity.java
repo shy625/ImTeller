@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GameEntity {
+public class GameEntity extends BaseEntity {
     @Column(nullable = false, length=20)
     private String session;
 }

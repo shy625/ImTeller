@@ -2,22 +2,27 @@ package com.classic.imteller.api.repository;
 
 import lombok.*;
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "card")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardEntity {
-
-    @Column(nullable = false, length=20)
-    private String grade;
-
-    @Column(nullable = false, length=256)
-    private String effect;
+public class CardEntity extends BaseEntity {
 
     @Column
-    private int detail;
+    private Boolean isNFT;
+
+    @Column(nullable = false, length=256)
+    private String url;
+
+    @Column(nullable = false, length=20)
+    private String title;
+
+    @Column(nullable = false, length=256)
+    private String desc;
+
+    @Column
+    private int recent_price;
 
 }

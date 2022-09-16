@@ -9,24 +9,18 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EffectEntity {
-
-    @Id
-    private int EffectId;
+public class EffectEntity extends BaseEntity {
 
     @Column(nullable = false, length=20)
     private String grade;
 
     @Column(nullable = false, length=256)
-    private String effect;
+    private String description;
+
+    @Column
+    private int effect;
 
     @Column
     private int detail;
-
-    @Column(nullable = false)
-    private LocalDateTime createdDT;
-
-    @Column
-    private LocalDateTime updatedDT;
 
 }
