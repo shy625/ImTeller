@@ -2,14 +2,12 @@ package com.classic.imteller.api.repository;
 
 import lombok.*;
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "effect")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EffectEntity extends BaseEntity {
+public class Effect extends BaseEntity {
 
     @Column(nullable = false, length=20)
     private String grade;
