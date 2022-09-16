@@ -1,18 +1,15 @@
-package com.classic.imteller.api.dto;
+package com.classic.imteller.api.repository;
 
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "effect")
+@Table(name = "card")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EffectEntity {
-
-    @Id
-    private int EffectId;
+public class CardEntity {
 
     @Column(nullable = false, length=20)
     private String grade;
@@ -22,11 +19,5 @@ public class EffectEntity {
 
     @Column
     private int detail;
-
-    @Column(nullable = false)
-    private LocalDateTime createdDT;
-
-    @Column
-    private LocalDateTime updatedDT;
 
 }
