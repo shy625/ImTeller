@@ -20,12 +20,12 @@ public class Card extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="designer_id", nullable = false)
     @OnDelete(action= OnDeleteAction.CASCADE)
-    private User user;
+    private User designer;
 
     @ManyToOne
     @JoinColumn(name="owner_id",nullable = false)
     @OnDelete(action= OnDeleteAction.CASCADE)
-    private User user2;
+    private User owner;
 
     @Column
     private Boolean isNFT;
