@@ -21,9 +21,11 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.javassist:javassist:3.29.1-GA'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	runtimeOnly 'mysql:mysql-connector-java:8.0.29'
 	compileOnly 'org.projectlombok:lombok'
+	compileOnly 'javax.xml.bind:jaxb-api'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
