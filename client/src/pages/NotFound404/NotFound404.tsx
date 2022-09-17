@@ -1,9 +1,11 @@
-import React from "react"
+import React from 'react'
 
+import Layout from 'layout/layout'
 
 export default function NotFound404() {
   return (
-    <div>
-    </div>
+    <Layout>
+      <main>여긴 NotFound404</main>
+    </Layout>
   )
 }

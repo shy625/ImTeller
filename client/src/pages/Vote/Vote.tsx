@@ -1,9 +1,11 @@
-import React from "react"
+import React from 'react'
 
+import Layout from 'layout/layout'
 
 export default function Vote() {
   return (
-    <div>
-    </div>
+    <Layout>
+      <main>여긴 Vote</main>
+    </Layout>
   )
 }
