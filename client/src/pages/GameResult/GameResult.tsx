@@ -1,9 +1,5 @@
-import React from "react"
-
+import React from 'react'
 
 export default function GameResult() {
-  return (
-    <div>
-    </div>
-  )
+  return <div>여긴 GameResult</div>
 }
