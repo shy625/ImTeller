@@ -8,7 +8,16 @@ export default function Main() {
 
   return (
     <Layout>
-      <main>여긴 main</main>
+      <main>
+        여긴 main
+        <button
+          onClick={() => {
+            navigate('/game')
+          }}
+        >
+          시작하기
+        </button>
+      </main>
     </Layout>
   )
 }
