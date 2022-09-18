@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 import Layout from 'layout/layout'
-import TabNavbar from 'pages/FAQ/tabNavbar'
-import TabViewer from 'pages/FAQ/tabViewer'
+import FaqTabNavbar from 'pages/FAQ/faqTabNav'
+import FaqTabViewer from 'pages/FAQ/faqTabViewer'
 
 export default function FAQ() {
   const [tabNo, setTabNo] = useState(0)
@@ -11,9 +11,9 @@ export default function FAQ() {
     <Layout>
       <main>
         여긴 FAQ
-        <TabNavbar setTabNo={setTabNo} />
+        <FaqTabNavbar setTabNo={setTabNo} />
         <hr></hr>
-        <TabViewer tabNo={tabNo} />
+        <FaqTabViewer tabNo={tabNo} />
       </main>
     </Layout>
   )
