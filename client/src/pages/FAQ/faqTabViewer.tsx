@@ -6,7 +6,7 @@ import FaqVoteTab from 'pages/FAQ/faqVoteTab'
 import FaqRankTab from 'pages/FAQ/faqRankTab'
 import FaqNftTab from 'pages/FAQ/faqNftTab'
 
-export default function TabViewer(props: any) {
+export default function FaqTabViewer(props: any) {
   const { tabNo } = props
   const [page, setPage] = useState([0, 1])
   const tabs = {

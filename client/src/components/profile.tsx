@@ -9,12 +9,11 @@ export default function Profile(props: any) {
   return (
     <div
       onClick={() => {
-        navigate(`./mypage/${nickname}`)
+        navigate(`/mypage/${nickname}`)
       }}
     >
-      Profile
+      <img src={profile} alt="" />
       {nickname}
-      {profile}
     </div>
   )
 }
