@@ -71,7 +71,7 @@ export default function Header() {
       <div onClick={() => navigate('/faq')}>FAQ</div>
       {isLoggedIn ? (
         <>
-          <Profile />
+          <Profile nickname={currentUser.nickname} profile={currentUser.profile} />
           <div onClick={handleConnect}>로그아웃</div>
         </>
       ) : (

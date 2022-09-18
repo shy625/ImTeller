@@ -24,7 +24,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/mypage/:userId" element={<Mypage />} />
+        <Route path="/mypage/:nick" element={<Mypage />} />
         <Route path="/signup" element={<Signup signup={true} />} />
         <Route path="/profileEdit" element={<Signup signup={false} />} />
         <Route path="/paint" element={<Paint />} />

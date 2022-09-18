@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function TabNavbar(props: any) {
+export default function FaqTabNav(props: any) {
   const { setTabNo } = props
 
   return (
