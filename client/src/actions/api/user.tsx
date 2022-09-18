@@ -30,6 +30,13 @@ const user = {
       },
     })
   },
+  userDetail(data) {
+    return api({
+      method: 'post',
+      url: `${END_POINT}/detail`,
+      data: data,
+    })
+  },
 }
 
 export default user
