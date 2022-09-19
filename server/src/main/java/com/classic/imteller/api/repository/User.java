@@ -1,5 +1,6 @@
 package com.classic.imteller.api.repository;
 
+import com.classic.imteller.api.controller.UserController;
 import lombok.*;
 import javax.persistence.*;
 import org.hibernate.annotations.OnDelete;
@@ -9,7 +10,14 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User extends BaseEntity {
+
+    @Column(nullable = false, length=256)
+    private String email;
+
+    @Column(nullable = false, length=20)
+    private String password;
 
     @Column(nullable = false, length=20)
     private String nickname;
@@ -17,13 +25,13 @@ public class User extends BaseEntity {
     @Column(nullable = false, length=256)
     private String profile;
 
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int exp;
 
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int win;
 
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int lose;
 
     @Column(nullable = false, length=256)
