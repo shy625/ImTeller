@@ -8,7 +8,6 @@ import user from 'actions/api/user'
 import { setUserDetail } from 'store/modules/user'
 import MypageTabNav from 'pages/Mypage/mypageTabNav'
 import CardList from 'components/cardList'
-import { stat } from 'fs'
 
 export default function Mypage() {
   const dispatch = useDispatch()
