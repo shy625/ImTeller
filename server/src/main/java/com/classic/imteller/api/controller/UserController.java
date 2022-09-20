@@ -1,5 +1,6 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.dto.user.PwCheckDto;
 import com.classic.imteller.api.dto.user.PwmailReqDto;
 import com.classic.imteller.api.dto.user.SignupReqDto;
 import com.classic.imteller.api.repository.User;
@@ -51,14 +52,12 @@ public class UserController {
     // 이메일 중복체크
     @PostMapping("/check/pw")
     @ApiOperation(value = "비밀번호 체크", notes = "맞는 비밀번호인지 체크")
-    public ResponseEntity<String> checkPassword(@RequestBody String password){
-        // 헤더 내에서 nickname을 뽑아내야한다
-        String email = "";
-        Boolean isExists = userService.checkPassword(email, password);
+    public ResponseEntity<String> checkPassword(@RequestBody PwCheckDto pwCheckDto){
+        Boolean isExists = userService.checkPassword(pwCheckDto.getEmail(), pwCheckDto.getPassword());
         if(isExists){
-            return new ResponseEntity<String>("중복된 이메일입니다.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("올바른 비밀번호입니다.", HttpStatus.OK);
         } else{
-            return new ResponseEntity<String>("사용가능한 이메일입니다.", HttpStatus.OK);
+            return new ResponseEntity<String>("잘못된 아이디 혹은 비밀번호입니다.", HttpStatus.FORBIDDEN);
         }
     }
 

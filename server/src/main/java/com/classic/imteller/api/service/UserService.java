@@ -29,8 +29,8 @@ public class UserService {
     // 비밀번호 체크
     @Transactional(readOnly = true)
     public Boolean checkPassword(String email, String password) {
-        // int i = userRepository.countByEmail(email);
-        // return i > 0;
+        User user = userRepository.findByEmail(email);
+        if (user == null || !encoder.matches(password, user.getPassword())) return false;
         return true;
     }
 
@@ -48,7 +48,6 @@ public class UserService {
                 .wallet(null)
                 .build();
         User result = userRepository.save(newUser);
-        System.out.println(result);
         if (result != null) return true;
         else return false;
     }
@@ -61,9 +60,7 @@ public class UserService {
     @Transactional
     public void setNewPw(String email, String newPw) {
         User user = userRepository.findByEmail(email);
-        System.out.println("before: " + user.getPassword());
         user.updatePassword(encoder.encode(newPw));
-        System.out.println("after: " + user.getPassword());
         userRepository.save(user);
     }
 }
