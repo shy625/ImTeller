@@ -30,8 +30,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//swagger
+	// swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	// 보안
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
