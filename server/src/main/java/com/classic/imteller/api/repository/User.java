@@ -37,4 +37,7 @@ public class User extends BaseEntity {
     @Column(length=256)
     private String wallet;
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }

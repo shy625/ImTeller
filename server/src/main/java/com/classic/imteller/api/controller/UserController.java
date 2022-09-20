@@ -1,8 +1,11 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.dto.user.PwmailReqDto;
 import com.classic.imteller.api.dto.user.SignupReqDto;
 import com.classic.imteller.api.repository.User;
+import com.classic.imteller.api.service.EmailService;
 import com.classic.imteller.api.service.UserService;
+import com.classic.imteller.api.service.UtilService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,8 +13,6 @@ import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiOperation;
-import java.security.SecureRandom;
-import java.util.Date;
 
 @Api(value = "유저 API", tags = {"유저"})
 @CrossOrigin("*")
@@ -20,6 +21,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final EmailService emailService;
+    private final UtilService utilService;
 
     // 이메일 중복체크
     @PostMapping("/check/email")
@@ -78,18 +81,21 @@ public class UserController {
         return new ResponseEntity<String>("가입 실패", HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/getpwmail")
+    @PostMapping("/pwmail")
     @ApiOperation(value = "새 비밀번호 메일 전송", notes = "사용자의 이메일로 새롭게 설정된 비밀번호를 전달")
-    public ResponseEntity<String> newPassword(@RequestBody SignupReqDto signupReqDto) {
+    public ResponseEntity<String> newPassword(@RequestBody PwmailReqDto pwmailReqDto) {
+        // 해당하는 이메일이 DB에 존재하는지 여부 확인
+        if (!userService.checkEmail(pwmailReqDto.getEmail())) return new ResponseEntity<String>("존재하지 않는 이메일입니다.", HttpStatus.FORBIDDEN);
 
-        Boolean result = userService.signUp(signupReqDto);
-        // 잘 등록됐으면 그대로 리턴
-        if (result) return new ResponseEntity<String>("가입 성공", HttpStatus.ACCEPTED);
+        // DB에 새로운 비밀번호 등록
+        String newPw = utilService.getRandomPassword(10);
+        userService.setNewPw(pwmailReqDto.getEmail(), newPw);
 
-        // 등록 안됐으면 forbidden 리턴
-        return new ResponseEntity<String>("가입 실패", HttpStatus.FORBIDDEN);
+        // 메일 보내기
+        User user = userService.findUser(pwmailReqDto.getEmail());
+        System.out.println("나" + user);
+        emailService.sendMail(user, newPw);
+        return new ResponseEntity<String>("비밀번호 변경 메일을 전송했습니다.", HttpStatus.ACCEPTED);
     }
-
-
 
 }

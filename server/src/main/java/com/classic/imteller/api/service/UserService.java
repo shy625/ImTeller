@@ -6,25 +6,28 @@ import com.classic.imteller.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     // 이메일 체크
+    @Transactional(readOnly = true)
     public Boolean checkEmail(String email) {
-        int i = userRepository.countByEmail(email);
-        return i > 0;
+        return userRepository.existsByEmail(email);
     }
 
     // 닉네임 체크
+    @Transactional(readOnly = true)
     public Boolean checkNickname(String nickname) {
-        int i = userRepository.countByNickname(nickname);
-        return i > 0;
+        return userRepository.existsByNickname(nickname);
     }
 
-    // 이메일 체크
+    // 비밀번호 체크
+    @Transactional(readOnly = true)
     public Boolean checkPassword(String email, String password) {
         // int i = userRepository.countByEmail(email);
         // return i > 0;
@@ -32,6 +35,7 @@ public class UserService {
     }
 
     // 회원가입
+    @Transactional
     public Boolean signUp(SignupReqDto signupReqDto, String newPw) {
         User newUser = User.builder()
                 .email(signupReqDto.getEmail())
@@ -47,5 +51,19 @@ public class UserService {
         System.out.println(result);
         if (result != null) return true;
         else return false;
+    }
+
+    @Transactional(readOnly = true)
+    public User findUser(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public void setNewPw(String email, String newPw) {
+        User user = userRepository.findByEmail(email);
+        System.out.println("before: " + user.getPassword());
+        user.updatePassword(encoder.encode(newPw));
+        System.out.println("after: " + user.getPassword());
+        userRepository.save(user);
     }
 }

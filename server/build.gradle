@@ -32,6 +32,10 @@ dependencies {
 
 	// swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+	// SMTP 메일 관련
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	// 보안
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
