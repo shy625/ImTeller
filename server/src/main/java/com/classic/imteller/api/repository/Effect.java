@@ -5,8 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Effect extends BaseEntity {
 
     @Column(nullable = false, length=20)
@@ -20,5 +19,12 @@ public class Effect extends BaseEntity {
 
     @Column
     private int detail;
+
+    @Builder
+    public RankingEntity(StudentEntity student, int rankNum, int totalPoint){
+        this.student=student;
+        this.rankNum=rankNum;
+        this.totalPoint = totalPoint;
+    }
 
 }

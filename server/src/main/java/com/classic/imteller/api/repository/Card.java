@@ -40,6 +40,6 @@ public class Card extends BaseEntity {
     private String desc;
 
     @Column
-    private int recent_price;
+    private int recentPrice;
 
 }
