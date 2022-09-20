@@ -1,5 +1,6 @@
 package com.classic.imteller.api.service;
 
+import com.classic.imteller.api.dto.user.DetailResDto;
 import com.classic.imteller.api.dto.user.EditReqDto;
 import com.classic.imteller.api.dto.user.SignupReqDto;
 import com.classic.imteller.api.dto.user.WalletReqDto;
@@ -83,5 +84,17 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         user.updateWallet(wallet);
         userRepository.save(user);
+    }
+
+    @Transactional
+    public DetailResDto getDetail(String nickname) {
+        User user = userRepository.findByNickname(nickname);
+        return DetailResDto.builder()
+                .nickname(user.getNickname())
+                .profile(user.getProfile())
+                .exp(user.getExp())
+                .win(user.getWin())
+                .lose(user.getLose())
+                .createdAt(user.getCreatedAt()).build();
     }
 }
