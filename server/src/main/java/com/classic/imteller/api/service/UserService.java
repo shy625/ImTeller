@@ -1,5 +1,6 @@
 package com.classic.imteller.api.service;
 
+import com.classic.imteller.api.dto.user.EditReqDto;
 import com.classic.imteller.api.dto.user.SignupReqDto;
 import com.classic.imteller.api.repository.User;
 import com.classic.imteller.api.repository.UserRepository;
@@ -62,5 +63,16 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         user.updatePassword(encoder.encode(newPw));
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void edit(EditReqDto editReqDto) {
+        User user = userRepository.findByEmail(editReqDto.getEmail());
+        // 비밀번호 안넣은 케이스 설정
+        if("".equals(user.getPassword())==false && user.getPassword() != null) {
+            String password = user.getPassword();
+            editReqDto.updatePassword(encoder.encode(password));
+        }
+        user.updateUser(editReqDto);
     }
 }

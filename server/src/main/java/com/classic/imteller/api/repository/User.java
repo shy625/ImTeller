@@ -1,6 +1,7 @@
 package com.classic.imteller.api.repository;
 
 import com.classic.imteller.api.controller.UserController;
+import com.classic.imteller.api.dto.user.EditReqDto;
 import lombok.*;
 import javax.persistence.*;
 import org.hibernate.annotations.OnDelete;
@@ -39,5 +40,17 @@ public class User extends BaseEntity {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateUser(EditReqDto editReqDto) {
+        if ("".equals(editReqDto.getPassword()) == false && editReqDto.getPassword()!=null) {
+            this.password = editReqDto.getPassword();
+        }
+        if ("".equals(editReqDto.getNickname()) == false && editReqDto.getNickname()!=null) {
+            this.nickname = editReqDto.getNickname();
+        }
+        if ("".equals(editReqDto.getProfile()) == false && editReqDto.getProfile()!=null) {
+            this.profile = editReqDto.getProfile();
+        }
     }
 }

@@ -1,9 +1,11 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.dto.user.EditReqDto;
 import com.classic.imteller.api.dto.user.PwCheckDto;
 import com.classic.imteller.api.dto.user.PwmailReqDto;
 import com.classic.imteller.api.dto.user.SignupReqDto;
 import com.classic.imteller.api.repository.User;
+import com.classic.imteller.api.repository.UserRepository;
 import com.classic.imteller.api.service.EmailService;
 import com.classic.imteller.api.service.UserService;
 import com.classic.imteller.api.service.UtilService;
@@ -14,6 +16,9 @@ import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Api(value = "유저 API", tags = {"유저"})
 @CrossOrigin("*")
@@ -24,6 +29,8 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
     private final UtilService utilService;
+
+    private final UserRepository userRepository;
 
     // 이메일 중복체크
     @PostMapping("/check/email")
@@ -95,6 +102,44 @@ public class UserController {
         System.out.println("나" + user);
         emailService.sendMail(user, newPw);
         return new ResponseEntity<String>("비밀번호 변경 메일을 전송했습니다.", HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/edit")
+    @ApiOperation(value = "정보 수정", notes = "사용자가 정보를 갱신할 때 사용")
+    public ResponseEntity<String> edit(@RequestBody EditReqDto editReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        // S3 서비스 구현하고 주석 풀기
+//        try {
+//            if(file!=null) {
+//                if (file.getSize() >= 10485760) {
+//                    return new ResponseEntity<String>("이미지 크기 제한은 10MB 입니다.", HttpStatus.FORBIDDEN);
+//                }
+//                String originFile = file.getOriginalFilename();
+//                String originFileExtension = originFile.substring(originFile.lastIndexOf("."));
+//                if (!originFileExtension.equalsIgnoreCase(".jpg") && !originFileExtension.equalsIgnoreCase(".png")
+//                        && !originFileExtension.equalsIgnoreCase(".jpeg")) {
+//                    return new ResponseEntity<String>("jpg, jpeg, png의 이미지 파일만 업로드해주세요", HttpStatus.FORBIDDEN);
+//                }
+//                User user = userRepository.findByEmail(editReqDto.getEmail());
+//                String imgPath = s3Service.upload(user.getProfile(), file);
+//                editReqDto.updateProfile(imgPath);
+//                userService.edit(editReqDto);
+//            } else if(editReqDto.getProfile()!=null && editReqDto.getProfile().equals("reset")) {
+//                User user = userRepository.findByEmail(editReqDto.getEmail());
+//                //이미지 있으면 s3 버킷에서 지움
+//                s3Service.delete(user.getProfile());
+//
+//                //이미지 컬럼 null로 변경
+//                editReqDto.updateProfile("null");
+//                userService.edit(editReqDto);
+//            } else {
+//                userService.edit(editReqDto);
+//            }
+//            return new ResponseEntity<String>("유저 정보수정 성공", HttpStatus.OK);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            return new ResponseEntity<String>("유저 정보수정 실패", HttpStatus.FORBIDDEN);
+//        }
+        return new ResponseEntity<String>("사용자의 정보를 변경했습니다.", HttpStatus.ACCEPTED);
     }
 
 }
