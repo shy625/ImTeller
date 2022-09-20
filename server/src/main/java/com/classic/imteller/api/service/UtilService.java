@@ -1,10 +1,15 @@
-package com.classic.imteller.util;
+package com.classic.imteller.api.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Date;
 
-public class GetRandom {
-    public String getRandomPassword(int size) {
+@Service
+@RequiredArgsConstructor
+public class UtilService {
+    public static String getRandomPassword(int size) {
         char[] charSet = new char[] {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
