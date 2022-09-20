@@ -42,6 +42,10 @@ public class User extends BaseEntity {
         this.password = password;
     }
 
+    public void updateWallet(String wallet) {
+        this.wallet = wallet;
+    }
+
     public void updateUser(EditReqDto editReqDto) {
         if ("".equals(editReqDto.getPassword()) == false && editReqDto.getPassword()!=null) {
             this.password = editReqDto.getPassword();

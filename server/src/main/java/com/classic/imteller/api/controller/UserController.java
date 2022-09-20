@@ -1,9 +1,6 @@
 package com.classic.imteller.api.controller;
 
-import com.classic.imteller.api.dto.user.EditReqDto;
-import com.classic.imteller.api.dto.user.PwCheckDto;
-import com.classic.imteller.api.dto.user.PwmailReqDto;
-import com.classic.imteller.api.dto.user.SignupReqDto;
+import com.classic.imteller.api.dto.user.*;
 import com.classic.imteller.api.repository.User;
 import com.classic.imteller.api.repository.UserRepository;
 import com.classic.imteller.api.service.EmailService;
@@ -140,6 +137,13 @@ public class UserController {
 //            return new ResponseEntity<String>("유저 정보수정 실패", HttpStatus.FORBIDDEN);
 //        }
         return new ResponseEntity<String>("사용자의 정보를 변경했습니다.", HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/wallet")
+    @ApiOperation(value = "지갑 주소 등록", notes = "사용자의 아이디에 지갑 주소를 등록")
+    public ResponseEntity<String> newPassword(@RequestBody WalletReqDto walletReqDto) {
+        userService.setWallet(walletReqDto.getEmail(), walletReqDto.getWallet());
+        return new ResponseEntity<String>("지갑 주소를 등록했습니다.", HttpStatus.ACCEPTED);
     }
 
 }

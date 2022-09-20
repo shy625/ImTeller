@@ -2,6 +2,7 @@ package com.classic.imteller.api.service;
 
 import com.classic.imteller.api.dto.user.EditReqDto;
 import com.classic.imteller.api.dto.user.SignupReqDto;
+import com.classic.imteller.api.dto.user.WalletReqDto;
 import com.classic.imteller.api.repository.User;
 import com.classic.imteller.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -74,5 +75,13 @@ public class UserService {
             editReqDto.updatePassword(encoder.encode(password));
         }
         user.updateUser(editReqDto);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void setWallet(String email, String wallet) {
+        User user = userRepository.findByEmail(email);
+        user.updateWallet(wallet);
+        userRepository.save(user);
     }
 }
