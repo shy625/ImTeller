@@ -8,12 +8,11 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Card extends BaseEntity {
 
     @OneToOne
-    @JoinColumn(name="effect_id",nullable = false)
+    @JoinColumn(name="effect_id", nullable = false)
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Effect effect;
 
@@ -23,7 +22,7 @@ public class Card extends BaseEntity {
     private User designer;
 
     @ManyToOne
-    @JoinColumn(name="owner_id",nullable = false)
+    @JoinColumn(name="owner_id", nullable = false)
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User owner;
 
@@ -37,7 +36,7 @@ public class Card extends BaseEntity {
     private String title;
 
     @Column(nullable = false, length=256)
-    private String desc;
+    private String description;
 
     @Column
     private int recentPrice;

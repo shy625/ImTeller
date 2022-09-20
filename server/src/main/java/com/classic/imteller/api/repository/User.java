@@ -9,7 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class User extends BaseEntity {
 
@@ -34,7 +34,7 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "int default 0")
     private int lose;
 
-    @Column(nullable = false, length=256)
+    @Column(length=256)
     private String wallet;
 
 }

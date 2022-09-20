@@ -5,8 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Game extends BaseEntity {
     @Column(nullable = false, length=20)
     private String session;
