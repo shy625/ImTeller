@@ -32,10 +32,10 @@ public class UserService {
     }
 
     // 회원가입
-    public Boolean signUp(SignupReqDto signupReqDto) {
+    public Boolean signUp(SignupReqDto signupReqDto, String newPw) {
         User newUser = User.builder()
                 .email(signupReqDto.getEmail())
-                .password(getRandomPassword(10))
+                .password(encoder.encode(newPw))
                 .nickname(signupReqDto.getNickname())
                 .profile("DEFAULT")
                 .exp(0)
@@ -43,7 +43,9 @@ public class UserService {
                 .lose(0)
                 .wallet(null)
                 .build();
-        if (userRepository.save(newUser) != null) return true;
+        User result = userRepository.save(newUser);
+        System.out.println(result);
+        if (result != null) return true;
         else return false;
     }
 }

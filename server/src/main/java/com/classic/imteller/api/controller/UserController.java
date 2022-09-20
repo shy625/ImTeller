@@ -65,12 +65,17 @@ public class UserController {
     public ResponseEntity<String> signUp(@RequestBody SignupReqDto signupReqDto) {
         // 서비스에 접근해서 DB에 이메일과 비밀번호, 닉네임을 등록
         // user_id, 프로필, 경험치, 승, 패, 생성일시, 수정일시는 기본으로 들어갈 수 있도록 처리한다.
-        Boolean result = userService.signUp(signupReqDto);
+
+        // 새로운 비밀번호 생성
+        String newPw = utilService.getRandomPassword(10);
+        System.out.println(newPw);
+        Boolean result = userService.signUp(signupReqDto, newPw);
+        System.out.println(result);
         // 잘 등록됐으면 그대로 리턴
         if (result) return new ResponseEntity<String>("가입 성공", HttpStatus.ACCEPTED);
 
         // 등록 안됐으면 forbidden 리턴
-        return new ResponseEntity<String>("가입 실패", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<String>("가입 실패", HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/getpwmail")

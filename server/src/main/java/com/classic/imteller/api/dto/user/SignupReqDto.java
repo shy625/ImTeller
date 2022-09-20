@@ -4,6 +4,5 @@ import lombok.*;
 @Getter
 public class SignupReqDto {
     private String email;
-    private String password;
     private String nickname;
 }
