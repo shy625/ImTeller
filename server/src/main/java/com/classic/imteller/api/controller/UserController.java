@@ -47,9 +47,9 @@ public class UserController {
     public ResponseEntity<String> checkNickname(@RequestBody String nickname){
         Boolean isExists = userService.checkNickname(nickname);
         if(isExists){
-            return new ResponseEntity<String>("중복된 이메일입니다.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("중복된 닉네임입니다.", HttpStatus.FORBIDDEN);
         } else{
-            return new ResponseEntity<String>("사용가능한 이메일입니다.", HttpStatus.OK);
+            return new ResponseEntity<String>("사용가능한 닉네임입니다.", HttpStatus.OK);
         }
     }
 

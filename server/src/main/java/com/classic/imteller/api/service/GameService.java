@@ -2,10 +2,12 @@ package com.classic.imteller.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class GameService {
+    @Transactional(readOnly = true)
     public int getRoomId() {
         int roomId = 1;
         // 레디스 적용 이후 작성 예정
