@@ -47,9 +47,9 @@ public class UserController {
     public ResponseEntity<String> checkNickname(@RequestBody String nickname){
         Boolean isExists = userService.checkNickname(nickname);
         if(isExists){
-            return new ResponseEntity<String>("중복된 이메일입니다.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<String>("중복된 닉네임입니다.", HttpStatus.FORBIDDEN);
         } else{
-            return new ResponseEntity<String>("사용가능한 이메일입니다.", HttpStatus.OK);
+            return new ResponseEntity<String>("사용가능한 닉네임입니다.", HttpStatus.OK);
         }
     }
 
@@ -96,7 +96,6 @@ public class UserController {
 
         // 메일 보내기
         User user = userService.findUser(pwmailReqDto.getEmail());
-        System.out.println("나" + user);
         emailService.sendMail(user, newPw);
         return new ResponseEntity<String>("비밀번호 변경 메일을 전송했습니다.", HttpStatus.ACCEPTED);
     }
