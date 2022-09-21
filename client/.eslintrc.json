@@ -14,7 +14,8 @@
     "prettier/prettier": ["error", { "singleQuote": true }],
     "react/jsx-uses-vars": "error",
     "semi": "off",
-    "space-before-function-paren": "off"
+    "space-before-function-paren": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }]
   },
   "settings": {
     "react": {
