@@ -32,6 +32,14 @@ export default function MypageTabNav(props: any) {
             >
               그림그리기
             </div>
+            <div
+              onClick={() => {
+                alert('비밀번호 확인절차(현재 생략)')
+                navigate('/profileEdit')
+              }}
+            >
+              회원정보수정
+            </div>
           </>
         ) : null}
       </div>

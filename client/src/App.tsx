@@ -5,6 +5,8 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import Main from 'pages/Main/Main'
 import Mypage from 'pages/Mypage/Mypage'
 import Signup from 'pages/Signup/Signup'
+import ProfileEdit from 'pages/ProfileEdit/ProfileEdit'
+import Login from 'pages/Login/Login'
 import Paint from 'pages/Paint/Paint'
 import GameList from 'pages/GameList/GameList'
 import GamePlay from 'pages/GamePlay/GamePlay'
@@ -26,7 +28,8 @@ export default function App() {
         <Route path="/" element={<Main />} />
         <Route path="/mypage/:nick" element={<Mypage />} />
         <Route path="/signup" element={<Signup signup={true} />} />
-        <Route path="/profileEdit" element={<Signup signup={false} />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profileEdit" element={<ProfileEdit />} />
         <Route path="/paint" element={<Paint />} />
         <Route path="/game" element={<GameList />} />
         <Route path="/game/:gameId" element={<GamePlay />} />
