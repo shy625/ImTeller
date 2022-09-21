@@ -1,5 +1,8 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 
 export default function GameRoom() {
-  return <div>여긴 GameRoom</div>
+  const roomId: any = useParams().gameId
+
+  return <div>{roomId} 대기실입니다</div>
 }
