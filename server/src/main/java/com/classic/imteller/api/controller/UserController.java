@@ -96,7 +96,6 @@ public class UserController {
 
         // 메일 보내기
         User user = userService.findUser(pwmailReqDto.getEmail());
-        System.out.println("나" + user);
         emailService.sendMail(user, newPw);
         return new ResponseEntity<String>("비밀번호 변경 메일을 전송했습니다.", HttpStatus.ACCEPTED);
     }
