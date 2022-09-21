@@ -35,4 +35,26 @@ public class ArtService {
         }
         return data;
     }
+
+    @Transactional(readOnly = true)
+    public List<PaintsResDto> getPaints(String email) {
+        List<Art> allPaints = artRepository.findAllByEmailAndIsPaint(email);
+        List<PaintsResDto> data = new ArrayList<>();
+
+        // 하나씩 뒤져가면서 effect_id 카드효과에서 찾아서 넣기
+        for(Art card : allPaints) {
+            PaintsResDto singlePaint = PaintsResDto.builder()
+                    .paintId(card.getId())
+                    .paintTitle(card.getTitle())
+                    .paintImageURL(card.getUrl())
+                    .content(card.getDescription()).build();
+            data.add(singlePaint);
+        }
+        return data;
+    }
+
+    @Transactional
+    public void deletePaint(Long id) {
+        artRepository.deleteById(id);
+    }
 }

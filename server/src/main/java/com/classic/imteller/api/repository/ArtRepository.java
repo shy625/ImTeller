@@ -11,4 +11,9 @@ import java.util.List;
 public interface ArtRepository extends JpaRepository<Art, Integer> {
     @Query(value="SELECT * FROM Art WHERE owner_id = :email AND isNFT IS NOT NULL", nativeQuery = true)
     List<Art> findAllByEmailAndIsNFT(@Param("email") String email);
+
+    @Query(value="SELECT * FROM Art WHERE owner_id = :email AND isNFT IS NULL", nativeQuery = true)
+    List<Art> findAllByEmailAndIsPaint(@Param("email") String email);
+
+    void deleteById(Long id);
 }
