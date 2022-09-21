@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { currentUser, userDetail } from './modules/user'
+import { email, currentUser, userDetail } from './modules/user'
 
 export default configureStore({
   reducer: {
+    email: email.reducer,
     currentUser: currentUser.reducer,
     userDetail: userDetail.reducer,
   },

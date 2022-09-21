@@ -3,10 +3,11 @@ import api from './api'
 const END_POINT = 'art'
 
 const art = {
-  cardList() {
+  cardList(data) {
     return api({
       method: 'get',
       url: `${END_POINT}/cards`,
+      data: data,
     })
   },
   paintList() {
@@ -15,16 +16,24 @@ const art = {
       url: `${END_POINT}/paints`,
     })
   },
-  paintCreate() {
+  paintCreate(data) {
     return api({
       method: 'post',
       url: `${END_POINT}/paints`,
+      data: data,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
   },
-  paintUpdate() {
+  paintUpdate(data) {
     return api({
       method: 'petch',
       url: `${END_POINT}/paints`,
+      data: data,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
   },
   paintDelete() {

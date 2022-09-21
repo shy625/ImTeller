@@ -1,140 +1,119 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 
 import Layout from 'layout/layout'
 import user from 'actions/api/user'
 
 export default function Signup(props: any) {
-  const [isSignup, setIsSignup] = useState(false)
   const [nickValid, setNickValid] = useState('')
-  const currentUser = useSelector((state: any) => state.currentUser)
+  const [authError, setAuthError] = useState('')
+  const [emailChecked, setEmailChecked] = useState(false)
+  const [nickChecked, setNickChecked] = useState(false)
 
-  useEffect(() => {
-    if (props.signup) {
-      setIsSignup(true)
-    }
-  }, [])
+  const nickFilter = (event) => {
+    setNickChecked(false)
 
-  const changeImage = (event) => {
-    const image = event.target.files[0]
-
-    const imageTag: any = document.querySelector('#image')
-    imageTag.src = URL.createObjectURL(image)
-  }
-
-  const resetImage = (event) => {
-    event.preventDefault()
-
-    const imageInput: any = document.querySelector('#profileImage')
-    imageInput.value = currentUser.profile
-
-    const imageTag: any = document.querySelector('#image')
-    imageTag.src = ''
-  }
-
-  const deleteImage = (event) => {
-    event.preventDefault()
-
-    const imageInput: any = document.querySelector('#profileImage')
-    imageInput.value = ''
-
-    const imageTag: any = document.querySelector('#image')
-    imageTag.src = ''
-  }
-
-  const checkNick = (event) => {
     let nickname = event.target.value
-    nickname = nickname.replace(/\s/g, '')
-
-    if (nickname.length > 20) {
-      nickname = nickname.slice(0, 20)
-    }
-    event.target.value = nickname
-
+    nickname = nickname.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]/g, '')
     if (nickname.length < 5) {
       setNickValid('5자 이상의 닉네임을 지어주세요')
+    } else if (nickname.length > 20) {
+      nickname = nickname.slice(0, 20)
     } else {
       setNickValid('')
     }
+    event.target.value = nickname
+  }
+
+  const emailFilter = () => {
+    setEmailChecked(false)
+  }
+
+  const checkEmail = () => {
+    const email: any = document.querySelector('#email')
+    if (!email.value) return alert('이메일 입력하셈')
+
+    const data = { email: email.value }
+    user
+      .checkEmail(data)
+      .then((result) => {
+        if (result.data == '사용가능한 이메일입니다.') {
+          setEmailChecked(true)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  const checkNick = () => {
+    if (nickValid) return alert('닉네임 규칙지키세요')
+    const nickname: any = document.querySelector('#nickname')
+    if (!nickname.value) return alert('닉네임 입력하셈')
+
+    const data = { nickname: nickname.value }
+    user
+      .checkNickname(data)
+      .then((result) => {
+        console.log(result)
+        if (result.data == '사용가능한 닉네임입니다.') {
+          setNickChecked(true)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   const onSubmit = (event) => {
     event.preventDefault()
-    if (nickValid) return alert('닉네임 규칙 에러')
 
-    const formdata: any = new FormData()
-    const form = document.querySelector('form')
-    formdata.append('wallet', currentUser.wallet)
-    formdata.append('nickname', form.nickname.value)
-    formdata.append('profile', form.profileImage.files[0])
+    const email: any = document.querySelector('#email')
+    const nickname: any = document.querySelector('#nickname')
+    if (!emailChecked) return alert('이메일 중복체크하셈')
+    if (!nickChecked) return alert('닉네임 중복체크하셈')
 
-    if (isSignup) {
-      user.signup(formdata) // 결과 오면 처리하기
-    } else {
-      formdata.append('userId', currentUser.userId)
-      const ImageTag: any = document.querySelector('#image')
-      if (currentUser.profile !== ImageTag.src) {
-        formdata.append('isProfileChanged', 'true')
-      } else {
-        formdata.append('isProfileChanged', '')
-      }
-      user.profileEdit(formdata) // 결과 오면 처리하기
+    const credentials = {
+      email: email.value,
+      nickname: nickname.value,
     }
+
+    user
+      .signup(credentials)
+      .then((result) => {
+        console.log(result)
+        // 결과오면 처리하기. 로그인페이지로 보내기 등
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
     <Layout>
       <main>
         여긴 Signup
-        <img id="image" src="" alt="" />
-        <form>
-          <div>
-            <label htmlFor="profileImage">프로필 이미지</label>
-            <input
-              id="profileImage"
-              type="file"
-              accept="image/*"
-              onChange={(event) => {
-                changeImage(event)
-              }}
-            />
-            <button
-              onClick={(event) => {
-                resetImage(event)
-              }}
-            >
-              원상복구하기
-            </button>
-            <button
-              onClick={(event) => {
-                deleteImage(event)
-              }}
-            >
-              지우기
-            </button>
-          </div>
-          <div>
-            <label htmlFor="nickname">닉네임</label>
-            <input
-              id="nickname"
-              type="text"
-              defaultValue={currentUser.nickname || ''}
-              placeholder="닉네임"
-              required
-              onChange={(event) => {
-                checkNick(event)
-              }}
-            />
-            {nickValid || null}
-          </div>
-          <button
-            onClick={(event) => {
-              onSubmit(event)
+        <div>
+          <label htmlFor="email">이메일</label>
+          <input id="email" type="email" onChange={emailFilter} placeholder="이메일" />
+          <button onClick={checkEmail}>이메일 중복 체크</button>
+          {emailChecked ? '✅' : null}
+        </div>
+        <div>
+          <label htmlFor="nickname">닉네임</label>
+          <input
+            id="nickname"
+            type="text"
+            placeholder="닉네임"
+            onChange={(event) => {
+              nickFilter(event)
             }}
-          >
-            전송
-          </button>
-        </form>
+          />
+          <button onClick={checkNick}>닉네임 중복 체크</button>
+          {nickChecked ? '✅' : null}
+          {nickValid}
+        </div>
+        <button onClick={onSubmit}>회원가입</button>
+        {authError}
       </main>
     </Layout>
   )

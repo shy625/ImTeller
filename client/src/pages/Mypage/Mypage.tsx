@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 
 import Layout from 'layout/layout'
 import user from 'actions/api/user'
+import art from 'actions/api/art'
 
 import { setUserDetail } from 'store/modules/user'
 import MypageTabNav from 'pages/Mypage/mypageTabNav'
@@ -12,16 +13,21 @@ import CardList from 'components/cardList'
 export default function Mypage() {
   const dispatch = useDispatch()
   const { nick } = useParams()
-  const { nickname, profile, exp, win, lose, createdDT, updatedDT, cardList } = useSelector(
+  const { nickname, profile, exp, win, lose, createdDT } = useSelector(
     (state: any) => state.userDetail,
   )
   const currentUser = useSelector((state: any) => state.currentUser)
 
   const [isMyMypage, setIsMyMypage] = useState(false)
   const [tabNo, setTabNo] = useState(0)
+  const [cardList, setCartList] = useState([])
   const [paintList, setPaintList] = useState([])
 
   useEffect(() => {
+    if (nick === currentUser.nickname) {
+      setIsMyMypage(true)
+    }
+
     user
       .userDetail(nick)
       .then((result) => {
@@ -31,10 +37,18 @@ export default function Mypage() {
         console.error(error)
       })
 
-    if (nick === currentUser.nickname) {
-      setIsMyMypage(true)
-    }
+    art.cardList(nick).then((result) => {
+      setCartList(result.data.cardList)
+    }) //
   }, [nick, nickname])
+
+  useEffect(() => {
+    if (isMyMypage) {
+      art.paintList().then((result) => {
+        setPaintList(result.data.paintList)
+      }) //
+    }
+  }, [isMyMypage])
 
   const tabs = {
     0: <CardList cardList={cardList} />,
