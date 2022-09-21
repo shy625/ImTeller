@@ -7,6 +7,7 @@ import Mypage from 'pages/Mypage/Mypage'
 import Signup from 'pages/Signup/Signup'
 import Paint from 'pages/Paint/Paint'
 import GameList from 'pages/GameList/GameList'
+import GameRoom from 'pages/GameRoom/GameRoom'
 import GamePlay from 'pages/GamePlay/GamePlay'
 import GameResult from 'pages/GameResult/GameResult'
 import DealList from 'pages/DealList/DealList'
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/profileEdit" element={<Signup signup={false} />} />
         <Route path="/paint" element={<Paint />} />
         <Route path="/game" element={<GameList />} />
+        <Route path="/gameRoom/:gameId" element={<GameRoom />} />
         <Route path="/game/:gameId" element={<GamePlay />} />
         <Route path="/game/:gameId/result" element={<GameResult />} /> {/* 필요 없을 수도 */}
         <Route path="/deal" element={<DealList />} />
