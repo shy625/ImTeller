@@ -1,4 +1,4 @@
-import api from './api'
+import api from 'actions/api/api'
 
 const END_POINT = 'user'
 
@@ -6,7 +6,7 @@ const user = {
   login(data) {
     return api({
       method: 'post',
-      url: `${END_POINT}/login`,
+      url: `${END_POINT}/check/pw`,
       data: data,
     })
   },
@@ -15,9 +15,6 @@ const user = {
       method: 'post',
       url: `${END_POINT}/signup`,
       data: data,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
     })
   },
   profileEdit(data) {
@@ -34,6 +31,34 @@ const user = {
     return api({
       method: 'post',
       url: `${END_POINT}/detail`,
+      data: data,
+    })
+  },
+  checkEmail(data) {
+    return api({
+      method: 'post',
+      url: `${END_POINT}/check/email`,
+      data: data,
+    })
+  },
+  checkNickname(data) {
+    return api({
+      method: 'post',
+      url: `${END_POINT}/check/nickname`,
+      data: data,
+    })
+  },
+  setWallet(data) {
+    return api({
+      method: 'post',
+      url: `${END_POINT}/wallet`,
+      data: data,
+    })
+  },
+  sendPassword(data) {
+    return api({
+      method: 'post',
+      url: `${END_POINT}/pwmail`,
       data: data,
     })
   },
