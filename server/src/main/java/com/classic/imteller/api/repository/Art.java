@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Card extends BaseEntity {
+public class Art extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name="effect_id", nullable = false)
@@ -26,8 +26,8 @@ public class Card extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User owner;
 
-    @Column
-    private Boolean isNFT;
+    @Column(length=256)
+    private String isNFT;
 
     @Column(nullable = false, length=256)
     private String url;
