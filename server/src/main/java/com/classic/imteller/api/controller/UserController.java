@@ -129,4 +129,11 @@ public class UserController {
         return new ResponseEntity<DetailResDto>(resUser, HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/currentUser")
+    @ApiOperation(value = "내 정보 반환", notes = "내 정보를 전달받는 API")
+    // detailResDto 재활용
+    public ResponseEntity<DetailResDto> newPassword(@RequestHeader(value="Authorization") String email) {
+        DetailResDto resUser = userService.getDetail(userService.findUser(email).getNickname());
+        return new ResponseEntity<DetailResDto>(resUser, HttpStatus.ACCEPTED);
+    }
 }

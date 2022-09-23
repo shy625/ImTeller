@@ -101,7 +101,7 @@ public class UserService {
                 String imgPath = s3Service.upload(user.getProfile(), file);
                 editReqDto.updateProfile(imgPath);
                 this.modify(editReqDto);
-            } else if(editReqDto.getProfile()!=null && editReqDto.getProfile().equals("null")) {
+            } else if(editReqDto.getProfile() != null && editReqDto.getProfile().equals("null")) {
                 User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 //이미지 있으면 s3 버킷에서 지움
                 s3Service.delete(user.getProfile());
