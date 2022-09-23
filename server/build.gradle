@@ -38,6 +38,9 @@ dependencies {
 
 	// 보안
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//Amazon S3 imageUpload
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
 }
 
 tasks.named('test') {
