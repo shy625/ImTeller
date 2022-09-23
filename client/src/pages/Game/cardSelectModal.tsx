@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react'
 import { css } from '@emotion/react'
 
-const CardSelect = (props: any) => {
+const CardSelectModal = (props: any) => {
   // 모달용
   const open: boolean = props.open
 
@@ -45,6 +45,7 @@ const CardSelect = (props: any) => {
     </div>
   )
 }
+
 // style 관련
 const makeRoomModal = css`
   .modal {
@@ -127,4 +128,4 @@ const makeRoomModal = css`
     }
   }
 `
-export default CardSelect
+export default CardSelectModal

@@ -67,7 +67,9 @@ export default function Mypage() {
             {win} 승 {lose} 패. 승률: {((win / (win + lose)) * 100).toFixed(1)}%
           </div>
         </div>
+        <hr />
         <MypageTabNav setTabNo={setTabNo} isMyMypage={isMyMypage} />
+        <hr />
         {tabs[tabNo]}
       </main>
     </Layout>

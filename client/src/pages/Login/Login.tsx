@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import Layout from 'layout/layout'
@@ -6,7 +7,9 @@ import user from 'actions/api/user'
 import { setEmail } from 'store/modules/user'
 
 export default function Login(props: any) {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const [authError, setAuthError] = useState('')
   const [pwFind, setPwFind] = useState(false)
 
@@ -25,9 +28,11 @@ export default function Login(props: any) {
     user
       .login(credentials)
       .then((result) => {
-        console.log(result)
-        dispatch(setEmail(credentials.email)) //
-        localStorage.setItem('email', credentials.email) //
+        if (result.data === '올바른 비밀번호입니다.') {
+          dispatch(setEmail(credentials.email))
+          localStorage.setItem('email', credentials.email)
+          navigate('/')
+        }
       })
       .catch((error) => {
         setAuthError(error)
@@ -44,11 +49,13 @@ export default function Login(props: any) {
       email: email.value,
     }
 
-    user
+    user // 사실 요청 한번 보내면 응답 올 때까지 재클릭 막아야함
       .sendPassword(credentials)
       .then((result) => {
-        console.log(result)
-        alert('이메일확인해보면 비번갔음')
+        if (result.data == '비밀번호 변경 메일을 전송했습니다.') {
+          alert('이메일확인해보면 비번갔음')
+          setPwFind(false)
+        }
       })
       .catch((error) => {
         console.log(error)
