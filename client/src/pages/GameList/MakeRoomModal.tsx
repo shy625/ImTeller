@@ -24,92 +24,91 @@ const MakeRoom = (props: any) => {
   }
 
   return (
-    <div className={open ? 'openModal modal' : 'modal'} css={makeRoomModal}>
-      {open ? (
-        <section>
-          <header>
-            방 만들기
-            <br></br>
-          </header>
-          <main>
-            <form>
-              <input onChange={(e) => setName(e.target.value)} placeholder="방 제목"></input>
-              <select onChange={(e) => setPeople(e.target.value)}>
-                <option value={0} disabled>
-                  인원
-                </option>
-                <option value={3}>3명</option>
-                <option value={4}>4명</option>
-                <option value={5}>5명</option>
-                <option value={6}>6명</option>
-              </select>
-              <label>
-                <input
-                  onChange={(e) => setType(e.target.value)}
-                  type={'radio'}
-                  name="type"
-                  value={'라운드'}
-                ></input>
-                라운드
-              </label>
-              <label>
-                <input
-                  onChange={(e) => setType(e.target.value)}
-                  type={'radio'}
-                  name="type"
-                  value={'점수'}
-                ></input>
-                점수
-              </label>
-              {type === '점수' ? (
-                <input
-                  onChange={(e) => setCondition(e.target.value)}
-                  placeholder="승리 점수"
-                ></input>
-              ) : (
-                <select onChange={(e) => setCondition(e.target.value)}>
+    <div css={makeRoomModal}>
+      <div className={open ? 'openModal modal' : 'modal'}>
+        {open ? (
+          <section>
+            <header>방 만들기</header>
+            <main>
+              <form>
+                <input onChange={(e) => setName(e.target.value)} placeholder="방 제목"></input>
+                <select onChange={(e) => setPeople(e.target.value)}>
                   <option value={0} disabled>
-                    승리 조건
+                    인원
                   </option>
-                  <option value={2}>2라운드</option>
-                  <option value={3}>3라운드</option>
-                  <option value={4}>4라운드</option>
-                  <option value={5}>5라운드</option>
+                  <option value={3}>3명</option>
+                  <option value={4}>4명</option>
+                  <option value={5}>5명</option>
+                  <option value={6}>6명</option>
                 </select>
-              )}
-              <label>
-                <input
-                  onChange={(e) => setLock(e.target.value)}
-                  type={'radio'}
-                  name="lock"
-                  value={'공개'}
-                ></input>
-                공개
-              </label>
-              <label>
-                <input
-                  onChange={(e) => setLock(e.target.value)}
-                  type={'radio'}
-                  name="lock"
-                  value={'비공개'}
-                ></input>
-                비공개
-              </label>
-              {lock === '비공개' ? (
-                <input onChange={(e) => setPw(e.target.value)} placeholder="비밀번호"></input>
-              ) : null}
-            </form>
-          </main>
-          <footer>
-            <button className="submit" onClick={onSubmit}>
-              생성하기
-            </button>
-            <button className="close" onClick={props.close}>
-              취소
-            </button>
-          </footer>
-        </section>
-      ) : null}
+                <label>
+                  <input
+                    onChange={(e) => setType(e.target.value)}
+                    type={'radio'}
+                    name="type"
+                    value={'라운드'}
+                  ></input>
+                  라운드
+                </label>
+                <label>
+                  <input
+                    onChange={(e) => setType(e.target.value)}
+                    type={'radio'}
+                    name="type"
+                    value={'점수'}
+                  ></input>
+                  점수
+                </label>
+                {type === '점수' ? (
+                  <input
+                    onChange={(e) => setCondition(e.target.value)}
+                    placeholder="승리 점수"
+                  ></input>
+                ) : (
+                  <select onChange={(e) => setCondition(e.target.value)}>
+                    <option value={0} disabled>
+                      승리 조건
+                    </option>
+                    <option value={2}>2라운드</option>
+                    <option value={3}>3라운드</option>
+                    <option value={4}>4라운드</option>
+                    <option value={5}>5라운드</option>
+                  </select>
+                )}
+                <label>
+                  <input
+                    onChange={(e) => setLock(e.target.value)}
+                    type={'radio'}
+                    name="lock"
+                    value={'공개'}
+                  ></input>
+                  공개
+                </label>
+                <label>
+                  <input
+                    onChange={(e) => setLock(e.target.value)}
+                    type={'radio'}
+                    name="lock"
+                    value={'비공개'}
+                  ></input>
+                  비공개
+                </label>
+                {lock === '비공개' ? (
+                  <input onChange={(e) => setPw(e.target.value)} placeholder="비밀번호"></input>
+                ) : null}
+              </form>
+            </main>
+            <footer>
+              <button className="submit" onClick={onSubmit}>
+                생성하기
+              </button>
+              <button className="close" onClick={props.close}>
+                취소
+              </button>
+            </footer>
+          </section>
+        ) : null}
+      </div>
     </div>
   )
 }
@@ -143,7 +142,6 @@ const makeRoomModal = css`
   .modal > section > header {
     position: relative;
     padding: 16px 64px 16px 16px;
-    background-color: #f1f1f1;
     font-weight: 700;
   }
   .modal > section > header button {
@@ -159,8 +157,6 @@ const makeRoomModal = css`
   }
   .modal > section > main {
     padding: 16px;
-    border-bottom: 1px solid #dee2e6;
-    border-top: 1px solid #dee2e6;
   }
   .modal > section > footer {
     padding: 12px 16px;

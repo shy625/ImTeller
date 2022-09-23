@@ -3,17 +3,24 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { css } from '@emotion/react'
+import { useState } from 'react'
 
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
 
-import RoomInfo from './RoomInfo'
-import GameProfile from 'components/GameProfile'
-import Setting from './Setting'
+import RoomInfo from 'components/roomInfo'
+import GameProfile from 'components/gameProfile'
+import Setting from '../../components/setting'
 import Chat from 'components/chat'
+import CardSelectModal from './CardSelectModal'
 // 여기서 이제 socket 연결이 시작되는거지
 export default function GameRoom() {
   const roomId: any = useParams().gameId
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const openModal = () => {
+    setModalOpen(!modalOpen)
+  }
 
   return (
     <div css={roomBg}>
@@ -39,8 +46,11 @@ export default function GameRoom() {
         </div>
         <Chat />
       </div>
-      <button css={button}>카드 선택</button>
+      <button css={button} onClick={openModal}>
+        카드 선택
+      </button>
       <button css={button}>취소</button>
+      <CardSelectModal open={modalOpen} close={openModal} />
     </div>
   )
 }
@@ -104,6 +114,9 @@ const playerOne = css({
   flexGrow: 1,
   flexShrink: 1,
   flexBasis: '20%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 })
 const head = css({
   display: 'flex',
@@ -117,6 +130,7 @@ const button = css({
   width: '10em',
   borderRadius: 15,
   margin: '1em',
+  cursor: 'pointer',
 })
 const roomBg = css({
   // backgroundImage: 'linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%)',

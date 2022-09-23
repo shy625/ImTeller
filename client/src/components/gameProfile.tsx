@@ -13,7 +13,7 @@ export default function GameProfile(props: any) {
 }
 const imgSize = css({
   borderRadius: '100%',
-  width: '4em',
+  width: '8em',
   objectFit: 'cover',
 })
 
