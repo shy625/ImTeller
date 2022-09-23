@@ -8,13 +8,11 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Art extends BaseEntity {
 
     @OneToOne
-    @JoinColumn(name="effect_id")
+    @JoinColumn(name="effect_id", nullable = false)
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Effect effect;
 
@@ -42,11 +40,5 @@ public class Art extends BaseEntity {
 
     @Column
     private int recentPrice;
-
-    public void updatePaint(String url, String title, String desc) {
-        this.url = url;
-        this.title = title;
-        this.description = desc;
-    }
 
 }
