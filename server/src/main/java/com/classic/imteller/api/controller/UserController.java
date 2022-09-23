@@ -110,39 +110,9 @@ public class UserController {
     @PostMapping("/edit")
     @ApiOperation(value = "정보 수정", notes = "사용자가 정보를 갱신할 때 사용")
     public ResponseEntity<String> edit(@RequestBody EditReqDto editReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
-        // S3 서비스 구현하고 주석 풀기
-//        try {
-//            if(file!=null) {
-//                if (file.getSize() >= 10485760) {
-//                    return new ResponseEntity<String>("이미지 크기 제한은 10MB 입니다.", HttpStatus.FORBIDDEN);
-//                }
-//                String originFile = file.getOriginalFilename();
-//                String originFileExtension = originFile.substring(originFile.lastIndexOf("."));
-//                if (!originFileExtension.equalsIgnoreCase(".jpg") && !originFileExtension.equalsIgnoreCase(".png")
-//                        && !originFileExtension.equalsIgnoreCase(".jpeg")) {
-//                    return new ResponseEntity<String>("jpg, jpeg, png의 이미지 파일만 업로드해주세요", HttpStatus.FORBIDDEN);
-//                }
-//                User user = userRepository.findByEmail(editReqDto.getEmail());
-//                String imgPath = s3Service.upload(user.getProfile(), file);
-//                editReqDto.updateProfile(imgPath);
-//                userService.edit(editReqDto);
-//            } else if(editReqDto.getProfile()!=null && editReqDto.getProfile().equals("reset")) {
-//                User user = userRepository.findByEmail(editReqDto.getEmail());
-//                //이미지 있으면 s3 버킷에서 지움
-//                s3Service.delete(user.getProfile());
-//
-//                //이미지 컬럼 null로 변경
-//                editReqDto.updateProfile("null");
-//                userService.edit(editReqDto);
-//            } else {
-//                userService.edit(editReqDto);
-//            }
-//            return new ResponseEntity<String>("유저 정보수정 성공", HttpStatus.OK);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            return new ResponseEntity<String>("유저 정보수정 실패", HttpStatus.FORBIDDEN);
-//        }
-        return new ResponseEntity<String>("사용자의 정보를 변경했습니다.", HttpStatus.ACCEPTED);
+        String msg = userService.editInfo(editReqDto, file);
+        if (msg == "유저 정보수정 성공") return new ResponseEntity<String>("사용자의 정보를 변경했습니다.", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>(msg, HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/wallet")
@@ -159,4 +129,11 @@ public class UserController {
         return new ResponseEntity<DetailResDto>(resUser, HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/currentUser")
+    @ApiOperation(value = "내 정보 반환", notes = "내 정보를 전달받는 API")
+    // detailResDto 재활용
+    public ResponseEntity<DetailResDto> newPassword(@RequestHeader(value="Authorization") String email) {
+        DetailResDto resUser = userService.getDetail(userService.findUser(email).getNickname());
+        return new ResponseEntity<DetailResDto>(resUser, HttpStatus.ACCEPTED);
+    }
 }
