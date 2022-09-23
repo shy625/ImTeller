@@ -6,6 +6,6 @@ export default function Chat() {
 }
 const chat = css({
   border: '1px solid black',
-  width: '20em',
-  height: '50em',
+  width: '30%',
+  height: '80vh',
 })

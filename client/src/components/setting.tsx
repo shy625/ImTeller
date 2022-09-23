@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { css } from '@emotion/react'
-import setting from '../../assets/image/setting.png'
+import setting from '../assets/image/setting.png'
 
 const Setting = () => {
   return (
@@ -15,4 +15,5 @@ export default Setting
 
 const imgSize = css({
   width: '2em',
+  margin: 10,
 })

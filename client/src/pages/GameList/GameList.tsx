@@ -23,7 +23,7 @@ export default function GameList() {
   }
   return (
     <Layout>
-      <div>
+      <div css={roomBg}>
         <h2>게임방 목록입니다</h2>
         <button onClick={openModal}>방만들기</button>
         <MakeRoom open={modalOpen} close={openModal} />
@@ -41,8 +41,8 @@ export default function GameList() {
             </div>
           ))}
         </div>
+        <Pagination total={roomsDummy.length} limit={8} page={page} setPage={setPage} />
       </div>
-      <Pagination total={roomsDummy.length} limit={8} page={page} setPage={setPage} />
     </Layout>
   )
 }
@@ -119,7 +119,7 @@ const rooms = css({
 })
 const roomOne = css({
   boxSizing: 'border-box',
-  backgroundColor: 'grey',
+  background: 'rgba(255, 255, 255, .3)',
   borderRadius: 15,
   margin: '1em',
   padding: '1em',
@@ -127,4 +127,11 @@ const roomOne = css({
   flexShrink: 1,
   flexBasis: '40%',
   cursor: 'pointer',
+  '&:hover': {
+    boxShadow: '2px 2px 2px 2px rgba(255, 255, 255, 0.2)',
+  },
+})
+const roomBg = css({
+  backgroundImage: 'linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%)',
+  backgroundSize: 'cover',
 })
