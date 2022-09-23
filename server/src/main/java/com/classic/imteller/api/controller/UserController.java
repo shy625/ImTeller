@@ -41,7 +41,7 @@ public class UserController {
         }
     }
 
-    // 이메일 중복체크
+    // 닉네임 중복체크
     @PostMapping("/check/nickname")
     @ApiOperation(value = "닉네임 중복 체크", notes = "중복 닉네임인지 체크")
     public ResponseEntity<String> checkNickname(@RequestBody String nickname){
@@ -53,7 +53,7 @@ public class UserController {
         }
     }
 
-    // 이메일 중복체크
+    // 비밀번호 체크
     @PostMapping("/check/pw")
     @ApiOperation(value = "비밀번호 체크", notes = "맞는 비밀번호인지 체크")
     public ResponseEntity<String> checkPassword(@RequestBody PwCheckDto pwCheckDto){
@@ -72,16 +72,23 @@ public class UserController {
         // 서비스에 접근해서 DB에 이메일과 비밀번호, 닉네임을 등록
         // user_id, 프로필, 경험치, 승, 패, 생성일시, 수정일시는 기본으로 들어갈 수 있도록 처리한다.
 
+        // 이미 DB에 존재하는 아이디와 닉네임인지 한번 더 체크
+        if (userService.checkEmail(signupReqDto.getEmail()) || userService.checkNickname(signupReqDto.getNickname())) {
+            return new ResponseEntity<String>("가입 실패", HttpStatus.FORBIDDEN);
+        }
+
         // 새로운 비밀번호 생성
         String newPw = utilService.getRandomPassword(10);
-        System.out.println(newPw);
         Boolean result = userService.signUp(signupReqDto, newPw);
-        System.out.println(result);
         // 잘 등록됐으면 그대로 리턴
-        if (result) return new ResponseEntity<String>("가입 성공", HttpStatus.ACCEPTED);
+        if (result) {
+            User user = userService.findUser(signupReqDto.getEmail());
+            emailService.sendMail(user, newPw);
+            return new ResponseEntity<String>("가입 성공", HttpStatus.ACCEPTED);
+        }
 
         // 등록 안됐으면 forbidden 리턴
-        return new ResponseEntity<String>("가입 실패", HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>("가입 실패", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/pwmail")
