@@ -6,15 +6,21 @@ import com.classic.imteller.api.dto.user.SignupReqDto;
 import com.classic.imteller.api.dto.user.WalletReqDto;
 import com.classic.imteller.api.repository.User;
 import com.classic.imteller.api.repository.UserRepository;
+import com.classic.imteller.exception.CustomException;
+import com.classic.imteller.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final S3Service s3Service;
     private final PasswordEncoder encoder;
 
     // 이메일 체크
@@ -32,7 +38,7 @@ public class UserService {
     // 비밀번호 체크
     @Transactional(readOnly = true)
     public Boolean checkPassword(String email, String password) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         if (user == null || !encoder.matches(password, user.getPassword())) return false;
         return true;
     }
@@ -57,38 +63,72 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findUser(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
     }
 
     @Transactional
     public void setNewPw(String email, String newPw) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         user.updatePassword(encoder.encode(newPw));
         userRepository.save(user);
     }
 
-    @Transactional
-    public void edit(EditReqDto editReqDto) {
-        User user = userRepository.findByEmail(editReqDto.getEmail());
+    // 수정을 위한 함수
+    private void modify(EditReqDto editReqDto) {
+        User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         // 비밀번호 안넣은 케이스 설정
-        if("".equals(user.getPassword())==false && user.getPassword() != null) {
+        if("".equals(user.getPassword()) == false && user.getPassword() != null) {
             String password = user.getPassword();
             editReqDto.updatePassword(encoder.encode(password));
         }
         user.updateUser(editReqDto);
-        userRepository.save(user);
+    }
+
+    @Transactional
+    public String editInfo(EditReqDto editReqDto, MultipartFile file) {
+        try {
+            if (file != null) {
+                if (file.getSize() >= 10485760) {
+                    return "이미지 크기 제한은 10MB 입니다.";
+                }
+                String originFile = file.getOriginalFilename();
+                String originFileExtension = originFile.substring(originFile.lastIndexOf("."));
+                if (!originFileExtension.equalsIgnoreCase(".jpg") && !originFileExtension.equalsIgnoreCase(".png")
+                        && !originFileExtension.equalsIgnoreCase(".jpeg")) {
+                    return "jpg, jpeg, png의 이미지 파일만 업로드해주세요";
+                }
+                User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                String imgPath = s3Service.upload(user.getProfile(), file);
+                editReqDto.updateProfile(imgPath);
+                this.modify(editReqDto);
+            } else if(editReqDto.getProfile() != null && editReqDto.getProfile().equals("null")) {
+                User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                //이미지 있으면 s3 버킷에서 지움
+                s3Service.delete(user.getProfile());
+
+                //이미지 컬럼 null로 변경
+                editReqDto.updateProfile("null");
+                this.modify(editReqDto);
+            } else {
+                this.modify(editReqDto);
+            }
+            return "유저 정보수정 성공";
+        } catch (Exception e){
+            e.printStackTrace();
+            return "에러가 발생했습니다.";
+        }
     }
 
     @Transactional
     public void setWallet(String email, String wallet) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         user.updateWallet(wallet);
         userRepository.save(user);
     }
 
     @Transactional
     public DetailResDto getDetail(String nickname) {
-        User user = userRepository.findByNickname(nickname);
+        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         return DetailResDto.builder()
                 .nickname(user.getNickname())
                 .profile(user.getProfile())

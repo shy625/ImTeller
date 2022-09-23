@@ -66,7 +66,7 @@ public class ArtService {
 
     @Transactional
     public void savePaint(PaintSaveReqDto paintSaveReqDto, MultipartFile file) throws IOException {
-        User user = userRepository.findByEmail(paintSaveReqDto.getEmail());
+        User user = userRepository.findByEmail(paintSaveReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         String imgPath = s3Service.upload("", file);
 
         Art art = Art.builder()
