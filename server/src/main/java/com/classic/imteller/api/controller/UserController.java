@@ -32,8 +32,8 @@ public class UserController {
     // 이메일 중복체크
     @PostMapping("/check/email")
     @ApiOperation(value = "이메일 중복 체크", notes = "중복 이메일인지 체크")
-    public ResponseEntity<String> checkEmail(@RequestBody String email){
-        Boolean isExists = userService.checkEmail(email);
+    public ResponseEntity<String> checkEmail(@RequestBody EmailCheckReqDto emailCheckReqDto){
+        Boolean isExists = userService.checkEmail(emailCheckReqDto.getEmail());
         if(isExists){
             return new ResponseEntity<String>("중복된 이메일입니다.", HttpStatus.FORBIDDEN);
         } else{
@@ -44,8 +44,8 @@ public class UserController {
     // 닉네임 중복체크
     @PostMapping("/check/nickname")
     @ApiOperation(value = "닉네임 중복 체크", notes = "중복 닉네임인지 체크")
-    public ResponseEntity<String> checkNickname(@RequestBody String nickname){
-        Boolean isExists = userService.checkNickname(nickname);
+    public ResponseEntity<String> checkNickname(@RequestBody NicknameCheckReqDto nicknameCheckReqDto){
+        Boolean isExists = userService.checkNickname(nicknameCheckReqDto.getNickname());
         if(isExists){
             return new ResponseEntity<String>("중복된 닉네임입니다.", HttpStatus.FORBIDDEN);
         } else{
