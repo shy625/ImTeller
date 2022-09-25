@@ -22,7 +22,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.javassist:javassist:3.29.1-GA'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	runtimeOnly 'mysql:mysql-connector-java:8.0.29'
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly 'javax.xml.bind:jaxb-api'
@@ -44,8 +43,12 @@ dependencies {
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	// 로컬에서 redis 테스트하는 용도
-	implementation 'it.ozimov:embedded-redis:0.7.1'
+	implementation 'it.ozimov:embedded-redis:0.7.1' // 로컬에서 redis 테스트하는 용도
+
+	// socket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.webjars:sockjs-client'
+	implementation 'org.webjars:stomp-websocket'
 }
 
 tasks.named('test') {
