@@ -99,8 +99,6 @@ public class UserService {
                 }
                 User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 String imgPath = s3Service.upload(user.getProfile(), file);
-                System.out.println("사진 업로드?");
-                System.out.println(file);
                 editReqDto.updateProfile(imgPath);
                 this.modify(editReqDto);
             } else if(editReqDto.getProfile().equals("reset")) {
