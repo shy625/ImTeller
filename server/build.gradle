@@ -41,6 +41,11 @@ dependencies {
 
 	//Amazon S3 imageUpload
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// 로컬에서 redis 테스트하는 용도
+	implementation 'it.ozimov:embedded-redis:0.7.1'
 }
 
 tasks.named('test') {
