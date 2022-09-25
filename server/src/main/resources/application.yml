@@ -40,6 +40,12 @@ spring:
     password: dtthfaxzlefpsyql
     port: 587
 
+  # redis 관련
+  redis:
+    host: localhost
+    # host: http://j7a509.p.ssafy.io/
+    port: 6379
+
 server:
   servlet:
     context-path: /api/v1
