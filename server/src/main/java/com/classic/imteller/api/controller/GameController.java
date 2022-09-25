@@ -2,7 +2,7 @@ package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.game.GameRoomDto;
 import com.classic.imteller.api.dto.game.JoinReqDto;
-import com.classic.imteller.api.dto.game.makeReqDto;
+import com.classic.imteller.api.dto.game.MakeReqDto;
 import com.classic.imteller.api.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +49,7 @@ public class GameController {
 
     @PostMapping("/make")
     @ApiOperation(value = "게임방 생성", notes = "게임방을 생성하고 해당 내용을 DB에 저장")
-    public ResponseEntity<Integer> makeRoom(@RequestBody final makeReqDto roomInfo){
+    public ResponseEntity<Integer> makeRoom(@RequestBody final MakeReqDto roomInfo){
         // 방 정보를 소켓과 Redis에 저장
         // 생성된 roomId 반환
         int newRoomId = gameService.getRoomId();
