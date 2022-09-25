@@ -1,5 +1,26 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { setTime } from 'store/modules/game'
 
 export default function Timer() {
-  return <div>timer</div>
+  const dispatch = useDispatch()
+  const time = useSelector((state: any) => state.time)
+  const interval = useRef(null)
+  const initialTime = useRef(time)
+
+  useEffect(() => {
+    interval.current = setInterval(() => {
+      initialTime.current -= 1
+      dispatch(setTime(initialTime.current))
+    }, 1000)
+  }, [])
+
+  useEffect(() => {
+    if (initialTime.current <= 0) {
+      clearInterval(interval.current)
+    }
+  }, [time])
+
+  return <div>{time}s</div>
 }
