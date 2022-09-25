@@ -13,6 +13,7 @@ contract Exchange {
     IERC20 public erc20Contract;
     address private TockenAddress;
     address private NFTAddress;
+    address private buyer;
 
     event NewBid(address dealContractAddress, uint cardId, address bidder, uint256 amount);
     event DealCanceled(address dealContractAddress, uint cardId, address seller);
@@ -28,7 +29,7 @@ contract Exchange {
         NFTAddress = _nftAddress;
     }
 
-    function buy(address seller, uint256 cardId, uint256 price) public payable duringDeal{
+    function buy(address seller, uint256 cardId, uint256 price) public payable{
         //구매자는 함수 호출자
         buyer=msg.sender;
         //판매자는 구매를 할 수 없음.
