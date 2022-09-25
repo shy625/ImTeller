@@ -1,5 +1,6 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 @Controller
 public class SocketController {
+    private final RoomService roomService;
 
     // 입장 : 게임방에 입장
     @MessageMapping("/chat/room/{sessionId}/join")
