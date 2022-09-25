@@ -27,7 +27,7 @@ contract ClassicNFT is ERC721URIStorage, Ownable {
     //신규 ERC-721 토큰을 생성
     //입력: 신규 NFT 카드를 저장할 지갑, , 그림 s3 주소
     //반환: 신규 NFT 카드 식별자(tokenId)
-    function create(address to, string memory _tokenURI, uint128 cost) public onlyOwner returns (uint256) {
+    function create(address to, string memory _tokenURI, uint128 cost) public returns (uint256) {
         //1. 카드 민팅할때 돈 지불 필요
         //토큰이 충분한지 확인
         require(_getCurrencyAmount() >= cost, "You don't have enough token to mint this card");

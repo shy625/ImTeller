@@ -1,7 +1,6 @@
 
-
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-// const privateKey = "0x0c54E456CE9E4501D2c43C38796ce3F06846C966";
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const privateKey = "0x0c54E456CE9E4501D2c43C38796ce3F06846C966";
 
 
 module.exports = {
@@ -12,12 +11,12 @@ module.exports = {
      network_id: "*",       // Any network (default: none)
     },
 
-    // ssafynet: {
-    //   provider: () => new HDWalletProvider(privateKey, "ws://20.196.209.2:6174"),
-    //   network_id: "*",       // Goerli's id
-    //   chainId: 31221,
-    //   timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-    // },
+    ssafynet: {
+      provider: () => new HDWalletProvider(privateKey, "ws://20.196.209.2:6174"),
+      network_id: "*",       // Goerli's id
+      chainId: 31221,
+      timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
+    },
   },
   // Set default mocha options here, use special reporters, etc.
   mocha: {
