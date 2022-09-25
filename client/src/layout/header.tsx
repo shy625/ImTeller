@@ -6,12 +6,16 @@ import Profile from 'components/profile'
 import { setCurrentUser, setEmail, setLogout } from 'store/modules/user'
 import user from 'actions/api/user'
 
+import { useBGM } from 'actions/hooks/useBGM'
+
 export default function Header() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const currentUser = useSelector((state: any) => state.currentUser)
+
+  const start = useBGM()
 
   const logout = () => {
     dispatch(setLogout())

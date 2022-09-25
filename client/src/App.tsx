@@ -19,27 +19,30 @@ import FAQ from 'pages/FAQ/FAQ'
 import NotFound404 from 'pages/NotFound404/NotFound404'
 
 import 'App.css'
+import { BgmLayer } from 'layout/bgmLayer'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/mypage/:nick" element={<Mypage />} />
-        <Route path="/signup" element={<Signup signup={true} />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profileEdit" element={<ProfileEdit />} />
-        <Route path="/paint" element={<Paint />} />
-        <Route path="/game" element={<GameList />} />
-        <Route path="/game/:gameId" element={<Game />} />
-        <Route path="/deal" element={<DealList />} />
-        <Route path="/deal/:dealId" element={<DealDetail />} />
-        <Route path="/deal/register" element={<DealRegister />} />
-        <Route path="/rank" element={<Rank />} />
-        <Route path="/vote" element={<Vote />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/*" element={<NotFound404 />} />
-      </Routes>
+      <BgmLayer>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/mypage/:nick" element={<Mypage />} />
+          <Route path="/signup" element={<Signup signup={true} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profileEdit" element={<ProfileEdit />} />
+          <Route path="/paint" element={<Paint />} />
+          <Route path="/game" element={<GameList />} />
+          <Route path="/game/:roomId" element={<Game />} />
+          <Route path="/deal" element={<DealList />} />
+          <Route path="/deal/:dealId" element={<DealDetail />} />
+          <Route path="/deal/register" element={<DealRegister />} />
+          <Route path="/rank" element={<Rank />} />
+          <Route path="/vote" element={<Vote />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/*" element={<NotFound404 />} />
+        </Routes>
+      </BgmLayer>
     </BrowserRouter>
   )
 }

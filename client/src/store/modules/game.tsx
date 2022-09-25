@@ -117,7 +117,7 @@ export const { setPlayers, addScore } = players.actions
 
 export const time = createSlice({
   name: 'time',
-  initialState: 0,
+  initialState: 10,
   reducers: {
     setTime(state, action) {
       return action.payload

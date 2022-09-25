@@ -12,6 +12,7 @@ import {
   endResult,
 } from 'store/modules/game'
 import { paintList } from 'store/modules/art'
+import { isBgmOn, bgmSrc, volume } from 'store/modules/setting'
 
 export default configureStore({
   reducer: {
@@ -30,5 +31,9 @@ export default configureStore({
     endResult: endResult.reducer,
 
     paintList: paintList.reducer,
+
+    isBgmOn: isBgmOn.reducer,
+    bgmSrc: bgmSrc.reducer,
+    volume: volume.reducer,
   },
 })

@@ -1,23 +1,21 @@
 /** @jsxImportSource @emotion/react */
 
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 import { useWebSocket } from 'actions/hooks/useWebSocket'
 import { clearChat, addChat } from 'store/modules/game'
 import { css } from '@emotion/react'
 
-export default function Chat(props: any) {
+export default function Chat() {
   const dispatch = useDispatch()
 
-  // const { roomId } = props
-  const roomId = 1
+  const { roomId } = useParams()
   const { currentRoomId, chats } = useSelector((state: any) => state.chats)
   const { nickname } = useSelector((state: any) => state.currentUser)
   const email = useSelector((state: any) => state.email)
   const [msgInput, setMsgInput] = useState('')
-  const header = { Authorization: email }
 
   useEffect(() => {
     if (roomId !== currentRoomId) {

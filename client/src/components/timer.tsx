@@ -14,6 +14,7 @@ export default function Timer() {
       initialTime.current -= 1
       dispatch(setTime(initialTime.current))
     }, 1000)
+    return () => clearInterval(interval.current)
   }, [])
 
   useEffect(() => {

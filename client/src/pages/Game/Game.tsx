@@ -5,10 +5,8 @@ import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
 
-import RoomInfo from 'components/roomInfo'
-import Setting from 'components/setting'
 import Chat from 'components/chat'
-
+import GameHeader from 'pages/Game/gameHeader'
 import GameTeller from 'pages/Game/gameTeller'
 import GameChoice from 'pages/Game/gameChoice'
 import GameResult from 'pages/Game/gameResult'
@@ -28,7 +26,7 @@ import {
 
 export default function Game() {
   const dispatch = useDispatch()
-  const roomId = useParams().gameId
+  const { roomId } = useParams()
   const { nickname } = useSelector((state: any) => state.currentUser)
   const email = useSelector((state: any) => state.email)
 
@@ -159,13 +157,8 @@ export default function Game() {
 
   return (
     <div css={roomBg}>
-      <div css={head}>
-        <RoomInfo />
-        <Setting />
-      </div>
-
+      <GameHeader />
       <div>{mainComponent()}</div>
-
       <Chat />
     </div>
   )
@@ -175,8 +168,4 @@ const roomBg = css({
   // backgroundImage: 'linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%)',
   backgroundImage: 'linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%)',
   backgroundSize: 'cover',
-})
-const head = css({
-  display: 'flex',
-  justifyContent: 'space-between',
 })
