@@ -50,7 +50,7 @@ public class UserService {
                 .email(signupReqDto.getEmail())
                 .password(encoder.encode(newPw))
                 .nickname(signupReqDto.getNickname())
-                .profile("DEFAULT")
+                .profile("null")
                 .exp(0)
                 .win(0)
                 .lose(0)
@@ -99,9 +99,11 @@ public class UserService {
                 }
                 User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 String imgPath = s3Service.upload(user.getProfile(), file);
+                System.out.println("사진 업로드?");
+                System.out.println(file);
                 editReqDto.updateProfile(imgPath);
                 this.modify(editReqDto);
-            } else if(editReqDto.getProfile() != null && editReqDto.getProfile().equals("null")) {
+            } else if(editReqDto.getProfile().equals("reset")) {
                 User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 //이미지 있으면 s3 버킷에서 지움
                 s3Service.delete(user.getProfile());

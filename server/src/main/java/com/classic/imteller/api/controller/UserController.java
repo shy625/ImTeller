@@ -109,7 +109,7 @@ public class UserController {
 
     @PostMapping("/edit")
     @ApiOperation(value = "정보 수정", notes = "사용자가 정보를 갱신할 때 사용")
-    public ResponseEntity<String> edit(@RequestBody EditReqDto editReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+    public ResponseEntity<String> edit(@RequestPart(value="info") EditReqDto editReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         String msg = userService.editInfo(editReqDto, file);
         if (msg == "유저 정보수정 성공") return new ResponseEntity<String>("사용자의 정보를 변경했습니다.", HttpStatus.ACCEPTED);
         else return new ResponseEntity<String>(msg, HttpStatus.FORBIDDEN);
