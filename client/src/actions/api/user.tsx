@@ -17,9 +17,15 @@ const user = {
       data: data,
     })
   },
+  currentUser() {
+    return api({
+      method: 'get',
+      url: `${END_POINT}/currentUser`,
+    })
+  },
   profileEdit(data) {
     return api({
-      method: 'patch',
+      method: 'post',
       url: `${END_POINT}/edit`,
       data: data,
       headers: {

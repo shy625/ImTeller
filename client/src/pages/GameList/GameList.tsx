@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+
 import React from 'react'
 import { useState } from 'react'
 import { css } from '@emotion/react'
@@ -12,6 +13,7 @@ import Pagination from './Pagination'
 export default function GameList() {
   const [modalOpen, setModalOpen] = useState(false)
   const [page, setPage] = useState(false)
+
   const openModal = () => {
     setModalOpen(!modalOpen)
   }
@@ -19,8 +21,9 @@ export default function GameList() {
   const navigate = useNavigate()
 
   const goRoom = (roomId: number) => {
-    navigate(`/gameroom/${roomId}`)
+    navigate(`/game/${roomId}`)
   }
+
   return (
     <Layout>
       <div css={roomBg}>
@@ -46,6 +49,7 @@ export default function GameList() {
     </Layout>
   )
 }
+
 const roomsDummy: any = [
   {
     num: 1,

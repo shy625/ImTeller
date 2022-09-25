@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import Profile from 'components/profile'
-import { setEmail, setLogout } from 'store/modules/user'
+import { setCurrentUser, setEmail, setLogout } from 'store/modules/user'
+import user from 'actions/api/user'
+
+import { useBGM } from 'actions/hooks/useBGM'
 
 export default function Header() {
   const dispatch = useDispatch()
@@ -12,11 +15,24 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const currentUser = useSelector((state: any) => state.currentUser)
 
+  const start = useBGM()
+
   const logout = () => {
     dispatch(setLogout())
     dispatch(setEmail(''))
     localStorage.setItem('email', '')
   }
+
+  useEffect(() => {
+    user
+      .currentUser()
+      .then((result) => {
+        dispatch(setCurrentUser(result.data))
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [])
 
   useEffect(() => {
     if (currentUser.nickname) {

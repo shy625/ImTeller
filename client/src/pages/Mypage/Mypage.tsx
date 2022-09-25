@@ -29,9 +29,9 @@ export default function Mypage() {
     }
 
     user
-      .userDetail(nick)
+      .userDetail({ nickname: nick })
       .then((result) => {
-        dispatch(setUserDetail(result))
+        dispatch(setUserDetail(result.data))
       })
       .catch((error) => {
         console.error(error)
@@ -62,12 +62,15 @@ export default function Mypage() {
         <div>
           <img src={profile} alt="" />
           <div>{nickname}</div>
-          <div>Lv. {Math.floor(exp / 100)}</div>
+          <div>Lv. {Math.floor(exp / 100) + 1}</div>
           <div>
-            {win} 승 {lose} 패. 승률: {((win / (win + lose)) * 100).toFixed(1)}%
+            {win} 승 {lose} 패. 승률:{' '}
+            {win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%
           </div>
         </div>
+        <hr />
         <MypageTabNav setTabNo={setTabNo} isMyMypage={isMyMypage} />
+        <hr />
         {tabs[tabNo]}
       </main>
     </Layout>

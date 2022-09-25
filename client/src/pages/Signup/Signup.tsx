@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import Layout from 'layout/layout'
 import user from 'actions/api/user'
 
 export default function Signup(props: any) {
+  const navigate = useNavigate()
+
   const [nickValid, setNickValid] = useState('')
   const [authError, setAuthError] = useState('')
   const [emailChecked, setEmailChecked] = useState(false)
@@ -36,6 +39,7 @@ export default function Signup(props: any) {
     user
       .checkEmail(data)
       .then((result) => {
+        console.log(result)
         if (result.data == '사용가능한 이메일입니다.') {
           setEmailChecked(true)
         }
@@ -80,8 +84,10 @@ export default function Signup(props: any) {
     user
       .signup(credentials)
       .then((result) => {
-        console.log(result)
-        // 결과오면 처리하기. 로그인페이지로 보내기 등
+        if (result.data == '가입 성공') {
+          alert('회원가입에 성공했습니다. 이메일을 확인해 주세요')
+          navigate('/login')
+        }
       })
       .catch((error) => {
         console.error(error)
