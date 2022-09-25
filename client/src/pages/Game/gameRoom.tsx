@@ -1,17 +1,18 @@
 /** @jsxImportSource @emotion/react */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'
-import { useState } from 'react'
 
 import GameProfile from 'components/gameProfile'
 import CardSelectModal from 'pages/Game/cardSelectModal'
-import { playersDummy } from 'pages/Game/dummys'
 
-export default function GameRoom() {
-  const roomId: any = useParams().gameId
+export default function GameRoom(props: any) {
+  const players = useSelector((state: any) => state.players)
+  const roomId = useParams().gameId
   const [modalOpen, setModalOpen] = useState(false)
+  const { stompClient } = props
 
   const openModal = () => {
     setModalOpen(!modalOpen)
@@ -20,9 +21,9 @@ export default function GameRoom() {
   return (
     <div css={main}>
       <div css={players}>
-        {playersDummy.map((player: any) => (
-          <div key={player.id} css={playerOne}>
-            <GameProfile name={player.name} profile={player.profileUrl} />
+        {players.map((player: any) => (
+          <div key={player.nickname} css={playerOne}>
+            <GameProfile player={player} />
           </div>
         ))}
       </div>

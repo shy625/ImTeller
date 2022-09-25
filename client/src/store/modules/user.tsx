@@ -14,9 +14,8 @@ export const { setEmail } = email.actions
 export const currentUser = createSlice({
   name: 'currentUser',
   initialState: {
-    nickname: 'test',
-    profile:
-      'https://w.namu.la/s/6f490388edd0eb0595b633808b7f9d4a4251ef5f33052b34a8f104a7b872676191869533df4148d6b540c5191c3651c6e492c4cb1502b8f1a62ba16a194f75b830f2e42d3496fe77d8c553746be4b71e2bd3ef4a8dc3b80783f89ac227c426c0f741a78c04644728cc49aaa5dc0b9143',
+    nickname: '',
+    profile: '',
     exp: 0,
     win: 0,
     lose: 0,
@@ -30,8 +29,7 @@ export const currentUser = createSlice({
     setLogout(state) {
       return {
         nickname: '',
-        profile:
-          'https://w.namu.la/s/6f490388edd0eb0595b633808b7f9d4a4251ef5f33052b34a8f104a7b872676191869533df4148d6b540c5191c3651c6e492c4cb1502b8f1a62ba16a194f75b830f2e42d3496fe77d8c553746be4b71e2bd3ef4a8dc3b80783f89ac227c426c0f741a78c04644728cc49aaa5dc0b9143',
+        profile: '',
         exp: 0,
         win: 0,
         lose: 0,
@@ -51,14 +49,12 @@ export const { setCurrentUser, setLogout, setWallet } = currentUser.actions
 export const userDetail = createSlice({
   name: 'userDetail',
   initialState: {
-    nickname: 'test',
-    profile:
-      'https://w.namu.la/s/6f490388edd0eb0595b633808b7f9d4a4251ef5f33052b34a8f104a7b872676191869533df4148d6b540c5191c3651c6e492c4cb1502b8f1a62ba16a194f75b830f2e42d3496fe77d8c553746be4b71e2bd3ef4a8dc3b80783f89ac227c426c0f741a78c04644728cc49aaa5dc0b9143',
-    exp: 1000,
-    win: 1,
-    lose: 1,
+    nickname: '',
+    profile: '',
+    exp: 0,
+    win: 0,
+    lose: 0,
     createdDT: undefined,
-    updatedDT: undefined,
     cardList: [
       {
         cardTitle: 'testcard',
@@ -74,3 +70,14 @@ export const userDetail = createSlice({
   },
 })
 export const { setUserDetail } = userDetail.actions
+
+export const cardList = createSlice({
+  name: 'cardList',
+  initialState: [],
+  reducers: {
+    setCardList(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setCardList } = cardList.actions

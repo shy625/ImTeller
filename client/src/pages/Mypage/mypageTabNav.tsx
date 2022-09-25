@@ -34,7 +34,6 @@ export default function MypageTabNav(props: any) {
             </div>
             <div
               onClick={() => {
-                alert('비밀번호 확인절차(현재 생략)')
                 navigate('/profileEdit')
               }}
             >

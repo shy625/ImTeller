@@ -9,7 +9,7 @@ export default function CardList(props: any) {
     <div>
       CardList
       {cardList.map((card, idx) => {
-        return <Card card={card} key={idx + card.cardTitle} />
+        return <Card card={card} key={idx} />
       })}
     </div>
   )

@@ -39,6 +39,7 @@ export default function Signup(props: any) {
     user
       .checkEmail(data)
       .then((result) => {
+        console.log(result)
         if (result.data == '사용가능한 이메일입니다.') {
           setEmailChecked(true)
         }

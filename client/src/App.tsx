@@ -10,7 +10,6 @@ import Login from 'pages/Login/Login'
 import Paint from 'pages/Paint/Paint'
 import GameList from 'pages/GameList/GameList'
 import Game from 'pages/Game/Game'
-import GameResult from 'pages/GameResult/GameResult'
 import DealList from 'pages/DealList/DealList'
 import DealDetail from 'pages/DealDetail/DealDetail'
 import DealRegister from 'pages/DealRegister/DealRegister'
@@ -33,7 +32,6 @@ export default function App() {
         <Route path="/paint" element={<Paint />} />
         <Route path="/game" element={<GameList />} />
         <Route path="/game/:gameId" element={<Game />} />
-        <Route path="/game/:gameId/result" element={<GameResult />} /> {/* 필요 없을 수도 */}
         <Route path="/deal" element={<DealList />} />
         <Route path="/deal/:dealId" element={<DealDetail />} />
         <Route path="/deal/register" element={<DealRegister />} />
