@@ -1,5 +1,5 @@
 //NFT 민팅 테스트코드
-const ClassicCard = artifacts.require("ClassicNFT(custom)");
+const ClassicCard = artifacts.require("ClassicNFT");
 
 contract("ClassicCard", (accounts) => {
 
@@ -7,14 +7,11 @@ contract("ClassicCard", (accounts) => {
         const instance = await ClassicCard.deployed();
         const artist = accounts[0];
         const tokenURI="토큰URI";
-        const creationDate="날짜";
-        const title ="살려줘";
-        const description ="솔리디티 근본없어";
 
         it("Create Test", () => {
             SsafyNFT.deployed()
                 .then(instance => {
-                    tokenId = instance.createCard(artist, tokenURI, creationDate, title, description);
+                    tokenId = instance.createCard(artist, tokenURI);
                     owner = sender;
                     instance.current()
                         .then(tokenid => console.log(tokenid))

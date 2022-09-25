@@ -1,5 +1,9 @@
 # production
 /build
+/contracts/artifacts
 
 # dependencies
 /node_modules
+
+#test
+/test
