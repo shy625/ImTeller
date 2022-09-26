@@ -32,7 +32,7 @@ export default function Game() {
 
   const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2면 gameEnd
   const [turn, setTurn] = useState(0) // 0이면 teller 단계(텔러면 문장 적기, 아니면 유사 그림 선택), 1이면 choice단계, 2면 result단계
-  const [selectedCard, setSelectedCard] = useState([])
+  const selectedCard = useSelector((state: any) => state.selectedCards)
   const [imteller, setImteller] = useState(false)
   const [result, setResult] = useState([])
 
@@ -97,7 +97,7 @@ export default function Game() {
         }
       })
 
-      // 텔러가 그림 묘사를 완료하면 그때부터 20초간 낚시그림 선택
+      // 텔러가 그림 묘사를 완료하면 그때부터 낚시그림 선택
       client.subscribe(`teller`, (action) => {
         const content = JSON.parse(action.body)
         dispatch(setDescription(content.cardMsg))
@@ -115,7 +115,7 @@ export default function Game() {
       // 아이템에 따라 효과 발동시키기
       client.subscribe(`item`, (action) => {
         const content = JSON.parse(action.body)
-        console.log(content)
+        // 미구현
       })
 
       // 카드 덱 채워넣기
@@ -127,7 +127,7 @@ export default function Game() {
       // 유저 점수 갱신
       client.subscribe(`result`, (action) => {
         const content = JSON.parse(action.body)
-        setResult(content.result)
+        setResult(content.result) // useState result가 최신점수, useSelector가 이전 점수, 차이보여주고 useSelector에 반영
         setTurn(2)
         setTimeout(() => {
           setTurn(0)
@@ -144,6 +144,7 @@ export default function Game() {
         }, 12000)
       })
     },
+
     beforeDisconnect(frame, client) {
       client.publish({
         destination: 'join',

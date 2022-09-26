@@ -110,6 +110,9 @@ export default function Login(props: any) {
                 onChange={(e) => {
                   passwordFilter(e)
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') onSubmit()
+                }}
               />
               {authError ? <p>{authError}</p> : null}
             </div>

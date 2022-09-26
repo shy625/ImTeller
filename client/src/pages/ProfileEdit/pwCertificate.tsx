@@ -33,7 +33,13 @@ export default function PwCertificate(props: any) {
       <label htmlFor="email"></label>
       <input type="email" value={email} disabled />
       <label htmlFor="password"></label>
-      <input id="password" type="password" />
+      <input
+        id="password"
+        type="password"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') checkPw()
+        }}
+      />
       <button onClick={checkPw}>비밀번호 확인</button>
     </div>
   )
