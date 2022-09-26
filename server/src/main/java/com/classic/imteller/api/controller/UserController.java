@@ -32,8 +32,8 @@ public class UserController {
     // 이메일 중복체크
     @PostMapping("/check/email")
     @ApiOperation(value = "이메일 중복 체크", notes = "중복 이메일인지 체크")
-    public ResponseEntity<String> checkEmail(@RequestBody String email){
-        Boolean isExists = userService.checkEmail(email);
+    public ResponseEntity<String> checkEmail(@RequestBody EmailCheckReqDto emailCheckReqDto){
+        Boolean isExists = userService.checkEmail(emailCheckReqDto.getEmail());
         if(isExists){
             return new ResponseEntity<String>("중복된 이메일입니다.", HttpStatus.FORBIDDEN);
         } else{
@@ -41,11 +41,11 @@ public class UserController {
         }
     }
 
-    // 이메일 중복체크
+    // 닉네임 중복체크
     @PostMapping("/check/nickname")
     @ApiOperation(value = "닉네임 중복 체크", notes = "중복 닉네임인지 체크")
-    public ResponseEntity<String> checkNickname(@RequestBody String nickname){
-        Boolean isExists = userService.checkNickname(nickname);
+    public ResponseEntity<String> checkNickname(@RequestBody NicknameCheckReqDto nicknameCheckReqDto){
+        Boolean isExists = userService.checkNickname(nicknameCheckReqDto.getNickname());
         if(isExists){
             return new ResponseEntity<String>("중복된 닉네임입니다.", HttpStatus.FORBIDDEN);
         } else{
@@ -53,7 +53,7 @@ public class UserController {
         }
     }
 
-    // 이메일 중복체크
+    // 비밀번호 체크
     @PostMapping("/check/pw")
     @ApiOperation(value = "비밀번호 체크", notes = "맞는 비밀번호인지 체크")
     public ResponseEntity<String> checkPassword(@RequestBody PwCheckDto pwCheckDto){
@@ -72,16 +72,23 @@ public class UserController {
         // 서비스에 접근해서 DB에 이메일과 비밀번호, 닉네임을 등록
         // user_id, 프로필, 경험치, 승, 패, 생성일시, 수정일시는 기본으로 들어갈 수 있도록 처리한다.
 
+        // 이미 DB에 존재하는 아이디와 닉네임인지 한번 더 체크
+        if (userService.checkEmail(signupReqDto.getEmail()) || userService.checkNickname(signupReqDto.getNickname())) {
+            return new ResponseEntity<String>("가입 실패", HttpStatus.FORBIDDEN);
+        }
+
         // 새로운 비밀번호 생성
         String newPw = utilService.getRandomPassword(10);
-        System.out.println(newPw);
         Boolean result = userService.signUp(signupReqDto, newPw);
-        System.out.println(result);
         // 잘 등록됐으면 그대로 리턴
-        if (result) return new ResponseEntity<String>("가입 성공", HttpStatus.ACCEPTED);
+        if (result) {
+            User user = userService.findUser(signupReqDto.getEmail());
+            emailService.sendMail(user, newPw);
+            return new ResponseEntity<String>("가입 성공", HttpStatus.ACCEPTED);
+        }
 
         // 등록 안됐으면 forbidden 리턴
-        return new ResponseEntity<String>("가입 실패", HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>("가입 실패", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/pwmail")
@@ -102,40 +109,10 @@ public class UserController {
 
     @PostMapping("/edit")
     @ApiOperation(value = "정보 수정", notes = "사용자가 정보를 갱신할 때 사용")
-    public ResponseEntity<String> edit(@RequestBody EditReqDto editReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
-        // S3 서비스 구현하고 주석 풀기
-//        try {
-//            if(file!=null) {
-//                if (file.getSize() >= 10485760) {
-//                    return new ResponseEntity<String>("이미지 크기 제한은 10MB 입니다.", HttpStatus.FORBIDDEN);
-//                }
-//                String originFile = file.getOriginalFilename();
-//                String originFileExtension = originFile.substring(originFile.lastIndexOf("."));
-//                if (!originFileExtension.equalsIgnoreCase(".jpg") && !originFileExtension.equalsIgnoreCase(".png")
-//                        && !originFileExtension.equalsIgnoreCase(".jpeg")) {
-//                    return new ResponseEntity<String>("jpg, jpeg, png의 이미지 파일만 업로드해주세요", HttpStatus.FORBIDDEN);
-//                }
-//                User user = userRepository.findByEmail(editReqDto.getEmail());
-//                String imgPath = s3Service.upload(user.getProfile(), file);
-//                editReqDto.updateProfile(imgPath);
-//                userService.edit(editReqDto);
-//            } else if(editReqDto.getProfile()!=null && editReqDto.getProfile().equals("reset")) {
-//                User user = userRepository.findByEmail(editReqDto.getEmail());
-//                //이미지 있으면 s3 버킷에서 지움
-//                s3Service.delete(user.getProfile());
-//
-//                //이미지 컬럼 null로 변경
-//                editReqDto.updateProfile("null");
-//                userService.edit(editReqDto);
-//            } else {
-//                userService.edit(editReqDto);
-//            }
-//            return new ResponseEntity<String>("유저 정보수정 성공", HttpStatus.OK);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            return new ResponseEntity<String>("유저 정보수정 실패", HttpStatus.FORBIDDEN);
-//        }
-        return new ResponseEntity<String>("사용자의 정보를 변경했습니다.", HttpStatus.ACCEPTED);
+    public ResponseEntity<String> edit(@RequestPart(value="info") EditReqDto editReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        String msg = userService.editInfo(editReqDto, file);
+        if (msg == "유저 정보수정 성공") return new ResponseEntity<String>("사용자의 정보를 변경했습니다.", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>(msg, HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/wallet")
@@ -152,4 +129,11 @@ public class UserController {
         return new ResponseEntity<DetailResDto>(resUser, HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/currentUser")
+    @ApiOperation(value = "내 정보 반환", notes = "내 정보를 전달받는 API")
+    // detailResDto 재활용
+    public ResponseEntity<DetailResDto> newPassword(@RequestHeader(value="Authorization") String email) {
+        DetailResDto resUser = userService.getDetail(userService.findUser(email).getNickname());
+        return new ResponseEntity<DetailResDto>(resUser, HttpStatus.ACCEPTED);
+    }
 }
