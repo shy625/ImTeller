@@ -28,8 +28,8 @@ public class Art extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User owner;
 
-    @Column(length=256)
-    private String isNFT;
+    @Column
+    private long tokenId;
 
     @Column(nullable = false, length=256)
     private String url;

@@ -74,14 +74,19 @@ public class UserService {
     }
 
     // 수정을 위한 함수
-    private void modify(EditReqDto editReqDto) {
+    @Transactional
+    public void modify(EditReqDto editReqDto) {
         User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         // 비밀번호 안넣은 케이스 설정
-        if("".equals(user.getPassword()) == false && user.getPassword() != null) {
+        if("".equals(editReqDto.getPassword()) == false && user.getPassword() != null) {
             String password = user.getPassword();
             editReqDto.updatePassword(encoder.encode(password));
         }
+        else {
+            editReqDto.updatePassword(encoder.encode(editReqDto.getPassword()));
+        }
         user.updateUser(editReqDto);
+        userRepository.save(user);
     }
 
     @Transactional
