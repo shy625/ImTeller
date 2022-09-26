@@ -28,6 +28,9 @@ public class Art extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User owner;
 
+    @Column(nullable = false, length=20)
+    private String ownerNickname;
+
     @Column
     private long tokenId;
 
