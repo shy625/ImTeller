@@ -16,9 +16,9 @@ public class DealController {
     private final DealService dealService;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDto> registerCard(@RequestBody RegisterDealReqDto requestDto) {
-        Long newDealId = dealService.registerCard(requestDto);
-        return new ResponseEntity<ResponseDto>(new ResponseDto(newDealId), HttpStatus.CREATED);
+    public ResponseEntity<ResponseDto> registerDeal(@RequestBody RegisterDealReqDto requestDto) {
+        Long newDealId = dealService.registerDeal(requestDto);
+        return new ResponseEntity<>(new ResponseDto(newDealId), HttpStatus.CREATED);
     }
 
 //    @GetMapping("/")

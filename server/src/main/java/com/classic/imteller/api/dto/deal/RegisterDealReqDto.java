@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RegisterDealReqDto {
 
-    private Long cardId;
+    private Long artId;
     private Integer lowPrice;
     private Integer instantPrice;
     private String tag;
