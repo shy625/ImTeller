@@ -10,7 +10,11 @@ export default function profileImage(props: any) {
     const image = event.target.files[0]
 
     const imageTag: any = document.querySelector('#image')
-    imageTag.src = URL.createObjectURL(image)
+    if (image) {
+      imageTag.src = URL.createObjectURL(image)
+    } else {
+      imageTag.src = ''
+    }
   }
 
   const resetImage = () => {
@@ -37,7 +41,7 @@ export default function profileImage(props: any) {
         <input
           id="profileImage"
           type="file"
-          accept="image/*"
+          accept=".png, .jpg"
           onChange={(event) => {
             changeImage(event)
           }}

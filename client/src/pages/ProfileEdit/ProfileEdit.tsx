@@ -102,19 +102,22 @@ export default function ProfileEdit(props: any) {
     }
 
     const passwordTag: any = document.querySelector('#password1')
-    const credentials = {
+    let credentials = {
       email,
       password: isChangePw ? passwordTag.value : password,
       nickname: nickname.value,
     }
-    const formdata: any = new FormData()
-    formdata.append('info', credentials)
 
+    const formdata: any = new FormData()
     const ImageTag: any = document.querySelector('#image')
-    if (currentUser.profile !== ImageTag.src) {
-      const profileImage: any = document.querySelector('#profileImage')
+    const profileImage: any = document.querySelector('#profileImage')
+    if (currentUser.profile !== ImageTag.src && profileImage.files.length !== 0) {
       formdata.append('file', profileImage.files[0])
+    } else {
+      credentials['profile'] = 'reset'
     }
+    const blob = new Blob([JSON.stringify(credentials)], { type: 'application/json' })
+    formdata.append('info', blob)
 
     user
       .profileEdit(formdata) // 결과 오면 처리하기
@@ -129,7 +132,7 @@ export default function ProfileEdit(props: any) {
   return (
     <Layout>
       <main>
-        {password ? (
+        {!password ? (
           <PwCertificate setPassword={setPassword} />
         ) : (
           <>

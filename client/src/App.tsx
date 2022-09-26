@@ -18,6 +18,8 @@ import Vote from 'pages/Vote/Vote'
 import FAQ from 'pages/FAQ/FAQ'
 import NotFound404 from 'pages/NotFound404/NotFound404'
 
+import Test from 'pages/test'
+
 import 'App.css'
 import { BgmLayer } from 'layout/bgmLayer'
 
@@ -40,6 +42,7 @@ export default function App() {
           <Route path="/rank" element={<Rank />} />
           <Route path="/vote" element={<Vote />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/test" element={<Test />} />
           <Route path="/*" element={<NotFound404 />} />
         </Routes>
       </BgmLayer>

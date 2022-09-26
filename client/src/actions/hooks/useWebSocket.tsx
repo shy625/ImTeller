@@ -26,7 +26,7 @@ export const useWebSocket = (params: any) => {
       logRawCommunication: false,
     })
     stompClient.webSocketFactory = () =>
-      new Sockjs(`http://j509.p.ssafy.io/socket/room/${params.roomId}/`)
+      new Sockjs(`http://j509.p.ssafy.io/api/v1/socket/room/${params.roomId}/`)
     stompClient.activate()
 
     return () => {

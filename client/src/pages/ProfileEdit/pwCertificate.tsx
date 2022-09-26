@@ -12,6 +12,7 @@ export default function PwCertificate(props: any) {
       email,
       password,
     }
+    console.log(credentials)
 
     user
       .login(credentials)
