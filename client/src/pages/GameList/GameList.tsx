@@ -8,9 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { useBGM } from 'actions/hooks/useBGM'
 import Layout from 'layout/layout'
 import Room from 'pages/GameList/room'
-import Pagination from 'pages/GameList/Pagination'
+import Pagination from 'pages/GameList/pagination'
 import game from 'actions/api/game'
-import MakeRoom from './makeRoomModal'
 
 export default function GameList() {
   const navigate = useNavigate()
