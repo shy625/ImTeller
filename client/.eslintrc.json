@@ -1,0 +1,25 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "prettier"],
+  "extends": ["plugin:react/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true }],
+    "react/jsx-uses-vars": "error",
+    "semi": "off",
+    "space-before-function-paren": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
