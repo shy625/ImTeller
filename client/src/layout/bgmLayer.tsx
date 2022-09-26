@@ -26,14 +26,16 @@ export const BgmLayer = (props: any) => {
 
   useEffect(() => {
     return () => {
-      ref.current.pause()
+      if (ref.current) {
+        ref.current.pause()
+      }
     }
   }, [])
 
   return (
     <div>
       {props.children}
-      <audio autoPlay ref={ref} loop controls></audio>
+      <audio ref={ref} autoPlay loop controls></audio>
     </div>
   )
 }

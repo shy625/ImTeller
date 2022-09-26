@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
 
+import { useBGM } from 'actions/hooks/useBGM'
 import Chat from 'components/chat'
 import GameHeader from 'pages/Game/gameHeader'
 import GameTeller from 'pages/Game/gameTeller'
@@ -35,6 +36,8 @@ export default function Game() {
   const [selectedCard, setSelectedCard] = useState([])
   const [imteller, setImteller] = useState(false)
   const [result, setResult] = useState([])
+
+  useBGM({ src: 'assets/audio/gameBgm.mp3' })
 
   const mainComponent = () => {
     if (state === 0) return <GameRoom stompClient={stompClient} />

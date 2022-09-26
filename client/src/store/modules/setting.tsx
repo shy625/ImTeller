@@ -13,7 +13,7 @@ export const { setIsBgmOn } = isBgmOn.actions
 
 export const bgmSrc = createSlice({
   name: 'bgmSrc',
-  initialState: 'assets/audio/bgm.mp3',
+  initialState: 'assets/audio/mainBgm.mp3',
   reducers: {
     setBgmSrc(state, action) {
       return action.payload

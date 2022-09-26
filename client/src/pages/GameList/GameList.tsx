@@ -5,10 +5,11 @@ import { useState } from 'react'
 import { css } from '@emotion/react'
 import { useNavigate } from 'react-router-dom'
 
-import Room from './Room'
-import MakeRoom from './MakeRoomModal'
+import { useBGM } from 'actions/hooks/useBGM'
 import Layout from 'layout/layout'
-import Pagination from './Pagination'
+import Room from 'pages/GameList/Room'
+import MakeRoom from 'pages/GameList/MakeRoomModal'
+import Pagination from 'pages/GameList/Pagination'
 
 export default function GameList() {
   const [modalOpen, setModalOpen] = useState(false)
@@ -23,6 +24,8 @@ export default function GameList() {
   const goRoom = (roomId: number) => {
     navigate(`/game/${roomId}`)
   }
+
+  useBGM({ src: 'assets/audio/gameListBgm.mp3', volume: 50 })
 
   return (
     <Layout>

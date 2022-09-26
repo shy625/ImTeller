@@ -15,8 +15,6 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const currentUser = useSelector((state: any) => state.currentUser)
 
-  const start = useBGM()
-
   const logout = () => {
     dispatch(setLogout())
     dispatch(setEmail(''))

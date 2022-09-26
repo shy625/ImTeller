@@ -20,8 +20,7 @@ export default function Main() {
         >
           시작하기
         </button>
-        {/* <Timer /> */}
-        <button>재생하기</button>
+        <Timer />
       </main>
     </Layout>
   )
