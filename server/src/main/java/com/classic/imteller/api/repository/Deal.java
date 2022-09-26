@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,14 +30,16 @@ public class Deal extends BaseEntity {
     private LocalDateTime finishedAt;
 
     @OneToMany(mappedBy = "deal")
-    private List<Bid> bidList;
+    private List<Bid> bidList = new ArrayList<>();
 
     @Builder
-    public Deal(Card card, Integer lowPrice, Integer instantPrice, String tag, LocalDateTime finishedAt) {
+    public Deal(Card card, Integer lowPrice, Integer instantPrice, String tag, LocalDateTime finishedAt, List<Bid> bidList) {
         this.card = card;
         this.lowPrice = lowPrice;
         this.instantPrice = instantPrice;
         this.tag = tag;
         this.finishedAt = finishedAt;
+        this.bidList = bidList;
     }
+
 }
