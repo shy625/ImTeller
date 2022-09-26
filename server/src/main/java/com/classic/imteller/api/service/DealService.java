@@ -1,6 +1,8 @@
 package com.classic.imteller.api.service;
 
+import com.classic.imteller.api.dto.deal.DealDetailResDto;
 import com.classic.imteller.api.dto.deal.RegisterDealReqDto;
+import com.classic.imteller.api.dto.deal.SearchDealResDto;
 import com.classic.imteller.api.repository.Art;
 import com.classic.imteller.api.repository.ArtRepository;
 import com.classic.imteller.api.repository.Deal;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -36,4 +40,25 @@ public class DealService {
 
         return dealRepository.save(newDeal).getId();
     }
+
+    public List<SearchDealResDto> search(String keyword, int target, int sort, int status) {
+        List<SearchDealResDto> resDtoList = new ArrayList<>();
+
+
+
+        return resDtoList;
+    }
+
+    public DealDetailResDto showDealDetail(Long dealId) {
+        return new DealDetailResDto();
+    }
+
+    @Transactional
+    public void removeDeal(Long dealId) {
+        Deal deal = dealRepository.findById(dealId).orElseThrow();
+
+
+        dealRepository.deleteById(dealId);
+    }
+
 }
