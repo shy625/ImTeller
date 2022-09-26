@@ -1,9 +1,13 @@
-# production
+
 /build
 /contracts/artifacts
 
-# dependencies
+.secret
+truffle-config.js
+
+
 /node_modules
 
-#test
+
 /test
+
