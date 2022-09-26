@@ -1,18 +1,33 @@
 package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.game.ChatDto;
+import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
 public class SocketController {
     private final RoomService roomService;
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
+
+    private final SimpMessageSendingOperations sendingOperations;
+
+    // 생성 : 게임방 생성
+    @MessageMapping("/room/create/")
+    public void create(@DestinationVariable String sessionId) {
+        if (Message.MessageType.ENTER.equals(message.getType())) {
+            message.setMessage(message.getSender() + "이 입장했습니다.");
+        }
+        sendingOperations.convertAndSend("/sub/comm/room/" + message.getRoomId(), message);
+    }
 
     // 입장 : 게임방에 입장
     @MessageMapping("/chat/room/{sessionId}/join")
@@ -104,10 +119,11 @@ public class SocketController {
 
     }
 
-    @MessageMapping("/chat/room/test")
+
+
+    @MessageMapping("/chat/room/join")
     public void test(ChatDto chatDto) {
         chatDto.setMessage(chatDto.getWriter() + "님이 채팅방에 참여하였습니다.");
-        template.convertAndSend("/sub/chat/room/1" + chatDto.getRoomId(), chatDto);
-        System.out.println("연결됏음");
+        template.convertAndSend("/sub/chat/room/" + chatDto.getRoomId(), chatDto);
     }
 }
