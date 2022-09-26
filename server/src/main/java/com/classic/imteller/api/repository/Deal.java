@@ -15,7 +15,7 @@ import java.util.List;
 public class Deal extends BaseEntity {
 
     @OneToOne
-    private Card card;
+    private Art art;
 
     @Column(nullable = false)
     private Integer lowPrice;
@@ -33,8 +33,8 @@ public class Deal extends BaseEntity {
     private List<Bid> bidList = new ArrayList<>();
 
     @Builder
-    public Deal(Card card, Integer lowPrice, Integer instantPrice, String tag, LocalDateTime finishedAt, List<Bid> bidList) {
-        this.card = card;
+    public Deal(Art art, Integer lowPrice, Integer instantPrice, String tag, LocalDateTime finishedAt, List<Bid> bidList) {
+        this.art = art;
         this.lowPrice = lowPrice;
         this.instantPrice = instantPrice;
         this.tag = tag;
