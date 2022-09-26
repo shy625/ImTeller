@@ -69,7 +69,22 @@ const CardSelect = (props: any) => {
       setSelected([...selected, cardId])
     }
   }
-  console.log(page)
+  const moveLeft = () => {
+    let num: number = Math.floor(page / limit)
+    if (num === 0) {
+      setPage((numPages - 1) * 6)
+    } else {
+      setPage((num - 1) * 6)
+    }
+  }
+  const moveRight = () => {
+    let num: number = Math.floor(page / limit)
+    if (num === numPages - 1) {
+      setPage(0)
+    } else {
+      setPage((num + 1) * 6)
+    }
+  }
   return (
     <div css={makeRoomModal}>
       <div className={open ? 'openModal modal' : 'modal'}>
@@ -78,6 +93,37 @@ const CardSelect = (props: any) => {
             <header>카드 선택하기</header>
             <main>
               <div className="window">
+                <button onClick={moveLeft}>왼쪽으로</button>
+                <div className="container" css={cards}>
+                  {cardDummy.slice(page, page + limit).map((card, i) => (
+                    <div key={i} css={cardOne} onClick={() => selectCard(card.cardId)}>
+                      <div className="info" css={info}>
+                        <div>{card.grade}</div>
+                        <div>{card.effect}</div>
+                        <div>{card.effectDetail}</div>
+                      </div>
+                      <img
+                        src={check}
+                        alt="check"
+                        className="check"
+                        css={selected.includes(card.cardId) ? cardOneSelected : checkImg}
+                      />
+                      <img src={card.cardImageURL} alt="카드" css={cardSize} />
+                    </div>
+                  ))}
+                </div>
+                <button onClick={moveRight}>오른쪽으로</button>
+                <div className="nav">
+                  {Array(numPages)
+                    .fill(0)
+                    .map((_, i) => (
+                      <div key={i} onClick={() => setPage(i * 6)}>
+                        ●
+                      </div>
+                    ))}
+                </div>
+              </div>
+              {/* <div className="window" css={window}>
                 <button>왼쪽으로</button>
                 <div className="container" css={container}>
                   {Array(numPages)
@@ -113,24 +159,6 @@ const CardSelect = (props: any) => {
                       </div>
                     ))}
                 </div>
-              </div>
-              {/* <div css={cards}>
-                {cardDummy.map((card, i) => (
-                  <div key={i} css={cardOne} onClick={() => selectCard(card.cardId)}>
-                    <div className="info" css={info}>
-                      <div>{card.grade}</div>
-                      <div>{card.effect}</div>
-                      <div>{card.effectDetail}</div>
-                    </div>
-                    <img
-                      src={check}
-                      alt="check"
-                      className="check"
-                      css={selected.includes(card.cardId) ? cardOneSelected : checkImg}
-                    />
-                    <img src={card.cardImageURL} alt="카드" css={cardSize} />
-                  </div>
-                ))}
               </div> */}
             </main>
             <footer>
@@ -273,6 +301,10 @@ const checkImg = css({
 })
 const container = css({
   display: 'flex',
+})
+const window = css({
+  overflow: 'hidden',
+  position: 'relative',
   width: '500px',
 })
 const cardDummy = [
