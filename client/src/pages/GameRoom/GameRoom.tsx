@@ -3,36 +3,47 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { css } from '@emotion/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
+
+import game from 'actions/api/game'
 
 import RoomInfo from 'components/roomInfo'
 import GameProfile from 'components/gameProfile'
 import Setting from '../../components/setting'
 import Chat from 'components/chat'
-import CardSelectModal from './CardSelectModal'
+import CardSelectModal from './cardSelectModal'
 // 여기서 이제 socket 연결이 시작되는거지
 export default function GameRoom() {
   const roomId: any = useParams().gameId
+  // api 연결되면 더미 데이터 이걸로 바꾸기
+  const [roomDetail, setRoomDetail] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
 
   const openModal = () => {
     setModalOpen(!modalOpen)
   }
 
+  useEffect(() => {
+    game.roomDetail(roomId).then((result) => {
+      setRoomDetail(result.data)
+    })
+  }, [roomId])
+
   return (
     <div css={roomBg}>
       <div>{roomId} 대기실입니다</div>
       <div css={head}>
         <RoomInfo
-          room={roomsDummy.num}
-          name={roomsDummy.name}
-          pw={roomsDummy.pw}
-          people={roomsDummy.people}
-          max={roomsDummy.max}
-          method={roomsDummy.method}
+          room={roomsDummy.roomId}
+          name={roomsDummy.roomName}
+          pw={roomsDummy.isLocked}
+          people={roomsDummy.peopleNum}
+          max={roomsDummy.maxPeopleNum}
+          method={roomsDummy.type}
+          typeNum={roomsDummy.typeNum}
         />
         <Setting />
       </div>
@@ -55,12 +66,13 @@ export default function GameRoom() {
   )
 }
 const roomsDummy: any = {
-  num: 1,
-  name: '내가 최고다',
-  people: 3,
-  max: 5,
-  method: '라운드',
-  pw: '',
+  roomId: 1,
+  roomName: '내가 최고다',
+  isLocked: true,
+  peopleNum: 3,
+  maxPeopleNum: 5,
+  type: '라운드',
+  typeNum: 3,
 }
 
 const playersDummy: any = [
@@ -133,7 +145,11 @@ const button = css({
   cursor: 'pointer',
 })
 const roomBg = css({
-  // backgroundImage: 'linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%)',
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  left: 0,
+  bottom: 0,
   backgroundImage: 'linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%)',
   backgroundSize: 'cover',
 })
