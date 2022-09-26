@@ -124,12 +124,7 @@ const makeRoomModal = css`
     z-index: 99;
     background-color: rgba(0, 0, 0, 0.6);
   }
-  .modal button {
-    outline: none;
-    cursor: pointer;
-    border: 0;
-  }
-  .modal > section {
+  section {
     width: 90%;
     max-width: 450px;
     margin: 0 auto;
@@ -139,37 +134,35 @@ const makeRoomModal = css`
     animation: modal-show 0.3s;
     overflow: hidden;
   }
-  .modal > section > header {
+  header {
     position: relative;
-    padding: 16px 64px 16px 16px;
+    padding: 16px 16px 0px 16px;
     font-weight: 700;
+    display: flex;
+    justify-content: center;
   }
-  .modal > section > header button {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 30px;
-    font-size: 21px;
-    font-weight: 700;
-    text-align: center;
-    color: #999;
-    background-color: transparent;
-  }
-  .modal > section > main {
+  main {
     padding: 16px;
   }
-  .modal > section > footer {
+  footer {
     padding: 12px 16px;
     text-align: right;
+    display: flex;
+    justify-content: center;
   }
-  .modal > section > footer button {
+  button {
+    outline: none;
+    cursor: pointer;
+    border: 0;
     padding: 6px 12px;
-    color: #fff;
-    background-color: #6c757d;
-    border-radius: 5px;
+    margin: 0px 10px 5px 10px;
+    color: #1b5198;
+    background-color: #d1e4ff;
+    border-radius: 12px;
     font-size: 13px;
+    width: 8em;
   }
-  .modal.openModal {
+  .openModal {
     display: flex;
     align-items: center;
     /* 팝업이 열릴때 스르륵 열리는 효과 */
