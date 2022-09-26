@@ -8,8 +8,10 @@ const Room = (props: any) => {
       <div>
         {props.people} / {props.max}
       </div>
-      <div>{props.method}</div>
-      <div>{props.pw === '' ? '공개' : '비공개'}</div>
+      <div>
+        {props.method} | {props.typeNum}
+      </div>
+      <div>{props.pw ? '공개' : '비공개'}</div>
     </div>
   )
 }
