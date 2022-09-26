@@ -79,11 +79,11 @@ public class UserService {
         User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         // 비밀번호 안넣은 케이스 설정
         if("".equals(editReqDto.getPassword()) == false && user.getPassword() != null) {
-            String password = user.getPassword();
+            String password = editReqDto.getPassword();
             editReqDto.updatePassword(encoder.encode(password));
         }
         else {
-            editReqDto.updatePassword(encoder.encode(editReqDto.getPassword()));
+            editReqDto.updatePassword(encoder.encode(user.getPassword()));
         }
         user.updateUser(editReqDto);
         userRepository.save(user);
