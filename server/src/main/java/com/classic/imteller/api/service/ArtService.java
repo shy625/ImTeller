@@ -26,8 +26,8 @@ public class ArtService {
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
-    public List<CardsResDto> getCards(String email) {
-        List<Art> allCards = artRepository.findAllByEmailAndIsNFT(email);
+    public List<CardsResDto> getCards(String nickname) {
+        List<Art> allCards = artRepository.findAllByNicknameAndIsNFT(nickname);
         List<CardsResDto> data = new ArrayList<>();
 
         // 하나씩 뒤져가면서 effect_id 카드효과에서 찾아서 넣기
@@ -72,6 +72,7 @@ public class ArtService {
         Art art = Art.builder()
                 .designer(user)
                 .owner(user)
+                .ownerNickname(paintSaveReqDto.getNickname())
                 .url(imgPath)
                 .title(paintSaveReqDto.getPaintTitle())
                 .description(paintSaveReqDto.getContent()).build();
