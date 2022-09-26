@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 import { useBGM } from 'actions/hooks/useBGM'
 import Layout from 'layout/layout'
 import Room from 'pages/GameList/Room'
-import MakeRoom from 'pages/GameList/MakeRoomModal'
 import Pagination from 'pages/GameList/Pagination'
 
 export default function GameList() {
@@ -32,7 +31,6 @@ export default function GameList() {
       <div css={roomBg}>
         <h2>게임방 목록입니다</h2>
         <button onClick={openModal}>방만들기</button>
-        <MakeRoom open={modalOpen} close={openModal} />
         <div css={rooms}>
           {roomsDummy.map((room: any) => (
             <div css={roomOne} key={room.num} onClick={() => goRoom(room.num)}>

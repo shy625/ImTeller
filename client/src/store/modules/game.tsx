@@ -152,6 +152,17 @@ export const cards = createSlice({
 })
 export const { setCards, addCard } = cards.actions
 
+export const selectedCards = createSlice({
+  name: 'selectedCards',
+  initialState: [],
+  reducers: {
+    setSelectedCards(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setSelectedCards } = selectedCards.actions
+
 export const description = createSlice({
   name: 'description',
   initialState: '',

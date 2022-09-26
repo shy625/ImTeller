@@ -32,3 +32,47 @@ export const volume = createSlice({
   },
 })
 export const { setVolume } = volume.actions
+
+export const soundEffect = createSlice({
+  name: 'soundEffect',
+  initialState: true,
+  reducers: {
+    setSoundEffect(state, action) {
+      return !state
+    },
+  },
+})
+export const { setSoundEffect } = soundEffect.actions
+
+export const modalState = createSlice({
+  name: 'modalState',
+  initialState: '',
+  reducers: {
+    setModalState(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setModalState } = modalState.actions
+
+export const modalMsg = createSlice({
+  name: 'modalMsg',
+  initialState: '',
+  reducers: {
+    setModalMsg(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setModalMsg } = modalMsg.actions
+
+export const modalResult = createSlice({
+  name: 'modalResult',
+  initialState: false,
+  reducers: {
+    setModalResult(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setModalResult } = modalResult.actions

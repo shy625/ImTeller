@@ -1,7 +1,7 @@
-import React, { FC, useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-export const BgmLayer = (props: any) => {
+export default function BgmLayer(props: any) {
   const ref: any = useRef()
 
   const bgmSrc = useSelector((state: any) => state.bgmSrc)
@@ -35,7 +35,7 @@ export const BgmLayer = (props: any) => {
   return (
     <div>
       {props.children}
-      <audio ref={ref} autoPlay loop controls></audio>
+      <audio ref={ref} loop controls></audio>
     </div>
   )
 }

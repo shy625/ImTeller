@@ -37,8 +37,9 @@ export default function Mypage() {
         console.error(error)
       })
 
-    art.cardList(nick).then((result) => {
-      setCartList(result.data.cardList)
+    art.cardList({ nickname: nick }).then((result) => {
+      console.log(result.data)
+      // setCartList(result.data.cardList)
     }) //
   }, [nick, nickname])
 

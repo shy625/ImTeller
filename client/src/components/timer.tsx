@@ -18,10 +18,10 @@ export default function Timer() {
   }, [])
 
   useEffect(() => {
-    if (initialTime.current <= 0) {
+    if (initialTime.current < 0) {
       clearInterval(interval.current)
     }
   }, [time])
 
-  return <div>{time}s</div>
+  return <div>{time !== -1 ? time + 's' : null}</div>
 }

@@ -16,11 +16,11 @@ export const useBGM = (props: any) => {
     }
   }, [])
 
-  const start = () => {
+  const playPause = () => {
     dispatch(setIsBgmOn(!isBgmOn))
   }
   const volumeControl = (volume) => {
     dispatch(setVolume(volume / 100))
   }
-  return [start, volumeControl]
+  return [playPause, volumeControl]
 }

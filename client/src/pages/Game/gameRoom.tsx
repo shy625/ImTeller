@@ -1,22 +1,33 @@
 /** @jsxImportSource @emotion/react */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import GameProfile from 'components/gameProfile'
-import CardSelectModal from 'pages/Game/cardSelectModal'
+
+import art from 'actions/api/art'
+import { setCardList } from 'store/modules/user'
 
 export default function GameRoom(props: any) {
-  const players = useSelector((state: any) => state.players)
-  const roomId = useParams().gameId
-  const [modalOpen, setModalOpen] = useState(false)
+  const dispatch = useDispatch()
+  const roomId = useParams().roomId
   const { stompClient } = props
+  const cardList = useSelector((state: any) => state.cardList)
+  const { nickname } = useSelector((state: any) => state.currentUser)
+  const players = useSelector((state: any) => state.players)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const openModal = () => {
     setModalOpen(!modalOpen)
   }
+
+  useEffect(() => {
+    art.cardList({ nickname }).then((result) => {
+      dispatch(setCardList(result.data))
+    })
+  }, [])
 
   return (
     <div css={main}>
@@ -32,7 +43,6 @@ export default function GameRoom(props: any) {
         카드 선택
       </button>
       <button css={button}>취소</button>
-      <CardSelectModal open={modalOpen} close={openModal} />
     </div>
   )
 }

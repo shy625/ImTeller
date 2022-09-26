@@ -9,10 +9,21 @@ import {
   items,
   itemState,
   cards,
+  selectedCards,
+  description,
+  table,
   endResult,
 } from 'store/modules/game'
 import { paintList } from 'store/modules/art'
-import { isBgmOn, bgmSrc, volume } from 'store/modules/setting'
+import {
+  isBgmOn,
+  bgmSrc,
+  volume,
+  soundEffect,
+  modalState,
+  modalMsg,
+  modalResult,
+} from 'store/modules/setting'
 
 export default configureStore({
   reducer: {
@@ -28,6 +39,9 @@ export default configureStore({
     items: items.reducer,
     itemState: itemState.reducer,
     cards: cards.reducer,
+    selectedCards: selectedCards.reducer,
+    description: description.reducer,
+    table: table.reducer,
     endResult: endResult.reducer,
 
     paintList: paintList.reducer,
@@ -35,5 +49,9 @@ export default configureStore({
     isBgmOn: isBgmOn.reducer,
     bgmSrc: bgmSrc.reducer,
     volume: volume.reducer,
+    soundEffect: soundEffect.reducer,
+    modalState: modalState.reducer,
+    modalMsg: modalMsg.reducer,
+    modalResult: modalResult.reducer,
   },
 })

@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
 
-import { useBGM } from 'actions/hooks/useBGM'
 import Chat from 'components/chat'
 import GameHeader from 'pages/Game/gameHeader'
 import GameTeller from 'pages/Game/gameTeller'
@@ -37,15 +36,11 @@ export default function Game() {
   const [imteller, setImteller] = useState(false)
   const [result, setResult] = useState([])
 
-  useBGM({ src: 'assets/audio/gameBgm.mp3' })
-
   const mainComponent = () => {
     if (state === 0) return <GameRoom stompClient={stompClient} />
     if (state === 1) {
       if (turn === 0)
-        return (
-          <GameTeller stompClient={stompClient} imteller={imteller} setImteller={setImteller} />
-        )
+        return <GameTeller stompClient={stompClient} imteller={imteller} nickname={nickname} />
       if (turn === 1) return <GameChoice stompClient={stompClient} />
       if (turn === 2) return <GameResult result={result} />
     }
@@ -93,10 +88,12 @@ export default function Game() {
       // 새 텔러 받으면 새 턴 시작
       client.subscribe('newteller', (action) => {
         const content = JSON.parse(action.body)
+        setImteller(false)
         setState(1)
         setTurn(0)
         if (content.nickname === nickname) {
           setImteller(true)
+          dispatch(setTime(45))
         }
       })
 
