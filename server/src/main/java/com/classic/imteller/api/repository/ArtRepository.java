@@ -10,10 +10,10 @@ import java.util.Optional;
 
 @Repository
 public interface ArtRepository extends JpaRepository<Art, Integer> {
-    @Query(value="SELECT * FROM Art WHERE owner_id = :email AND isNFT IS NOT NULL", nativeQuery = true)
-    List<Art> findAllByEmailAndIsNFT(@Param("email") String email);
+    @Query(value="SELECT * FROM Art WHERE owner_nickname = :nickname AND tokenId IS NOT NULL", nativeQuery = true)
+    List<Art> findAllByNicknameAndIsNFT(@Param("nickname") String email);
 
-    @Query(value="SELECT * FROM Art WHERE owner_id = :email AND isNFT IS NULL", nativeQuery = true)
+    @Query(value="SELECT * FROM Art WHERE owner_id = :email AND tokenId IS NULL", nativeQuery = true)
     List<Art> findAllByEmailAndIsPaint(@Param("email") String email);
 
     Optional<Art> findById(Long id);
