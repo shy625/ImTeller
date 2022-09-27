@@ -9,6 +9,7 @@ import GameProfile from 'components/gameProfile'
 
 import art from 'actions/api/art'
 import { setCardList } from 'store/modules/user'
+import { useModal } from 'actions/hooks/useModal'
 
 export default function GameRoom(props: any) {
   const dispatch = useDispatch()
@@ -17,17 +18,14 @@ export default function GameRoom(props: any) {
   const cardList = useSelector((state: any) => state.cardList)
   const { nickname } = useSelector((state: any) => state.currentUser)
   const players = useSelector((state: any) => state.players)
-  const [modalOpen, setModalOpen] = useState(false)
-
-  const openModal = () => {
-    setModalOpen(!modalOpen)
-  }
 
   useEffect(() => {
     art.cardList({ nickname }).then((result) => {
       dispatch(setCardList(result.data))
     })
   }, [])
+
+  const [setModalState, setModalMsg] = useModal()
 
   return (
     <div css={main}>
@@ -39,7 +37,12 @@ export default function GameRoom(props: any) {
         ))}
       </div>
 
-      <button css={button} onClick={openModal}>
+      <button
+        css={button}
+        onClick={() => {
+          setModalState('cardSelect')
+        }}
+      >
         카드 선택
       </button>
       <button css={button}>취소</button>

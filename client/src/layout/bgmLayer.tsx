@@ -35,7 +35,7 @@ export default function BgmLayer(props: any) {
   return (
     <div>
       {props.children}
-      <audio ref={ref} autoPlay loop controls></audio>
+      <audio ref={ref} loop controls></audio>
     </div>
   )
 }

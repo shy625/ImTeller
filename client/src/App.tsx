@@ -18,9 +18,10 @@ import Vote from 'pages/Vote/Vote'
 import FAQ from 'pages/FAQ/FAQ'
 import NotFound404 from 'pages/NotFound404/NotFound404'
 
-import 'App.css'
 import BgmLayer from 'layout/bgmLayer'
 import ModalLayer from 'layout/modals/modalLayer'
+
+import 'App.css'
 
 export default function App() {
   return (

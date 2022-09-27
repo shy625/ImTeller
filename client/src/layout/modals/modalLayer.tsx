@@ -22,12 +22,11 @@ export default function ModalLayer(props: any) {
     <div>
       {props.children}
       {console.log(modalState)}
-      <ModalST>{modalState ? Modals[modalState] : null}</ModalST>
+      {modalState ? <ModalST>{Modals[modalState]}</ModalST> : null}
     </div>
   )
 }
 const ModalST = styled.div`
-  display: none;
   position: fixed;
   top: 0;
   right: 0;
