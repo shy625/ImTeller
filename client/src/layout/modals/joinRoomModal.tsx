@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import game from 'actions/api/game'
-import { setModalState } from 'store/modules/setting'
+import { setModalState, setModalMsg } from 'store/modules/setting'
 import { setRoomInfo } from 'store/modules/game'
 
 export default function JoinRoomModal(props: any) {
@@ -29,6 +29,9 @@ export default function JoinRoomModal(props: any) {
       navigate('/game')
     } else if (!isLocked) {
       onSubmit()
+    }
+    return () => {
+      dispatch(setModalMsg(true))
     }
   }, [roomId])
 

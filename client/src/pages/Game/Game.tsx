@@ -46,6 +46,9 @@ export default function Game() {
   useEffect(() => {
     // 방에 들어오면 비밀번호 확인
     setModalState('joinRoom')
+    return () => {
+      setModalMsg(true)
+    }
   }, [roomId])
 
   const mainComponent = () => {
