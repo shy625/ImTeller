@@ -52,12 +52,12 @@ public class GameController {
 
     @PostMapping("/make")
     @ApiOperation(value = "게임방 생성", notes = "게임방을 생성하고 해당 내용을 DB에 저장")
-    public ResponseEntity<Integer> makeRoom(@RequestBody final MakeReqDto roomInfo){
-        // 방 정보를 소켓과 Redis에 저장
+    public ResponseEntity<Long> makeRoom(@RequestBody final MakeReqDto roomInfo){
+        // 방 정보를 소켓과 인메모리에 저장
         // 생성된 roomId 반환
-        int newRoomId = gameService.createRoom(roomInfo);
+        long newRoomId = gameService.createRoom(roomInfo);
 
-        return new ResponseEntity<Integer>(newRoomId, HttpStatus.OK);
+        return new ResponseEntity<Long>(newRoomId, HttpStatus.OK);
     }
 
 }
