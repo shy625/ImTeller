@@ -1,8 +1,10 @@
 package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.game.GameRoomDto;
-import com.classic.imteller.api.dto.game.JoinReqDto;
 import com.classic.imteller.api.dto.game.MakeReqDto;
+import com.classic.imteller.api.dto.room.JoinReqDto;
+import com.classic.imteller.api.repository.Room;
+import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.api.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GameController {
     private final GameService gameService;
+    private final RoomRepository roomRepository;
 
     // 이메일 중복체크
     @GetMapping("/rooms")
@@ -52,7 +55,8 @@ public class GameController {
     public ResponseEntity<Integer> makeRoom(@RequestBody final MakeReqDto roomInfo){
         // 방 정보를 소켓과 Redis에 저장
         // 생성된 roomId 반환
-        int newRoomId = gameService.getRoomId();
+        int newRoomId = gameService.createRoom(roomInfo);
+
         return new ResponseEntity<Integer>(newRoomId, HttpStatus.OK);
     }
 

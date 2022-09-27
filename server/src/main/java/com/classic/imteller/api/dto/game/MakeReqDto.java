@@ -7,7 +7,7 @@ public class MakeReqDto {
     private String roomName;
     private String roomPw;
     private int maxNum;
-    private boolean type;
+    private String type;
     private int typeNum;
     private String leader;
 }
