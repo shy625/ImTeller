@@ -10,5 +10,5 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Game extends BaseEntity {
     @Column(nullable = false, length=20)
-    private int session;
+    private long session;
 }

@@ -17,19 +17,32 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RoomService {
-    // 인메모리 리스트
-    List<Room> roomList = new ArrayList<>();
+    private final RoomRepository roomRepository;
 
     @Transactional
-    public void joinRoom(int sessionId, JoinReqDto joinReqDto) {
-
+    public Room joinRoom(long sessionId, JoinReqDto joinReqDto) {
+        // 게임이 시작되었다면 방에 들어갈 수 없어야 함
+        if (roomRepository.getRoom(sessionId) == null) return null;
+        if (roomRepository.getRoom(sessionId).getStarted()) return null;
+        boolean isGood = roomRepository.joinRoom(sessionId, joinReqDto);
+        if (isGood) {
+            Room room = roomRepository.getRoom(sessionId);
+            return room;
+        }
+        return null;
     }
     @Transactional(readOnly = true)
-    public void getRoomInfo(int sessionId) {
+    public void getRoomInfo(long sessionId) {
 
     }
 
     @Transactional
-    public void exitRoom(int sessionId, ExitReqDto exitReqDto) {
+    public Room exitRoom(long sessionId, ExitReqDto exitReqDto) {
+        String res = roomRepository.exitRoom(sessionId, exitReqDto);
+        if (res == "ok"){
+            Room room = roomRepository.getRoom(sessionId);
+            return room;
+        }
+        return null;
     }
 }

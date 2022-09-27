@@ -1,5 +1,6 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.dto.room.ExitReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
 import com.classic.imteller.api.dto.room.JoinResDto;
 import com.classic.imteller.api.repository.Room;
@@ -26,8 +27,15 @@ public class SocketController {
     // 입장 : 게임방에 입장
     @MessageMapping("/room/{sessionId}/join")
     public void join(@DestinationVariable("sessionId") int sessionId, JoinReqDto joinReqDto) {
-        // Room room = roomService.joinRoom(sessionId, joinReqDto);
-        // sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
+        Room room = roomService.joinRoom(sessionId, joinReqDto);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
+    }
+
+    // 퇴장 : 게임방에서 퇴장
+    @MessageMapping("/room/{sessionId}/exit")
+    public void exit(@DestinationVariable("sessionId") int sessionId, ExitReqDto exitReqDto) {
+        Room room = roomService.exitRoom(sessionId, exitReqDto);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/exit", room);
     }
 
     // 준비 : 방장 제외한 유저들 게임 준비

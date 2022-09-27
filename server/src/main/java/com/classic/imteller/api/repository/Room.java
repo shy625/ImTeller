@@ -22,7 +22,7 @@ import java.util.List;
 public class Room implements Serializable {
     @Id
     @Indexed
-    private int id;
+    private long id;
 
     private String roomName; // 방이름
     private String roomPw; // 방비번
@@ -39,10 +39,14 @@ public class Room implements Serializable {
     private List<Long> deck; // 전체 덱
     private HashMap<String, List<Long>> hand; // 각 플레이어가 가진 카드들의 id값을 저장
     private HashMap<String, Boolean> status; // 각 플레이어의 카드 제출 상태
-    private Long teller; // 현재 텔러인 유저 아이디
+    private String teller; // 현재 텔러인 유저 아이디
     private int turn; // 게임 중 상태 (type 1 : 텔러 카드 선택, type 2 : 플레이어 카드 선택, type 3 : 플레이어 카드 예측, type 4 : 결과 표시 및 반영)
     private int timer; // 해당 턴의 남은 시간
     private List<TableDto> table; // 텔러와 유저가 제출한 카드셋
     private HashMap<String, Long> choice; // 어떤 플레이어가 어떤 카드를 선택했는지 - key값은 유저id, value값은 카드id
     private List<EffectDto> activated; // 이번 턴에 발동한 아이템을 담아둔 배열
+
+    public boolean getStarted() {
+        return this.started;
+    }
 }
