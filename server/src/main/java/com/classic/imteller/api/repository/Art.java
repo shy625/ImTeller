@@ -51,5 +51,4 @@ public class Art extends BaseEntity {
         this.title = title;
         this.description = desc;
     }
-
 }
