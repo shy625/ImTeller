@@ -52,7 +52,7 @@ public class RoomRepository {
             HashMap<String, Boolean> ready = roomList.get(sessionId).getReady();
 
             // 방장이면 항상 true
-            if (roomList.get(sessionId).getLeader() == joinReqDto.getNickname()) {
+            if (roomList.get(sessionId).getLeader().equals(joinReqDto.getNickname())) {
                 ready.put(joinReqDto.getNickname(), true);
             }
             else ready.put(joinReqDto.getNickname(), false);
@@ -73,7 +73,7 @@ public class RoomRepository {
             // 만약 1명뿐이라면 특수케이스
             if (roomList.get(sessionId).getPlayers().size() > 1) {
                 String nextLeader = roomList.get(sessionId).getPlayers().get(1);
-                if (nextLeader == exitReqDto.getNickname()) nextLeader = roomList.get(sessionId).getPlayers().get(0);
+                if (nextLeader.equals(exitReqDto.getNickname())) nextLeader = roomList.get(sessionId).getPlayers().get(0);
                 roomList.get(sessionId).setLeader(nextLeader);
             }
             // players에서 없애기
