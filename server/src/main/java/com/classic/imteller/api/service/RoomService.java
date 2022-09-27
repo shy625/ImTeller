@@ -29,7 +29,7 @@ public class RoomService {
 
         // 인원수가 초과됐어도 방에 들어갈 수 없어야 함
         if (roomRepository.getRoom(sessionId).getPlayers().size() >= roomRepository.getRoom(sessionId).getMaxNum()) return null;
-        
+
         boolean isGood = roomRepository.joinRoom(sessionId, joinReqDto);
         if (isGood) {
             Room room = roomRepository.getRoom(sessionId);
@@ -52,7 +52,7 @@ public class RoomService {
         return null;
     }
 
-    public HashMap<String, Boolean> ready(String sessionId, ReadyReqDto readyReqDto) {
+    public HashMap<String, Boolean> ready(long sessionId, ReadyReqDto readyReqDto) {
         return roomRepository.ready(sessionId, readyReqDto);
     }
 

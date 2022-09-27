@@ -139,7 +139,7 @@ public class RoomRepository {
         }
     }
 
-    public HashMap<String, Boolean> ready (String sessionId, ReadyReqDto readyReqDto) {
+    public HashMap<String, Boolean> ready (long sessionId, ReadyReqDto readyReqDto) {
         try {
             HashMap<String, Boolean> readyMap = roomList.get(sessionId).getReady();
             readyMap.replace(readyReqDto.getNickname(), readyReqDto.getIsReady());
