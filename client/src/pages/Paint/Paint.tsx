@@ -8,6 +8,15 @@ import { css } from '@emotion/react'
 import art from 'actions/api/art'
 
 import Layout from 'layout/layout'
+import paintBucketIcon from '../../assets/image/paintBucket.png'
+import paintBrushIcon from '../../assets/image/paintBrush.png'
+import eraserIcon from '../../assets/image/eraser.png'
+import trashIcon from '../../assets/image/trash.png'
+import undoIcon from '../../assets/image/undo.png'
+import saveIcon from '../../assets/image/save.png'
+
+// style
+import { input, textarea, imgIcon } from '../../style/commonStyle'
 
 export default function Paint() {
   // form 전송용
@@ -15,8 +24,6 @@ export default function Paint() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
-  const CANVAS_WIDTH = 800
-  const CANVAS_HEIGHT = 800
   const location = useLocation()
   const { isNew } = location.state
   const canvasRef = useRef(null)
@@ -153,50 +160,81 @@ export default function Paint() {
 
     art.paintCreate(data)
   }
+
   return (
     <Layout>
       <main>
         <h1>여긴 Paint</h1>
         <div css={center}>
-          <input
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="작품의 제목을 입력해주세요"
-          />
-          <input
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="작품의 설명을 입력해주세요"
-          />
-
-          <input
-            onChange={(e) => setLineWidth(parseInt(e.target.value))}
-            type="range"
-            min="1"
-            max="100"
-          />
-          <div>{lineWidth}</div>
-          <input onChange={(e) => setColor(e.target.value)} type="color" ref={colorRef} />
-          <div className="palette">
-            {colorMap.map((_, i) => (
-              <div
-                css={colorDot}
-                key={i}
-                style={{ backgroundColor: colorMap[i].color }}
-                onClick={() => [
-                  setColor(colorMap[i].color),
-                  (colorRef.current.value = colorMap[i].color),
-                ]}
-              ></div>
-            ))}
+          <div className="canvas" css={vertical}>
+            <div className="controller" css={center}>
+              <div className="palette" css={palette}>
+                {colorMap.map((_, i) => (
+                  <div
+                    css={colorDot}
+                    key={i}
+                    style={{ backgroundColor: colorMap[i].color }}
+                    onClick={() => [
+                      setColor(colorMap[i].color),
+                      (colorRef.current.value = colorMap[i].color),
+                    ]}
+                  ></div>
+                ))}
+              </div>
+              <div>
+                <button onClick={() => setIsFilling(false)} css={btn}>
+                  <img src={paintBrushIcon} alt="붓" css={imgIcon} />
+                </button>
+                <button onClick={() => setIsFilling(true)} css={btn}>
+                  <img src={paintBucketIcon} alt="페인트통" css={imgIcon} />
+                </button>
+                <button onClick={eraseStroke} css={btn}>
+                  <img src={eraserIcon} alt="지우개" css={imgIcon} />
+                </button>
+                <button onClick={undo} css={btn}>
+                  <img src={undoIcon} alt="취소" css={imgIcon} />
+                </button>
+                <button onClick={eraseAll} css={btn}>
+                  <img src={trashIcon} alt="쓰레기통" css={imgIcon} />
+                </button>
+                <button onClick={savePic} css={btn}>
+                  <img src={saveIcon} alt="저장" css={imgIcon} />
+                </button>
+                <div>
+                  <input
+                    onChange={(e) => setColor(e.target.value)}
+                    type="color"
+                    ref={colorRef}
+                    css={colorPicker}
+                  />
+                  {isFilling ? null : (
+                    <div>
+                      <div css={textColor}>{lineWidth}</div>
+                      <input
+                        onChange={(e) => setLineWidth(parseInt(e.target.value))}
+                        type="range"
+                        min="1"
+                        max="100"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div css={form}>
+              <input
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="작품 제목"
+                type="text"
+                css={input}
+              />
+              <textarea
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="작품 설명 작성"
+                css={textarea}
+              />
+            </div>
           </div>
-          {isFilling ? (
-            <button onClick={() => setIsFilling(!isFilling)}>그리기 모드</button>
-          ) : (
-            <button onClick={() => setIsFilling(!isFilling)}>채우기 모드</button>
-          )}
-          <button onClick={eraseAll}>모두 지우기</button>
-          <button onClick={eraseStroke}>지우개</button>
-          <button onClick={undo}>취소</button>
-          <button onClick={savePic}>그림 저장</button>
           <canvas
             ref={canvasRef}
             css={canvasStyle}
@@ -217,21 +255,58 @@ export default function Paint() {
     </Layout>
   )
 }
+
+const CANVAS_WIDTH = 500
+const CANVAS_HEIGHT = 740
 const center = css({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  marginTop: 20,
+  marginBottom: 20,
+})
+const vertical = css({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: '20px',
 })
 const canvasStyle = css({
-  width: '800px',
-  height: '800px',
-  border: '5px solid black',
+  width: `${CANVAS_WIDTH}`,
+  height: `${CANVAS_HEIGHT}`,
   backgroundColor: 'white',
+  borderRadius: 12,
+})
+const palette = css({
+  display: 'flex',
+  width: '160px',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
 })
 const colorDot = css({
-  width: 20,
-  height: 20,
+  width: '20px',
+  height: '20px',
   cursor: 'pointer',
+  border: '2px solid white',
+  margin: '2px',
+})
+const btn = css({
+  border: 'none',
+  backgroundColor: 'transparent',
+  cursor: 'pointer',
+})
+const form = css({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  width: '100%',
+})
+const colorPicker = css({
+  width: '90%',
+})
+const textColor = css({
+  color: 'white',
 })
 const colorMap = [
   {
@@ -239,36 +314,36 @@ const colorMap = [
     color: '#55efc4',
   },
   {
-    id: 2,
-    color: '#00b894',
-  },
-  {
     id: 3,
     color: '#81ecec',
-  },
-  {
-    id: 4,
-    color: '#00cec9',
   },
   {
     id: 5,
     color: '#74b9ff',
   },
   {
-    id: 6,
-    color: '#0984e3',
-  },
-  {
     id: 7,
     color: '#a29bfe',
   },
   {
-    id: 8,
-    color: '#6c5ce7',
-  },
-  {
     id: 9,
     color: '#dfe6e9',
+  },
+  {
+    id: 2,
+    color: '#00b894',
+  },
+  {
+    id: 4,
+    color: '#00cec9',
+  },
+  {
+    id: 6,
+    color: '#0984e3',
+  },
+  {
+    id: 8,
+    color: '#6c5ce7',
   },
   {
     id: 10,
@@ -279,36 +354,36 @@ const colorMap = [
     color: '#ffeaa7',
   },
   {
-    id: 12,
-    color: '#fdcb6e',
-  },
-  {
     id: 13,
     color: '#fab1a0',
-  },
-  {
-    id: 14,
-    color: '#e17055',
   },
   {
     id: 15,
     color: '#ff7675',
   },
   {
-    id: 16,
-    color: '#d63031',
-  },
-  {
     id: 17,
     color: '#fd79a8',
   },
   {
-    id: 18,
-    color: '#e84393',
-  },
-  {
     id: 19,
     color: '#636e72',
+  },
+  {
+    id: 12,
+    color: '#fdcb6e',
+  },
+  {
+    id: 14,
+    color: '#e17055',
+  },
+  {
+    id: 16,
+    color: '#d63031',
+  },
+  {
+    id: 18,
+    color: '#e84393',
   },
   {
     id: 20,
