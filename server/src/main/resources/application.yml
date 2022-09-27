@@ -48,7 +48,6 @@ spring:
 
 #https 설정
 server:
-  port: 443
   servlet:
     context-path: /api/v1
   ssl:
