@@ -57,4 +57,12 @@ public class User extends BaseEntity {
             this.profile = editReqDto.getProfile();
         }
     }
+
+    public void plusWin() {
+        ++this.win;
+    }
+
+    public void plusLose() {
+        ++this.lose;
+    }
 }

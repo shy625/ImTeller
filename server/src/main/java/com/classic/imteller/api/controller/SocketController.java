@@ -1,7 +1,9 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.dto.room.ExitReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
 import com.classic.imteller.api.dto.room.JoinResDto;
+import com.classic.imteller.api.dto.room.ReadyReqDto;
 import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.api.service.RoomService;
@@ -13,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -25,93 +28,102 @@ public class SocketController {
 
     // 입장 : 게임방에 입장
     @MessageMapping("/room/{sessionId}/join")
-    public void join(@DestinationVariable("sessionId") int sessionId, JoinReqDto joinReqDto) {
-        // Room room = roomService.joinRoom(sessionId, joinReqDto);
-        // sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
+    public void join(@DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
+        Room room = roomService.joinRoom(sessionId, joinReqDto);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
+    }
+
+    // 퇴장 : 게임방에서 퇴장
+    @MessageMapping("/room/{sessionId}/exit")
+    public void exit(@DestinationVariable("sessionId") long sessionId, ExitReqDto exitReqDto) {
+        Room room = roomService.exitRoom(sessionId, exitReqDto);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/exit", room);
     }
 
     // 준비 : 방장 제외한 유저들 게임 준비
     @MessageMapping("/room/{sessionId}/ready")
-    public void ready(@DestinationVariable String sessionId) {
-
+    public void ready(@DestinationVariable long sessionId, ReadyReqDto readyReqDto) {
+        HashMap<String, Boolean> readyMap = roomService.ready(sessionId, readyReqDto);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/ready", readyMap);
     }
 
     // 게임시작 : 방장만 게임시작
     @MessageMapping("/room/{sessionId}/start")
-    public void start(@DestinationVariable String sessionId) {
+    public void start(@DestinationVariable long sessionId) {
 
     }
 
     // 카드 선택 : 유저가 사용할 NFT 카드 선택
     @MessageMapping("/room/{sessionId}/select")
-    public void select(@DestinationVariable String sessionId) {
+    public void select(@DestinationVariable long sessionId) {
 
     }
 
     // 카드 제출 : 각 유저가 선택한 NFT카드 덱에 추가
     @MessageMapping("/room/{sessionId}/table")
-    public void table(@DestinationVariable String sessionId) {
+    public void table(@DestinationVariable long sessionId) {
 
     }
 
     // 새로운 텔러 : 특정 텔러의 동작이 끝나거나 게임이 새로 시작해서 새로운 텔러의 동작이 시작
     @MessageMapping("/room/{sessionId}/newteller")
-    public void newTeller(@DestinationVariable String sessionId) {
+    public void newTeller(@DestinationVariable long sessionId) {
 
     }
 
     // 텔러 카드선택 : 텔러가 선택한 카드와 텔러의 문장이 전달됨
     @MessageMapping("/room/{sessionId}/teller")
-    public void teller(@DestinationVariable String sessionId) {
+    public void teller(@DestinationVariable long sessionId) {
 
     }
 
     // 드로우 : 카드를 사용해서 패가 줄었을 때 다시 채워주기
     @MessageMapping("/room/{sessionId}/draw")
-    public void draw(@DestinationVariable String sessionId) {
+    public void draw(@DestinationVariable long sessionId) {
 
     }
 
     // 유저 카드선택 : 텔러를 제외한 유저들이 카드를 제출
     @MessageMapping("/room/{sessionId}/others")
-    public void others(@DestinationVariable String sessionId) {
+    public void others(@DestinationVariable long sessionId) {
 
     }
 
     // 유저 카드 선택 : 텔러를 제외한 유저들이 카드를 선택
     @MessageMapping("/room/{sessionId}/choice")
-    public void choice(@DestinationVariable String sessionId) {
+    public void choice(@DestinationVariable long sessionId) {
 
     }
 
     // 해당 턴의 결과 : 유저 점수 업데이트
     @MessageMapping("/room/{sessionId}/result")
-    public void result(@DestinationVariable String sessionId) {
+    public void result(@DestinationVariable long sessionId) {
 
     }
 
     // 아이템 사용 : 아이템의 사용을 서버에 알림
     @MessageMapping("/room/{sessionId}/item")
-    public void item(@DestinationVariable String sessionId) {
+    public void item(@DestinationVariable long sessionId) {
 
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정
     @MessageMapping("/room/{sessionId}/end")
-    public void end(@DestinationVariable String sessionId) {
+    public void end(@DestinationVariable long sessionId) {
 
     }
 
     // 채팅 : 채팅 보내기
     @MessageMapping("/room/{sessionId}/chat")
-    public void chat(@DestinationVariable String sessionId) {
+    public void chat(@DestinationVariable long sessionId) {
 
     }
 
     // 모든 정보 : 방 내 모든 정보를 전달
     @MessageMapping("/room/{sessionId}/all")
-    public void all(@DestinationVariable String sessionId) {
-
+    public void all(@DestinationVariable long sessionId) {
+        Room room = roomService.getRoom(sessionId);;
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/ready", room);
     }
 
 }

@@ -10,5 +10,10 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Game extends BaseEntity {
     @Column(nullable = false, length=20)
-    private int session;
+    private long session;
+
+    // session이 0이되면 이미 없어진 방
+    public void deleteSession() {
+        this.session = 0;
+    }
 }
