@@ -20,6 +20,8 @@ export default function Paint() {
   const [color, setColor] = useState('')
   const [isFilling, setIsFilling] = useState(false)
   const [text, setText] = useState('')
+  const [restore, setRestore] = useState([])
+  const [index, setIndex] = useState(-1)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -31,7 +33,13 @@ export default function Paint() {
     setCtx(contextRef.current)
   }, [])
 
-  function onMove({ nativeEvent }) {
+  function start({ nativeEvent }) {
+    setIsDrawing(true)
+    ctx.beginPath()
+    ctx.moveTo(nativeEvent.offsetX, nativeEvent.offsetY)
+  }
+
+  function draw({ nativeEvent }) {
     if (isDrawing) {
       ctx.lineCap = 'round'
       ctx.lineWidth = lineWidth
@@ -41,14 +49,40 @@ export default function Paint() {
       ctx.stroke()
       return
     }
-    ctx.beginPath()
-    ctx.moveTo(nativeEvent.offsetX, nativeEvent.offsetY)
   }
+  // function onMove({ nativeEvent }) {
+  //   if (isDrawing) {
+  //     ctx.lineCap = 'round'
+  //     ctx.lineWidth = lineWidth
+  //     ctx.strokeStyle = color
+  //     ctx.fillStyle = color
+  //     ctx.lineTo(nativeEvent.offsetX, nativeEvent.offsetY)
+  //     ctx.stroke()
+  //     setRestore([...restore, ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)])
+  //     setIndex(index + 1)
+  //     console.log(restore)
+  //     console.log(index)
+  //     return
+  //   }
+  //   ctx.beginPath()
+  //   ctx.moveTo(nativeEvent.offsetX, nativeEvent.offsetY)
+  // }
   function onMouseDown() {
     setIsDrawing(true)
+    ctx.beginPath()
   }
-  function cancelPainting() {
-    setIsDrawing(false)
+  function cancelPainting({ nativeEvent }) {
+    if (isDrawing) {
+      ctx.stroke()
+      ctx.closePath()
+      setIsDrawing(false)
+    }
+    if (nativeEvent.type != 'mouseout') {
+      setRestore([...restore, ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)])
+      setIndex(index + 1)
+      console.log(restore)
+      console.log(index)
+    }
   }
   function onCanvasClick() {
     if (isFilling) {
@@ -59,6 +93,9 @@ export default function Paint() {
   function eraseAll() {
     ctx.fillStyle = 'white'
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+    setRestore([])
+    setIndex(-1)
   }
   function eraseStroke() {
     setColor('white')
@@ -74,6 +111,17 @@ export default function Paint() {
       setIsDrawing(false)
     }
   }
+  function undo() {
+    if (index < 0) {
+      eraseAll()
+    } else {
+      setRestore([...restore.slice(0, index)])
+      setIndex(index - 1)
+      ctx.putImageData(restore[index], 0, 0)
+    }
+    console.log(index)
+    console.log(restore)
+  }
   return (
     <Layout>
       <main>
@@ -82,8 +130,8 @@ export default function Paint() {
           <canvas
             ref={canvasRef}
             css={canvasStyle}
-            onMouseMove={onMove}
-            onMouseDown={onMouseDown}
+            onMouseMove={draw}
+            onMouseDown={start}
             onMouseUp={cancelPainting}
             onMouseLeave={cancelPainting}
             onClick={onCanvasClick}
@@ -117,6 +165,7 @@ export default function Paint() {
           )}
           <button onClick={eraseAll}>모두 지우기</button>
           <button onClick={eraseStroke}>지우개</button>
+          <button onClick={undo}>취소</button>
           <button>그림 저장</button>
           {/* <input
             type="text"
