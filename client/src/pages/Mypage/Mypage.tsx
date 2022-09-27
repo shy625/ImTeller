@@ -6,9 +6,11 @@ import Layout from 'layout/layout'
 import user from 'actions/api/user'
 import art from 'actions/api/art'
 
-import { setUserDetail } from 'store/modules/user'
 import MypageTabNav from 'pages/Mypage/mypageTabNav'
 import CardList from 'components/cardList'
+
+import { setUserDetail, setCardList } from 'store/modules/user'
+import { setPaintList } from 'store/modules/art'
 
 export default function Mypage() {
   const dispatch = useDispatch()
@@ -17,11 +19,11 @@ export default function Mypage() {
     (state: any) => state.userDetail,
   )
   const currentUser = useSelector((state: any) => state.currentUser)
+  const paintList = useSelector((state: any) => state.paintList)
+  const cardList = useSelector((state: any) => state.cardList)
 
   const [isMyMypage, setIsMyMypage] = useState(false)
   const [tabNo, setTabNo] = useState(0)
-  const [cardList, setCartList] = useState([])
-  const [paintList, setPaintList] = useState([])
 
   useEffect(() => {
     if (nick === currentUser.nickname) {
@@ -37,17 +39,27 @@ export default function Mypage() {
         console.error(error)
       })
 
-    art.cardList({ nickname: nick }).then((result) => {
-      console.log(result.data)
-      // setCartList(result.data.cardList)
-    }) //
+    art
+      .cardList({ nickname: nick })
+      .then((result) => {
+        console.log(result.data)
+        dispatch(setCardList(result.data.cardList))
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }, [nick, nickname])
 
   useEffect(() => {
     if (isMyMypage) {
-      art.paintList().then((result) => {
-        setPaintList(result.data.paintList)
-      }) //
+      art
+        .paintList()
+        .then((result) => {
+          setPaintList(result.data.paintList)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   }, [isMyMypage])
 
@@ -63,7 +75,7 @@ export default function Mypage() {
         <div>
           <img src={profile} alt="" />
           <div>{nickname}</div>
-          <div>Lv. {Math.floor(exp / 100) + 1}</div>
+          <div>Lv. {Math.floor(exp / 50) + 1}</div>
           <div>
             {win} 승 {lose} 패. 승률:{' '}
             {win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%

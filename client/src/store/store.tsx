@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import { email, currentUser, userDetail, cardList } from 'store/modules/user'
 import {
+  roomList,
   roomInfo,
   chats,
   players,
@@ -32,6 +33,7 @@ export default configureStore({
     userDetail: userDetail.reducer,
     cardList: cardList.reducer,
 
+    roomList: roomList.reducer,
     roomInfo: roomInfo.reducer,
     chats: chats.reducer,
     players: players.reducer,

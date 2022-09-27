@@ -57,7 +57,7 @@ export const { setModalState } = modalState.actions
 
 export const modalMsg = createSlice({
   name: 'modalMsg',
-  initialState: '',
+  initialState: true,
   reducers: {
     setModalMsg(state, action) {
       return action.payload
