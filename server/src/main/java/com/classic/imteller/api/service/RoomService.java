@@ -55,4 +55,8 @@ public class RoomService {
     public HashMap<String, Boolean> ready(String sessionId, ReadyReqDto readyReqDto) {
         return roomRepository.ready(sessionId, readyReqDto);
     }
+
+    public Room getRoom(long sessionId) {
+        return roomRepository.getRoom(sessionId);
+    }
 }

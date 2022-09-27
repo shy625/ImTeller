@@ -121,8 +121,9 @@ public class SocketController {
 
     // 모든 정보 : 방 내 모든 정보를 전달
     @MessageMapping("/room/{sessionId}/all")
-    public void all(@DestinationVariable String sessionId) {
-
+    public void all(@DestinationVariable long sessionId) {
+        Room room = roomService.getRoom(sessionId);;
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/ready", room);
     }
 
 }
