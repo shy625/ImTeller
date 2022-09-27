@@ -8,7 +8,7 @@ export default function AlertModal(props: any) {
   const dispatch = useDispatch()
   const modalMsg = useSelector((state: any) => state.modalMsg)
   return (
-    <div className="modal">
+    <div>
       {modalMsg}
       <button
         onClick={() => {

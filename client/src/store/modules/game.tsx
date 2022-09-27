@@ -1,5 +1,89 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+export const roomList = createSlice({
+  name: 'roomList',
+  initialState: [
+    {
+      roomId: 1,
+      roomName: '내가 최고다',
+      isLocked: true,
+      peopleNum: 3,
+      maxPeopleNum: 5,
+      type: '라운드',
+      typeNum: 3,
+    },
+    {
+      roomId: 3,
+      roomName: '가즈아',
+      isLocked: true,
+      peopleNum: 5,
+      maxPeopleNum: 6,
+      type: '점수',
+      typeNum: 30,
+    },
+    {
+      roomId: 4,
+      roomName: '자신있는 사람만 들어와',
+      isLocked: false,
+      peopleNum: 5,
+      maxPeopleNum: 6,
+      type: '점수',
+      typeNum: 50,
+    },
+    {
+      roomId: 5,
+      roomName: '힘들군',
+      isLocked: true,
+      peopleNum: 5,
+      maxPeopleNum: 6,
+      type: '라운드',
+      typeNum: 5,
+    },
+    {
+      roomId: 10,
+      roomName: '나는 더미데이터',
+      isLocked: true,
+      peopleNum: 5,
+      maxPeopleNum: 6,
+      type: '점수',
+      typeNum: 20,
+    },
+    {
+      roomId: 13,
+      roomName: '곧 사라질 계획이지',
+      isLocked: false,
+      peopleNum: 5,
+      maxPeopleNum: 6,
+      type: '라운드',
+      typeNum: 3,
+    },
+    {
+      roomId: 14,
+      roomName: '우승자리그',
+      isLocked: false,
+      peopleNum: 5,
+      maxPeopleNum: 6,
+      type: '라운드',
+      typeNum: 4,
+    },
+    {
+      roomId: 20,
+      roomName: '클래식이 좋아',
+      isLocked: true,
+      peopleNum: 5,
+      maxPeopleNum: 6,
+      type: '라운드',
+      typeNum: 8,
+    },
+  ],
+  reducers: {
+    setRoomList(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setRoomList } = roomList.actions
+
 export const roomInfo = createSlice({
   name: 'roomInfo',
   initialState: {

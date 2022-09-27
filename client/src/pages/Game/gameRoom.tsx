@@ -5,19 +5,24 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
-import GameProfile from 'components/gameProfile'
-
 import art from 'actions/api/art'
 import { setCardList } from 'store/modules/user'
+import { setSelectedCards } from 'store/modules/game'
 import { useModal } from 'actions/hooks/useModal'
+import nftGrade from 'actions/functions/nftGrade'
 
 export default function GameRoom(props: any) {
   const dispatch = useDispatch()
   const roomId = useParams().roomId
   const { stompClient } = props
+
   const cardList = useSelector((state: any) => state.cardList)
+  const selectedCards = useSelector((state: any) => state.selectedCards)
   const { nickname } = useSelector((state: any) => state.currentUser)
-  const players = useSelector((state: any) => state.players)
+
+  const [cardGrade, setCardGrade] = useState('')
+
+  const [setModalState, setModalMsg] = useModal()
 
   useEffect(() => {
     art.cardList({ nickname }).then((result) => {
@@ -25,18 +30,12 @@ export default function GameRoom(props: any) {
     })
   }, [])
 
-  const [setModalState, setModalMsg] = useModal()
+  useEffect(() => {
+    if (selectedCards.length) setCardGrade(nftGrade(selectedCards))
+  }, selectedCards)
 
   return (
     <div css={main}>
-      <div css={players}>
-        {players.map((player: any) => (
-          <div key={player.nickname} css={playerOne}>
-            <GameProfile player={player} />
-          </div>
-        ))}
-      </div>
-
       <button
         css={button}
         onClick={() => {
@@ -45,27 +44,18 @@ export default function GameRoom(props: any) {
       >
         카드 선택
       </button>
-      <button css={button}>취소</button>
+      <button
+        css={button}
+        onClick={() => {
+          dispatch(setSelectedCards([]))
+        }}
+      >
+        취소
+      </button>
+      {cardGrade}
     </div>
   )
 }
-
-const players = css({
-  display: 'flex',
-  justifyContent: 'space-evenly',
-  flexWrap: 'wrap',
-  width: '65%',
-})
-
-const playerOne = css({
-  margin: '10px',
-  flexGrow: 1,
-  flexShrink: 1,
-  flexBasis: '20%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-})
 
 const main = css({
   display: 'flex',
