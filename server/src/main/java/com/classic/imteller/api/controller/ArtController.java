@@ -46,7 +46,7 @@ public class ArtController {
     // form 데이터 처리 필요
     @PostMapping("/paints/save")
     @ApiOperation(value = "내 그림 새로 저장", notes = "내가 그린 그림을 저장한다")
-    public ResponseEntity<String> savePaint(@RequestBody PaintSaveReqDto paintSaveReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+    public ResponseEntity<String> savePaint(@RequestPart(value="saveInfo") PaintSaveReqDto paintSaveReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         artService.savePaint(paintSaveReqDto, file);
         return new ResponseEntity<String>("저장 성공", HttpStatus.ACCEPTED);
     }
@@ -54,7 +54,7 @@ public class ArtController {
     // form 데이터 처리 필요
     @PatchMapping("/paints/edit")
     @ApiOperation(value = "내 그림 수정", notes = "해당하는 내 그림을 수정한다")
-    public ResponseEntity<String> editPaint(@RequestBody PaintEditReqDto paintEditReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+    public ResponseEntity<String> editPaint(@RequestPart(value="editInfo") PaintEditReqDto paintEditReqDto, @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         artService.editPaint(paintEditReqDto, file);
         return new ResponseEntity<String>("수정 성공", HttpStatus.ACCEPTED);
     }
