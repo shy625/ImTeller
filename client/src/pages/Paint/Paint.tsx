@@ -1,12 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect } from 'react'
 import { useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import { css } from '@emotion/react'
+
+import art from 'actions/api/art'
 
 import Layout from 'layout/layout'
 
 export default function Paint() {
+  // form 전송용
+  const email = useSelector((state: any) => state.email)
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+
   const CANVAS_WIDTH = 800
   const CANVAS_HEIGHT = 800
   const location = useLocation()
@@ -14,6 +22,7 @@ export default function Paint() {
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
   const colorRef = useRef(null)
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null)
   const [isDrawing, setIsDrawing] = useState(false)
   const [lineWidth, setLineWidth] = useState(5)
@@ -27,6 +36,7 @@ export default function Paint() {
     const canvas = canvasRef.current
     canvas.width = CANVAS_WIDTH
     canvas.height = CANVAS_HEIGHT
+    setCanvas(canvas)
 
     const context = canvas.getContext('2d')
     contextRef.current = context
@@ -80,8 +90,6 @@ export default function Paint() {
     if (nativeEvent.type != 'mouseout') {
       setRestore([...restore, ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)])
       setIndex(index + 1)
-      console.log(restore)
-      console.log(index)
     }
   }
   function onCanvasClick() {
@@ -119,24 +127,46 @@ export default function Paint() {
       setIndex(index - 1)
       ctx.putImageData(restore[index], 0, 0)
     }
-    console.log(index)
-    console.log(restore)
+  }
+  function savePic() {
+    let imgDataUrl = canvas.toDataURL('image/png')
+
+    // 이미지 파일 다운로드용
+    // const a = document.createElement('a')
+    // a.href = imgDataUrl
+    // a.download = 'MyFirstCanvas.png'
+    // a.click()
+
+    let imgData = atob(imgDataUrl.split(',')[1])
+    let array = []
+    for (let i = 0; i < imgData.length; i++) {
+      array.push(imgData.charCodeAt(i))
+    }
+    let imgFile = new File([new Uint8Array(array)], 'picture', { type: 'image/png' })
+
+    const data: any = new FormData()
+
+    data.append('email', email)
+    data.append('paintTitle', title)
+    data.append('content', content)
+    data.append('paintImage', imgFile)
+
+    art.paintCreate(data)
   }
   return (
     <Layout>
       <main>
         <h1>여긴 Paint</h1>
         <div css={center}>
-          <canvas
-            ref={canvasRef}
-            css={canvasStyle}
-            onMouseMove={draw}
-            onMouseDown={start}
-            onMouseUp={cancelPainting}
-            onMouseLeave={cancelPainting}
-            onClick={onCanvasClick}
-            // onDoubleClick={onDoubleClick}
-          ></canvas>
+          <input
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="작품의 제목을 입력해주세요"
+          />
+          <input
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="작품의 설명을 입력해주세요"
+          />
+
           <input
             onChange={(e) => setLineWidth(parseInt(e.target.value))}
             type="range"
@@ -166,7 +196,17 @@ export default function Paint() {
           <button onClick={eraseAll}>모두 지우기</button>
           <button onClick={eraseStroke}>지우개</button>
           <button onClick={undo}>취소</button>
-          <button>그림 저장</button>
+          <button onClick={savePic}>그림 저장</button>
+          <canvas
+            ref={canvasRef}
+            css={canvasStyle}
+            onMouseMove={draw}
+            onMouseDown={start}
+            onMouseUp={cancelPainting}
+            onMouseLeave={cancelPainting}
+            onClick={onCanvasClick}
+            // onDoubleClick={onDoubleClick}
+          ></canvas>
           {/* <input
             type="text"
             placeholder="내용을 적고 더블 클릭해주세요"
