@@ -46,6 +46,12 @@ spring:
     # host: http://j7a509.p.ssafy.io/
     port: 6379
 
+#https 설정
 server:
   servlet:
     context-path: /api/v1
+  ssl:
+    enabled: true
+    key-store: keystore.p12
+    key-store-password: imteller509!
+    key-store-type: PKCS12
