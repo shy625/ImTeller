@@ -1,9 +1,6 @@
 package com.classic.imteller.api.repository;
 
-import com.classic.imteller.api.dto.room.CardDto;
-import com.classic.imteller.api.dto.room.ExitReqDto;
-import com.classic.imteller.api.dto.room.ItemDto;
-import com.classic.imteller.api.dto.room.JoinReqDto;
+import com.classic.imteller.api.dto.room.*;
 import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +17,7 @@ public class RoomRepository {
     private static final HashMap<Long, Room> roomList = new HashMap<>();
     private static final List<Long> usingId = new ArrayList<>();
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
     public Room getRoom (Long sessionId) {
         Room room = roomList.get(sessionId);
@@ -54,8 +52,10 @@ public class RoomRepository {
             HashMap<String, Boolean> ready = roomList.get(sessionId).getReady();
 
             // 방장이면 항상 true
-
-            ready.put(joinReqDto.getNickname(), false);
+            if (roomList.get(sessionId).getLeader() == joinReqDto.getNickname()) {
+                ready.put(joinReqDto.getNickname(), true);
+            }
+            else ready.put(joinReqDto.getNickname(), false);
             roomList.get(sessionId).setReady(ready);
 
             return true;
@@ -70,9 +70,12 @@ public class RoomRepository {
         try {
             // exit할때
             // 나간사람이 방장이면 방장 바꾸기
-            String nextLeader = roomList.get(sessionId).getPlayers().get(1);
-            if (nextLeader == exitReqDto.getNickname()) nextLeader = roomList.get(sessionId).getPlayers().get(0);
-            roomList.get(sessionId).setLeader(nextLeader);
+            // 만약 1명뿐이라면 특수케이스
+            if (roomList.get(sessionId).getPlayers().size() > 1) {
+                String nextLeader = roomList.get(sessionId).getPlayers().get(1);
+                if (nextLeader == exitReqDto.getNickname()) nextLeader = roomList.get(sessionId).getPlayers().get(0);
+                roomList.get(sessionId).setLeader(nextLeader);
+            }
             // players에서 없애기
             List<String> players = roomList.get(sessionId).getPlayers();
             players.remove(exitReqDto.getNickname());
@@ -80,40 +83,54 @@ public class RoomRepository {
             // ready에서 없애기
             HashMap<String, Boolean> newReady = roomList.get(sessionId).getReady();
             newReady.remove(exitReqDto.getNickname());
+            // 나간사람이 방장이면 새로운 방장의 ready상태를 true로 변경
+            newReady.replace(roomList.get(sessionId).getLeader(), true);
             roomList.get(sessionId).setReady(newReady);
-            // cards에서 없애기
-            HashMap<String, CardDto> newCards = roomList.get(sessionId).getCards();
-            newCards.remove(exitReqDto.getNickname());
-            roomList.get(sessionId).setCards(newCards);
-            // items에서 없애기
-            HashMap<String, ItemDto> newItems = roomList.get(sessionId).getItems();
-            newItems.remove(exitReqDto.getNickname());
-            roomList.get(sessionId).setItems(newItems);
-            // score에서 없애기
-            HashMap<String, Integer> newScore = roomList.get(sessionId).getScore();
-            newScore.remove(exitReqDto.getNickname());
-            roomList.get(sessionId).setScore(newScore);
-            // hand에서 없애기
-            HashMap<String, List<Long>> newHand = roomList.get(sessionId).getHand();
-            newHand.remove(exitReqDto.getNickname());
-            roomList.get(sessionId).setHand(newHand);
-            // status에서 없애기
-            HashMap<String, Boolean> newStatus = roomList.get(sessionId).getStatus();
-            newStatus.remove(exitReqDto.getNickname());
-            roomList.get(sessionId).setStatus(newStatus);
-            // choice에서 없애기
-            HashMap<String, Long> newChoice = roomList.get(sessionId).getChoice();
-            newChoice.remove(exitReqDto.getNickname());
-            roomList.get(sessionId).setChoice(newChoice);
 
-            // 만약 게임 도중에 나가면 1패가 추가되도록 만들기
-            if (roomList.get(sessionId).getStarted() == true) {
+            // 밑 요소들은 게임중일 때 작동
+            if (roomList.get(sessionId).getStarted()) {
+                // cards에서 없애기
+                HashMap<String, CardDto> newCards = roomList.get(sessionId).getCards();
+                newCards.remove(exitReqDto.getNickname());
+                roomList.get(sessionId).setCards(newCards);
+                // items에서 없애기
+                HashMap<String, ItemDto> newItems = roomList.get(sessionId).getItems();
+                newItems.remove(exitReqDto.getNickname());
+                roomList.get(sessionId).setItems(newItems);
+                // score에서 없애기
+                HashMap<String, Integer> newScore = roomList.get(sessionId).getScore();
+                newScore.remove(exitReqDto.getNickname());
+                roomList.get(sessionId).setScore(newScore);
+                // hand에서 없애기
+                HashMap<String, List<Long>> newHand = roomList.get(sessionId).getHand();
+                newHand.remove(exitReqDto.getNickname());
+                roomList.get(sessionId).setHand(newHand);
+                // status에서 없애기
+                HashMap<String, Boolean> newStatus = roomList.get(sessionId).getStatus();
+                newStatus.remove(exitReqDto.getNickname());
+                roomList.get(sessionId).setStatus(newStatus);
+                // choice에서 없애기
+                HashMap<String, Long> newChoice = roomList.get(sessionId).getChoice();
+                newChoice.remove(exitReqDto.getNickname());
+                roomList.get(sessionId).setChoice(newChoice);
+
+                // 만약 게임 도중에 나가면 1패가 추가되도록 만들기
+
                 User user = userRepository.findByNickname(exitReqDto.getNickname()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 user.plusLose();
                 userRepository.save(user);
+
+                // 나갔을 때 3명 이하가 되면 게임 종료 알림 전달
             }
 
-            // 나갔을 때 3명 이하가 되면 게임 종료 알림 전달
+            // 만약 모든 플레이어가 다 나갔다면?
+            if (players.size() == 0) {
+                Game game = gameRepository.findBySession(sessionId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                game.deleteSession();
+                gameRepository.save(game);
+                // 게임소켓방에서도 나가기
+                roomList.remove(sessionId);
+            }
 
             return "ok";
         } catch (Exception e) {
