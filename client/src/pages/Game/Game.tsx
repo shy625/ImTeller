@@ -1,11 +1,10 @@
 /** @jsxImportSource @emotion/react */
 
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
 
-import Chat from 'components/chat'
 import GameHeader from 'pages/Game/gameHeader'
 import GameTeller from 'pages/Game/gameTeller'
 import GameChoice from 'pages/Game/gameChoice'
@@ -13,7 +12,11 @@ import GameResult from 'pages/Game/gameResult'
 import GameRoom from 'pages/Game/gameRoom'
 import GameEnd from 'pages/Game/gameEnd'
 
+import Chat from 'components/chat'
+import GameProfile from 'components/gameProfile'
+
 import { useWebSocket } from 'actions/hooks/useWebSocket'
+import { useModal } from 'actions/hooks/useModal'
 import {
   setPlayers,
   setCards,
@@ -23,18 +26,30 @@ import {
   setTable,
   setEndResult,
 } from 'store/modules/game'
+import game from 'actions/api/game'
 
 export default function Game() {
+  const location = useLocation()
   const dispatch = useDispatch()
   const { roomId } = useParams()
   const { nickname } = useSelector((state: any) => state.currentUser)
   const email = useSelector((state: any) => state.email)
+  const players = useSelector((state: any) => state.players)
+  const selectedCard = useSelector((state: any) => state.selectedCards)
 
   const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2면 gameEnd
   const [turn, setTurn] = useState(0) // 0이면 teller 단계(텔러면 문장 적기, 아니면 유사 그림 선택), 1이면 choice단계, 2면 result단계
-  const selectedCard = useSelector((state: any) => state.selectedCards)
   const [imteller, setImteller] = useState(false)
   const [result, setResult] = useState([])
+  const [setModalState, setModalMsg] = useModal()
+
+  useEffect(() => {
+    // 방에 들어오면 비밀번호 확인
+    setModalState('joinRoom')
+    return () => {
+      setModalMsg(true)
+    }
+  }, [roomId])
 
   const mainComponent = () => {
     if (state === 0) return <GameRoom stompClient={stompClient} />
@@ -157,11 +172,22 @@ export default function Game() {
   })
 
   return (
-    <div css={roomBg}>
-      <GameHeader />
+    <main css={roomBg}>
+      <div>
+        <GameHeader />
+      </div>
+      <div css={players}>
+        {players.map((player: any) => (
+          <div key={player.nickname} css={playerOne}>
+            <GameProfile player={player} />
+          </div>
+        ))}
+      </div>
       <div>{mainComponent()}</div>
-      <Chat />
-    </div>
+      <div>
+        <Chat />
+      </div>
+    </main>
   )
 }
 
@@ -169,4 +195,21 @@ const roomBg = css({
   // backgroundImage: 'linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%)',
   backgroundImage: 'linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%)',
   backgroundSize: 'cover',
+})
+
+const players = css({
+  display: 'flex',
+  justifyContent: 'space-evenly',
+  flexWrap: 'wrap',
+  width: '65%',
+})
+
+const playerOne = css({
+  margin: '10px',
+  flexGrow: 1,
+  flexShrink: 1,
+  flexBasis: '20%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 })

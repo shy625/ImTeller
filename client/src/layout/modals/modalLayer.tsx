@@ -4,6 +4,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 import MakeRoomModal from 'layout/modals/makeRoomModal'
+import JoinRoomModal from 'layout/modals/joinRoomModal'
 import CardSelectModal from 'layout/modals/cardSelectModal'
 import AlertModal from 'layout/modals/alertModal'
 import ConfirmModal from 'layout/modals/confirmModal'
@@ -14,14 +15,14 @@ export default function ModalLayer(props: any) {
   const Modals = {
     makeRoom: <MakeRoomModal />,
     cardSelect: <CardSelectModal />,
-    alertModal: <AlertModal />,
-    confirmModal: <ConfirmModal />,
+    alert: <AlertModal />,
+    confirm: <ConfirmModal />,
+    joinRoom: <JoinRoomModal />,
   }
 
   return (
     <div>
       {props.children}
-      {console.log(modalState)}
       {modalState ? <ModalST>{Modals[modalState]}</ModalST> : null}
     </div>
   )
