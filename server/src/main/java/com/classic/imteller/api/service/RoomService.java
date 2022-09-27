@@ -2,6 +2,7 @@ package com.classic.imteller.api.service;
 
 import com.classic.imteller.api.dto.room.ExitReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
+import com.classic.imteller.api.dto.room.ReadyReqDto;
 import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.exception.CustomException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -44,5 +46,9 @@ public class RoomService {
             return room;
         }
         return null;
+    }
+
+    public HashMap<String, Boolean> ready(String sessionId, ReadyReqDto readyReqDto) {
+        return roomRepository.ready(sessionId, readyReqDto);
     }
 }

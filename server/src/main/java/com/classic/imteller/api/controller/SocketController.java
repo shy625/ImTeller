@@ -3,6 +3,7 @@ package com.classic.imteller.api.controller;
 import com.classic.imteller.api.dto.room.ExitReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
 import com.classic.imteller.api.dto.room.JoinResDto;
+import com.classic.imteller.api.dto.room.ReadyReqDto;
 import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.api.service.RoomService;
@@ -14,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -40,8 +42,9 @@ public class SocketController {
 
     // 준비 : 방장 제외한 유저들 게임 준비
     @MessageMapping("/room/{sessionId}/ready")
-    public void ready(@DestinationVariable String sessionId) {
-
+    public void ready(@DestinationVariable String sessionId, ReadyReqDto readyReqDto) {
+        HashMap<String, Boolean> readyMap = roomService.ready(sessionId, readyReqDto);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/ready", readyMap);
     }
 
     // 게임시작 : 방장만 게임시작

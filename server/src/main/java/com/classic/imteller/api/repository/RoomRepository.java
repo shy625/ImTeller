@@ -138,4 +138,16 @@ public class RoomRepository {
             return "error";
         }
     }
+
+    public HashMap<String, Boolean> ready (String sessionId, ReadyReqDto readyReqDto) {
+        try {
+            HashMap<String, Boolean> readyMap = roomList.get(sessionId).getReady();
+            readyMap.replace(readyReqDto.getNickname(), readyReqDto.getIsReady());
+            roomList.get(sessionId).setReady(readyMap);
+            return roomList.get(sessionId).getReady();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
