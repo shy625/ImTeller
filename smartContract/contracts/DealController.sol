@@ -37,7 +37,7 @@ contract DealController is Ownable {
         //2. 신규 거래 생성
         Deal deal = new Deal(seller, cardId, minPrice, purchasePrice, startTime, endTime, currencyAddress, nftAddress);
 
-        //3. 카드 소유권을 거래인스턴스에게 이전
+        //3. 카드 소유권을 거래CA에게 이전
         cardContract.transferFrom(seller, address(deal), cardId);
 
         //거래 CA 리스트에 신규 생성된 거래 push

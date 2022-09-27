@@ -4,7 +4,6 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "./Token.sol";
 import "./ClassicNFT.sol";
 
 contract Deal {
@@ -22,12 +21,12 @@ contract Deal {
     address public highestBidder;
     uint256 public highestBid;
 
+    IERC20 public coinContract;
     IERC721 public cardContract;
-    address private NFTAddress;
 
-    event NewBid(address dealContractAddress, uint cardId, address bidder, uint256 amount);
-    event DealCanceled(address dealContractAddress, uint cardId, address seller);
-    event DealEnded(address dealContractAddress, uint256 cardId, address buyer, uint256 amount);
+    event NewBid(address dealCA, uint cardId, address bidder, uint256 amount);
+    event DealCanceled(address dealCA, uint cardId, address seller);
+    event DealEnded(address dealCA, uint256 cardId, address buyer, uint256 amount);
 
     constructor(
         address _seller,
@@ -48,7 +47,7 @@ contract Deal {
         highestBid=0;
         highestBidder=address(0);
         cardContract = IERC721(_nftAddress);
-        NFTAddress = _nftAddress;
+        coinContract = IERC20(0x0c54E456CE9E4501D2c43C38796ce3F06846C966);
     }
 
 
@@ -60,14 +59,11 @@ contract Deal {
         require(amount < purchasePrice, "Your bid have to lower than Purchase Price");
 
         // 새로운 Highet bidder 등장에 따른 기존의 Highet bidder 환불
-        if (highestBidder != address(0)) {
-
-            //
-
+        if(highestBidder!=address(0)){
+            coinContract.transferFrom(address(this), highestBidder, highestBid);
         }
 
-        //bidder contract 로 송금
-        //
+        coinContract.transferFrom(bidder, address(this), amount);
 
         //최고입찰가, 입찰가 정보 업데이트
         highestBid = amount;
@@ -89,15 +85,13 @@ contract Deal {
 
         //1. 최고입찰자가 존재하는 경우 ERC20 토큰 환불진행
         if(highestBidder!=address(0)){
-
-            //
-
+            coinContract.transferFrom(address(this), highestBidder, highestBid);
         }
         //2. 구매자의 ERC20 토큰을 판매자에게 송금, 즉시구매가
-        //
+        coinContract.transferFrom(msg.sender, seller, purchasePrice);
 
-        //3. 판매자의 NFT를 구매자에게 소유권 이전
-        ClassicNFT(NFTAddress).transferFrom(address(this), buyer, cardId);
+        //3. 판매자의 NFT를 거래CA가 구매자에게 소유권 이전
+        cardContract.transferFrom(address(this), buyer, cardId);
 
         //거래상태 종료로 변경
         _end();
@@ -112,9 +106,10 @@ contract Deal {
         buyer=msg.sender;
         require(buyer == highestBidder || buyer == seller, "caller is not highestBidder or seller");
 
-        //
+        coinContract.transferFrom(msg.sender, seller, purchasePrice);
 
-        ClassicNFT(NFTAddress).transferFrom(address(this), buyer, cardId);
+        cardContract.transferFrom(address(this), buyer, cardId);
+
         emit DealEnded(address(this), cardId, buyer, highestBid);
         _end();
     }
@@ -123,12 +118,10 @@ contract Deal {
     function cancelDeal() public payable onlySeller{
         //경매참여자 있으면 최고입찰자에게 해당 금액 환불
         if(highestBidder!=address(0)){
-
-            //
-
+            coinContract.transferFrom(address(this), highestBidder, highestBid);
         }
         //카드 소유권을 다시 판매자에게 반환
-        ClassicNFT(NFTAddress).transferFrom(address(this), seller, cardId);
+        cardContract.transferFrom(address(this), seller, cardId);
         //판매 상태를 완료로 전환
 
         _end();
@@ -140,7 +133,7 @@ contract Deal {
     }
 
     function balanceOf() public view returns(uint256) {
-        return erc20Contract.balanceOf(address(this));
+        return coinContract.balanceOf(address(this));
     }
 
 
