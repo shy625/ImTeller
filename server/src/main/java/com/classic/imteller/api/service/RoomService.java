@@ -26,6 +26,10 @@ public class RoomService {
         // 게임이 시작되었다면 방에 들어갈 수 없어야 함
         if (roomRepository.getRoom(sessionId) == null) return null;
         if (roomRepository.getRoom(sessionId).getStarted()) return null;
+
+        // 인원수가 초과됐어도 방에 들어갈 수 없어야 함
+        if (roomRepository.getRoom(sessionId).getPlayers().size() >= roomRepository.getRoom(sessionId).getMaxNum()) return null;
+        
         boolean isGood = roomRepository.joinRoom(sessionId, joinReqDto);
         if (isGood) {
             Room room = roomRepository.getRoom(sessionId);
