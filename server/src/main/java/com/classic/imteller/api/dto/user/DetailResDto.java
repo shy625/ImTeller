@@ -14,4 +14,5 @@ public class DetailResDto {
     private int win;
     private int lose;
     private LocalDateTime createdAt;
+    private String wallet;
 }
