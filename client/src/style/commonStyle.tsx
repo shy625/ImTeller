@@ -14,6 +14,7 @@ const normalBtn = css({
   width: '8em',
   fontFamily: 'GongGothicMedium',
 })
+// text만 적혀있는 버튼
 const textBtn = css({
   cursor: 'pointer',
 })
@@ -35,10 +36,12 @@ const textarea = css({
   width: '95%',
   fontFamily: 'GongGothicMedium',
 })
+// 아이콘용 이미지 크기 조절
 const imgIcon = css({
   width: 20,
   height: 20,
 })
+// 페이지 풀 사이즈로 키우기
 const fullDisplay = css({
   height: 'auto',
   minHeight: '100vh',
