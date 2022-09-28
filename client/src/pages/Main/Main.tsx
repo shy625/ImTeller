@@ -6,7 +6,7 @@ import Layout from 'layout/layout'
 import Timer from 'components/timer'
 
 import { useBGM } from 'actions/hooks/useBGM'
-import { setModalState } from 'store/modules/setting'
+import { setModalState } from 'store/modules/util'
 
 export default function Main() {
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ export default function Main() {
         </button>
         <button
           onClick={() => {
-            dispatch(setModalState('alertModal'))
+            dispatch(setModalState('setting'))
           }}
         >
           모달 띄우기

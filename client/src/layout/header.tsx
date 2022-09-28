@@ -6,13 +6,10 @@ import Profile from 'components/profile'
 import { setCurrentUser, setEmail, setLogout } from 'store/modules/user'
 import user from 'actions/api/user'
 
-import { useBGM } from 'actions/hooks/useBGM'
-
 export default function Header() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const currentUser = useSelector((state: any) => state.currentUser)
 
   const logout = () => {
@@ -32,14 +29,6 @@ export default function Header() {
       })
   }, [])
 
-  useEffect(() => {
-    if (currentUser.nickname) {
-      setIsLoggedIn(true)
-    } else {
-      setIsLoggedIn(false)
-    }
-  }, [currentUser])
-
   return (
     <div>
       header
@@ -49,7 +38,7 @@ export default function Header() {
       <div onClick={() => navigate('/vote')}>출품</div>
       <div onClick={() => navigate('/rank')}>랭킹</div>
       <div onClick={() => navigate('/faq')}>FAQ</div>
-      {isLoggedIn ? (
+      {currentUser.nickname ? (
         <>
           <Profile nickname={currentUser.nickname} profile={currentUser.profile} />
           <div onClick={logout}>로그아웃</div>

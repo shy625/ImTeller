@@ -54,7 +54,7 @@ const user = {
       data: data,
     })
   },
-  setWallet(data) {
+  addWallet(data) {
     return api({
       method: 'post',
       url: `${END_POINT}/wallet`,

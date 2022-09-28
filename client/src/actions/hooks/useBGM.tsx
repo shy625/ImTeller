@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setBgmSrc, setIsBgmOn, setVolume } from 'store/modules/setting'
+import { setBgmSrc, setIsBgmOn, setBgmVolume } from 'store/modules/util'
 
 export const useBGM = (props: any) => {
   const dispatch = useDispatch()
@@ -10,7 +10,6 @@ export const useBGM = (props: any) => {
     if (props.src) {
       dispatch(setBgmSrc(props.src))
     }
-
     return () => {
       dispatch(setBgmSrc('assets/audio/mainBgm.mp3'))
     }
@@ -20,7 +19,7 @@ export const useBGM = (props: any) => {
     dispatch(setIsBgmOn(!isBgmOn))
   }
   const volumeControl = (volume) => {
-    dispatch(setVolume(volume / 100))
+    dispatch(setBgmVolume(volume / 100))
   }
   return [playPause, volumeControl]
 }
