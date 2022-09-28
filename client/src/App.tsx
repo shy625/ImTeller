@@ -22,6 +22,7 @@ import BgmLayer from 'layout/bgmLayer'
 import ModalLayer from 'layout/modals/modalLayer'
 
 import 'App.css'
+import '../src/style/fonts.css'
 
 export default function App() {
   return (
