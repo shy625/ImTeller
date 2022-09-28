@@ -41,6 +41,7 @@ public class GameService {
 
         Room room = Room.builder()
                 .id(newRoomId)
+                .userSessionIds(new HashMap<String, String>())
                 .roomName(roomInfo.getRoomName())
                 .roomPw(roomInfo.getRoomPw())
                 .maxNum(roomInfo.getMaxNum())

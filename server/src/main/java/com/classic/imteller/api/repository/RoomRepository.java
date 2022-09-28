@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +42,13 @@ public class RoomRepository {
         }
     }
 
-    public boolean joinRoom (long sessionId, JoinReqDto joinReqDto) {
+    public boolean joinRoom (String userSessionId, long sessionId, JoinReqDto joinReqDto) {
         try {
+            // 세션아이디 등록
+            HashMap<String, String> usids = roomList.get(sessionId).getUserSessionIds();
+            usids.put(joinReqDto.getNickname(), userSessionId);
+            roomList.get(sessionId).setUserSessionIds(usids);
+
             // 접속자
             List<String> players = roomList.get(sessionId).getPlayers();
             players.add(joinReqDto.getNickname());
@@ -80,12 +86,25 @@ public class RoomRepository {
             List<String> players = roomList.get(sessionId).getPlayers();
             players.remove(exitReqDto.getNickname());
             roomList.get(sessionId).setPlayers(players);
+            // 만약 모든 플레이어가 다 나갔다면?
+            if (players.size() == 0) {
+                Game game = gameRepository.findBySession(sessionId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                game.deleteSession();
+                gameRepository.save(game);
+                // 게임소켓방에서도 나가기
+                roomList.remove(sessionId);
+                return "ok";
+            }
             // ready에서 없애기
             HashMap<String, Boolean> newReady = roomList.get(sessionId).getReady();
             newReady.remove(exitReqDto.getNickname());
             // 나간사람이 방장이면 새로운 방장의 ready상태를 true로 변경
             newReady.replace(roomList.get(sessionId).getLeader(), true);
             roomList.get(sessionId).setReady(newReady);
+            // userSessionId에서 없애기
+            HashMap<String, String> usids = roomList.get(sessionId).getUserSessionIds();
+            usids.remove(exitReqDto.getNickname());
+            roomList.get(sessionId).setUserSessionIds(usids);
 
             // 밑 요소들은 게임중일 때 작동
             if (roomList.get(sessionId).getStarted()) {
@@ -121,15 +140,6 @@ public class RoomRepository {
                 userRepository.save(user);
 
                 // 나갔을 때 3명 이하가 되면 게임 종료 알림 전달
-            }
-
-            // 만약 모든 플레이어가 다 나갔다면?
-            if (players.size() == 0) {
-                Game game = gameRepository.findBySession(sessionId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-                game.deleteSession();
-                gameRepository.save(game);
-                // 게임소켓방에서도 나가기
-                roomList.remove(sessionId);
             }
 
             return "ok";

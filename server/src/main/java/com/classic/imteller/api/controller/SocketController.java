@@ -9,12 +9,14 @@ import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.api.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,9 +29,12 @@ public class SocketController {
     private final SimpMessageSendingOperations sendingOperations;
 
     // 입장 : 게임방에 입장
+    // socketSessionId는 해당 클라이언트와 서버가 소켓연결이 될 때 그떄의 sessionId
+    // sessionId는 stomp에서 생성한 방의 sessionId
     @MessageMapping("/room/{sessionId}/join")
-    public void join(@DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
-        Room room = roomService.joinRoom(sessionId, joinReqDto);
+    public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
+        Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
+        System.out.println(userSessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
     }
 
