@@ -31,7 +31,7 @@ public class ArtController {
     @PostMapping("/cards")
     @ApiOperation(value = "해당 유저 NFT 카드 목록", notes = "해당 유저가 가진 모든 NFT 카드 목록을 가져온다")
     public ResponseEntity<List<CardsResDto>> getCards(@RequestBody CardsReqDto cardsReqDto) {
-        List<CardsResDto> data = artService.getCards(cardsReqDto.getEmail());
+        List<CardsResDto> data = artService.getCards(cardsReqDto.getNickname());
         return new ResponseEntity<List<CardsResDto>>(data, HttpStatus.ACCEPTED);
     }
 
@@ -39,7 +39,7 @@ public class ArtController {
     @ApiOperation(value = "내 그림 목록", notes = "내가 가진 모든 그림 목록을 가져온다")
     // NFT 카드에서 사용한 ReqDto를 재활용
     public ResponseEntity<List<PaintsResDto>> getPaints(@RequestBody CardsReqDto cardsReqDto) {
-        List<PaintsResDto> data = artService.getPaints(cardsReqDto.getEmail());
+        List<PaintsResDto> data = artService.getPaints(cardsReqDto.getNickname());
         return new ResponseEntity<List<PaintsResDto>>(data, HttpStatus.ACCEPTED);
     }
 
