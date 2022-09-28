@@ -1,6 +1,7 @@
 package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.game.GameRoomDto;
+import com.classic.imteller.api.dto.game.GameRoomJoinReqDto;
 import com.classic.imteller.api.dto.game.MakeReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
 import com.classic.imteller.api.repository.Room;
@@ -45,9 +46,10 @@ public class GameController {
 
     @PostMapping("/rooms/{roomId}/join")
     @ApiOperation(value = "해당 게임방 접속", notes = "해당 게임의 방이름과 비밀번호로 접근")
-    public ResponseEntity<Boolean> joinRoom(@PathVariable final long roomId, @RequestBody final JoinReqDto roomInfo){
+    public ResponseEntity<Boolean> joinRoom(@PathVariable final long roomId, @RequestBody final GameRoomJoinReqDto gameRoomJoinReqDto){
         // 비밀번호 맞는지 여부를 파악하고 boolean값을 보냄
-        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        boolean chk = gameService.pwCheck(roomId, gameRoomJoinReqDto);
+        return new ResponseEntity<Boolean>(chk, HttpStatus.OK);
     }
 
     @PostMapping("/make")

@@ -1,6 +1,7 @@
 package com.classic.imteller.api.service;
 
 import com.classic.imteller.api.dto.game.GameRoomDto;
+import com.classic.imteller.api.dto.game.GameRoomJoinReqDto;
 import com.classic.imteller.api.dto.game.MakeReqDto;
 import com.classic.imteller.api.dto.room.CardDto;
 import com.classic.imteller.api.dto.room.EffectDto;
@@ -68,6 +69,15 @@ public class GameService {
             return room;
         }
         return null;
+    }
+
+    public boolean pwCheck(long roomId, GameRoomJoinReqDto gameRoomJoinReqDto) {
+        HashMap<Long, Room> rooms = roomRepository.getRooms();
+        List<Long> usingId = roomRepository.getUsingId();
+        if (usingId.contains(roomId)) {
+            return rooms.get(roomId).getRoomPw().equals(gameRoomJoinReqDto.getPassword());
+        }
+        return false;
     }
 
     private long getRoomId() {
