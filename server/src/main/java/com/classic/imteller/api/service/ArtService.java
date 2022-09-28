@@ -67,15 +67,13 @@ public class ArtService {
     @Transactional
     public void savePaint(PaintSaveReqDto paintSaveReqDto, MultipartFile file) throws IOException {
         User user = userRepository.findByEmail(paintSaveReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        int cnt = artRepository.countByEmailAndIsPaint(paintSaveReqDto.getEmail());
-
-        String imgPath = s3Service.upload("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + paintSaveReqDto.getEmail() + "_" + cnt, file);
+        String imgPath = s3Service.upload("", file);
 
         Art art = Art.builder()
                 .designer(user)
                 .owner(user)
                 .ownerNickname(user.getNickname())
-                .url(imgPath)
+                .url("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath)
                 .title(paintSaveReqDto.getPaintTitle())
                 .description(paintSaveReqDto.getDescription()).build();
         artRepository.save(art);
@@ -85,7 +83,7 @@ public class ArtService {
     public void editPaint(PaintEditReqDto paintEditReqDto, MultipartFile file) throws IOException {
         Art art = artRepository.findById(paintEditReqDto.getPaintId()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         String imgPath = s3Service.upload(art.getUrl(), file);
-        art.updatePaint(imgPath, paintEditReqDto.getPaintTitle(), paintEditReqDto.getDescription());
+        art.updatePaint("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath, paintEditReqDto.getPaintTitle(), paintEditReqDto.getDescription());
         artRepository.save(art);
     }
 
