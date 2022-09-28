@@ -29,12 +29,12 @@ public class DealController {
     @GetMapping("/search")
     public ResponseEntity<ResponseDto> searchCDeals(@RequestParam Map<String, String> filters) {
         String keyword = filters.get("keyword");
-        int target = Integer.parseInt(filters.getOrDefault("target", "0"));     // 0 : 작품명, 1 : 제작자, 2 : 판매자
+        int target = Integer.parseInt(filters.getOrDefault("target", "0"));     // 0 : 작품명, 1 : 제작자, 2 : 소유자(판매자)
         int sort = Integer.parseInt(filters.getOrDefault("sort", "0"));         // 0 : 기본순, 1 : 최신순, ...
         int status = Integer.parseInt(filters.getOrDefault("status", "0"));     // 0 : 전체, 1 : 경매진행중, 2 : 경매완료
 
-        List<SearchDealResDto> dealList = dealService.search(keyword, target, sort, status);
-        return new ResponseEntity<>(new ResponseDto(dealList), HttpStatus.OK);
+        List<SearchDealResDto> responseDtoList = dealService.search(keyword, target, sort, status);
+        return new ResponseEntity<>(new ResponseDto(responseDtoList), HttpStatus.OK);
     }
 
     @GetMapping("/{dealId}")
