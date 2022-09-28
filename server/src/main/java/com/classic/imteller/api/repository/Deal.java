@@ -26,6 +26,12 @@ public class Deal extends BaseEntity {
     @Column
     private String tag;
 
+    @OneToOne
+    private Bid finalBid;
+
+    @Column(nullable = false)
+    private String dealAddress;
+
     @Column(nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime finishedAt;
 
@@ -33,11 +39,13 @@ public class Deal extends BaseEntity {
     private List<Bid> bidList = new ArrayList<>();
 
     @Builder
-    public Deal(Art art, Integer lowPrice, Integer instantPrice, String tag, LocalDateTime finishedAt, List<Bid> bidList) {
+    public Deal(Art art, Integer lowPrice, Integer instantPrice, String tag, Bid finalBid, String dealAddress, LocalDateTime finishedAt, List<Bid> bidList) {
         this.art = art;
         this.lowPrice = lowPrice;
         this.instantPrice = instantPrice;
         this.tag = tag;
+        this.finalBid = finalBid;
+        this.dealAddress = dealAddress;
         this.finishedAt = finishedAt;
         this.bidList = bidList;
     }
