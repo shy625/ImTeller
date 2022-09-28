@@ -3,10 +3,7 @@ package com.classic.imteller.api.service;
 import com.classic.imteller.api.dto.game.GameRoomDto;
 import com.classic.imteller.api.dto.game.GameRoomJoinReqDto;
 import com.classic.imteller.api.dto.game.MakeReqDto;
-import com.classic.imteller.api.dto.room.CardDto;
-import com.classic.imteller.api.dto.room.EffectDto;
-import com.classic.imteller.api.dto.room.ItemDto;
-import com.classic.imteller.api.dto.room.TableDto;
+import com.classic.imteller.api.dto.room.*;
 import com.classic.imteller.api.repository.Game;
 import com.classic.imteller.api.repository.GameRepository;
 import com.classic.imteller.api.repository.Room;
@@ -109,10 +106,11 @@ public class GameService {
                 .ready(new HashMap<String, Boolean>())
                 .started(false)
                 .cards(new HashMap<String, List<Long>>())
-                .items(new HashMap<String, ItemDto>())
+                .items(new HashMap<String, List<ItemDto>>())
                 .score(new HashMap<String, Integer>())
                 .deck(new ArrayList<Long>())
-                .hand(new HashMap<String, List<Long>>())
+                .nftDeck(new ArrayList<Long>())
+                .hand(new HashMap<String, List<GameCardDto>>())
                 .status(new HashMap<String, Boolean>())
                 .teller("")
                 .turn(0)
