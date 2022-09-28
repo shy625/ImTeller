@@ -19,7 +19,7 @@ const art = {
   paintCreate(data) {
     return api({
       method: 'post',
-      url: `${END_POINT}/paints`,
+      url: `${END_POINT}/paints/save`,
       data: data,
       headers: {
         'Content-Type': 'multipart/form-data',

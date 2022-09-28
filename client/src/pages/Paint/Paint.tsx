@@ -16,7 +16,8 @@ import undoIcon from '../../assets/image/undo.png'
 import saveIcon from '../../assets/image/save.png'
 
 // style
-import { input, textarea, imgIcon } from '../../style/commonStyle'
+import { input, textarea, imgIcon, normalBtn } from '../../style/commonStyle'
+import { type } from 'os'
 
 export default function Paint() {
   // form 전송용
@@ -135,30 +136,61 @@ export default function Paint() {
       ctx.putImageData(restore[index], 0, 0)
     }
   }
-  function savePic() {
+  function downloadPic() {
     let imgDataUrl = canvas.toDataURL('image/png')
 
-    // 이미지 파일 다운로드용
-    // const a = document.createElement('a')
-    // a.href = imgDataUrl
-    // a.download = 'MyFirstCanvas.png'
-    // a.click()
+    const a = document.createElement('a')
+    a.href = imgDataUrl
+    a.download = `${title}.png`
+    a.click()
+  }
+  function savePic() {
+    // 이름이나 설명이 비어있으면 안됨
+
+    let imgDataUrl = canvas.toDataURL('image/png')
 
     let imgData = atob(imgDataUrl.split(',')[1])
     let array = []
     for (let i = 0; i < imgData.length; i++) {
       array.push(imgData.charCodeAt(i))
     }
-    let imgFile = new File([new Uint8Array(array)], 'picture', { type: 'image/png' })
+    // 왜 blob 을 다시 파일로 바꿔야 잘되는거지...?
+    // let imgFile = new File([new Uint8Array(array)], 'picture', { type: 'image/png' })
+    let imgBlob = new Blob([new Uint8Array(array)], { type: 'image/png' })
+    let imgFile = new File([imgBlob], 'blobtofile.png')
 
     const data: any = new FormData()
-
-    data.append('email', email)
-    data.append('paintTitle', title)
-    data.append('content', content)
-    data.append('paintImage', imgFile)
-
-    art.paintCreate(data)
+    let save = {
+      email: email,
+      paintTitle: title,
+      description: content,
+    }
+    data.append('saveInfo', new Blob([JSON.stringify(save)], { type: 'application/json' }))
+    data.append('file', imgFile)
+    if (isNew) {
+      art
+        .paintCreate(data)
+        .then((result) => {
+          // 결과 확인용
+          // console.log(result)
+          // for (let key of data.keys()) {
+          //   console.log(key)
+          // }
+          // for (let value of data.values()) {
+          //   console.log(value)
+          // }
+          if (result.data === '저장 성공') {
+            // 성공했다는 alert modal
+          } else {
+            // 실패했다는 alert modal
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    } else {
+      // 처음 만드는게 아니면 수정
+    }
   }
 
   return (
@@ -196,7 +228,7 @@ export default function Paint() {
                 <button onClick={eraseAll} css={btn}>
                   <img src={trashIcon} alt="쓰레기통" css={imgIcon} />
                 </button>
-                <button onClick={savePic} css={btn}>
+                <button onClick={downloadPic} css={btn}>
                   <img src={saveIcon} alt="저장" css={imgIcon} />
                 </button>
                 <div>
@@ -232,6 +264,12 @@ export default function Paint() {
                 placeholder="작품 설명 작성"
                 css={textarea}
               />
+            </div>
+            <div>
+              <button css={normalBtn} onClick={savePic}>
+                저장
+              </button>
+              <button css={normalBtn}>취소</button>
             </div>
           </div>
           <canvas
