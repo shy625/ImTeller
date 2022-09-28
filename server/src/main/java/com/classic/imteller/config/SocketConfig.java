@@ -20,7 +20,7 @@ public class SocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/pub");
-        registry.enableSimpleBroker("/sub");
+        registry.enableSimpleBroker("/sub", "/user");
 
         // 특정 유저에게만 메시지 보내기
         registry.setUserDestinationPrefix("/user");

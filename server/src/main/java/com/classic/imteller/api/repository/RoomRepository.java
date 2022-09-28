@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class RoomRepository {
     private static final List<Long> usingId = new ArrayList<>();
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
+    private final ArtRepository artRepository;
 
     public Room getRoom (Long sessionId) {
         Room room = roomList.get(sessionId);
@@ -33,6 +35,7 @@ public class RoomRepository {
         return usingId;
     }
 
+    @Transactional
     public void createRoom (Room room) {
         try {
             roomList.put(room.getId(), room);
@@ -113,7 +116,7 @@ public class RoomRepository {
                 newCards.remove(exitReqDto.getNickname());
                 roomList.get(sessionId).setCards(newCards);
                 // items에서 없애기
-                HashMap<String, ItemDto> newItems = roomList.get(sessionId).getItems();
+                HashMap<String, List<ItemDto>> newItems = roomList.get(sessionId).getItems();
                 newItems.remove(exitReqDto.getNickname());
                 roomList.get(sessionId).setItems(newItems);
                 // score에서 없애기
@@ -121,7 +124,7 @@ public class RoomRepository {
                 newScore.remove(exitReqDto.getNickname());
                 roomList.get(sessionId).setScore(newScore);
                 // hand에서 없애기
-                HashMap<String, List<Long>> newHand = roomList.get(sessionId).getHand();
+                HashMap<String, List<GameCardDto>> newHand = roomList.get(sessionId).getHand();
                 newHand.remove(exitReqDto.getNickname());
                 roomList.get(sessionId).setHand(newHand);
                 // status에서 없애기
@@ -170,9 +173,22 @@ public class RoomRepository {
         try {
             // 유저가 제출한 카드 등록
             roomList.get(sessionId).getCards().put(selectReqDto.getNickname(), selectReqDto.getSelectedCard());
+            roomList.get(sessionId).getNftDeck().addAll(selectReqDto.getSelectedCard());
             // 낸 유저 status에 등록하기
             roomList.get(sessionId).getStatus().put(selectReqDto.getNickname(), false);
             // 아이템 등록하기
+            List<ItemDto> itemList = new ArrayList<>();
+            for (Long artId : selectReqDto.getSelectedCard()) {
+                Art art = artRepository.findById(artId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                ItemDto item = ItemDto.builder()
+                        .cardId(art.getId())
+                        .grade(art.getEffect().getGrade())
+                        .effect(art.getEffect().getEffect())
+                        .effectNum(art.getEffect().getDetail())
+                        .isUsed(false).build();
+                itemList.add(item);
+            }
+            roomList.get(sessionId).getItems().put(selectReqDto.getNickname(), itemList);
 
             // 점수 초기화
             roomList.get(sessionId).getScore().put(selectReqDto.getNickname(), 0);
@@ -181,5 +197,51 @@ public class RoomRepository {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // 덱을 만들고 카드를 드로우하는 함수
+    public HashMap<String, List<GameCardDto>> draw(long sessionId) {
+        HashMap<String, List<GameCardDto>> basicHand = new HashMap<>();
+        // 기본덱은 1부터 74
+        List<Long> deck = new ArrayList<>();
+        for (long i = 1; i <= 74; ++i) deck.add(i);
+
+        // 새로 넣어야 하는 nft카드의 개수 추출하기
+        int nftNum = roomList.get(sessionId).getNftDeck().size();
+        // 랜덤으로 deck 요소 하나씩 빼는걸 nft카드의 개수만큼 반복
+        for (int i = 0; i < nftNum; ++i) {
+            double random = Math.random();
+            int num = (int)Math.round(random * (deck.size() - 1));
+            System.out.println(num);
+            deck.remove(num);
+        }
+        // nft카드 넣기
+        deck.addAll(roomList.get(sessionId).getNftDeck());
+
+        // 셔플하기
+        Collections.shuffle(deck);
+
+        // 플레이어에게 6개씩 할당하기
+        List<String> players = roomList.get(sessionId).getPlayers();
+
+        for (int i = 0; i < players.size(); ++i) {
+            List<GameCardDto> myHand = new ArrayList<>();
+            for (int j = 0; j < 6; ++j) {
+                Art art = artRepository.findById(deck.get(j)).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));;
+                GameCardDto tmpCard = GameCardDto.builder()
+                    .cardId(deck.get(j))
+                    .cardUrl(art.getUrl()).build();
+                myHand.add(tmpCard);
+            }
+            // 덱에서 사용한 카드 잘라내기
+            deck = deck.subList(6, deck.size());
+            basicHand.put(players.get(i), myHand);
+        }
+
+        roomList.get(sessionId).setDeck(deck);
+
+        // 할당한 내용 hand변수에 반영하고 반환하기
+        roomList.get(sessionId).setHand(basicHand);
+        return basicHand;
     }
 }
