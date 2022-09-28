@@ -48,8 +48,8 @@ public class ArtService {
     }
 
     @Transactional(readOnly = true)
-    public List<PaintsResDto> getPaints(String email) {
-        List<Art> allPaints = artRepository.findAllByEmailAndIsPaint(email);
+    public List<PaintsResDto> getPaints(String nickname) {
+        List<Art> allPaints = artRepository.findAllByNicknameAndIsPaint(nickname);
         List<PaintsResDto> data = new ArrayList<>();
 
         // 하나씩 뒤져가면서 effect_id 카드효과에서 찾아서 넣기

@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class CardsReqDto {
-    private String email;
+    private String nickname;
 }
