@@ -199,14 +199,14 @@ export default function ProfileEdit(props: any) {
             >
               {isChangePw ? '비밀번호 변경하지 않기' : '비밀번호 변경하기'}
             </button>
-            {/* {!currentUser.wallet ? ( */}
-            <button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
-            {/* ) : (
+            {!currentUser.wallet ? (
+              <button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
+            ) : (
               <>
                 <label htmlFor="wallet">등록된 지갑주소</label>
                 <input id="wallet" value={currentUser.wallet} disabled></input>
               </>
-            )} */}
+            )}
             <button
               onClick={(event) => {
                 onSubmit(event)
