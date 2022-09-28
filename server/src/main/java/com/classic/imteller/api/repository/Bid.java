@@ -22,7 +22,7 @@ public class Bid extends BaseEntity {
     private Integer bidPrice;
 
     @Column(nullable = false)
-    private Integer bidType;
+    private Integer bidType;    // 0 : 구매입찰, 1 : 즉시구매
 
     public Bid(User bidder, Deal deal, Integer bidPrice, Integer bidType) {
         this.bidder = bidder;
