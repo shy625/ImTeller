@@ -1,6 +1,7 @@
 package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.game.GameRoomDto;
+import com.classic.imteller.api.dto.game.GameRoomJoinReqDto;
 import com.classic.imteller.api.dto.game.MakeReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
 import com.classic.imteller.api.repository.Room;
@@ -31,7 +32,7 @@ public class GameController {
     @ApiOperation(value = "게임방 리스트 받기", notes = "게임방 리스트 전체 반환")
     public ResponseEntity<List<GameRoomDto>> getRooms(){
         // 소켓 or Redis 자료들 전부 가져와서 던져주기
-        List<GameRoomDto> gameRooms = new ArrayList<GameRoomDto>();
+        List<GameRoomDto> gameRooms = gameService.getRoomsInfo();
         return new ResponseEntity<List<GameRoomDto>>(gameRooms, HttpStatus.OK);
     }
 
@@ -39,15 +40,16 @@ public class GameController {
     @ApiOperation(value = "해당 게임방 정보 받기", notes = "해당 게임방의 정보를 JSON형태로 반환")
     public ResponseEntity<GameRoomDto> getRoom(@PathVariable final long roomId){
         // 소켓 or Redis 에서 해당 roomId 정보 가져와서 던져주기
-        GameRoomDto gameRoom = new GameRoomDto();
+        GameRoomDto gameRoom = gameService.getRoomInfo(roomId);
         return new ResponseEntity<GameRoomDto>(gameRoom, HttpStatus.OK);
     }
 
     @PostMapping("/rooms/{roomId}/join")
     @ApiOperation(value = "해당 게임방 접속", notes = "해당 게임의 방이름과 비밀번호로 접근")
-    public ResponseEntity<Boolean> joinRoom(@PathVariable final long roomId, @RequestBody final JoinReqDto roomInfo){
+    public ResponseEntity<Boolean> joinRoom(@PathVariable final long roomId, @RequestBody final GameRoomJoinReqDto gameRoomJoinReqDto){
         // 비밀번호 맞는지 여부를 파악하고 boolean값을 보냄
-        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        boolean chk = gameService.pwCheck(roomId, gameRoomJoinReqDto);
+        return new ResponseEntity<Boolean>(chk, HttpStatus.OK);
     }
 
     @PostMapping("/make")

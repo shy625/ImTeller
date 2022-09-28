@@ -1,6 +1,7 @@
 package com.classic.imteller.api.repository;
 
 import com.classic.imteller.api.dto.room.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,9 @@ public class Room implements Serializable {
     @Indexed
     private long id;
 
+    private HashMap<String, String> userSessionIds; // 세션 아이디를 담은 항목
     private String roomName; // 방이름
+    @JsonIgnore
     private String roomPw; // 방비번
     private int maxNum; // 최대인원
     private String leader; // 방장 id
