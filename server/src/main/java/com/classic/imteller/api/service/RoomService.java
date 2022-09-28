@@ -59,4 +59,31 @@ public class RoomService {
         return roomRepository.getRoom(sessionId);
     }
 
+    @Transactional
+    public boolean start(String userSessionId, long sessionId) {
+        Room room = roomRepository.getRoom(sessionId);
+        if (room == null) return false;
+
+        // 모두가 레디했는지 확인
+        HashMap<String, Boolean> isReady = room.getReady();
+        List<String> players = room.getPlayers();
+        boolean chk = true;
+        for (String player : players) {
+            if(!isReady.get(player)) {
+                chk = false;
+                break;
+            }
+        }
+        if (!chk) return false;
+
+        // 방장의 sessionId와 시작요청을 보낸 사람이 같은지 확인
+        HashMap<String, String> usids = room.getUserSessionIds();
+        String leader = room.getLeader();
+        if (usids.get(leader).equals(userSessionId)) {
+            roomRepository.start(sessionId);
+            return true;
+        }
+        else return false;
+    }
+
 }

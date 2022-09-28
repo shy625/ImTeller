@@ -160,4 +160,9 @@ public class RoomRepository {
             return null;
         }
     }
+
+    public void start (long sessionId) {
+        // 시작변수 변경
+        roomList.get(sessionId).setStarted(true);
+    }
 }
