@@ -31,7 +31,7 @@ public class GameController {
     @ApiOperation(value = "게임방 리스트 받기", notes = "게임방 리스트 전체 반환")
     public ResponseEntity<List<GameRoomDto>> getRooms(){
         // 소켓 or Redis 자료들 전부 가져와서 던져주기
-        List<GameRoomDto> gameRooms = new ArrayList<GameRoomDto>();
+        List<GameRoomDto> gameRooms = gameService.getRoomsInfo();
         return new ResponseEntity<List<GameRoomDto>>(gameRooms, HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class GameController {
     @ApiOperation(value = "해당 게임방 정보 받기", notes = "해당 게임방의 정보를 JSON형태로 반환")
     public ResponseEntity<GameRoomDto> getRoom(@PathVariable final long roomId){
         // 소켓 or Redis 에서 해당 roomId 정보 가져와서 던져주기
-        GameRoomDto gameRoom = new GameRoomDto();
+        GameRoomDto gameRoom = gameService.getRoomInfo(roomId);
         return new ResponseEntity<GameRoomDto>(gameRoom, HttpStatus.OK);
     }
 
