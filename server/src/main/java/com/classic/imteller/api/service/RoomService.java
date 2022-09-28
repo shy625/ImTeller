@@ -3,6 +3,7 @@ package com.classic.imteller.api.service;
 import com.classic.imteller.api.dto.room.ExitReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
 import com.classic.imteller.api.dto.room.ReadyReqDto;
+import com.classic.imteller.api.dto.room.SelectReqDto;
 import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.exception.CustomException;
@@ -38,10 +39,6 @@ public class RoomService {
         }
         return null;
     }
-    @Transactional(readOnly = true)
-    public void getRoomInfo(long sessionId) {
-
-    }
 
     @Transactional
     public Room exitRoom(long sessionId, ExitReqDto exitReqDto) {
@@ -53,11 +50,47 @@ public class RoomService {
         return null;
     }
 
+    @Transactional
     public HashMap<String, Boolean> ready(long sessionId, ReadyReqDto readyReqDto) {
         return roomRepository.ready(sessionId, readyReqDto);
     }
 
+    @Transactional(readOnly = true)
     public Room getRoom(long sessionId) {
         return roomRepository.getRoom(sessionId);
     }
+
+    @Transactional
+    public boolean start(String userSessionId, long sessionId) {
+        Room room = roomRepository.getRoom(sessionId);
+        if (room == null) return false;
+
+        // 모두가 레디했는지 확인
+        HashMap<String, Boolean> isReady = room.getReady();
+        List<String> players = room.getPlayers();
+        boolean chk = true;
+        for (String player : players) {
+            if(!isReady.get(player)) {
+                chk = false;
+                break;
+            }
+        }
+        if (!chk) return false;
+
+        // 방장의 sessionId와 시작요청을 보낸 사람이 같은지 확인
+        HashMap<String, String> usids = room.getUserSessionIds();
+        String leader = room.getLeader();
+        if (usids.get(leader).equals(userSessionId)) {
+            roomRepository.start(sessionId);
+            return true;
+        }
+        else return false;
+    }
+
+    @Transactional
+    public boolean selectCards(long sessionId, SelectReqDto selectReqDto) {
+        boolean chk = roomRepository.selectCards(sessionId, selectReqDto);
+        return chk;
+    }
+
 }

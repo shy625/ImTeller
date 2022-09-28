@@ -1,9 +1,6 @@
 package com.classic.imteller.api.controller;
 
-import com.classic.imteller.api.dto.room.ExitReqDto;
-import com.classic.imteller.api.dto.room.JoinReqDto;
-import com.classic.imteller.api.dto.room.JoinResDto;
-import com.classic.imteller.api.dto.room.ReadyReqDto;
+import com.classic.imteller.api.dto.room.*;
 import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.api.service.RoomService;
@@ -35,6 +32,7 @@ public class SocketController {
     public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
         Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
         System.out.println(userSessionId);
+        System.out.println(room);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
     }
 
@@ -54,13 +52,15 @@ public class SocketController {
 
     // 게임시작 : 방장만 게임시작
     @MessageMapping("/room/{sessionId}/start")
-    public void start(@DestinationVariable long sessionId) {
-
+    public void start(@Header("simpSessionId") String userSessionId, @DestinationVariable long sessionId) {
+        boolean isStart = roomService.start(userSessionId, sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/start", isStart);
     }
 
-    // 카드 선택 : 유저가 사용할 NFT 카드 선택
+    // 카드 선택 : 유저가 사용할 NFT 카드 선택 - 반환 X
     @MessageMapping("/room/{sessionId}/select")
-    public void select(@DestinationVariable long sessionId) {
+    public void select(@DestinationVariable long sessionId, SelectReqDto selectReqDto) {
+        boolean chk = roomService.selectCards(sessionId, selectReqDto);
 
     }
 
@@ -120,15 +120,15 @@ public class SocketController {
 
     // 채팅 : 채팅 보내기
     @MessageMapping("/room/{sessionId}/chat")
-    public void chat(@DestinationVariable long sessionId) {
-
+    public void chat(@DestinationVariable long sessionId, MsgDto msgDto) {
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/chat", msgDto);
     }
 
     // 모든 정보 : 방 내 모든 정보를 전달
-    @MessageMapping("/room/{sessionId}/all")
-    public void all(@DestinationVariable long sessionId) {
-        Room room = roomService.getRoom(sessionId);;
-        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/ready", room);
+    @MessageMapping("/room/{sessionId}/roomInfo")
+    public void getRoom(@DestinationVariable long sessionId) {
+        Room room = roomService.getRoom(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/all", room);
     }
 
 }

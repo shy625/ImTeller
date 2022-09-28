@@ -108,7 +108,7 @@ public class GameService {
                 .typeNum(roomInfo.getTypeNum())
                 .ready(new HashMap<String, Boolean>())
                 .started(false)
-                .cards(new HashMap<String, CardDto>())
+                .cards(new HashMap<String, List<Long>>())
                 .items(new HashMap<String, ItemDto>())
                 .score(new HashMap<String, Integer>())
                 .deck(new ArrayList<Long>())
