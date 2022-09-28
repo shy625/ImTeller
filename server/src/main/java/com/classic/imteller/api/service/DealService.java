@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,12 +84,17 @@ public class DealService {
         for (Deal d : dealList) {
             User seller = d.getArt().getOwner();
             User buyer = d.getFinalBid().getBidder();
+            LocalDateTime dealedAt = d.getFinishedAt();
+            if (d.getFinalBid().getBidType() == 1) {
+                dealedAt = d.getFinalBid().getCreatedAt();
+            }
             DealDetailResDto.DealHistory dealHistory = DealDetailResDto.DealHistory.builder()
                     .sellerId(seller.getId())
                     .sellerNickname(seller.getNickname())
                     .buyerId(buyer.getId())
                     .buyerNickname(buyer.getNickname())
                     .price(d.getFinalBid().getBidPrice())
+                    .dealedAt(dealedAt)
                     .build();
             dealHistoryList.add(dealHistory);
         }

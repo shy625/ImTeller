@@ -39,8 +39,8 @@ public class DealDetailResDto {
         private Long ownerId;
         private String ownerNickname;
         private String grade;
-        private int effect;
-        private int effectDetail;
+        private Integer effect;
+        private Integer effectDetail;
         private LocalDateTime createdAt;
     }
 
