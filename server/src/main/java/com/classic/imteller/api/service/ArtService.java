@@ -65,26 +65,54 @@ public class ArtService {
     }
 
     @Transactional
-    public void savePaint(PaintSaveReqDto paintSaveReqDto, MultipartFile file) throws IOException {
-        User user = userRepository.findByEmail(paintSaveReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        String imgPath = s3Service.upload("", file);
+    public String savePaint(PaintSaveReqDto paintSaveReqDto, MultipartFile file) {
+        try {
+            String originFile = file.getOriginalFilename();
+            String originFileExtension = originFile.substring(originFile.lastIndexOf("."));
+            if (!originFileExtension.equalsIgnoreCase(".jpg") && !originFileExtension.equalsIgnoreCase(".png")
+                    && !originFileExtension.equalsIgnoreCase(".jpeg")) {
+                return "jpg, jpeg, png의 이미지 파일만 업로드해주세요";
+            }
 
-        Art art = Art.builder()
-                .designer(user)
-                .owner(user)
-                .ownerNickname(user.getNickname())
-                .url("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath)
-                .title(paintSaveReqDto.getPaintTitle())
-                .description(paintSaveReqDto.getDescription()).build();
-        artRepository.save(art);
+            User user = userRepository.findByEmail(paintSaveReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            String imgPath = s3Service.upload("", file);
+
+            Art art = Art.builder()
+                    .designer(user)
+                    .owner(user)
+                    .ownerNickname(user.getNickname())
+                    .url("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath)
+                    .title(paintSaveReqDto.getPaintTitle())
+                    .description(paintSaveReqDto.getDescription()).build();
+            artRepository.save(art);
+            return "그림 업로드 성공";
+        } catch (Exception e){
+            e.printStackTrace();
+            return "에러가 발생했습니다.";
+        }
+
     }
 
     @Transactional
-    public void editPaint(PaintEditReqDto paintEditReqDto, MultipartFile file) throws IOException {
-        Art art = artRepository.findById(paintEditReqDto.getPaintId()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        String imgPath = s3Service.upload(art.getUrl(), file);
-        art.updatePaint("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath, paintEditReqDto.getPaintTitle(), paintEditReqDto.getDescription());
-        artRepository.save(art);
+    public String editPaint(PaintEditReqDto paintEditReqDto, MultipartFile file) {
+        try {
+            String originFile = file.getOriginalFilename();
+            String originFileExtension = originFile.substring(originFile.lastIndexOf("."));
+            if (!originFileExtension.equalsIgnoreCase(".jpg") && !originFileExtension.equalsIgnoreCase(".png")
+                    && !originFileExtension.equalsIgnoreCase(".jpeg")) {
+                return "jpg, jpeg, png의 이미지 파일만 업로드해주세요";
+            }
+
+            Art art = artRepository.findById(paintEditReqDto.getPaintId()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            String imgPath = s3Service.upload(art.getUrl(), file);
+            art.updatePaint("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath, paintEditReqDto.getPaintTitle(), paintEditReqDto.getDescription());
+            artRepository.save(art);
+            return "그림 수정 성공";
+        } catch (Exception e){
+            e.printStackTrace();
+            return "에러가 발생했습니다.";
+        }
+
     }
 
     @Transactional
