@@ -54,10 +54,11 @@ public class DealService {
     }
 
     @Transactional
-    public void removeDeal(Long dealId) {
-        Deal deal = dealRepository.findById(dealId).orElseThrow();
-
-
+    public void deleteDeal(Long dealId) {
+        Deal deal = dealRepository.findById(dealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        if (deal.getBidList().size() > 0) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
         dealRepository.deleteById(dealId);
     }
 

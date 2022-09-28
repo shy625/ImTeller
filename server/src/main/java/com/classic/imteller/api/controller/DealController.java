@@ -44,8 +44,8 @@ public class DealController {
     }
 
     @DeleteMapping("/{dealId}")
-    public ResponseEntity<ResponseDto> removeDeal(@PathVariable Long dealId) {
-        dealService.removeDeal(dealId);
+    public ResponseEntity<ResponseDto> deleteDeal(@PathVariable Long dealId) {
+        dealService.deleteDeal(dealId);
         return new ResponseEntity<>(new ResponseDto(), HttpStatus.OK);
     }
 
