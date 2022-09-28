@@ -2,11 +2,12 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "./ClassicNFT.sol";
 import "./Deal.sol";
 
+//즉시거래 + 경매
 contract DealController is Ownable {
 
     constructor(address _nftAddress) {cardContract = IERC721(_nftAddress);}
@@ -32,7 +33,7 @@ contract DealController is Ownable {
         address seller = msg.sender;
         //1. 카드 거래 등록 조건
         //거래에 내놓는 카드가 판매자의 것이 맞는지 확인
-        require(erc721Contract.ownerOf(cardId) == seller, "Seller is not owner of this Card");
+        require(cardContract.ownerOf(cardId) == seller, "Seller is not owner of this Card");
 
         //2. 신규 거래 생성
         Deal deal = new Deal(seller, cardId, minPrice, purchasePrice, startTime, endTime, currencyAddress, nftAddress);

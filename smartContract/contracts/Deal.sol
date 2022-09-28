@@ -60,10 +60,10 @@ contract Deal {
 
         // 새로운 Highet bidder 등장에 따른 기존의 Highet bidder 환불
         if(highestBidder!=address(0)){
-            coinContract.transferFrom(address(this), highestBidder, highestBid);
+            //
         }
 
-        coinContract.transferFrom(bidder, address(this), amount);
+        //
 
         //최고입찰가, 입찰가 정보 업데이트
         highestBid = amount;
@@ -81,14 +81,14 @@ contract Deal {
         //판매자는 구매를 할 수 없음.
         require(buyer!=seller, "You can't buy your own card");
         //구매자가 잔고에 즉시구매가만큼 토큰이 있어야됨
-        require(erc20Contract.balanceOf(buyer) >= purchasePrice, "You don't have enough Tocken to buy this Card");
+        require(erc20Contract.balanceOf(buyer) >= purchasePrice, "You don't have enough Coin to buy this Card");
 
         //1. 최고입찰자가 존재하는 경우 ERC20 토큰 환불진행
         if(highestBidder!=address(0)){
-            coinContract.transferFrom(address(this), highestBidder, highestBid);
+            //
         }
         //2. 구매자의 ERC20 토큰을 판매자에게 송금, 즉시구매가
-        coinContract.transferFrom(msg.sender, seller, purchasePrice);
+        //
 
         //3. 판매자의 NFT를 거래CA가 구매자에게 소유권 이전
         cardContract.transferFrom(address(this), buyer, cardId);
@@ -106,7 +106,8 @@ contract Deal {
         buyer=msg.sender;
         require(buyer == highestBidder || buyer == seller, "caller is not highestBidder or seller");
 
-        coinContract.transferFrom(msg.sender, seller, purchasePrice);
+        //
+
 
         cardContract.transferFrom(address(this), buyer, cardId);
 
@@ -118,12 +119,13 @@ contract Deal {
     function cancelDeal() public payable onlySeller{
         //경매참여자 있으면 최고입찰자에게 해당 금액 환불
         if(highestBidder!=address(0)){
-            coinContract.transferFrom(address(this), highestBidder, highestBid);
+            //
+
+
         }
         //카드 소유권을 다시 판매자에게 반환
         cardContract.transferFrom(address(this), seller, cardId);
         //판매 상태를 완료로 전환
-
         _end();
         emit DealCanceled(address(this), cardId, seller);
     }
