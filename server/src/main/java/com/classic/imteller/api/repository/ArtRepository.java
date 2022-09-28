@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ArtRepository extends JpaRepository<Art, Integer> {
+public interface ArtRepository extends JpaRepository<Art, Long> {
     @Query(value="SELECT * FROM art WHERE owner_nickname = :nickname AND token_id != 0", nativeQuery = true)
     List<Art> findAllByNicknameAndIsNFT(@Param("nickname") String email);
 

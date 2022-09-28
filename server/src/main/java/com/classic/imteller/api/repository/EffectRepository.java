@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EffectRepository extends JpaRepository<Effect, Integer> {
+public interface EffectRepository extends JpaRepository<Effect, Long> {
 
 }
