@@ -32,7 +32,7 @@ public class Art extends BaseEntity {
     private String ownerNickname;
 
     @Column
-    private long tokenId;
+    private Long tokenId;
 
     @Column(nullable = false, length=256)
     private String url;
@@ -44,7 +44,7 @@ public class Art extends BaseEntity {
     private String description;
 
     @Column
-    private int recentPrice;
+    private Integer recentPrice;
 
     public void updatePaint(String url, String title, String desc) {
         this.url = url;

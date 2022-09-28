@@ -1,9 +1,6 @@
 package com.classic.imteller.api.service;
 
-import com.classic.imteller.api.dto.room.ExitReqDto;
-import com.classic.imteller.api.dto.room.JoinReqDto;
-import com.classic.imteller.api.dto.room.ReadyReqDto;
-import com.classic.imteller.api.dto.room.SelectReqDto;
+import com.classic.imteller.api.dto.room.*;
 import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.exception.CustomException;
@@ -77,6 +74,9 @@ public class RoomService {
         }
         if (!chk) return false;
 
+        // 3명 이상인지 확인
+        if(players.size() < 3) return false;
+
         // 방장의 sessionId와 시작요청을 보낸 사람이 같은지 확인
         HashMap<String, String> usids = room.getUserSessionIds();
         String leader = room.getLeader();
@@ -88,9 +88,13 @@ public class RoomService {
     }
 
     @Transactional
-    public boolean selectCards(long sessionId, SelectReqDto selectReqDto) {
+    public HashMap<String, List<GameCardDto>> selectCards(long sessionId, SelectReqDto selectReqDto) {
         boolean chk = roomRepository.selectCards(sessionId, selectReqDto);
-        return chk;
+        if (chk && roomRepository.getRoom(sessionId).getCards().size() == roomRepository.getRoom(sessionId).getPlayers().size()) {
+            HashMap<String, List<GameCardDto>> firstHands = roomRepository.draw(sessionId);
+            return firstHands;
+        }
+        else return null;
     }
 
 }
