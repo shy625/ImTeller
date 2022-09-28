@@ -8,17 +8,14 @@ import Profile from 'components/profile'
 import { setCurrentUser, setEmail, setLogout } from 'store/modules/user'
 import user from 'actions/api/user'
 
-import { useBGM } from 'actions/hooks/useBGM'
-
 // style
-import logo from '../assets/image/logo2.png'
+import logo from 'assets/image/logo2.png'
 import { textBtn } from 'style/commonStyle'
 
 export default function Header() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const currentUser = useSelector((state: any) => state.currentUser)
 
   const logout = () => {
@@ -37,14 +34,6 @@ export default function Header() {
         console.log(error)
       })
   }, [])
-
-  useEffect(() => {
-    if (currentUser.nickname) {
-      setIsLoggedIn(true)
-    } else {
-      setIsLoggedIn(false)
-    }
-  }, [currentUser])
 
   return (
     <div css={headerCss}>
@@ -70,7 +59,7 @@ export default function Header() {
         <div onClick={() => navigate('/faq')} css={textBtn}>
           FAQ
         </div>
-        {isLoggedIn ? (
+        {currentUser.nickname ? (
           <div css={loginCss}>
             <Profile nickname={currentUser.nickname} profile={currentUser.profile} />
             <div onClick={logout} css={textBtn}>

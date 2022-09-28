@@ -26,10 +26,10 @@ export default function Mypage() {
   const [tabNo, setTabNo] = useState(0)
 
   useEffect(() => {
-    if (nick === currentUser.nickname) {
-      setIsMyMypage(true)
-    }
+    if (nick === currentUser.nickname) setIsMyMypage(true)
+  })
 
+  useEffect(() => {
     user
       .userDetail({ nickname: nick })
       .then((result) => {
@@ -38,12 +38,11 @@ export default function Mypage() {
       .catch((error) => {
         console.error(error)
       })
-
     art
       .cardList({ nickname: nick })
       .then((result) => {
         console.log(result.data)
-        dispatch(setCardList(result.data.cardList))
+        dispatch(setCardList(result.data))
       })
       .catch((error) => {
         console.error(error)
@@ -53,9 +52,9 @@ export default function Mypage() {
   useEffect(() => {
     if (isMyMypage) {
       art
-        .paintList()
+        .paintList({ nickname: nick })
         .then((result) => {
-          setPaintList(result.data.paintList)
+          dispatch(setPaintList(result.data))
         })
         .catch((error) => {
           console.error(error)

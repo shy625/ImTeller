@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
 
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
-import { useBGM } from 'actions/hooks/useBGM'
-import setting from '../assets/image/setting.png'
+import { useModal } from 'actions/hooks/useModal'
+import setting from 'assets/image/setting.png'
 
 const Setting = () => {
-  const [playPause, volumeControl] = useBGM('assets/audio/gameBgm.mp3')
+  const [setModalState, setModalMsg] = useModal('')
 
   return (
-    <div>
+    <div onClick={() => setModalState('setting')}>
       <img css={imgSize} src={setting} alt="setting" />
     </div>
   )
