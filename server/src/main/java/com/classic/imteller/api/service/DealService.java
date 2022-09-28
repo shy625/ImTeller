@@ -24,7 +24,7 @@ public class DealService {
     @Transactional
     public Long registerDeal(RegisterDealReqDto requestDto) {
         Art art = artRepository.findById(requestDto.getArtId()).orElseThrow();
-        if (art.getIsNFT() == null) {
+        if (art.getTokenId() == null) {
             throw new CustomException((ErrorCode.BAD_REQUEST));
         }
 
