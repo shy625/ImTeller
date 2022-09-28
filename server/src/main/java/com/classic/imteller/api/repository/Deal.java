@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 public class Deal extends BaseEntity {
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Art art;
 
     @Column(nullable = false)
