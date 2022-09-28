@@ -52,6 +52,6 @@ server:
     context-path: /api/v1
   ssl:
     enabled: true
-    key-store: keystore.p12
+    key-store: classpath:keystore.p12
     key-store-password: imteller509!
     key-store-type: PKCS12
