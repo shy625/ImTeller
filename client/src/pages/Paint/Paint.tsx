@@ -164,7 +164,6 @@ export default function Paint() {
   return (
     <Layout>
       <main>
-        <h1>여긴 Paint</h1>
         <div css={center}>
           <div className="canvas" css={vertical}>
             <div className="controller" css={center}>
