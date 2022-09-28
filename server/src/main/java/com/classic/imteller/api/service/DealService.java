@@ -3,16 +3,13 @@ package com.classic.imteller.api.service;
 import com.classic.imteller.api.dto.deal.DealDetailResDto;
 import com.classic.imteller.api.dto.deal.RegisterDealReqDto;
 import com.classic.imteller.api.dto.deal.SearchDealResDto;
-import com.classic.imteller.api.repository.Art;
-import com.classic.imteller.api.repository.ArtRepository;
-import com.classic.imteller.api.repository.Deal;
-import com.classic.imteller.api.repository.DealRepository;
+import com.classic.imteller.api.repository.*;
 import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +47,53 @@ public class DealService {
         return resDtoList;
     }
 
+    @Transactional(readOnly = true)
     public DealDetailResDto showDealDetail(Long dealId) {
-        return new DealDetailResDto();
+        Deal deal = dealRepository.findById(dealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        Integer finalBidPrice = deal.getLowPrice();
+        if (deal.getFinalBid() != null) {
+            finalBidPrice = deal.getFinalBid().getBidPrice();
+        }
+        DealDetailResDto.DealInfo dealInfo = DealDetailResDto.DealInfo.builder()
+                .dealId(deal.getId())
+                .instantPrice(deal.getInstantPrice())
+                .finalBidPrice(finalBidPrice)
+                .tag(deal.getTag())
+                .finishedAt(deal.getFinishedAt())
+                .build();
+
+        Art card = deal.getArt();
+        DealDetailResDto.CardInfo cardInfo = DealDetailResDto.CardInfo.builder()
+                .cardId(card.getId())
+                .cardTitle(card.getTitle())
+                .cardImageURL(card.getUrl())
+                .description(card.getDescription())
+                .designerId(card.getDesigner().getId())
+                .designerNickname(card.getDesigner().getNickname())
+                .ownerId(card.getOwner().getId())
+                .ownerNickname(card.getOwner().getNickname())
+                .grade(card.getEffect().getGrade())
+                .effect(card.getEffect().getEffect())
+                .effectDetail(card.getEffect().getDetail())
+                .createdAt(card.getCreatedAt())
+                .build();
+
+        List<Deal> dealList = card.getDealList();
+        List<DealDetailResDto.DealHistory> dealHistoryList = new ArrayList<>();
+        for (Deal d : dealList) {
+            User seller = d.getArt().getOwner();
+            User buyer = d.getFinalBid().getBidder();
+            DealDetailResDto.DealHistory dealHistory = DealDetailResDto.DealHistory.builder()
+                    .sellerId(seller.getId())
+                    .sellerNickname(seller.getNickname())
+                    .buyerId(buyer.getId())
+                    .buyerNickname(buyer.getNickname())
+                    .price(d.getFinalBid().getBidPrice())
+                    .build();
+            dealHistoryList.add(dealHistory);
+        }
+
+        return new DealDetailResDto(dealInfo, cardInfo, dealHistoryList);
     }
 
     @Transactional
