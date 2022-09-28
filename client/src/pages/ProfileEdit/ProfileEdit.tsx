@@ -3,62 +3,62 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import Layout from 'layout/layout'
+import ProfileImage from 'pages/ProfileEdit/profileImage'
+import PwCertificate from 'pages/ProfileEdit/pwCertificate'
+
 import user from 'actions/api/user'
+import { current } from '@reduxjs/toolkit'
 
 export default function ProfileEdit(props: any) {
   const navigate = useNavigate()
 
-  const [nickValid, setNickValid] = useState('')
-  const [nickChecked, setNickChecked] = useState(false)
   const currentUser = useSelector((state: any) => state.currentUser)
-  const email = useSelector((state: any) => state.email)
+  const email = localStorage.getItem('email')
 
-  const changeImage = (event) => {
-    const image = event.target.files[0]
+  const [password, setPassword] = useState('') // 처음 비밀번호 인증하면 비번이 담긴다
 
-    const imageTag: any = document.querySelector('#image')
-    imageTag.src = URL.createObjectURL(image)
-  }
+  const [nickValid, setNickValid] = useState('')
+  const [nickChecked, setNickChecked] = useState(false) // 사용가능한 닉네임 체크 여부
+  const [pwValid, setPwValid] = useState('')
+  const [pwChecked, setPwChecked] = useState('') // password1,2 일치 여부
 
-  const resetImage = () => {
-    const imageInput: any = document.querySelector('#profileImage')
-    imageInput.value = ''
-
-    const imageTag: any = document.querySelector('#image')
-    imageTag.src = currentUser.profile
-  }
-
-  const deleteImage = () => {
-    const imageInput: any = document.querySelector('#profileImage')
-    imageInput.value = ''
-
-    const imageTag: any = document.querySelector('#image')
-    imageTag.src = ''
-  }
+  const [nickError, setNickError] = useState('') // 체크 에러문구
+  const [isChangePw, setIsChangePw] = useState(false) // 비밀번호 수정 여부
 
   const nickFilter = (event) => {
     setNickChecked(false)
-
-    let nickname = event.target.value
-    nickname = nickname.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]/g, '')
+    const { value } = event.target
+    const nickname = value.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]/g, '')
     if (nickname.length < 5) {
       setNickValid('5자 이상의 닉네임을 지어주세요')
-    } else if (nickname.length > 20) {
-      nickname = nickname.slice(0, 20)
     } else {
       setNickValid('')
     }
-    event.target.value = nickname
+    event.target.value = nickname.slice(0, 20)
+  }
+
+  const passwordFilter = (event) => {
+    const { value } = event.target
+    const filtered = value.replace(/[^0-9a-zA-Z~!@#$%^&*()=|+]/g, '')
+    if (event.target.value.length < 8) {
+      setPwValid('비밀번호는 8자 이상이여야 합니다')
+    } else {
+      setPwValid('')
+    }
+    event.target.value = filtered.slice(0, 30)
   }
 
   const checkNick = () => {
+    setNickError('')
     if (nickValid) return alert('닉네임 규칙지키세요')
     const nickname: any = document.querySelector('#nickname')
     if (!nickname.value) return alert('닉네임 입력하셈')
+    if (nickname.value === currentUser.nickname) {
+      return setNickChecked(true)
+    }
 
-    const data = { nickname: nickname.value }
     user
-      .checkNickname(data)
+      .checkNickname({ nickname: nickname.value })
       .then((result) => {
         console.log(result)
         if (result.data == '사용가능한 닉네임입니다.') {
@@ -66,68 +66,137 @@ export default function ProfileEdit(props: any) {
         }
       })
       .catch((error) => {
+        setNickError(error.response.data)
+        setNickChecked(false)
         console.error(error)
       })
   }
 
+  const pwMatch = () => {
+    const password1: any = document.querySelector('#password1')
+    const password2: any = document.querySelector('#password2')
+    if (password2.value === '') {
+      setPwChecked('')
+    } else if (password1.value === password2.value) {
+      setPwChecked('비밀번호가 일치합니다')
+    } else {
+      setPwChecked('비밀번호가 일치하지 않습니다')
+    }
+  }
+
   const onSubmit = (event) => {
     event.preventDefault()
-    if (!nickChecked) return alert('닉네임 중복체크하셈')
+
+    if (isChangePw && (pwValid !== '' || pwChecked !== '비밀번호가 일치합니다')) {
+      return alert('비밀번호를 정확히 입력해 주세요')
+    }
+
+    const nickname: any = document.querySelector('#nickname')
+    if (nickname.value === '') {
+      nickname.value = currentUser.nickname
+    }
+    if (nickname.value === currentUser.nickname) {
+      setNickChecked(true)
+    } else if (!nickChecked) {
+      return alert('닉네임 중복체크를 해주세요')
+    }
+
+    const passwordTag: any = document.querySelector('#password1')
+    let credentials = {
+      email,
+      password: isChangePw ? passwordTag.value : password,
+      nickname: nickname.value,
+    }
 
     const formdata: any = new FormData()
-    formdata.append('email', email)
-    const nickname: any = document.querySelector('#nickname')
-    formdata.append('nickname', nickname.value)
-
     const ImageTag: any = document.querySelector('#image')
-    if (currentUser.profile !== ImageTag.src) {
-      const profileImage: any = document.querySelector('#profileImage')
-      formdata.append('profile', profileImage.files[0])
+    const profileImage: any = document.querySelector('#profileImage')
+    if (currentUser.profile !== ImageTag.src && profileImage.files.length !== 0) {
+      formdata.append('file', profileImage.files[0])
+    } else {
+      credentials['profile'] = 'reset'
     }
-    user.profileEdit(formdata) // 결과 오면 처리하기
+    const blob = new Blob([JSON.stringify(credentials)], { type: 'application/json' })
+    formdata.append('info', blob)
+
+    user
+      .profileEdit(formdata) // 결과 오면 처리하기
+      .then((result) => {
+        console.log(result)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
     <Layout>
       <main>
-        여긴 ProfileEdit
-        <img id="image" src={currentUser.profile} alt="" />
-        <div>
-          <label htmlFor="profileImage">프로필 이미지</label>
-          <input
-            id="profileImage"
-            type="file"
-            accept="image/*"
-            onChange={(event) => {
-              changeImage(event)
-            }}
-          />
-          <button onClick={resetImage}>원상복구하기</button>
-          <button onClick={deleteImage}>지우기</button>
-        </div>
-        <div>
-          <label htmlFor="nickname">닉네임</label>
-          <input
-            id="nickname"
-            type="text"
-            defaultValue={currentUser.nickname || ''}
-            placeholder="닉네임"
-            required
-            onChange={(event) => {
-              nickFilter(event)
-            }}
-          />
-          <button onClick={checkNick}>닉네임 중복 체크</button>
-          {nickChecked ? '✅' : null}
-          {nickValid}
-        </div>
-        <button
-          onClick={(event) => {
-            onSubmit(event)
-          }}
-        >
-          수정하기
-        </button>
+        {!password ? (
+          <PwCertificate setPassword={setPassword} />
+        ) : (
+          <>
+            <div>
+              <ProfileImage />
+              <label htmlFor="nickname">닉네임</label>
+              <input
+                id="nickname"
+                type="text"
+                defaultValue={currentUser.nickname || ''}
+                placeholder={currentUser.nickname}
+                required
+                onChange={(event) => {
+                  nickFilter(event)
+                }}
+              />
+              <button onClick={checkNick}>닉네임 중복 체크</button>
+              {nickChecked ? '✅' : nickError}
+              {nickValid}
+            </div>
+            {isChangePw ? (
+              <div>
+                <label htmlFor="password">비밀번호</label>
+                <input
+                  onChange={(e) => {
+                    passwordFilter(e)
+                    pwMatch()
+                  }}
+                  type="password"
+                  id="password1"
+                  required
+                  placeholder="비밀번호를 입력해주세요"
+                />
+                {pwValid}
+                <label htmlFor="password2">비밀번호 재입력</label>
+                <input
+                  onChange={(e) => {
+                    pwMatch()
+                  }}
+                  type="password"
+                  id="password2"
+                  required
+                  placeholder="비밀번호를 다시 입력해주세요"
+                />
+                {pwChecked}
+              </div>
+            ) : null}
+            <button
+              onClick={() => {
+                setIsChangePw(!isChangePw)
+              }}
+            >
+              {isChangePw ? '비밀번호 변경하지 않기' : '비밀번호 변경하기'}
+            </button>
+            <button
+              onClick={(event) => {
+                onSubmit(event)
+              }}
+            >
+              수정하기
+            </button>
+          </>
+        )}
+        <div>회원정보에 지갑주소 없으면 지갑주소 변경 할 수 있도록 하기</div>
         <button
           onClick={() => {
             navigate(-1)
@@ -135,14 +204,6 @@ export default function ProfileEdit(props: any) {
         >
           뒤로
         </button>
-        <button
-          onClick={() => {
-            alert('없음')
-          }}
-        >
-          회원 탈퇴
-        </button>
-        <div>회원정보에 지갑주소 없으면 지갑주소 변경 할 수 있도록 하기</div>
       </main>
     </Layout>
   )

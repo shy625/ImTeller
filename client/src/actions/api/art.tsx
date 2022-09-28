@@ -5,7 +5,7 @@ const END_POINT = 'art'
 const art = {
   cardList(data) {
     return api({
-      method: 'get',
+      method: 'post',
       url: `${END_POINT}/cards`,
       data: data,
     })

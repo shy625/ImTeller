@@ -10,9 +10,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Art extends BaseEntity {
 
     @OneToOne
@@ -30,8 +30,11 @@ public class Art extends BaseEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private User owner;
 
-    @Column(length=256)
-    private String isNFT;
+    @Column(nullable = false, length=20)
+    private String ownerNickname;
+
+    @Column
+    private long tokenId;
 
     @Column(nullable = false, length=256)
     private String url;
@@ -53,5 +56,4 @@ public class Art extends BaseEntity {
         this.title = title;
         this.description = desc;
     }
-
 }

@@ -50,7 +50,7 @@ public class UserService {
                 .email(signupReqDto.getEmail())
                 .password(encoder.encode(newPw))
                 .nickname(signupReqDto.getNickname())
-                .profile("null")
+                .profile("https://imtellercard.s3.ap-northeast-2.amazonaws.com/null.png")
                 .exp(0)
                 .win(0)
                 .lose(0)
@@ -74,14 +74,19 @@ public class UserService {
     }
 
     // 수정을 위한 함수
-    private void modify(EditReqDto editReqDto) {
+    @Transactional
+    public void modify(EditReqDto editReqDto) {
         User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         // 비밀번호 안넣은 케이스 설정
-        if("".equals(user.getPassword()) == false && user.getPassword() != null) {
-            String password = user.getPassword();
+        if("".equals(editReqDto.getPassword()) == false && user.getPassword() != null) {
+            String password = editReqDto.getPassword();
             editReqDto.updatePassword(encoder.encode(password));
         }
+        else {
+            editReqDto.updatePassword(encoder.encode(user.getPassword()));
+        }
         user.updateUser(editReqDto);
+        userRepository.save(user);
     }
 
     @Transactional
@@ -99,7 +104,7 @@ public class UserService {
                 }
                 User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 String imgPath = s3Service.upload(user.getProfile(), file);
-                editReqDto.updateProfile(imgPath);
+                editReqDto.updateProfile("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath);
                 this.modify(editReqDto);
             } else if(editReqDto.getProfile().equals("reset")) {
                 User user = userRepository.findByEmail(editReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
@@ -107,7 +112,7 @@ public class UserService {
                 s3Service.delete(user.getProfile());
 
                 //이미지 컬럼 null로 변경
-                editReqDto.updateProfile("null");
+                editReqDto.updateProfile("https://imtellercard.s3.ap-northeast-2.amazonaws.com/null.png");
                 this.modify(editReqDto);
             } else {
                 this.modify(editReqDto);
@@ -135,6 +140,7 @@ public class UserService {
                 .exp(user.getExp())
                 .win(user.getWin())
                 .lose(user.getLose())
+                .wallet(user.getWallet())
                 .createdAt(user.getCreatedAt()).build();
     }
 }

@@ -9,9 +9,7 @@ import ProfileEdit from 'pages/ProfileEdit/ProfileEdit'
 import Login from 'pages/Login/Login'
 import Paint from 'pages/Paint/Paint'
 import GameList from 'pages/GameList/GameList'
-import GameRoom from 'pages/GameRoom/GameRoom'
-import GamePlay from 'pages/GamePlay/GamePlay'
-import GameResult from 'pages/GameResult/GameResult'
+import Game from 'pages/Game/Game'
 import DealList from 'pages/DealList/DealList'
 import DealDetail from 'pages/DealDetail/DealDetail'
 import DealRegister from 'pages/DealRegister/DealRegister'
@@ -20,30 +18,36 @@ import Vote from 'pages/Vote/Vote'
 import FAQ from 'pages/FAQ/FAQ'
 import NotFound404 from 'pages/NotFound404/NotFound404'
 
+import BgmLayer from 'layout/bgmLayer'
+import ModalLayer from 'layout/modals/modalLayer'
+
 import 'App.css'
+import '../src/style/fonts.css'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/mypage/:nick" element={<Mypage />} />
-        <Route path="/signup" element={<Signup signup={true} />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profileEdit" element={<ProfileEdit />} />
-        <Route path="/paint" element={<Paint />} />
-        <Route path="/game" element={<GameList />} />
-        <Route path="/gameRoom/:gameId" element={<GameRoom />} />
-        <Route path="/game/:gameId" element={<GamePlay />} />
-        <Route path="/game/:gameId/result" element={<GameResult />} /> {/* 필요 없을 수도 */}
-        <Route path="/deal" element={<DealList />} />
-        <Route path="/deal/:dealId" element={<DealDetail />} />
-        <Route path="/deal/register" element={<DealRegister />} />
-        <Route path="/rank" element={<Rank />} />
-        <Route path="/vote" element={<Vote />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/*" element={<NotFound404 />} />
-      </Routes>
+      <BgmLayer>
+        <ModalLayer>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/mypage/:nick" element={<Mypage />} />
+            <Route path="/signup" element={<Signup signup={true} />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profileEdit" element={<ProfileEdit />} />
+            <Route path="/paint" element={<Paint />} />
+            <Route path="/game" element={<GameList />} />
+            <Route path="/game/:roomId" element={<Game />} />
+            <Route path="/deal" element={<DealList />} />
+            <Route path="/deal/:dealId" element={<DealDetail />} />
+            <Route path="/deal/register" element={<DealRegister />} />
+            <Route path="/rank" element={<Rank />} />
+            <Route path="/vote" element={<Vote />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/*" element={<NotFound404 />} />
+          </Routes>
+        </ModalLayer>
+      </BgmLayer>
     </BrowserRouter>
   )
 }
