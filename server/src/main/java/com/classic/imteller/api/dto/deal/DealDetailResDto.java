@@ -1,11 +1,13 @@
 package com.classic.imteller.api.dto.deal;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
 @NoArgsConstructor
 public class DealDetailResDto {
 
@@ -19,6 +21,7 @@ public class DealDetailResDto {
         this.dealHistoryList = dealHistoryList;
     }
 
+    @Getter
     @Builder
     public static class DealInfo {
         private Long dealId;
@@ -28,6 +31,7 @@ public class DealDetailResDto {
         private LocalDateTime finishedAt;
     }
 
+    @Getter
     @Builder
     public static class CardInfo {
         private Long cardId;
@@ -44,6 +48,7 @@ public class DealDetailResDto {
         private LocalDateTime createdAt;
     }
 
+    @Getter
     @Builder
     public static class DealHistory {
         private Long sellerId;

@@ -82,6 +82,9 @@ public class DealService {
         List<Deal> dealList = card.getDealList();
         List<DealDetailResDto.DealHistory> dealHistoryList = new ArrayList<>();
         for (Deal d : dealList) {
+            if (d.getId() == dealId) {
+                continue;
+            }
             User seller = d.getArt().getOwner();
             User buyer = d.getFinalBid().getBidder();
             LocalDateTime dealedAt = d.getFinishedAt();
