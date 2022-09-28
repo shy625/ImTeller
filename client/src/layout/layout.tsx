@@ -9,9 +9,7 @@ export default function Layout(props: any) {
   return (
     <div css={background}>
       <Header />
-      <hr />
       {props.children}
-      <hr />
       <Footer />
     </div>
   )

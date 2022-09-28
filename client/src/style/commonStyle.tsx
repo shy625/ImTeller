@@ -28,19 +28,18 @@ const textarea = css({
   border: 'none',
   borderRadius: '12px',
   width: '95%',
-  fontFamily: 'normalFont',
+  fontFamily: 'GongGothicMedium',
 })
 const imgIcon = css({
   width: 20,
   height: 20,
 })
-const normalFont = css`
-  @font-face {
-    font-family: 'GongGothicMedium';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff')
-      format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-`
-export { normalBtn, input, textarea, imgIcon }
+const textBtn = css({
+  cursor: 'pointer',
+})
+const fullDisplay = css({
+  height: 'auto',
+  minHeight: '100vh',
+})
+
+export { normalBtn, textBtn, input, textarea, imgIcon, fullDisplay }
