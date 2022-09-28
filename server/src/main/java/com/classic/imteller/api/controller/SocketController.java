@@ -53,13 +53,14 @@ public class SocketController {
     // 게임시작 : 방장만 게임시작
     @MessageMapping("/room/{sessionId}/start")
     public void start(@Header("simpSessionId") String userSessionId, @DestinationVariable long sessionId) {
-        Boolean isStart = roomService.start(userSessionId, sessionId);
+        boolean isStart = roomService.start(userSessionId, sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/start", isStart);
     }
 
-    // 카드 선택 : 유저가 사용할 NFT 카드 선택
+    // 카드 선택 : 유저가 사용할 NFT 카드 선택 - 반환 X
     @MessageMapping("/room/{sessionId}/select")
-    public void select(@DestinationVariable long sessionId) {
+    public void select(@DestinationVariable long sessionId, SelectReqDto selectReqDto) {
+        boolean chk = roomService.selectCards(sessionId, selectReqDto);
 
     }
 

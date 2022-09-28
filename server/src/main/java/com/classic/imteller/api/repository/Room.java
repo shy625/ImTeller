@@ -36,7 +36,7 @@ public class Room implements Serializable {
     private int typeNum; // 종료조건에 해당하는 숫자
     private HashMap<String, Boolean> ready; // 준비 여부 (Long에는 uid, Boolean에는 준비 여부가 들어감)
     private boolean started; // 시작 여부
-    private HashMap<String, CardDto> cards; // 어떤 아이디의 유저가 어떤 nft 카드를 제출했는지 담은 변수 (Long에는 uid가 들어감)
+    private HashMap<String, List<Long>> cards; // 어떤 아이디의 유저가 어떤 nft 카드를 제출했는지 담은 변수 (Long에는 uid가 들어감)
     private HashMap<String, ItemDto> items; // 어떤 아이디의 유저가 어떤 아이템을 가지고 있는지, 사용했는지 담은 변수 (Long에는 uid가 들어감)
     private HashMap<String, Integer> score; // 어떤 유저가 몇 점인지 담은 변수
     private List<Long> deck; // 전체 덱

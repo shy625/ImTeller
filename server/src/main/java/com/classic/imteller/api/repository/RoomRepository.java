@@ -109,7 +109,7 @@ public class RoomRepository {
             // 밑 요소들은 게임중일 때 작동
             if (roomList.get(sessionId).getStarted()) {
                 // cards에서 없애기
-                HashMap<String, CardDto> newCards = roomList.get(sessionId).getCards();
+                HashMap<String, List<Long>> newCards = roomList.get(sessionId).getCards();
                 newCards.remove(exitReqDto.getNickname());
                 roomList.get(sessionId).setCards(newCards);
                 // items에서 없애기
@@ -139,7 +139,7 @@ public class RoomRepository {
                 user.plusLose();
                 userRepository.save(user);
 
-                // 나갔을 때 3명 이하가 되면 게임 종료 알림 전달
+                // 나갔을 때 3명 이하가 되면 게임 종료 알림 전달 (end 구현 이후 적용 예정)
             }
 
             return "ok";
@@ -164,5 +164,22 @@ public class RoomRepository {
     public void start (long sessionId) {
         // 시작변수 변경
         roomList.get(sessionId).setStarted(true);
+    }
+
+    public boolean selectCards (long sessionId, SelectReqDto selectReqDto) {
+        try {
+            // 유저가 제출한 카드 등록
+            roomList.get(sessionId).getCards().put(selectReqDto.getNickname(), selectReqDto.getSelectedCard());
+            // 낸 유저 status에 등록하기
+            roomList.get(sessionId).getStatus().put(selectReqDto.getNickname(), false);
+            // 아이템 등록하기
+
+            // 점수 초기화
+            roomList.get(sessionId).getScore().put(selectReqDto.getNickname(), 0);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

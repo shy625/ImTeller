@@ -3,6 +3,7 @@ package com.classic.imteller.api.service;
 import com.classic.imteller.api.dto.room.ExitReqDto;
 import com.classic.imteller.api.dto.room.JoinReqDto;
 import com.classic.imteller.api.dto.room.ReadyReqDto;
+import com.classic.imteller.api.dto.room.SelectReqDto;
 import com.classic.imteller.api.repository.Room;
 import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.exception.CustomException;
@@ -84,6 +85,12 @@ public class RoomService {
             return true;
         }
         else return false;
+    }
+
+    @Transactional
+    public boolean selectCards(long sessionId, SelectReqDto selectReqDto) {
+        boolean chk = roomRepository.selectCards(sessionId, selectReqDto);
+        return chk;
     }
 
 }
