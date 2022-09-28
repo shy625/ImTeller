@@ -38,10 +38,6 @@ public class RoomService {
         }
         return null;
     }
-    @Transactional(readOnly = true)
-    public void getRoomInfo(long sessionId) {
-
-    }
 
     @Transactional
     public Room exitRoom(long sessionId, ExitReqDto exitReqDto) {
@@ -53,11 +49,14 @@ public class RoomService {
         return null;
     }
 
+    @Transactional
     public HashMap<String, Boolean> ready(long sessionId, ReadyReqDto readyReqDto) {
         return roomRepository.ready(sessionId, readyReqDto);
     }
 
+    @Transactional(readOnly = true)
     public Room getRoom(long sessionId) {
         return roomRepository.getRoom(sessionId);
     }
+
 }
