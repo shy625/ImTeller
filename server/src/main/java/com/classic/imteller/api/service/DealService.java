@@ -35,6 +35,7 @@ public class DealService {
                 .lowPrice(requestDto.getLowPrice())
                 .instantPrice(requestDto.getInstantPrice())
                 .tag(requestDto.getTag())
+                .dealAddress(requestDto.getDealAddress())
                 .finishedAt(requestDto.getFinishedAt())
                 .build();
 

@@ -13,6 +13,7 @@ public class RegisterDealReqDto {
     private Integer lowPrice;
     private Integer instantPrice;
     private String tag;
+    private String dealAddress;
     private LocalDateTime finishedAt;
 
 }
