@@ -1,8 +1,10 @@
 package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.game.GameRoomDto;
-import com.classic.imteller.api.dto.game.JoinReqDto;
 import com.classic.imteller.api.dto.game.MakeReqDto;
+import com.classic.imteller.api.dto.room.JoinReqDto;
+import com.classic.imteller.api.repository.Room;
+import com.classic.imteller.api.repository.RoomRepository;
 import com.classic.imteller.api.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GameController {
     private final GameService gameService;
+    private final RoomRepository roomRepository;
 
     // 이메일 중복체크
     @GetMapping("/rooms")
@@ -34,7 +37,7 @@ public class GameController {
 
     @GetMapping("/rooms/{roomId}")
     @ApiOperation(value = "해당 게임방 정보 받기", notes = "해당 게임방의 정보를 JSON형태로 반환")
-    public ResponseEntity<GameRoomDto> getRoom(@PathVariable final int roomId){
+    public ResponseEntity<GameRoomDto> getRoom(@PathVariable final long roomId){
         // 소켓 or Redis 에서 해당 roomId 정보 가져와서 던져주기
         GameRoomDto gameRoom = new GameRoomDto();
         return new ResponseEntity<GameRoomDto>(gameRoom, HttpStatus.OK);
@@ -42,18 +45,19 @@ public class GameController {
 
     @PostMapping("/rooms/{roomId}/join")
     @ApiOperation(value = "해당 게임방 접속", notes = "해당 게임의 방이름과 비밀번호로 접근")
-    public ResponseEntity<Boolean> joinRoom(@PathVariable final int roomId, @RequestBody final JoinReqDto roomInfo){
+    public ResponseEntity<Boolean> joinRoom(@PathVariable final long roomId, @RequestBody final JoinReqDto roomInfo){
         // 비밀번호 맞는지 여부를 파악하고 boolean값을 보냄
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
     @PostMapping("/make")
     @ApiOperation(value = "게임방 생성", notes = "게임방을 생성하고 해당 내용을 DB에 저장")
-    public ResponseEntity<Integer> makeRoom(@RequestBody final MakeReqDto roomInfo){
-        // 방 정보를 소켓과 Redis에 저장
+    public ResponseEntity<Long> makeRoom(@RequestBody final MakeReqDto roomInfo){
+        // 방 정보를 소켓과 인메모리에 저장
         // 생성된 roomId 반환
-        int newRoomId = gameService.getRoomId();
-        return new ResponseEntity<Integer>(newRoomId, HttpStatus.OK);
+        long newRoomId = gameService.createRoom(roomInfo);
+
+        return new ResponseEntity<Long>(newRoomId, HttpStatus.OK);
     }
 
 }

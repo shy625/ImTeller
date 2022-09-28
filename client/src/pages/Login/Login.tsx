@@ -87,9 +87,7 @@ export default function Login(props: any) {
 
   return (
     <Layout>
-      <main>여긴 Login</main>
-
-      <div>
+      <main>
         <div>
           <label htmlFor="email">Email</label>
           <input type="text" id="email" autoFocus placeholder="이메일를 입력해주세요" />
@@ -127,7 +125,7 @@ export default function Login(props: any) {
         >
           비밀번호 잃어버렸음 비밀번호 찾기 {pwFind ? '⚫' : '⚪'}
         </div>
-      </div>
+      </main>
     </Layout>
   )
 }

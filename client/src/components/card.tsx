@@ -1,13 +1,22 @@
 import React from 'react'
 
 export default function Card(props: any) {
-  const { cardTitle, cardImageURL, content } = props.card
+  const {
+    cardTitle,
+    cardImageURL,
+    description,
+    grade,
+    effect,
+    effectDetail,
+    createdDt,
+    recentPrice,
+  } = props.card
 
   return (
     <div>
-      <img src={cardImageURL} alt="" />
+      <img style={{ height: '15vh' }} src={cardImageURL} alt="" />
       {cardTitle}
-      {content}
+      {description}
     </div>
   )
 }

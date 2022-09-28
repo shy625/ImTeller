@@ -6,5 +6,5 @@ import lombok.Getter;
 public class PaintEditReqDto {
     private Long paintId;
     private String paintTitle;
-    private String Content;
+    private String description;
 }

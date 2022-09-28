@@ -5,7 +5,6 @@ import lombok.Getter;
 @Getter
 public class PaintSaveReqDto {
     private String email;
-    private String nickname;
     private String paintTitle;
-    private String Content;
+    private String description;
 }

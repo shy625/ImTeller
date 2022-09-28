@@ -8,9 +8,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Art extends BaseEntity {
 
     @OneToOne
@@ -51,5 +51,4 @@ public class Art extends BaseEntity {
         this.title = title;
         this.description = desc;
     }
-
 }
