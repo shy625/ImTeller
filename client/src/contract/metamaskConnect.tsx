@@ -7,7 +7,8 @@ export default function Test() {
   const dispatch = useDispatch()
   const metamaskLogin = () => {
     if (!window.ethereum) {
-      alert('메타마스크 설치해')
+      // alert('메타마스크 설치해')
+      window.open('https://metamask.io/download.html')
     } else {
       window.ethereum
         .request({ method: 'eth_requestAccounts' })

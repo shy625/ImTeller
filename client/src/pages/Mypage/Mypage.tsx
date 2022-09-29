@@ -8,7 +8,7 @@ import art from 'actions/api/art'
 
 import MypageTabNav from 'pages/Mypage/mypageTabNav'
 import CardList from 'components/cardList'
-import Metamask from 'pages/test'
+import Metamask from 'contract/metamaskConnect'
 
 import { setUserDetail, setCardList } from 'store/modules/user'
 import { setPaintList } from 'store/modules/art'
