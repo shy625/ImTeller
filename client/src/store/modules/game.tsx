@@ -341,6 +341,7 @@ export const gameCards = createSlice({
 })
 export const { setGameCards, addGameCard } = gameCards.actions
 
+// cardId만 담김
 export const selectedCards = createSlice({
   name: 'selectedCards',
   initialState: [],
