@@ -9,7 +9,7 @@ import { css } from '@emotion/react'
 import { fullDisplay } from 'style/commonStyle'
 
 import { useBGM } from 'actions/hooks/useBGM'
-import { setModalState } from 'store/modules/util'
+import { setModalState } from 'store/modules/setting'
 
 export default function Main() {
   const navigate = useNavigate()
@@ -27,7 +27,7 @@ export default function Main() {
         </button>
         <button
           onClick={() => {
-            dispatch(setModalState('setting'))
+            dispatch(setModalState('alertModal'))
           }}
         >
           모달 띄우기

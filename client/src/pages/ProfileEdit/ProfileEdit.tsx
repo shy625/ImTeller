@@ -3,15 +3,14 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import Layout from 'layout/layout'
-import PwCertificate from 'pages/ProfileEdit/pwCertificate'
 import ProfileImage from 'pages/ProfileEdit/profileImage'
-import AddWallet from 'pages/ProfileEdit/addWallet'
+import PwCertificate from 'pages/ProfileEdit/pwCertificate'
 
 import user from 'actions/api/user'
-import { useModal } from 'actions/hooks/useModal'
+import { current } from '@reduxjs/toolkit'
 
 export default function ProfileEdit(props: any) {
-  const navigate: any = useNavigate()
+  const navigate = useNavigate()
 
   const currentUser = useSelector((state: any) => state.currentUser)
   const email = localStorage.getItem('email')
@@ -25,9 +24,6 @@ export default function ProfileEdit(props: any) {
 
   const [nickError, setNickError] = useState('') // 체크 에러문구
   const [isChangePw, setIsChangePw] = useState(false) // 비밀번호 수정 여부
-  const [isAddWallet, setIsAddWallet] = useState(false) // 지갑 추가 여부
-
-  const [setModalState, setModalMsg] = useModal('')
 
   const nickFilter = (event) => {
     setNickChecked(false)
@@ -92,8 +88,7 @@ export default function ProfileEdit(props: any) {
     event.preventDefault()
 
     if (isChangePw && (pwValid !== '' || pwChecked !== '비밀번호가 일치합니다')) {
-      setModalMsg('비밀번호를 정확히 입력해 주세요')
-      return setModalState('alert')
+      return alert('비밀번호를 정확히 입력해 주세요')
     }
 
     const nickname: any = document.querySelector('#nickname')
@@ -103,8 +98,7 @@ export default function ProfileEdit(props: any) {
     if (nickname.value === currentUser.nickname) {
       setNickChecked(true)
     } else if (!nickChecked) {
-      setModalMsg('닉네임 중복체크를 해주세요')
-      return setModalState('alert')
+      return alert('닉네임 중복체크를 해주세요')
     }
 
     const passwordTag: any = document.querySelector('#password1')
@@ -126,13 +120,9 @@ export default function ProfileEdit(props: any) {
     formdata.append('info', blob)
 
     user
-      .profileEdit(formdata)
+      .profileEdit(formdata) // 결과 오면 처리하기
       .then((result) => {
-        if (result.data === '사용자의 정보를 변경했습니다.') {
-          navigate(-1, { replace: true })
-          setModalMsg('회원정보가 수정되었습니다')
-          setModalState('alert')
-        }
+        console.log(result)
       })
       .catch((error) => {
         console.error(error)
@@ -144,8 +134,6 @@ export default function ProfileEdit(props: any) {
       <main>
         {!password ? (
           <PwCertificate setPassword={setPassword} />
-        ) : isAddWallet ? (
-          <AddWallet />
         ) : (
           <>
             <div>
@@ -199,14 +187,6 @@ export default function ProfileEdit(props: any) {
             >
               {isChangePw ? '비밀번호 변경하지 않기' : '비밀번호 변경하기'}
             </button>
-            {!currentUser.wallet ? (
-              <button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
-            ) : (
-              <>
-                <label htmlFor="wallet">등록된 지갑주소</label>
-                <input id="wallet" value={currentUser.wallet} disabled></input>
-              </>
-            )}
             <button
               onClick={(event) => {
                 onSubmit(event)
@@ -216,7 +196,7 @@ export default function ProfileEdit(props: any) {
             </button>
           </>
         )}
-
+        <div>회원정보에 지갑주소 없으면 지갑주소 변경 할 수 있도록 하기</div>
         <button
           onClick={() => {
             navigate(-1)

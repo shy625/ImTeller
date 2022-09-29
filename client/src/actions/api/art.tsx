@@ -10,11 +10,10 @@ const art = {
       data: data,
     })
   },
-  paintList(data) {
+  paintList() {
     return api({
-      method: 'post',
+      method: 'get',
       url: `${END_POINT}/paints`,
-      data: data,
     })
   },
   paintCreate(data) {

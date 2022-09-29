@@ -140,7 +140,6 @@ public class UserService {
                 .exp(user.getExp())
                 .win(user.getWin())
                 .lose(user.getLose())
-                .wallet(user.getWallet())
                 .createdAt(user.getCreatedAt()).build();
     }
 }

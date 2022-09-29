@@ -8,7 +8,7 @@ import { setEmail } from 'store/modules/user'
 import { setCurrentUser } from 'store/modules/user'
 
 export default function Login(props: any) {
-  const navigate: any = useNavigate()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [authError, setAuthError] = useState('')
@@ -37,6 +37,7 @@ export default function Login(props: any) {
     user
       .login(credentials)
       .then((result) => {
+        console.log(result.data)
         if (result.data === '올바른 비밀번호입니다.') {
           localStorage.setItem('email', credentials.email)
           dispatch(setEmail(credentials.email))
@@ -45,7 +46,7 @@ export default function Login(props: any) {
             .then((result) => {
               console.log(result.data)
               dispatch(setCurrentUser(result.data))
-              navigate(-1, { replace: true })
+              navigate('/')
             })
             .catch((error) => {
               console.log(error)
@@ -80,7 +81,6 @@ export default function Login(props: any) {
       })
       .catch((error) => {
         console.log(error)
-        setAuthError(error.data)
         setIsLoading(false)
       })
   }
@@ -117,7 +117,7 @@ export default function Login(props: any) {
             <button onClick={onSubmit}>로그인</button>
           </>
         )}
-        <button onClick={() => navigate(-1, { replace: true })}>뒤로가기</button>
+
         <div
           onClick={() => {
             setPwFind(!pwFind)

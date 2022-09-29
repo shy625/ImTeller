@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import game from 'actions/api/game'
-import { setIsChecked } from 'store/modules/game'
-import { setModalState } from 'store/modules/util'
+import { setModalState, setModalMsg } from 'store/modules/setting'
 
 export default function MakeRoomModal(props: any) {
   const navigate = useNavigate()
@@ -16,13 +15,12 @@ export default function MakeRoomModal(props: any) {
   const [roomName, setRoomName] = useState('')
   const [isLocked, setIsLocked] = useState(false)
   const [maxNum, setMaxNum] = useState(6)
-  const [type, setType] = useState('0')
+  const [type, setType] = useState(0)
   const [typeNum, setTypeNum] = useState(10)
   const [roomPw, setRoomPw] = useState('')
 
   const onSubmit = (event) => {
     event.preventDefault()
-    if (!roomName || !maxNum) return
 
     const roomInfo = {
       roomName,
@@ -33,19 +31,16 @@ export default function MakeRoomModal(props: any) {
       leader: currentUser.nickname,
     }
     if (!isLocked) {
-      roomInfo.roomPw = ''
+      roomInfo.roomPw = 'null'
     }
 
-    game
-      .make(roomInfo)
-      .then((result) => {
-        dispatch(setIsChecked(true))
-        dispatch(setModalState(''))
-        navigate(`/game/${result.data}`)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    game.make(roomInfo).then((result) => {
+      console.log(result)
+      dispatch(setModalMsg(false))
+      navigate(`/game/${result.data}`)
+    })
+
+    navigate(`/game/${1}`) // api완성되면 지우기
   }
 
   // 라디오 말고 버튼으로 만들면 더 꾸미기 좋을듯. radio 기본값 선택
@@ -63,11 +58,11 @@ export default function MakeRoomModal(props: any) {
           <option value={6}>6명</option>
         </select>
         <label>
-          <input onChange={() => setType('times')} type="radio" name="type"></input>
+          <input onChange={() => setType(1)} type="radio" name="type"></input>
           라운드
         </label>
         <label>
-          <input onChange={() => setType('score')} type="radio" name="type"></input>
+          <input onChange={() => setType(0)} type="radio" name="type"></input>
           점수
         </label>
         {!type ? (

@@ -12,16 +12,11 @@ export default function Card(props: any) {
     recentPrice,
   } = props.card
 
-  // effect는 이미지로 바꿔서 표시
-
   return (
     <div>
       <img style={{ height: '15vh' }} src={cardImageURL} alt="" />
       {cardTitle}
       {description}
-      {grade}
-      {createdDt}
-      {recentPrice}
     </div>
   )
 }
