@@ -3,21 +3,25 @@ import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
+import AddWalletModal from 'layout/modals/addWalletModal'
 import MakeRoomModal from 'layout/modals/makeRoomModal'
 import JoinRoomModal from 'layout/modals/joinRoomModal'
 import CardSelectModal from 'layout/modals/cardSelectModal'
 import AlertModal from 'layout/modals/alertModal'
-import ConfirmModal from 'layout/modals/confirmModal'
+// import ConfirmModal from 'layout/modals/confirmModal'
+import SettingModal from 'layout/modals/settingModal'
 
 export default function ModalLayer(props: any) {
   const modalState = useSelector((state: any) => state.modalState)
 
   const Modals = {
+    addWallet: <AddWalletModal />,
     makeRoom: <MakeRoomModal />,
     cardSelect: <CardSelectModal />,
     alert: <AlertModal />,
-    confirm: <ConfirmModal />,
+    // confirm: <ConfirmModal />,
     joinRoom: <JoinRoomModal />,
+    setting: <SettingModal />,
   }
 
   return (

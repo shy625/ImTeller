@@ -5,10 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ItemDto {
+public class GameCardDto {
     private long cardId;
-    private String grade;
-    private long effect;
-    private int effectNum;
-    private boolean isUsed;
+    private String cardUrl;
 }

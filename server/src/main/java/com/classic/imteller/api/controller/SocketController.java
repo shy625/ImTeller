@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ import java.util.Map;
 public class SocketController {
     private final RoomService roomService;
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
+    private final RoomRepository roomRepository;
 
     private final SimpMessageSendingOperations sendingOperations;
 
@@ -31,8 +33,6 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/join")
     public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
         Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
-        System.out.println(userSessionId);
-        System.out.println(room);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
     }
 
@@ -60,8 +60,27 @@ public class SocketController {
     // 카드 선택 : 유저가 사용할 NFT 카드 선택 - 반환 X
     @MessageMapping("/room/{sessionId}/select")
     public void select(@DestinationVariable long sessionId, SelectReqDto selectReqDto) {
-        boolean chk = roomService.selectCards(sessionId, selectReqDto);
+        HashMap<String, List<GameCardDto>> firstHands = roomService.selectCards(sessionId, selectReqDto);
+        if(firstHands != null) {
+            List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+            for (String player : players) {
+                String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", firstHands.get(player));
+            }
+        }
+    }
 
+    // 귓속말 테스트 : 특정 유저만 받을 수 있는 메시지
+    @MessageMapping("/room/{sessionId}/whisper")
+    public void whisper(@DestinationVariable long sessionId) {
+        System.out.println("--------------------");
+        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+        for (String player : players) {
+            System.out.println(player);
+            String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
+            System.out.println(player + userSessionId);
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/whisper", player);
+        }
     }
 
     // 카드 제출 : 각 유저가 선택한 NFT카드 덱에 추가
@@ -125,7 +144,7 @@ public class SocketController {
     }
 
     // 모든 정보 : 방 내 모든 정보를 전달
-    @MessageMapping("/room/{sessionId}/roomInfo")
+    @MessageMapping("/room/{sessionId}/roominfo")
     public void getRoom(@DestinationVariable long sessionId) {
         Room room = roomService.getRoom(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/all", room);
