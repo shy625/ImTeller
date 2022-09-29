@@ -70,31 +70,6 @@ public class SocketController {
         }
     }
 
-    // 귓속말 테스트 : 특정 유저만 받을 수 있는 메시지
-    @MessageMapping("/room/{sessionId}/whisper")
-    public void whisper(@DestinationVariable long sessionId) {
-        System.out.println("--------------------");
-        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
-        for (String player : players) {
-            System.out.println(player);
-            String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-            System.out.println(player + userSessionId);
-            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/whisper", player);
-        }
-    }
-
-    // 카드 제출 : 각 유저가 선택한 NFT카드 덱에 추가
-    @MessageMapping("/room/{sessionId}/table")
-    public void table(@DestinationVariable long sessionId) {
-
-    }
-
-    // 새로운 텔러 : 특정 텔러의 동작이 끝나거나 게임이 새로 시작해서 새로운 텔러의 동작이 시작
-    @MessageMapping("/room/{sessionId}/newteller")
-    public void newTeller(@DestinationVariable long sessionId) {
-
-    }
-
     // 텔러 카드선택 : 텔러가 선택한 카드와 텔러의 문장이 전달됨
     @MessageMapping("/room/{sessionId}/teller")
     public void teller(@DestinationVariable long sessionId) {

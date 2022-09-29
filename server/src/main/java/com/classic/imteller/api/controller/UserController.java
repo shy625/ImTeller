@@ -117,14 +117,14 @@ public class UserController {
 
     @PostMapping("/wallet")
     @ApiOperation(value = "지갑 주소 등록", notes = "사용자의 아이디에 지갑 주소를 등록")
-    public ResponseEntity<String> newPassword(@RequestBody WalletReqDto walletReqDto) {
+    public ResponseEntity<String> wallet(@RequestBody WalletReqDto walletReqDto) {
         userService.setWallet(walletReqDto.getEmail(), walletReqDto.getWallet());
         return new ResponseEntity<String>("지갑 주소를 등록했습니다.", HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "해당 닉네임 유저 정보 확인", notes = "해당 닉네임을 가진 유저의 정보를 전달받는 API")
-    public ResponseEntity<DetailResDto> newPassword(@RequestBody DetailReqDto detailReqDto) {
+    public ResponseEntity<DetailResDto> detail(@RequestBody DetailReqDto detailReqDto) {
         DetailResDto resUser = userService.getDetail(detailReqDto.getNickname());
         return new ResponseEntity<DetailResDto>(resUser, HttpStatus.ACCEPTED);
     }
