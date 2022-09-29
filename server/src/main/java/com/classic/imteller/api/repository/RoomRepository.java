@@ -8,10 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -243,5 +240,58 @@ public class RoomRepository {
         // 할당한 내용 hand변수에 반영하고 반환하기
         roomList.get(sessionId).setHand(basicHand);
         return basicHand;
+    }
+
+    public void setPhase (long sessionId, int phase) {
+        roomList.get(sessionId).setTurn(phase);
+    }
+
+    public void startTimer (long sessionId, TimerTask task) {
+        roomList.get(sessionId).setTimer(new Timer());
+
+        int phase = roomList.get(sessionId).getTurn();
+        int time;
+        if (phase == 1 || phase == 2) time = 30;
+        else if (phase == 3) {
+            if (roomList.get(sessionId).getActivated().size() > 0) {
+                int maxEffectNum = 0;
+                for (EffectDto effect : roomList.get(sessionId).getActivated()) {
+                    if (effect.getEffect() == 1 && maxEffectNum < effect.getEffectNum()) {
+                        maxEffectNum = effect.getEffectNum();
+                    }
+                }
+                time = 30 - maxEffectNum;
+            } else time = 30;
+        }
+        else if (phase == 4) time = 10;
+        else time = 0;
+
+        roomList.get(sessionId).getTimer().schedule(task, time * 1000);
+    }
+
+    public void stopTimer (long sessionId) {
+        roomList.get(sessionId).getTimer().cancel();
+        roomList.get(sessionId).setTimer(new Timer());
+    }
+
+    public void saveTellerInfo (long sessionId, TellerDto tellerDto) {
+        TableDto table = TableDto.builder()
+                .nickname(tellerDto.getNickname())
+                .cardId(tellerDto.getCardId())
+                .isTeller(true).build();
+        roomList.get(sessionId).getTable().add(table);
+    }
+
+    public void setNextTeller (long sessionId) {
+        List<String> players = roomList.get(sessionId).getPlayers();
+        String teller = roomList.get(sessionId).getTeller();
+        if (players.indexOf(teller) == players.size() - 1) {
+            int laps = roomList.get(sessionId).getLaps() + 1;
+            roomList.get(sessionId).setLaps(laps);
+            roomList.get(sessionId).setTeller(players.get(0));
+        } else {
+            int idx = players.indexOf(teller) + 1;
+            roomList.get(sessionId).setTeller(players.get(idx));
+        }
     }
 }

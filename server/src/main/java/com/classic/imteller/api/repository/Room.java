@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.index.Indexed;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
 
 // 여기는.. 그냥 Setter 쓸까..? 너무 무의미한 set function이 많아질 것 같은 느낌
 @Getter
@@ -43,7 +44,7 @@ public class Room implements Serializable {
     private HashMap<String, Boolean> status; // 각 플레이어의 카드 제출 상태
     private String teller; // 현재 텔러인 유저 아이디
     private int turn; // 게임 중 상태 (type 1 : 텔러 카드 선택, type 2 : 플레이어 카드 선택, type 3 : 플레이어 카드 예측, type 4 : 결과 표시 및 반영)
-    private int timer; // 해당 턴의 남은 시간
+    private Timer timer; // timer 객체를 담은 변수
     private int laps; // 현재 몇바퀴 돌았는지 알려주는 변수
     private List<TableDto> table; // 텔러와 유저가 제출한 카드셋
     private HashMap<String, Long> choice; // 어떤 플레이어가 어떤 카드를 선택했는지 - key값은 유저id, value값은 카드id
