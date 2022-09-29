@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import deal from 'actions/api/deal'
 import { setDealList } from 'store/modules/art'
 
 export default function Search() {
-  const [query, setQuery] = useState('')
+  const dispatch = useDispatch()
+
+  const [keyword, setKeyword] = useState('')
   const [target, setTarget] = useState(0) // 검색 조건. 0작품명, 1제작자, 2소유자
   const [sort, setSort] = useState(0) // 정렬 조건. 0기본순, 1최신순
   const [status, setStatus] = useState(0) // 정렬조건2. 0전체, 1진행중, 2완료
@@ -15,25 +17,24 @@ export default function Search() {
   }, [])
 
   const inputFilter = (event) => {
-    let query = event.target.value
-    query = query.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]/g, '')
-    if (query.length > 20) {
-      query = query.slice(0, 20)
+    let keyword = event.target.value
+    keyword = keyword.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]/g, '')
+    if (keyword.length > 20) {
+      keyword = keyword.slice(0, 20)
     }
-    event.target.value = query
-    setQuery(event.target.value)
+    event.target.value = keyword
+    setKeyword(event.target.value)
   }
 
   const onSubmit = () => {
     const params = {
-      query,
+      keyword,
       target,
       sort,
       status,
     }
     deal.dealList(params).then((result) => {
-      console.log(result)
-      setDealList(result.data)
+      dispatch(setDealList(result.data.response))
     })
   }
 

@@ -178,13 +178,14 @@ export default function Game() {
   })
 
   useEffect(() => {
+    console.log(123, isChecked)
     if (!isChecked) {
       setModalState('joinRoom')
     }
     return () => {
       setIsChecked(false)
     }
-  }, [roomId, isChecked])
+  }, [])
 
   const mainComponent = () => {
     if (state === 0) return <GameRoom stompClient={stompClient} /> // 대기실
