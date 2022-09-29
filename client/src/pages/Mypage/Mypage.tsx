@@ -8,6 +8,7 @@ import art from 'actions/api/art'
 
 import MypageTabNav from 'pages/Mypage/mypageTabNav'
 import CardList from 'components/cardList'
+import Metamask from 'pages/test'
 
 import { setUserDetail, setCardList } from 'store/modules/user'
 import { setPaintList } from 'store/modules/art'
@@ -24,7 +25,6 @@ export default function Mypage() {
 
   const [isMyMypage, setIsMyMypage] = useState(false)
   const [tabNo, setTabNo] = useState(0)
-
   useEffect(() => {
     if (nick === currentUser.nickname) setIsMyMypage(true)
   })
@@ -79,6 +79,7 @@ export default function Mypage() {
             {win} 승 {lose} 패. 승률:{' '}
             {win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%
           </div>
+          <Metamask />
         </div>
         <hr />
         <MypageTabNav setTabNo={setTabNo} isMyMypage={isMyMypage} />
