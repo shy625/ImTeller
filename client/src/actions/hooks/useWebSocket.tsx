@@ -10,6 +10,7 @@ import Sockjs from 'sockjs-client'
 
 export const useWebSocket = (params: any) => {
   let stompClient
+
   useEffect(() => {
     stompClient = new Stomp.Client({
       connectHeaders: { Authorization: params.email },
@@ -24,11 +25,14 @@ export const useWebSocket = (params: any) => {
       },
       logRawCommunication: false,
     })
-    stompClient.webSocketFactory = () => new Sockjs(`https://j7a509.p.ssafy.io:8080/api/v1/socket`)
+    stompClient.webSocketFactory = () =>
+      new Sockjs(`http://j509.p.ssafy.io/api/v1/socket/room/${params.roomId}/`)
     stompClient.activate()
+
     return () => {
       stompClient?.deactivate()
     }
   }, [])
+
   return stompClient
 }

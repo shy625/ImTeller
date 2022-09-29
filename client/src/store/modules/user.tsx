@@ -38,7 +38,9 @@ export const currentUser = createSlice({
       }
     },
     setWallet(state, action) {
-      state.wallet = action.payload
+      const copy = { ...state }
+      copy.wallet = action.payload
+      return copy
     },
   },
 })

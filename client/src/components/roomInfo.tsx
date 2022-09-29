@@ -17,11 +17,10 @@ const RoomInfo = (props: any) => {
       <div css={backBtn} onClick={() => navigate(-1)}>
         <img src={back} alt="뒤로 가기" css={imgSize} />
       </div>
+      <div>{roomId}</div>
       <div>{roomName}</div>
       <div>{isLocked ? '비공개' : '공개'}</div>
-      <div>
-        {typeNum} {type === 'score' ? '점수' : '라운드'}
-      </div>
+      <div>{type}</div>
       <div>
         {peopleNum} / {maxPeopleNum}
       </div>

@@ -16,5 +16,5 @@ public class CardsResDto {
     private int effect;
     private int effectDetail;
     private LocalDateTime createdDT;
-    private Integer recentPrice;
+    private int recentPrice;
 }

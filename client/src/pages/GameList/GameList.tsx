@@ -10,47 +10,42 @@ import Pagination from 'pages/GameList/pagination'
 import Room from 'pages/GameList/room'
 
 import game from 'actions/api/game'
-import { setIsChecked, setRoomList } from 'store/modules/game'
+import { setRoomList } from 'store/modules/game'
 import { useBGM } from 'actions/hooks/useBGM'
 import { useModal } from 'actions/hooks/useModal'
 
 export default function GameList() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [setModalState, setModalMsg] = useModal('')
+  const [setModalState, setModalMsg] = useModal()
 
   const roomList = useSelector((state: any) => state.roomList)
-  const currentUser = useSelector((state: any) => state.currentUser)
 
-  const [playPause, volumeControl] = useBGM({ src: 'assets/audio/gameListBgm.mp3' })
+  useBGM({ src: 'assets/audio/gameListBgm.mp3' })
 
   useEffect(() => {
     game.roomList().then((result) => {
-      console.log(result.data)
-      // dispatch(setRoomList(result.data))
+      dispatch(setRoomList(result.data.gameList))
     })
   }, [])
 
-  const makeRoom = () => {
-    if (!currentUser.nickname) {
-      return navigate('/login')
-    }
-    setModalState('makeRoom')
-  }
-
   const joinRoom = (roomId, isLocked) => {
-    if (!currentUser.nickname) {
-      return navigate('/login')
-    }
-    setIsChecked(!isLocked)
+    setModalMsg(isLocked)
     navigate(`/game/${roomId}`)
+    // setTimeout(() => navigate(`/game/${roomId}`), 1000)
   }
 
   return (
     <Layout>
       <main>
         <h2>게임방 목록입니다</h2>
-        <button onClick={makeRoom}>방만들기</button>
+        <button
+          onClick={() => {
+            setModalState('makeRoom')
+          }}
+        >
+          방만들기
+        </button>
         <div css={roomListCSS}>
           {roomList.map((room: any) => (
             <div key={room.roomId} onClick={() => joinRoom(room.roomId, room.isLocked)}>

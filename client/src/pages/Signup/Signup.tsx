@@ -11,7 +11,6 @@ export default function Signup(props: any) {
   const [authError, setAuthError] = useState('')
   const [emailChecked, setEmailChecked] = useState(false)
   const [nickChecked, setNickChecked] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const nickFilter = (event) => {
     setNickChecked(false)
@@ -71,8 +70,6 @@ export default function Signup(props: any) {
 
   const onSubmit = (event) => {
     event.preventDefault()
-    if (isLoading) return
-    setIsLoading(true)
 
     const email: any = document.querySelector('#email')
     const nickname: any = document.querySelector('#nickname')
@@ -88,13 +85,11 @@ export default function Signup(props: any) {
       .signup(credentials)
       .then((result) => {
         if (result.data == '가입 성공') {
-          setIsLoading(false)
-          alert('회원가입에 성공했습니다. 이메일을 확인해 주세요') // alert modal
-          navigate('/login', { replace: true })
+          alert('회원가입에 성공했습니다. 이메일을 확인해 주세요')
+          navigate('/login')
         }
       })
       .catch((error) => {
-        setIsLoading(false)
         console.error(error)
       })
   }
@@ -124,7 +119,6 @@ export default function Signup(props: any) {
           {nickValid}
         </div>
         <button onClick={onSubmit}>회원가입</button>
-        {isLoading ? '전송중입니다...' : null}
         {authError}
       </main>
     </Layout>

@@ -8,19 +8,13 @@ export default function CardList(props: any) {
 
   return (
     <div>
-      {cardList.length ? (
-        cardList[0].cardId ? (
-          cardList.map((card) => {
+      {cardList[0].cardId
+        ? cardList.map((card) => {
             return <Card card={card} key={card.cardId} />
           })
-        ) : (
-          cardList.map((paint) => {
+        : cardList.map((paint) => {
             return <Paint paint={paint} key={paint.paintId} />
-          })
-        )
-      ) : (
-        <div>작품이 없습니다</div>
-      )}
+          })}
     </div>
   )
 }

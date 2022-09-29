@@ -14,7 +14,7 @@ const Room = (props: any) => {
         {peopleNum} / {maxPeopleNum}
       </div>
       <div>
-        {type === 'score' ? '점수' : '라운드'} | {typeNum} {type === 'score' ? '점' : '라운드'}
+        {type ? '점수' : '라운드'} | {typeNum} {type ? '점' : '라운드'}
       </div>
       <div>{isLocked ? '비공개' : '공개'}</div>
     </div>

@@ -27,19 +27,19 @@ export default function Chat() {
     email,
     roomId,
     onConnect(frame, client) {
-      client.subscribe(`/sub/room/${roomId}/chat`, (response) => {
+      client.subscribe(`chat/sub`, (response) => {
         const content = JSON.parse(response.body)
         const time = new Date()
         content.time = time.toLocaleString()
         dispatch(addChat(content))
       })
     },
-    beforeDisconnected() {},
+    beforeDisconnect() {},
   })
 
   const send = () => {
     stompClient.publish({
-      destination: `/pub/room/${roomId}/chat`,
+      destination: `chat`,
       body: JSON.stringify({
         nickname,
         userMsg: msgInput,

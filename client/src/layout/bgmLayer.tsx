@@ -5,7 +5,7 @@ export default function BgmLayer(props: any) {
   const ref: any = useRef()
 
   const bgmSrc = useSelector((state: any) => state.bgmSrc)
-  const bgmVolume = useSelector((state: any) => state.bgmVolume)
+  const volume = useSelector((state: any) => state.volume)
   const isBgmOn = useSelector((state: any) => state.isBgmOn)
 
   useEffect(() => {
@@ -17,8 +17,8 @@ export default function BgmLayer(props: any) {
   }, [isBgmOn])
 
   useEffect(() => {
-    ref.current.volume = bgmVolume / 100
-  }, [bgmVolume])
+    ref.current.volume = volume / 100
+  }, [volume])
 
   useEffect(() => {
     ref.current.src = bgmSrc

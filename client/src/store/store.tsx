@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import { email, currentUser, userDetail, cardList } from 'store/modules/user'
 import {
-  isChecked,
   roomList,
   roomInfo,
   chats,
@@ -10,7 +9,7 @@ import {
   time,
   items,
   itemState,
-  gameCards,
+  cards,
   selectedCards,
   description,
   table,
@@ -20,14 +19,12 @@ import { paintList } from 'store/modules/art'
 import {
   isBgmOn,
   bgmSrc,
-  bgmVolume,
-  isEffectOn,
-  effectVolume,
-  isMouseEffectOn,
+  volume,
+  soundEffect,
   modalState,
   modalMsg,
   modalResult,
-} from 'store/modules/util'
+} from 'store/modules/setting'
 
 export default configureStore({
   reducer: {
@@ -36,7 +33,6 @@ export default configureStore({
     userDetail: userDetail.reducer,
     cardList: cardList.reducer,
 
-    isChecked: isChecked.reducer,
     roomList: roomList.reducer,
     roomInfo: roomInfo.reducer,
     chats: chats.reducer,
@@ -44,7 +40,7 @@ export default configureStore({
     time: time.reducer,
     items: items.reducer,
     itemState: itemState.reducer,
-    gameCards: gameCards.reducer,
+    cards: cards.reducer,
     selectedCards: selectedCards.reducer,
     description: description.reducer,
     table: table.reducer,
@@ -54,10 +50,8 @@ export default configureStore({
 
     isBgmOn: isBgmOn.reducer,
     bgmSrc: bgmSrc.reducer,
-    bgmVolume: bgmVolume.reducer,
-    isEffectOn: isEffectOn.reducer,
-    effectVolume: effectVolume.reducer,
-    isMouseEffectOn: isMouseEffectOn.reducer,
+    volume: volume.reducer,
+    soundEffect: soundEffect.reducer,
     modalState: modalState.reducer,
     modalMsg: modalMsg.reducer,
     modalResult: modalResult.reducer,

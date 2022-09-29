@@ -22,7 +22,7 @@ export default function GameRoom(props: any) {
 
   const [cardGrade, setCardGrade] = useState('')
 
-  const [setModalState, setModalMsg] = useModal('')
+  const [setModalState, setModalMsg] = useModal()
 
   useEffect(() => {
     art.cardList({ nickname }).then((result) => {
