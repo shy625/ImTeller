@@ -223,15 +223,42 @@ export const { setTime } = time.actions
 
 export const items = createSlice({
   name: 'items',
-  initialState: [],
-  reducers: {},
+  initialState: [
+    {
+      itemId: 1,
+      grade: 'S',
+      effect: 2,
+      effectNum: 60,
+    },
+    {
+      itemId: 2,
+      grade: 'A',
+      effect: 5,
+      effectNum: 2.5,
+    },
+  ],
+  reducers: {
+    removeItem(state, action) {
+      const copy = state.filter((item) => item.itemId !== action.payload.itemId)
+      return copy
+    },
+    setItems(state, action) {
+      return action.payload
+    },
+  },
 })
+export const { removeItem } = items.actions
 
 export const itemState = createSlice({
   name: 'itemState',
   initialState: [],
-  reducers: {},
+  reducers: {
+    setItemState(state, action) {
+      return action.payload
+    },
+  },
 })
+export const { setItemState } = itemState.actions
 
 export const gameCards = createSlice({
   name: 'gameCards',

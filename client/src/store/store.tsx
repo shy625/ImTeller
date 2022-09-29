@@ -16,7 +16,7 @@ import {
   table,
   endResult,
 } from 'store/modules/game'
-import { paintList } from 'store/modules/art'
+import { paintList, dealList, dealDetail } from 'store/modules/art'
 import {
   isBgmOn,
   bgmSrc,
@@ -51,6 +51,8 @@ export default configureStore({
     endResult: endResult.reducer,
 
     paintList: paintList.reducer,
+    dealList: dealList.reducer,
+    dealDetail: dealDetail.reducer,
 
     isBgmOn: isBgmOn.reducer,
     bgmSrc: bgmSrc.reducer,
