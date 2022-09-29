@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
@@ -20,13 +20,18 @@ import { input, textarea, imgIcon, normalBtn } from '../../style/commonStyle'
 import { type } from 'os'
 
 export default function Paint() {
+  const navigate = useNavigate()
   // form 전송용
   const email = useSelector((state: any) => state.email)
+  const currentNickname = useSelector((state: any) => state.currentUser.nickname)
+
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
   const location = useLocation()
-  const { isNew } = location.state
+  const state = location.state as { isNew: boolean; setTabNo: any }
+  const isNew = state.isNew
+  // const { setTabNo } = location.state
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
   const colorRef = useRef(null)
@@ -181,6 +186,8 @@ export default function Paint() {
           // }
           if (result.data === '저장 성공') {
             // 성공했다는 alert modal
+
+            navigate(`/mypage/${currentNickname}`)
           } else {
             // 실패했다는 alert modal
           }
