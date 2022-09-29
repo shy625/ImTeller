@@ -43,7 +43,7 @@ export const sellCard = async (
   const contract_id = dealCA.events.NewDeal.address
   await cardContract.methods.setApprovalForAll(contract_id, true).send({ from: wallet })
 
-  //   await cardContract.methods.transferFrom(wallet, contract_id, tokenId).send({ from: wallet })
+  // await cardContract.methods.transferFrom(wallet, contract_id, tokenId).send({ from: wallet })
 }
 
 //Card 구매

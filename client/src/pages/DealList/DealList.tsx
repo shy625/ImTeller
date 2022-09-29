@@ -7,8 +7,10 @@ import Layout from 'layout/layout'
 
 export default function DealList() {
   const currentUser = useSelector((state: any) => state.currentUser)
+  console.log(currentUser)
   const buyCard = (dealId: any, walletAddress: any, wantedPrice: any) => {
-    purchaseCard('0x84dCc175506AE128216f2440C16AEFbf60e1f2f8', currentUser.wallet, 10)
+    console.log(currentUser.wallet)
+    purchaseCard('0x84dCc175506AE128216f2440C16AEFbf60e1f2f8', walletAddress, 10)
   }
   return (
     <Layout>

@@ -86,6 +86,19 @@ const dealABI: AbiItem[] = [
   },
   {
     inputs: [],
+    name: 'cancelDeal',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'cardContract',
     outputs: [
       {
@@ -118,19 +131,6 @@ const dealABI: AbiItem[] = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
-      },
-    ],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'cancelDeal',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
       },
     ],
     stateMutability: 'payable',

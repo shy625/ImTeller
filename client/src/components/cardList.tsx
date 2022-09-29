@@ -9,6 +9,7 @@ import { createCard, sellCard } from 'contract/API'
 export default function CardList(props: any) {
   const { cardList } = props
   const currentUser = useSelector((state: any) => state.currentUser)
+  console.log(currentUser)
   const mintPaint = (walletAddress: any, image: any) => {
     console.log('민팅 함수 시작')
     console.log(walletAddress)
