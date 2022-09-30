@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
@@ -45,6 +45,15 @@ export default function Paint() {
   const [restore, setRestore] = useState([])
   const [index, setIndex] = useState(-1)
 
+  // 그림 수정용
+  let paintId: string
+  let paintProps: any
+  if (isNew) {
+  } else {
+    paintId = useParams().paintId
+    console.log(state)
+  }
+
   useEffect(() => {
     const canvas = canvasRef.current
     canvas.width = CANVAS_WIDTH
@@ -57,6 +66,10 @@ export default function Paint() {
   }, [])
 
   function start({ nativeEvent }) {
+    if (!restore) {
+      ctx.fillStyle = 'white'
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+    }
     setIsDrawing(true)
     ctx.beginPath()
     ctx.moveTo(nativeEvent.offsetX, nativeEvent.offsetY)
@@ -321,7 +334,9 @@ const canvasStyle = css({
   width: `${CANVAS_WIDTH}`,
   height: `${CANVAS_HEIGHT}`,
   backgroundColor: 'white',
-  borderRadius: 12,
+  borderColor: 'white',
+  borderRadius: 36,
+  borderWidth: 12,
 })
 const palette = css({
   display: 'flex',
