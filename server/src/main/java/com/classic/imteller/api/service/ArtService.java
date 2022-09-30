@@ -122,7 +122,7 @@ public class ArtService {
 
     @Transactional
     public void insertTokenId(Long artId, Long tokenId) {
-        Art art = artRepository.findById(artId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));;
+        Art art = artRepository.findById(artId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         art.insertNft(tokenId);
     }
     @Transactional
