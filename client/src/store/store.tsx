@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { email, currentUser, userDetail } from 'store/modules/user'
+import { email, currentUser, userDetail, myPageTab } from 'store/modules/user'
 import {
   isChecked,
   roomList,
@@ -27,7 +27,6 @@ import {
   modalState,
   modalMsg,
   modalResult,
-  myPageTab,
 } from 'store/modules/util'
 
 export default configureStore({

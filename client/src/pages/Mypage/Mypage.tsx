@@ -12,11 +12,12 @@ import Test from 'pages/test'
 
 import { setUserDetail } from 'store/modules/user'
 import { setCardList, setPaintList } from 'store/modules/art'
+import { useModal } from 'actions/hooks/useModal'
 
 export default function Mypage() {
   const dispatch = useDispatch()
   const { nick } = useParams()
-  const { nickname, profile, exp, win, lose, createdDT } = useSelector(
+  const { nickname, profile, exp, win, lose, wallet, createdDT } = useSelector(
     (state: any) => state.userDetail,
   )
   const currentUser = useSelector((state: any) => state.currentUser)
@@ -25,7 +26,7 @@ export default function Mypage() {
   const myPageTab = useSelector((state: any) => state.myPageTab)
 
   const [isMyMypage, setIsMyMypage] = useState(false)
-  const [tabNo, setTabNo] = useState(0)
+  const [setModalState, setModalMsg] = useModal()
 
   useEffect(() => {
     if (nick === currentUser.nickname) setIsMyMypage(true)
@@ -80,6 +81,16 @@ export default function Mypage() {
           <div>
             {win} 승 {lose} 패. 승률:{' '}
             {win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%
+          </div>
+          <div>
+            {wallet ? (
+              <>
+                <label htmlFor="wallet">등록된 지갑주소</label>
+                <input id="wallet" value={currentUser.wallet} disabled></input>
+              </>
+            ) : (
+              <button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
+            )}
           </div>
         </div>
         <hr />

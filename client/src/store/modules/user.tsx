@@ -19,7 +19,7 @@ export const currentUser = createSlice({
     exp: 0,
     win: 0,
     lose: 0,
-    wallet: '',
+    wallet: '0xtesttesttest',
     createdDT: undefined,
   },
   reducers: {
@@ -68,3 +68,14 @@ export const userDetail = createSlice({
   },
 })
 export const { setUserDetail } = userDetail.actions
+
+export const myPageTab = createSlice({
+  name: 'myPageTab',
+  initialState: 0,
+  reducers: {
+    setMyPageTab(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setMyPageTab } = myPageTab.actions
