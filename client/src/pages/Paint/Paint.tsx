@@ -24,7 +24,7 @@ export default function Paint() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   // form 전송용
-  const email = useSelector((state: any) => state.email)
+  const email = localStorage.getItem('email')
   const currentNickname = useSelector((state: any) => state.currentUser.nickname)
 
   const [title, setTitle] = useState('')
@@ -59,6 +59,10 @@ export default function Paint() {
   }, [])
 
   function start({ nativeEvent }) {
+    if (!restore) {
+      ctx.fillStyle = 'white'
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+    }
     setIsDrawing(true)
     ctx.beginPath()
     ctx.moveTo(nativeEvent.offsetX, nativeEvent.offsetY)
@@ -323,7 +327,9 @@ const canvasStyle = css({
   width: `${CANVAS_WIDTH}`,
   height: `${CANVAS_HEIGHT}`,
   backgroundColor: 'white',
-  borderRadius: 12,
+  borderColor: 'white',
+  borderRadius: 36,
+  borderWidth: 12,
 })
 const palette = css({
   display: 'flex',
