@@ -79,7 +79,7 @@ public class ArtController {
     }
 
     @PatchMapping("/paints/offvote/{id}")
-    @ApiOperation(value = "내 그림 투표 제출", notes = "내 그림을 투표에서 내린다")
+    @ApiOperation(value = "내 그림 투표 제출 해제", notes = "내 그림을 투표에서 내린다")
     public ResponseEntity<String> offVote (@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
         boolean chk = artService.offVote(id, email);
         if (chk) return new ResponseEntity<String>("제출 해제 성공", HttpStatus.ACCEPTED);
