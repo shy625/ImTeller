@@ -17,7 +17,6 @@ import saveIcon from '../../assets/image/save.png'
 
 // style
 import { input, textarea, imgIcon, normalBtn } from '../../style/commonStyle'
-import { type } from 'os'
 
 export default function Paint() {
   const navigate = useNavigate()
@@ -29,8 +28,8 @@ export default function Paint() {
   const [content, setContent] = useState('')
 
   const location = useLocation()
-  const state = location.state as { isNew: boolean; setTabNo: any }
-  const isNew = state.isNew
+  const state = location.state as { isNew: boolean }
+  const isNew = state
   // const { setTabNo } = location.state
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
@@ -160,7 +159,7 @@ export default function Paint() {
       array.push(imgData.charCodeAt(i))
     }
     // 왜 blob 을 다시 파일로 바꿔야 잘되는거지...?
-    // let imgFile = new File([new Uint8Array(array)], 'picture', { type: 'image/png' })
+    // let imgFile = new File([new Uint8Array(array)], 'picture.png', { type: 'image/png' })
     let imgBlob = new Blob([new Uint8Array(array)], { type: 'image/png' })
     let imgFile = new File([imgBlob], 'blobtofile.png')
 
@@ -177,13 +176,14 @@ export default function Paint() {
         .paintCreate(data)
         .then((result) => {
           // 결과 확인용
-          // console.log(result)
-          // for (let key of data.keys()) {
-          //   console.log(key)
-          // }
-          // for (let value of data.values()) {
-          //   console.log(value)
-          // }
+          console.log(result)
+          for (let key of data.keys()) {
+            console.log(key)
+          }
+          for (let value of data.values()) {
+            console.log(value)
+          }
+
           if (result.data === '저장 성공') {
             // 성공했다는 alert modal
 
