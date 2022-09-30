@@ -119,7 +119,7 @@ public class ArtService {
     @Transactional
     public boolean deletePaint(Long id, String email) {
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        if (art.getOwner().getEmail() == email) {
+        if (art.getOwner().getEmail().equals(email)) {
             artRepository.deleteById(id);
             return true;
         }
@@ -128,8 +128,9 @@ public class ArtService {
 
     @Transactional
     public boolean onVote(Long id, String email) {
+        System.out.println(id + " " + email);
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        if (art.getOwner().getEmail() == email) {
+        if (art.getOwner().getEmail().equals(email)) {
             art.updateIsVote(true);
             artRepository.save(art);
             return true;
@@ -140,7 +141,7 @@ public class ArtService {
     @Transactional
     public boolean offVote(Long id, String email) {
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        if (art.getOwner().getEmail() == email) {
+        if (art.getOwner().getEmail().equals(email)) {
             art.updateIsVote(false);
             artRepository.save(art);
             return true;
