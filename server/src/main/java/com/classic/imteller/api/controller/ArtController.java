@@ -1,5 +1,6 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.dto.ResponseDto;
 import com.classic.imteller.api.dto.art.*;
 import com.classic.imteller.api.repository.Art;
 import com.classic.imteller.api.repository.ArtRepository;
@@ -70,9 +71,9 @@ public class ArtController {
 
     @PatchMapping("/nft")
     @ApiOperation(value="save TokenId", notes = "Save tokenId after success to Mint")
-    public ResponseEntity<String> saveTokenId(@RequestBody NftReqDto nftReqDto){
+    public ResponseEntity<ResponseDto> saveTokenId(@RequestBody NftReqDto nftReqDto){
         artService.insertTokenId(nftReqDto.getArtId(), nftReqDto.getTokenId());
-        return new ResponseEntity<String>("저장 성공", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ResponseDto("NFT tokenId 저장 성공"), HttpStatus.ACCEPTED);
     }
 
 }
