@@ -51,7 +51,7 @@ export default function CardList(props: any) {
   let tempImg = 'https://imtellercard.s3.ap-northeast-2.amazonaws.com/20222729012744-하트.png'
   return (
     <div>
-      <button onClick={() => registerSale(currentUser.wallet, tempImg, 5, 10)}>
+      <button onClick={() => registerSale(currentUser.wallet, tempImg, 1, 10)}>
         {/* <img src={tempImg} alt="" /> */}
         카드 등록하기
       </button>
