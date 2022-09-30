@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import Card from 'components/card'
 import Paint from 'components/paint'
 
-import { createCard, sellCard } from 'contract/API'
+import { createCard, sellCard, purchaseCard } from 'contract/API'
 import { allowedNodeEnvironmentFlags } from 'process'
 
 export default function CardList(props: any) {
@@ -48,12 +48,21 @@ export default function CardList(props: any) {
       const selling = await sellCard(walletAddress, image, token_id, wantedPrice)
     }
   }
+  const buyNft = async (dealId: any, walletAddress: any, wantedPrice: any) => {
+    purchaseCard(dealId, currentUser.wallet, 10)
+  }
   let tempImg = 'https://imtellercard.s3.ap-northeast-2.amazonaws.com/20222729012744-하트.png'
   return (
     <div>
       <button onClick={() => registerSale(currentUser.wallet, tempImg, 1, 10)}>
         {/* <img src={tempImg} alt="" /> */}
         카드 등록하기
+      </button>
+      <button
+        onClick={() => buyNft('0xb471f8E694Dc424123AE7dD4b02b061B497baEf7', currentUser.wallet, 10)}
+      >
+        {/* <img src={tempImg} alt="" /> */}
+        카드 구매하기
       </button>
       {cardList.length ? (
         cardList[0].cardId ? (
