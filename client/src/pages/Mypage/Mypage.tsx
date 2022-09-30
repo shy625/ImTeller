@@ -1,6 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { css } from '@emotion/react'
 
 import Layout from 'layout/layout'
 import user from 'actions/api/user'
@@ -75,7 +77,7 @@ export default function Mypage() {
       <main>
         여긴 mypage
         <div>
-          <img src={profile} alt="" />
+          <img src={profile} alt="" css={profileCss} />
           <div>{nickname}</div>
           <div>Lv. {Math.floor(exp / 50) + 1}</div>
           <div>
@@ -101,3 +103,6 @@ export default function Mypage() {
     </Layout>
   )
 }
+const profileCss = css({
+  width: 100,
+})
