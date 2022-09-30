@@ -224,7 +224,7 @@ public class RoomRepository {
         for (int i = 0; i < players.size(); ++i) {
             List<GameCardDto> myHand = new ArrayList<>();
             for (int j = 0; j < 6; ++j) {
-                Art art = artRepository.findById(deck.get(j)).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));;
+                Art art = artRepository.findById(deck.get(j)).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 GameCardDto tmpCard = GameCardDto.builder()
                     .cardId(deck.get(j))
                     .cardUrl(art.getUrl()).build();
@@ -467,5 +467,76 @@ public class RoomRepository {
 
     public HashMap<String, Integer> getTotalScore(long sessionId) {
         return roomList.get(sessionId).getScore();
+    }
+
+    public int getTypeNum(long sessionId) {
+        return roomList.get(sessionId).getTypeNum();
+    }
+
+    public int getTurn(long sessionId) {
+        return roomList.get(sessionId).getTurn();
+    }
+
+    public void oneCardDraw(long sessionId) {
+        HashMap<String, List<GameCardDto>> hands = roomList.get(sessionId).getHand();
+        for (String player : hands.keySet()) {
+            if (hands.get(player).size() < 6) {
+                roomList.get(sessionId).getHand();
+                // 덱에서 맨 앞에꺼 빼오기
+                Long newCardId = roomList.get(sessionId).getDeck().remove(0);
+                Art art = artRepository.findById(newCardId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                GameCardDto tmpCard = GameCardDto.builder()
+                        .cardId(newCardId)
+                        .cardUrl(art.getUrl()).build();
+                roomList.get(sessionId).getHand().get(player).add(tmpCard);
+            }
+        }
+    }
+
+    public HashMap<String, List<GameCardDto>> getHand(long sessionId) {
+        return roomList.get(sessionId).getHand();
+    }
+
+    public void useItem(long sessionId, UseItemDto useItemDto){
+        // 아이템 쓴사람이 보유한 아이템 현황
+        List<ItemDto> afterUsed = roomList.get(sessionId).getItems().get(useItemDto.getNickname());
+
+        // 그 사람 아이템셋에서 찾아서 바꿔주기
+        for (int i = 0; i < afterUsed.size(); ++i) {
+            if (afterUsed.get(i).getCardId() == useItemDto.getCardId()){
+                afterUsed.get(i).makeUsed();
+                break;
+            }
+        }
+        roomList.get(sessionId).getItems().replace(useItemDto.getNickname(), afterUsed);
+
+        // 아이템의 적용
+        boolean chk = true;
+        List<EffectDto> activated = roomList.get(sessionId).getActivated();
+        for (int i = 0; i < activated.size(); ++i) {
+            if (activated.get(i).getEffect() == useItemDto.getEffect()) {
+                if (activated.get(i).getEffectNum() >= useItemDto.getEffectNum()) {
+                    chk = false;
+                    break;
+                } else {
+                    activated.remove(i);
+                    break;
+                }
+            }
+        }
+
+        // 추가해도 되는 상황이면 추가하기
+        if (chk) {
+            EffectDto newEffect = EffectDto.builder()
+                    .cardId(useItemDto.getCardId())
+                    .nickname(useItemDto.getNickname())
+                    .effect(useItemDto.getEffect())
+                    .effectNum(useItemDto.getEffectNum()).build();
+            activated.add(newEffect);
+        }
+    }
+
+    public List<EffectDto> getActivated (long sessionId) {
+        return roomList.get(sessionId).getActivated();
     }
 }

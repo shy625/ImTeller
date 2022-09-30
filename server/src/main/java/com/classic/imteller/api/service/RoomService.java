@@ -113,13 +113,22 @@ public class RoomService {
 
     public boolean endCheck(long sessionId) {
         String endType = roomRepository.getRoom(sessionId).getType();
-        if (endType.equals("score")) return false;
-        int laps = roomRepository.getRoom(sessionId).getLaps();
-        int typeNum = roomRepository.getRoom(sessionId).getTypeNum();
-        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
-        String teller = roomRepository.getRoom(sessionId).getTeller();
+        if (endType.equals("score")) {
+            HashMap<String, Integer> totalScore = roomRepository.getTotalScore(sessionId);
+            for (String player : totalScore.keySet()) {
+                if (totalScore.get(player) >= roomRepository.getTypeNum(sessionId)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            int laps = roomRepository.getRoom(sessionId).getLaps();
+            int typeNum = roomRepository.getRoom(sessionId).getTypeNum();
+            List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+            String teller = roomRepository.getRoom(sessionId).getTeller();
 
-        return (laps == typeNum) && (players.indexOf(teller) == players.size() - 1);
+            return (laps == typeNum) && (players.indexOf(teller) == players.size() - 1);
+        }
     }
 
     public void setNextTeller(long sessionId) {
@@ -160,5 +169,38 @@ public class RoomService {
 
     public HashMap<String, Integer> getTotalScore(long sessionId) {
         return roomRepository.getTotalScore(sessionId);
+    }
+
+    public int getTurn(long sessionId) {
+        return roomRepository.getTurn(sessionId);
+    }
+
+    public boolean checkStatus(long sessionId) {
+        // 모든 status를 받아서 true인지 확인
+        HashMap<String, Boolean> status = roomRepository.getUserStatus(sessionId);
+        boolean chk = true;
+        for (String player : status.keySet()) {
+            if (status.get(player) == false) {
+                chk = false;
+                break;
+            }
+        }
+        return chk;
+    }
+
+    public void oneCardDraw(long sessionId) {
+        roomRepository.oneCardDraw(sessionId);
+    }
+
+    public HashMap<String, List<GameCardDto>> getHand(long sessionId) {
+        return roomRepository.getHand(sessionId);
+    }
+
+    public void useItem (long sessionId, UseItemDto useItemDto) {
+        roomRepository.useItem(sessionId, useItemDto);
+    }
+
+    public List<EffectDto> getActivated (long sessionId) {
+        return roomRepository.getActivated(sessionId);
     }
 }
