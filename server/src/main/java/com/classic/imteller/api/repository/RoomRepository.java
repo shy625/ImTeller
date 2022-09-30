@@ -4,6 +4,7 @@ import com.classic.imteller.api.dto.room.*;
 import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,8 +139,6 @@ public class RoomRepository {
                 User user = userRepository.findByNickname(exitReqDto.getNickname()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
                 user.plusLose();
                 userRepository.save(user);
-
-                // 나갔을 때 3명 이하가 되면 게임 종료 알림 전달 (end 구현 이후 적용 예정)
             }
 
             return "ok";
@@ -538,5 +537,46 @@ public class RoomRepository {
 
     public List<EffectDto> getActivated (long sessionId) {
         return roomList.get(sessionId).getActivated();
+    }
+
+    public void gameEnd(long sessionId) {
+        // 레디 초기화
+        HashMap<String, Boolean> readyMap = roomList.get(sessionId).getReady();
+        List<String> players = roomList.get(sessionId).getPlayers();
+        String leader = roomList.get(sessionId).getLeader();
+        for (String player : players) {
+            if (!player.equals(leader)) {
+                readyMap.replace(player, false);
+            }
+        }
+        roomList.get(sessionId).setReady(readyMap);
+        // 시작여부 초기화
+        roomList.get(sessionId).setStarted(false);
+        // cards 변수 초기화
+        roomList.get(sessionId).setCards(new HashMap<String, List<Long>>());
+        // score 변수 초기화
+        roomList.get(sessionId).setScore(new HashMap<String, Integer>());
+        // items 변수 초기화
+        roomList.get(sessionId).setItems(new HashMap<String, List<ItemDto>>());
+        // deck 초기화
+        roomList.get(sessionId).setDeck(new ArrayList<Long>());
+        // nftDeck 초기화
+        roomList.get(sessionId).setNftDeck(new ArrayList<Long>());
+        // hand 초기화
+        roomList.get(sessionId).setHand(new HashMap<String, List<GameCardDto>>());
+        // status 초기화
+        roomList.get(sessionId).setStatus(new HashMap<String, Boolean>());
+        // teller 초기화
+        roomList.get(sessionId).setTeller("");
+        // turn 초기화
+        roomList.get(sessionId).setTurn(0);
+        // laps 초기화
+        roomList.get(sessionId).setLaps(1);
+        // table 초기화
+        roomList.get(sessionId).setTable(new ArrayList<TableDto>());
+        // choice 초기화
+        roomList.get(sessionId).setChoice(new HashMap<String, Long>());
+        // activated 초기화
+        roomList.get(sessionId).setActivated(new ArrayList<EffectDto>());
     }
 }

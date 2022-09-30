@@ -255,10 +255,10 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/end")
     public void end(@DestinationVariable long sessionId) {
         // 각종 변수들 초기화
-        // roomService.gameEnd(sessionId);
+        roomService.gameEnd(sessionId);
 
         // DB에 점수 반영
-        // roomService.finalResult(sessionId);
+        roomService.finalResult(sessionId);
 
         // 끝났음을 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "end");
