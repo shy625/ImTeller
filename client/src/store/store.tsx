@@ -27,6 +27,7 @@ import {
   modalState,
   modalMsg,
   modalResult,
+  myPageTab,
 } from 'store/modules/util'
 
 export default configureStore({

@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux'
-import { setMyPageTab } from 'store/modules/setting'
+import { setMyPageTab } from 'store/modules/util'
 
 export default function MypageTabNav(props: any) {
   const navigate = useNavigate()
