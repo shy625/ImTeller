@@ -50,6 +50,7 @@ export default function App() {
                   <Route path="/game/:roomId" element={<Game />} />
                   <Route path="/deal/register" element={<DealRegister />} />
                   <Route path="/paint" element={<Paint />} />{' '}
+                  <Route path="/paint/:paintId" element={<Paint />} />{' '}
                 </>
               ) : (
                 <>

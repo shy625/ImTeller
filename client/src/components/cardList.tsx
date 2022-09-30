@@ -1,11 +1,12 @@
 import React from 'react'
 
+import { useNavigate } from 'react-router-dom'
 import Card from 'components/card'
 import Paint from 'components/paint'
 
 export default function CardList(props: any) {
   const { cardList } = props
-
+  const navigate = useNavigate()
   return (
     <div>
       {cardList.length ? (
@@ -15,7 +16,18 @@ export default function CardList(props: any) {
           })
         ) : (
           cardList.map((paint) => {
-            return <Paint paint={paint} key={paint.paintId} />
+            return (
+              <div key={paint.paintId}>
+                <button
+                  onClick={() => {
+                    navigate(`/paint/${paint.paintId}`)
+                  }}
+                >
+                  그림 수정하기
+                </button>
+                <Paint paint={paint} />
+              </div>
+            )
           })
         )
       ) : (

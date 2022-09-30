@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
@@ -46,6 +46,15 @@ export default function Paint() {
   const [text, setText] = useState('')
   const [restore, setRestore] = useState([])
   const [index, setIndex] = useState(-1)
+
+  // 그림 수정용
+  let paintId: string
+  let paintProps: any
+  if (isNew) {
+  } else {
+    paintId = useParams().paintId
+    console.log(state)
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current

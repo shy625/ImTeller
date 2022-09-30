@@ -20,7 +20,6 @@ export default function Main() {
       <div css={fullDisplay}>
         <div className="cardLoc" css={cardCss}>
           <div className="card">ImTeller</div>
-          <div className="backLine"></div>
           <div className="blur"></div>
         </div>
         <button
@@ -43,12 +42,6 @@ export default function Main() {
   )
 }
 const cardCss = css`
-  @property --rotate {
-    syntax: '<angle>';
-    initial-value: 132deg;
-    inherits: false;
-  }
-
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -79,23 +72,9 @@ const cardCss = css`
     color: rgb(88 199 250 / 100%);
     transition: color 1s;
   }
-  .card:hover: {
-    .blur {
+  .card:hover.blur {
     animation: none;
     opacity: 0;
-  }
-
-  .backLine {
-    content: '';
-    width: 44vh;
-    height: 67vh;
-    border-radius: 32px;
-    background-image: linear-gradient(45deg, #5ddcff, #3c67e3 43%, #4e00c2);
-    position: absolute;
-    z-index: 3;
-    // top: -1%;
-    // left: -2%;
-    // animation: spin 2.5s linear infinite;
   }
 
   .blur {
@@ -114,15 +93,6 @@ const cardCss = css`
     opacity: 1;
     transition: opacity 0.5s;
     // animation: spin 2.5s linear infinite;
-  }
-
-  @keyframes spin {
-    0% {
-      --rotate: 0deg;
-    }
-    100% {
-      --rotate: 360deg;
-    }
   }
 `
 // const moving = keyframes`
