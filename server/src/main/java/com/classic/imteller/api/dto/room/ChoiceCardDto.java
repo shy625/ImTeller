@@ -6,5 +6,4 @@ import lombok.Getter;
 public class ChoiceCardDto {
     private String nickname;
     private long cardId;
-    private String cardUrl;
 }
