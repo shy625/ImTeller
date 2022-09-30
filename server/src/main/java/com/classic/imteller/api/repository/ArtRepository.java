@@ -24,5 +24,7 @@ public interface ArtRepository extends JpaRepository<Art, Long> {
 
     Optional<Art> findById(Long id);
 
+    Optional<Art> findByTokenId(Long tokenId);
+
     void deleteById(Long id);
 }

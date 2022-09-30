@@ -119,4 +119,16 @@ public class ArtService {
     public void deletePaint(Long id) {
         artRepository.deleteById(id);
     }
+
+    @Transactional
+    public void insertTokenId(Long artId, Long tokenId) {
+        Art art = artRepository.findById(artId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        art.insertNft(tokenId);
+    }
+    @Transactional
+    public void editOwner(String owner, Long tokenId) {
+        Art art = artRepository.findByTokenId(tokenId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        User user = userRepository.findByNickname(owner).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        art.updateOwner(user, user.getNickname());
+    }
 }
