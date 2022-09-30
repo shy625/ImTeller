@@ -82,6 +82,7 @@ public class ArtService {
                     .owner(user)
                     .ownerNickname(user.getNickname())
                     .url("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath)
+                    .isVote(false)
                     .title(paintSaveReqDto.getPaintTitle())
                     .description(paintSaveReqDto.getDescription()).build();
             artRepository.save(art);
@@ -116,7 +117,34 @@ public class ArtService {
     }
 
     @Transactional
-    public void deletePaint(Long id) {
-        artRepository.deleteById(id);
+    public boolean deletePaint(Long id, String email) {
+        Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        if (art.getOwner().getEmail() == email) {
+            artRepository.deleteById(id);
+            return true;
+        }
+        else return false;
+    }
+
+    @Transactional
+    public boolean onVote(Long id, String email) {
+        Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        if (art.getOwner().getEmail() == email) {
+            art.updateIsVote(true);
+            artRepository.save(art);
+            return true;
+        }
+        else return false;
+    }
+
+    @Transactional
+    public boolean offVote(Long id, String email) {
+        Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        if (art.getOwner().getEmail() == email) {
+            art.updateIsVote(false);
+            artRepository.save(art);
+            return true;
+        }
+        else return false;
     }
 }

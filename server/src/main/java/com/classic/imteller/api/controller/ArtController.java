@@ -63,9 +63,26 @@ public class ArtController {
 
     @DeleteMapping("/paints/delete/{id}")
     @ApiOperation(value = "내 그림 삭제", notes = "해당하는 내 그림을 삭제한다")
-    public ResponseEntity<String> getPaints(@PathVariable Long id) {
-        artService.deletePaint(id);
-        return new ResponseEntity<String>("삭제 성공", HttpStatus.ACCEPTED);
+    public ResponseEntity<String> getPaints(@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
+        boolean chk = artService.deletePaint(id, email);
+        if (chk) return new ResponseEntity<String>("삭제 성공", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>("삭제 실패", HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("/paints/onvote/{id}")
+    @ApiOperation(value = "내 그림 투표 제출", notes = "내 그림을 투표에 올린다")
+    public ResponseEntity<String> onVote (@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
+        boolean chk = artService.onVote(id, email);
+        if (chk) return new ResponseEntity<String>("삭제 성공", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>("삭제 실패", HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("/paints/offvote/{id}")
+    @ApiOperation(value = "내 그림 투표 제출", notes = "내 그림을 투표에서 내린다")
+    public ResponseEntity<String> offVote (@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
+        boolean chk = artService.offVote(id, email);
+        if (chk) return new ResponseEntity<String>("삭제 성공", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>("삭제 실패", HttpStatus.FORBIDDEN);
     }
 
 }

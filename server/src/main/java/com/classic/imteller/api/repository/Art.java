@@ -39,6 +39,9 @@ public class Art extends BaseEntity {
     @Column(nullable = false, length=256)
     private String url;
 
+    @Column(nullable = false)
+    private Boolean isVote;
+
     @Column(nullable = false, length=20)
     private String title;
 
@@ -55,5 +58,9 @@ public class Art extends BaseEntity {
         this.url = url;
         this.title = title;
         this.description = desc;
+    }
+
+    public void updateIsVote(boolean b) {
+        this.isVote = b;
     }
 }
