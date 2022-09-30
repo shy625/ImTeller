@@ -48,11 +48,6 @@ export default function Paint() {
   // 그림 수정용
   let paintId: string
   let paintProps: any
-  if (isNew) {
-  } else {
-    paintId = useParams().paintId
-    console.log(state)
-  }
 
   useEffect(() => {
     const canvas = canvasRef.current
