@@ -5,9 +5,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class EffectDto {
-    private long cardId;
+public class UseItemDto {
     private String nickname;
+    private long cardId;
+    private String grade;
     private int effect;
     private int effectNum;
+    private boolean isUsed;
 }
