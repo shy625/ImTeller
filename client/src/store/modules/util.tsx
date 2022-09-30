@@ -99,7 +99,7 @@ export const modalResult = createSlice({
 })
 export const { setModalResult } = modalResult.actions
 
-export let myPageTab = createSlice({
+export const myPageTab = createSlice({
   name: 'myPageTab',
   initialState: 0,
   reducers: {
