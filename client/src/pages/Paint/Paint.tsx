@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
 
-import { setMyPageTab } from 'store/modules/setting'
+import { setMyPageTab } from 'store/modules/util'
 
 import Layout from 'layout/layout'
 import paintBucketIcon from '../../assets/image/paintBucket.png'
