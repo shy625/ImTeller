@@ -31,7 +31,7 @@ export default function MypageTabNav(props: any) {
             </div>
             <div
               onClick={() => {
-                navigate('/paint', { state: { isNew: true } })
+                navigate('/paint', { state: { isEdit: false } })
               }}
             >
               그림그리기

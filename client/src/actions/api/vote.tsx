@@ -9,16 +9,18 @@ const vote = {
       url: `${END_POINT}/paints`,
     })
   },
-  paintSubmit() {
+  paintSubmit(data) {
     return api({
       method: 'post',
       url: `${END_POINT}/submit`,
+      data: data,
     })
   },
-  vote() {
+  vote(data) {
     return api({
       method: 'post',
       url: `${END_POINT}/like`,
+      data: data,
     })
   },
 }

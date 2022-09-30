@@ -79,7 +79,7 @@ export const { setModalState } = modalState.actions
 
 export const modalMsg = createSlice({
   name: 'modalMsg',
-  initialState: true,
+  initialState: '',
   reducers: {
     setModalMsg(state, action) {
       return action.payload
@@ -88,9 +88,10 @@ export const modalMsg = createSlice({
 })
 export const { setModalMsg } = modalMsg.actions
 
+// 0이면 응답받지 않음, 1이면 확인, 2면 취소
 export const modalResult = createSlice({
   name: 'modalResult',
-  initialState: false,
+  initialState: 0,
   reducers: {
     setModalResult(state, action) {
       return action.payload

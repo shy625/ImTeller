@@ -22,7 +22,7 @@ import BgmLayer from 'layout/bgmLayer'
 import ModalLayer from 'layout/modalLayer'
 
 import 'App.css'
-import '../src/style/fonts.css'
+import 'style/fonts.css'
 
 export default function App() {
   const currentUser = useSelector((state: any) => state.currentUser)
@@ -43,13 +43,12 @@ export default function App() {
               <Route path="/rank" element={<Rank />} />
               <Route path="/vote" element={<Vote />} />
               <Route path="/faq" element={<FAQ />} />
-              <Route path="/*" element={<NotFound404 />} />
               {currentUser.nickname ? (
                 <>
                   <Route path="/profileEdit" element={<ProfileEdit />} />
                   <Route path="/game/:roomId" element={<Game />} />
                   <Route path="/deal/register" element={<DealRegister />} />
-                  <Route path="/paint" element={<Paint />} />{' '}
+                  <Route path="/paint" element={<Paint />} />
                 </>
               ) : (
                 <>
@@ -57,6 +56,7 @@ export default function App() {
                   <Route path="/signup" element={<Signup signup={true} />} />
                 </>
               )}
+              <Route path="/*" element={<NotFound404 />} />
             </Routes>
           </ModalLayer>
         </BgmLayer>

@@ -27,7 +27,7 @@ export default function GameList() {
   useEffect(() => {
     game.roomList().then((result) => {
       console.log(result.data)
-      // dispatch(setRoomList(result.data))
+      dispatch(setRoomList(result.data))
     })
   }, [])
 
@@ -42,7 +42,7 @@ export default function GameList() {
     if (!currentUser.nickname) {
       return navigate('/login')
     }
-    setIsChecked(!isLocked)
+    dispatch(setIsChecked(!isLocked))
     navigate(`/game/${roomId}`)
   }
 

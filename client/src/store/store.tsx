@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { email, currentUser, userDetail, cardList } from 'store/modules/user'
+import { email, currentUser, userDetail } from 'store/modules/user'
 import {
   isChecked,
   roomList,
@@ -16,7 +16,7 @@ import {
   table,
   endResult,
 } from 'store/modules/game'
-import { paintList } from 'store/modules/art'
+import { cardList, paintList, selectedPaint, dealList, dealDetail } from 'store/modules/art'
 import {
   isBgmOn,
   bgmSrc,
@@ -35,7 +35,6 @@ export default configureStore({
     email: email.reducer,
     currentUser: currentUser.reducer,
     userDetail: userDetail.reducer,
-    cardList: cardList.reducer,
 
     isChecked: isChecked.reducer,
     roomList: roomList.reducer,
@@ -51,7 +50,11 @@ export default configureStore({
     table: table.reducer,
     endResult: endResult.reducer,
 
+    cardList: cardList.reducer,
     paintList: paintList.reducer,
+    selectedPaint: selectedPaint.reducer,
+    dealList: dealList.reducer,
+    dealDetail: dealDetail.reducer,
 
     isBgmOn: isBgmOn.reducer,
     bgmSrc: bgmSrc.reducer,
