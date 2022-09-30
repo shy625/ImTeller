@@ -8,8 +8,10 @@ import MakeRoomModal from 'layout/modals/makeRoomModal'
 import JoinRoomModal from 'layout/modals/joinRoomModal'
 import CardSelectModal from 'layout/modals/cardSelectModal'
 import AlertModal from 'layout/modals/alertModal'
-// import ConfirmModal from 'layout/modals/confirmModal'
+import ConfirmModal from 'layout/modals/confirmModal'
 import SettingModal from 'layout/modals/settingModal'
+import VoteRegisterModal from 'layout/modals/voteRegisterModal'
+import VoteModal from 'layout/modals/vote'
 
 export default function ModalLayer(props: any) {
   const modalState = useSelector((state: any) => state.modalState)
@@ -19,9 +21,11 @@ export default function ModalLayer(props: any) {
     makeRoom: <MakeRoomModal />,
     cardSelect: <CardSelectModal />,
     alert: <AlertModal />,
-    // confirm: <ConfirmModal />,
+    confirm: <ConfirmModal />,
     joinRoom: <JoinRoomModal />,
     setting: <SettingModal />,
+    voteRegister: <VoteRegisterModal />,
+    vote: <VoteModal />,
   }
 
   return (
@@ -31,6 +35,7 @@ export default function ModalLayer(props: any) {
     </div>
   )
 }
+
 const ModalST = styled.div`
   position: fixed;
   top: 0;

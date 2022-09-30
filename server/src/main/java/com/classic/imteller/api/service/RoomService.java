@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -95,6 +93,49 @@ public class RoomService {
             return firstHands;
         }
         else return null;
+    }
+
+    public void setPhase (long sessionId, int phase){
+        roomRepository.setPhase(sessionId, phase);
+    }
+
+    public void startTimer (long sessionId, TimerTask task) {
+        roomRepository.startTimer(sessionId, task);
+    }
+
+    public void stopTimer (long sessionId) {
+        roomRepository.stopTimer(sessionId);
+    }
+
+    public void saveTellerInfo(long sessionId, TellerDto tellerDto){
+        roomRepository.saveTellerInfo(sessionId, tellerDto);
+    }
+
+    public boolean endCheck(long sessionId) {
+        String endType = roomRepository.getRoom(sessionId).getType();
+        if (endType.equals("score")) return false;
+        int laps = roomRepository.getRoom(sessionId).getLaps();
+        int typeNum = roomRepository.getRoom(sessionId).getTypeNum();
+        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+        String teller = roomRepository.getRoom(sessionId).getTeller();
+
+        return (laps == typeNum) && (players.indexOf(teller) == players.size() - 1);
+    }
+
+    public void setNextTeller(long sessionId) {
+        roomRepository.setNextTeller(sessionId);
+    }
+
+    public void forcedCard(long sessionId){
+        roomRepository.forcedCard(sessionId);
+    }
+
+    public boolean getUserCard(long sessionId, UserCardDto userCardDto){
+        return roomRepository.getUserCard(sessionId, userCardDto);
+    }
+
+    public HashMap<String, Boolean> getUserStatus(long sessionId) {
+        return roomRepository.getUserStatus(sessionId);
     }
 
 }

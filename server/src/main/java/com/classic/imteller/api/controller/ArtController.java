@@ -1,5 +1,6 @@
 package com.classic.imteller.api.controller;
 
+import com.classic.imteller.api.dto.ResponseDto;
 import com.classic.imteller.api.dto.art.*;
 import com.classic.imteller.api.repository.Art;
 import com.classic.imteller.api.repository.ArtRepository;
@@ -63,9 +64,33 @@ public class ArtController {
 
     @DeleteMapping("/paints/delete/{id}")
     @ApiOperation(value = "내 그림 삭제", notes = "해당하는 내 그림을 삭제한다")
-    public ResponseEntity<String> getPaints(@PathVariable Long id) {
-        artService.deletePaint(id);
-        return new ResponseEntity<String>("삭제 성공", HttpStatus.ACCEPTED);
+    public ResponseEntity<String> getPaints(@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
+        boolean chk = artService.deletePaint(id, email);
+        if (chk) return new ResponseEntity<String>("삭제 성공", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>("삭제 실패", HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("/paints/onvote/{id}")
+    @ApiOperation(value = "내 그림 투표 제출", notes = "내 그림을 투표에 올린다")
+    public ResponseEntity<String> onVote (@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
+        boolean chk = artService.onVote(id, email);
+        if (chk) return new ResponseEntity<String>("제출 성공", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>("제출 실패", HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("/paints/offvote/{id}")
+    @ApiOperation(value = "내 그림 투표 제출 해제", notes = "내 그림을 투표에서 내린다")
+    public ResponseEntity<String> offVote (@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
+        boolean chk = artService.offVote(id, email);
+        if (chk) return new ResponseEntity<String>("제출 해제 성공", HttpStatus.ACCEPTED);
+        else return new ResponseEntity<String>("제출 해제 실패", HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("/nft")
+    @ApiOperation(value="토큰 아이디 저장", notes = "민팅에 성공한 후에 토큰 아이디를 저장한다.")
+    public ResponseEntity<ResponseDto> saveTokenId(@RequestBody NftReqDto nftReqDto){
+        artService.insertTokenId(nftReqDto.getArtId(), nftReqDto.getTokenId());
+        return new ResponseEntity<>(new ResponseDto("NFT tokenId 저장 성공"), HttpStatus.ACCEPTED);
     }
 
 }

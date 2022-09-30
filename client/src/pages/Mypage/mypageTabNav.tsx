@@ -2,13 +2,13 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux'
-import { setMyPageTab } from 'store/modules/util'
+import { setMyPageTab } from 'store/modules/user'
 
 export default function MypageTabNav(props: any) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const { setTabNo, isMyMypage } = props
+  const { isMyMypage } = props
 
   return (
     <div>
@@ -31,7 +31,7 @@ export default function MypageTabNav(props: any) {
             </div>
             <div
               onClick={() => {
-                navigate('/paint', { state: { isNew: true } })
+                navigate('/paint', { state: { isEdit: false } })
               }}
             >
               그림그리기

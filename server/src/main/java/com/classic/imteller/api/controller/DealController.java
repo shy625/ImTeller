@@ -2,9 +2,12 @@ package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.ResponseDto;
 import com.classic.imteller.api.dto.deal.DealDetailResDto;
+import com.classic.imteller.api.dto.deal.DealEndReqDto;
 import com.classic.imteller.api.dto.deal.RegisterDealReqDto;
 import com.classic.imteller.api.dto.deal.SearchDealResDto;
+import com.classic.imteller.api.service.ArtService;
 import com.classic.imteller.api.service.DealService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ import java.util.Map;
 public class DealController {
 
     private final DealService dealService;
+    private final ArtService artService;
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> registerDeal(@RequestBody RegisterDealReqDto requestDto) {
@@ -47,6 +51,14 @@ public class DealController {
     public ResponseEntity<ResponseDto> deleteDeal(@PathVariable Long dealId) {
         dealService.deleteDeal(dealId);
         return new ResponseEntity<>(new ResponseDto(), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{dealId}/end")
+    @ApiOperation(value = "Deal is closed", notes = "Change owner of Card & Update Deal info - finishedAt")
+    public ResponseEntity<ResponseDto> closeDeal(@PathVariable Long dealId, @RequestBody DealEndReqDto dealEndReqDto){
+        artService.editOwner(dealEndReqDto.getOwner(), dealEndReqDto.getTokenId());
+        dealService.endDeal(dealId);
+        return new ResponseEntity<>(new ResponseDto("거래 종료"), HttpStatus.OK);
     }
 
 }

@@ -8,10 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -243,5 +240,105 @@ public class RoomRepository {
         // 할당한 내용 hand변수에 반영하고 반환하기
         roomList.get(sessionId).setHand(basicHand);
         return basicHand;
+    }
+
+    public void setPhase (long sessionId, int phase) {
+        roomList.get(sessionId).setTurn(phase);
+    }
+
+    public void startTimer (long sessionId, TimerTask task) {
+        roomList.get(sessionId).setTimer(new Timer());
+
+        int phase = roomList.get(sessionId).getTurn();
+        int time;
+        if (phase == 1 || phase == 2) time = 30;
+        else if (phase == 3) {
+            if (roomList.get(sessionId).getActivated().size() > 0) {
+                int maxEffectNum = 0;
+                for (EffectDto effect : roomList.get(sessionId).getActivated()) {
+                    if (effect.getEffect() == 1 && maxEffectNum < effect.getEffectNum()) {
+                        maxEffectNum = effect.getEffectNum();
+                    }
+                }
+                time = 30 - maxEffectNum;
+            } else time = 30;
+        }
+        else if (phase == 4) time = 10;
+        else time = 0;
+
+        roomList.get(sessionId).getTimer().schedule(task, time * 1000);
+    }
+
+    public void stopTimer (long sessionId) {
+        roomList.get(sessionId).getTimer().cancel();
+        roomList.get(sessionId).setTimer(new Timer());
+    }
+
+    public void saveTellerInfo (long sessionId, TellerDto tellerDto) {
+        TableDto table = TableDto.builder()
+                .nickname(tellerDto.getNickname())
+                .cardId(tellerDto.getCardId())
+                .cardUrl(tellerDto.getCardUrl())
+                .isTeller(true).build();
+        roomList.get(sessionId).getStatus().replace(tellerDto.getNickname(), true);
+        roomList.get(sessionId).getTable().add(table);
+    }
+
+    public void setNextTeller (long sessionId) {
+        List<String> players = roomList.get(sessionId).getPlayers();
+        String teller = roomList.get(sessionId).getTeller();
+        if (players.indexOf(teller) == players.size() - 1) {
+            int laps = roomList.get(sessionId).getLaps() + 1;
+            roomList.get(sessionId).setLaps(laps);
+            roomList.get(sessionId).setTeller(players.get(0));
+        } else {
+            int idx = players.indexOf(teller) + 1;
+            roomList.get(sessionId).setTeller(players.get(idx));
+        }
+    }
+
+    public void forcedCard (long sessionId) {
+        List<String> players = roomList.get(sessionId).getPlayers();
+        HashMap<String, Boolean> status = roomList.get(sessionId).getStatus();
+        for (String player: players) {
+            // 해당플레이어가 아직 제출하지 않았다면?
+            if (!status.get(player)) {
+                // 해당 플레이어의 첫 번째 hand카드를 강제로 추출
+                GameCardDto gameCard = roomList.get(sessionId).getHand().get(player).get(0);
+                roomList.get(sessionId).getHand().get(player).remove(0);
+                // 추출한 카드를 강제제출등록
+                TableDto table = TableDto.builder()
+                        .nickname(player)
+                        .cardId(gameCard.getCardId())
+                        .cardUrl(gameCard.getCardUrl())
+                        .isTeller(false).build();
+                roomList.get(sessionId).getTable().add(table);
+            }
+        }
+    }
+
+    public boolean getUserCard (long sessionId, UserCardDto userCardDto) {
+        TableDto table = TableDto.builder()
+                .nickname(userCardDto.getNickname())
+                .cardId(userCardDto.getCardId())
+                .cardUrl(userCardDto.getCardUrl())
+                .isTeller(false).build();
+        roomList.get(sessionId).getTable().add(table);
+        roomList.get(sessionId).getStatus().replace(userCardDto.getNickname(), true);
+
+        // 모두가 제출했는지 확인하는 부분
+        boolean chk = true;
+        HashMap<String, Boolean> status = roomList.get(sessionId).getStatus();
+        for (String key : status.keySet()) {
+            if (!status.get(key)) {
+                chk = false;
+                break;
+            }
+        }
+        return chk;
+    }
+
+    public HashMap<String, Boolean> getUserStatus (long sessionId) {
+        return roomList.get(sessionId).getStatus();
     }
 }
