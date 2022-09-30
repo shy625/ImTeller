@@ -5,30 +5,6 @@ const marketABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_cardId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_price',
-        type: 'uint256',
-      },
-    ],
-    name: 'createDeal',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
         name: '_cardAddress',
         type: 'address',
@@ -83,26 +59,6 @@ const marketABI: AbiItem[] = [
   },
   {
     inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
-    name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'cardContract',
     outputs: [
       {
@@ -128,6 +84,30 @@ const marketABI: AbiItem[] = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_cardId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_price',
+        type: 'uint256',
+      },
+    ],
+    name: 'createDeal',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'owner',
     outputs: [
@@ -140,8 +120,28 @@ const marketABI: AbiItem[] = [
     stateMutability: 'view',
     type: 'function',
   },
+  {
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
 ]
 export const web3 = new Web3(window.ethereum)
 
-export const marketAddress = '0x11527564267f1b39d8a1c9c32C2038DcC060eB71'
+export const marketAddress = '0xd9145CCE52D386f254917e481eB44e9943F39138'
 export const marketContract = new web3.eth.Contract(marketABI, marketAddress)
