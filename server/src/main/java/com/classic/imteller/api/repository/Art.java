@@ -56,4 +56,13 @@ public class Art extends BaseEntity {
         this.title = title;
         this.description = desc;
     }
+
+    public void insertNft(Long tokenId){
+        this.tokenId = tokenId;
+    }
+
+    public void updateOwner(User owner, String ownerNickname){
+        this.owner = owner;
+        this.ownerNickname = ownerNickname;
+    }
 }
