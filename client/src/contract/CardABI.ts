@@ -3,7 +3,7 @@ import Web3 from 'web3'
 
 
 //v5
-const cardABI: AbiItem[] = [
+const cardABI: AbiItem[] =[
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -440,5 +440,5 @@ const cardABI: AbiItem[] = [
 
 export const web3 = new Web3(window.ethereum)
 
-export const cardAddress = '0xd9145CCE52D386f254917e481eB44e9943F39138'
+export const cardAddress = '0xb8b8a831EE2F4fAcDC56D21Ec74BCE4EdCc59c3A'
 export const cardContract = new web3.eth.Contract(cardABI, cardAddress)
