@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { setModalState, setModalMsg } from 'store/modules/util'
+import { setModalState, setModalMsg, setModalResult } from 'store/modules/util'
 
 export const useModal = (modalMsg = '') => {
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(setModalMsg(modalMsg))
+    dispatch(setModalResult(0))
   }, [])
 
   const setState = (action: any) => {

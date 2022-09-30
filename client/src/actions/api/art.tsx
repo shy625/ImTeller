@@ -43,6 +43,18 @@ const art = {
       url: `${END_POINT}/paints`,
     })
   },
+  paintRegist(paintId) {
+    return api({
+      method: 'patch',
+      url: `${END_POINT}/onvote/${paintId}`,
+    })
+  },
+  cancelRegist(paintId) {
+    return api({
+      method: 'patch',
+      url: `${END_POINT}/offvote/${paintId}`,
+    })
+  },
 }
 
 export default art

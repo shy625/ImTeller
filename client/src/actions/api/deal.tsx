@@ -3,34 +3,43 @@ import api from './api'
 const END_POINT = 'deal'
 
 const deal = {
-  register() {
+  register(data) {
     return api({
       method: 'post',
       url: `${END_POINT}/register`,
+      data: data,
     })
   },
-  cardList() {
+  dealList(params) {
     return api({
       method: 'get',
-      url: `${END_POINT}/cards`,
+      url: `${END_POINT}/search`, // query string
+      params: params,
     })
   },
-  cardDetail(cardId) {
+  dealDetail(dealId) {
     return api({
       method: 'get',
-      url: `${END_POINT}/${cardId}`,
+      url: `${END_POINT}/${dealId}`,
     })
   },
-  bid(cardId) {
+  cancelDeal(dealId) {
     return api({
-      method: 'post',
-      url: `${END_POINT}/${cardId}/bid`,
+      method: 'delete',
+      url: `${END_POINT}/${dealId}`,
     })
   },
-  cancelBid(cardId) {
+  bid(dealId) {
     return api({
       method: 'post',
-      url: `${END_POINT}/${cardId}/cancel`,
+      url: `${END_POINT}/${dealId}/bid`,
+    })
+  },
+  cancelBid(dealId, bidId, data) {
+    return api({
+      method: 'delete',
+      url: `${END_POINT}/${dealId}/bid/${bidId}`,
+      data: data,
     })
   },
 }

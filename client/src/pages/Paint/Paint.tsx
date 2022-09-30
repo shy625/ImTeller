@@ -7,33 +7,31 @@ import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
 
-import { setMyPageTab } from 'store/modules/util'
+import { setMyPageTab } from 'store/modules/user'
 
 import Layout from 'layout/layout'
-import paintBucketIcon from '../../assets/image/paintBucket.png'
-import paintBrushIcon from '../../assets/image/paintBrush.png'
-import eraserIcon from '../../assets/image/eraser.png'
-import trashIcon from '../../assets/image/trash.png'
-import undoIcon from '../../assets/image/undo.png'
-import saveIcon from '../../assets/image/save.png'
+import paintBucketIcon from 'assets/image/paintBucket.png'
+import paintBrushIcon from 'assets/image/paintBrush.png'
+import eraserIcon from 'assets/image/eraser.png'
+import trashIcon from 'assets/image/trash.png'
+import undoIcon from 'assets/image/undo.png'
+import saveIcon from 'assets/image/save.png'
 
 // style
-import { input, textarea, imgIcon, normalBtn } from '../../style/commonStyle'
+import { input, textarea, imgIcon } from 'style/commonStyle'
 
 export default function Paint() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   // form 전송용
   const email = useSelector((state: any) => state.email)
-  const currentNickname = useSelector((state: any) => state.currentUser.nickname)
+  const nickname = useSelector((state: any) => state.currentUser.nickname)
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
   const location = useLocation()
-  const state = location.state as { isNew: boolean }
-  const isNew = state
-  // const { setTabNo } = location.state
+  const { isEdit, paint } = location.state
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
   const colorRef = useRef(null)
@@ -174,7 +172,7 @@ export default function Paint() {
     }
     data.append('saveInfo', new Blob([JSON.stringify(save)], { type: 'application/json' }))
     data.append('file', imgFile)
-    if (isNew) {
+    if (!isEdit) {
       art
         .paintCreate(data)
         .then((result) => {
@@ -190,7 +188,7 @@ export default function Paint() {
           if (result.data === '저장 성공') {
             // 성공했다는 alert modal
             dispatch(setMyPageTab(1))
-            navigate(`/mypage/${currentNickname}`)
+            navigate(`/mypage/${nickname}`)
           } else {
             // 실패했다는 alert modal
           }
@@ -276,10 +274,10 @@ export default function Paint() {
               />
             </div>
             <div>
-              <button css={normalBtn} onClick={savePic}>
+              <button css={'none' /*normalBtn*/} onClick={savePic}>
                 저장
               </button>
-              <button css={normalBtn}>취소</button>
+              <button css={'none' /*normalBtn*/}>취소</button>
             </div>
           </div>
           <canvas
