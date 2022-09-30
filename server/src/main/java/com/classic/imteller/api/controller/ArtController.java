@@ -93,4 +93,11 @@ public class ArtController {
         return new ResponseEntity<>(new ResponseDto("NFT tokenId 저장 성공"), HttpStatus.ACCEPTED);
     }
 
+    @PatchMapping("/nft")
+    @ApiOperation(value="save TokenId", notes = "Save tokenId after success to Mint")
+    public ResponseEntity<ResponseDto> saveTokenId(@RequestBody NftReqDto nftReqDto){
+        artService.insertTokenId(nftReqDto.getArtId(), nftReqDto.getTokenId());
+        return new ResponseEntity<>(new ResponseDto("NFT tokenId 저장 성공"), HttpStatus.ACCEPTED);
+    }
+
 }
