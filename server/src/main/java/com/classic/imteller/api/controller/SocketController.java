@@ -67,12 +67,13 @@ public class SocketController {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
                 template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", firstHands.get(player));
             }
-            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase1", "phase1");
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
         }
     }
 
     // 게임 진행
+    // 텔러 카드 제출 phase1
     public void phase1(long sessionId) {
         roomService.setPhase(sessionId, 1);
         TimerTask m_task = new TimerTask() {
@@ -82,6 +83,7 @@ public class SocketController {
                 if (roomService.endCheck(sessionId)) end(sessionId);
                 else {
                     roomService.setNextTeller(sessionId);
+                    sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
                     phase1(sessionId);
                 }
             }
@@ -95,46 +97,78 @@ public class SocketController {
         roomService.setPhase(sessionId, 2);
         roomService.saveTellerInfo(sessionId, tellerDto);
         roomService.stopTimer(sessionId);
+
+        HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase2");
         phase2(sessionId);
     }
 
+    // 유저 카드 제출 phase2
     public void phase2(long sessionId) {
         roomService.setPhase(sessionId, 2);
-        System.out.println("2222222222222");
-        Timer m = new Timer();
+
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
+                // 시간 지나면 강제로 hand의 맨 앞 카드 제출
+                roomService.forcedCard(sessionId);
                 phase3(sessionId);
             }
         };
-        m.schedule(m_task, 3000);
+        roomService.startTimer(sessionId, m_task);
     }
 
+    // 유저 카드 제출 : 텔러를 제외한 유저들이 카드를 제출
+    @MessageMapping("/room/{sessionId}/others")
+    public void others(@DestinationVariable long sessionId, UserCardDto userCardDto) {
+        // 제출한 카드 처리
+        boolean chk = roomService.getUserCard(sessionId, userCardDto);
+
+        // 유저들에게 제출 상태값 변경된거 전달
+        HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+
+        // 모두가 제출했는지 여부 확인
+        if (chk) {
+            roomService.stopTimer(sessionId);
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
+            phase3(sessionId);
+        }
+    }
+
+    // 카드 선택 phase 3
     public void phase3(long sessionId) {
-        roomService.setPhase(sessionId, 1);
-        System.out.println("33333333333333333333333");
-        Timer m = new Timer();
+        roomService.setPhase(sessionId, 3);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
+                // roomService.randomSelect(sessionId);
+                HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
                 phase4(sessionId);
             }
         };
-        m.schedule(m_task, 3000);
+        roomService.startTimer(sessionId, m_task);
+    }
+
+    // 유저 카드 선택 : 텔러를 제외한 유저들이 카드를 선택
+    @MessageMapping("/room/{sessionId}/choice")
+    public void choice(@DestinationVariable long sessionId, ChoiceCardDto choiceCardDto) {
+        // roomService.choice(sessionId, choiceCardDto);
     }
 
     public void phase4(long sessionId) {
-        roomService.setPhase(sessionId, 1);
-        System.out.println("44444444444444444");
-        Timer m = new Timer();
+        roomService.setPhase(sessionId, 4);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
+                HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
                 phase1(sessionId);
             }
         };
-        m.schedule(m_task, 1000);
+        roomService.startTimer(sessionId, m_task);
     }
 
     // 드로우 : 카드를 사용해서 패가 줄었을 때 다시 채워주기
@@ -143,17 +177,6 @@ public class SocketController {
 
     }
 
-    // 유저 카드선택 : 텔러를 제외한 유저들이 카드를 제출
-    @MessageMapping("/room/{sessionId}/others")
-    public void others(@DestinationVariable long sessionId) {
-
-    }
-
-    // 유저 카드 선택 : 텔러를 제외한 유저들이 카드를 선택
-    @MessageMapping("/room/{sessionId}/choice")
-    public void choice(@DestinationVariable long sessionId) {
-
-    }
 
     // 해당 턴의 결과 : 유저 점수 업데이트
     @MessageMapping("/room/{sessionId}/result")

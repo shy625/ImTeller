@@ -278,7 +278,9 @@ public class RoomRepository {
         TableDto table = TableDto.builder()
                 .nickname(tellerDto.getNickname())
                 .cardId(tellerDto.getCardId())
+                .cardUrl(tellerDto.getCardUrl())
                 .isTeller(true).build();
+        roomList.get(sessionId).getStatus().replace(tellerDto.getNickname(), true);
         roomList.get(sessionId).getTable().add(table);
     }
 
@@ -293,5 +295,50 @@ public class RoomRepository {
             int idx = players.indexOf(teller) + 1;
             roomList.get(sessionId).setTeller(players.get(idx));
         }
+    }
+
+    public void forcedCard (long sessionId) {
+        List<String> players = roomList.get(sessionId).getPlayers();
+        HashMap<String, Boolean> status = roomList.get(sessionId).getStatus();
+        for (String player: players) {
+            // 해당플레이어가 아직 제출하지 않았다면?
+            if (!status.get(player)) {
+                // 해당 플레이어의 첫 번째 hand카드를 강제로 추출
+                GameCardDto gameCard = roomList.get(sessionId).getHand().get(player).get(0);
+                roomList.get(sessionId).getHand().get(player).remove(0);
+                // 추출한 카드를 강제제출등록
+                TableDto table = TableDto.builder()
+                        .nickname(player)
+                        .cardId(gameCard.getCardId())
+                        .cardUrl(gameCard.getCardUrl())
+                        .isTeller(false).build();
+                roomList.get(sessionId).getTable().add(table);
+            }
+        }
+    }
+
+    public boolean getUserCard (long sessionId, UserCardDto userCardDto) {
+        TableDto table = TableDto.builder()
+                .nickname(userCardDto.getNickname())
+                .cardId(userCardDto.getCardId())
+                .cardUrl(userCardDto.getCardUrl())
+                .isTeller(false).build();
+        roomList.get(sessionId).getTable().add(table);
+        roomList.get(sessionId).getStatus().replace(userCardDto.getNickname(), true);
+
+        // 모두가 제출했는지 확인하는 부분
+        boolean chk = true;
+        HashMap<String, Boolean> status = roomList.get(sessionId).getStatus();
+        for (String key : status.keySet()) {
+            if (!status.get(key)) {
+                chk = false;
+                break;
+            }
+        }
+        return chk;
+    }
+
+    public HashMap<String, Boolean> getUserStatus (long sessionId) {
+        return roomList.get(sessionId).getStatus();
     }
 }

@@ -8,5 +8,6 @@ import lombok.Getter;
 public class TableDto {
     private String nickname;
     private long cardId;
+    private String cardUrl;
     private boolean isTeller;
 }

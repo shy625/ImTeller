@@ -119,11 +119,23 @@ public class RoomService {
         List<String> players = roomRepository.getRoom(sessionId).getPlayers();
         String teller = roomRepository.getRoom(sessionId).getTeller();
 
-        return (laps == typeNum) && (players.indexOf(teller) == players.size() - 1) ? true : false;
+        return (laps == typeNum) && (players.indexOf(teller) == players.size() - 1);
     }
 
     public void setNextTeller(long sessionId) {
         roomRepository.setNextTeller(sessionId);
+    }
+
+    public void forcedCard(long sessionId){
+        roomRepository.forcedCard(sessionId);
+    }
+
+    public boolean getUserCard(long sessionId, UserCardDto userCardDto){
+        return roomRepository.getUserCard(sessionId, userCardDto);
+    }
+
+    public HashMap<String, Boolean> getUserStatus(long sessionId) {
+        return roomRepository.getUserStatus(sessionId);
     }
 
 }
