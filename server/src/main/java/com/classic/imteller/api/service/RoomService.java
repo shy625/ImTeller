@@ -154,7 +154,11 @@ public class RoomService {
         roomRepository.randomSelect(sessionId);
     }
 
-    public void scoreCalc(long sessionId) {
-        roomRepository.scoreCalc(sessionId);
+    public HashMap<String, Integer> scoreCalc(long sessionId) {
+        return roomRepository.scoreCalc(sessionId);
+    }
+
+    public HashMap<String, Integer> getTotalScore(long sessionId) {
+        return roomRepository.getTotalScore(sessionId);
     }
 }

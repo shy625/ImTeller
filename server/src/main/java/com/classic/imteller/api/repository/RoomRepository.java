@@ -399,7 +399,7 @@ public class RoomRepository {
         }
     }
 
-    public void scoreCalc(long sessionId) {
+    public HashMap<String, Integer> scoreCalc(long sessionId) {
         HashMap<String, Integer> scores = new HashMap<>();
         List<TableDto> tables = roomList.get(sessionId).getTable();
         HashMap<String, Long> choice = roomList.get(sessionId).getChoice();
@@ -442,13 +442,30 @@ public class RoomRepository {
         // 아이템처리
         List<EffectDto> activatedItem = roomList.get(sessionId).getActivated();
         for (EffectDto item : activatedItem) {
+            // 개인 점수 추가 아이템을 썼고, 그 사람이 점수를 얻었다면? + 점수
             if (item.getEffect() == 4 && scores.get(item.getNickname()) != 0) {
                 int newScore = scores.get(item.getNickname()) + item.getEffectNum();
                 scores.replace(item.getNickname(), newScore);
             }
             // 전체 추가점수 만들기
+            if (item.getEffect() == 5) {
+                for (String player : players) {
+                    int newScore = scores.get(player) * item.getEffectNum() / 100;
+                    scores.replace(player, newScore);
+                }
+            }
         }
 
+        // DB에 이번턴 scores 반영
+        for (String player : players) {
+            int newScore = roomList.get(sessionId).getScore().get(player) + scores.get(player);
+            roomList.get(sessionId).getScore().replace(player, newScore);
+        }
 
+        return scores;
+    }
+
+    public HashMap<String, Integer> getTotalScore(long sessionId) {
+        return roomList.get(sessionId).getScore();
     }
 }

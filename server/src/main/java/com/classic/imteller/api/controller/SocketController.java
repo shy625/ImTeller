@@ -40,6 +40,13 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/exit")
     public void exit(@DestinationVariable("sessionId") long sessionId, ExitReqDto exitReqDto) {
         Room room = roomService.exitRoom(sessionId, exitReqDto);
+
+        // 텔러가 첫 페이즈에서 나간 경우
+
+        // 일반 유저가 혼자만 제출 안한 상태로 두 번째 페이즈에서 나간 경우
+
+        // 일반 유저가 혼자만 선택 안한 상태로 세 번째 페이즈에서 나간 경우
+
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/exit", room);
     }
 
@@ -173,7 +180,20 @@ public class SocketController {
 
     public void phase4(long sessionId) {
         roomService.setPhase(sessionId, 4);
-        roomService.scoreCalc(sessionId);
+
+        // 이번 턴 유저의 점수를 result 소켓에 반환
+        HashMap<String, Integer> nowScore = roomService.scoreCalc(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/result", nowScore);
+
+        // 전체 합산 점수를 반환
+
+        HashMap<String, Integer> totalScore = roomService.getTotalScore(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/totalresult", nowScore);
+
+        // 게임 종료조건 확인
+        boolean chk = roomService.endCheck(sessionId);
+
+
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
@@ -189,13 +209,6 @@ public class SocketController {
     // 드로우 : 카드를 사용해서 패가 줄었을 때 다시 채워주기
     @MessageMapping("/room/{sessionId}/draw")
     public void draw(@DestinationVariable long sessionId) {
-
-    }
-
-
-    // 해당 턴의 결과 : 유저 점수 업데이트
-    @MessageMapping("/room/{sessionId}/result")
-    public void result(@DestinationVariable long sessionId) {
 
     }
 
