@@ -24,6 +24,7 @@ import {
   modalState,
   modalMsg,
   modalResult,
+  myPageTab,
 } from 'store/modules/setting'
 
 export default configureStore({
@@ -55,5 +56,6 @@ export default configureStore({
     modalState: modalState.reducer,
     modalMsg: modalMsg.reducer,
     modalResult: modalResult.reducer,
+    myPageTab: myPageTab.reducer,
   },
 })

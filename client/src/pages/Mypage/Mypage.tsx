@@ -22,6 +22,7 @@ export default function Mypage() {
   const currentUser = useSelector((state: any) => state.currentUser)
   const paintList = useSelector((state: any) => state.paintList)
   const cardList = useSelector((state: any) => state.cardList)
+  const myPageTab = useSelector((state: any) => state.myPageTab)
 
   const [isMyMypage, setIsMyMypage] = useState(false)
   const [tabNo, setTabNo] = useState(0)
@@ -83,9 +84,9 @@ export default function Mypage() {
           </div>
         </div>
         <hr />
-        <MypageTabNav setTabNo={setTabNo} isMyMypage={isMyMypage} />
+        <MypageTabNav isMyMypage={isMyMypage} />
         <hr />
-        {tabs[tabNo]}
+        {tabs[myPageTab]}
       </main>
     </Layout>
   )

@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect } from 'react'
 import { useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
+
+import { setMyPageTab } from 'store/modules/setting'
 
 import Layout from 'layout/layout'
 import paintBucketIcon from '../../assets/image/paintBucket.png'
@@ -20,6 +22,7 @@ import { input, textarea, imgIcon, normalBtn } from '../../style/commonStyle'
 
 export default function Paint() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   // form 전송용
   const email = useSelector((state: any) => state.email)
   const currentNickname = useSelector((state: any) => state.currentUser.nickname)
@@ -176,17 +179,17 @@ export default function Paint() {
         .paintCreate(data)
         .then((result) => {
           // 결과 확인용
-          console.log(result)
-          for (let key of data.keys()) {
-            console.log(key)
-          }
-          for (let value of data.values()) {
-            console.log(value)
-          }
+          // console.log(result)
+          // for (let key of data.keys()) {
+          //   console.log(key)
+          // }
+          // for (let value of data.values()) {
+          //   console.log(value)
+          // }
 
           if (result.data === '저장 성공') {
             // 성공했다는 alert modal
-
+            dispatch(setMyPageTab(1))
             navigate(`/mypage/${currentNickname}`)
           } else {
             // 실패했다는 alert modal
