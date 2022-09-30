@@ -138,4 +138,19 @@ public class RoomService {
         return roomRepository.getUserStatus(sessionId);
     }
 
+    public boolean choice(long sessionId, ChoiceCardDto choiceCardDto) {
+        return roomRepository.choice(sessionId, choiceCardDto);
+    }
+
+    public void statusReset(long sessionId) {
+        roomRepository.statusReset(sessionId);
+    }
+
+    public void updateTellerStatus(long sessionId) {
+        roomRepository.updateTellerStatus(sessionId);
+    }
+
+    public void randomSelect(long sessionId) {
+        roomRepository.randomSelect(sessionId);
+    }
 }

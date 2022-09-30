@@ -140,12 +140,15 @@ public class SocketController {
     // 카드 선택 phase 3
     public void phase3(long sessionId) {
         roomService.setPhase(sessionId, 3);
+        // 모든 플레이어의 상태값을 초기화 시킨다
+        roomService.statusReset(sessionId);
+        // 텔러의 상태값은 true로 변경함
+        roomService.updateTellerStatus(sessionId);
+
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
-                // roomService.randomSelect(sessionId);
-                HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
-                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+                roomService.randomSelect(sessionId);
                 phase4(sessionId);
             }
         };
@@ -155,7 +158,17 @@ public class SocketController {
     // 유저 카드 선택 : 텔러를 제외한 유저들이 카드를 선택
     @MessageMapping("/room/{sessionId}/choice")
     public void choice(@DestinationVariable long sessionId, ChoiceCardDto choiceCardDto) {
-        // roomService.choice(sessionId, choiceCardDto);
+        boolean chk = roomService.choice(sessionId, choiceCardDto);
+
+        // 매번 선택할 때마다 누가 선택했는지 상태 List를 사용자에게 보내준다
+        HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+        // 모두가 제출했는지 여부 확인
+        if (chk) {
+            roomService.stopTimer(sessionId);
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
+            phase3(sessionId);
+        }
     }
 
     public void phase4(long sessionId) {
