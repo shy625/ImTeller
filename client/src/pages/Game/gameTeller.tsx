@@ -15,7 +15,7 @@ export default function GameTeller(props: any) {
   const description = useSelector((state: any) => state.discription)
   const selectedCards = useSelector((state: any) => state.selectedCards)
 
-  const [setModalState, setModalMsg, setModalResult] = useModal()
+  const [setModalState, setModalMsg] = useModal('')
   const { stompClient } = props
   const { nickname } = props
   const { imteller } = props

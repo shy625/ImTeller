@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import game from 'actions/api/game'
-import { setModalState, setModalMsg } from 'store/modules/setting'
-import { setRoomInfo } from 'store/modules/game'
+import { setModalState } from 'store/modules/util'
+import { setIsChecked } from 'store/modules/game'
 
 export default function JoinRoomModal(props: any) {
-  const navigate = useNavigate()
+  const navigate: any = useNavigate()
   const dispatch = useDispatch()
 
-  const isLocked = useSelector((state: any) => state.modalMsg)
+  const isChecked = useSelector((state: any) => state.isChecked)
   const [roomPw, setRoomPw] = useState('')
   const [authError, setAuthError] = useState('')
 
@@ -26,44 +26,42 @@ export default function JoinRoomModal(props: any) {
   useEffect(() => {
     if (!roomId) {
       dispatch(setModalState(''))
-      navigate('/game')
-    } else if (!isLocked) {
+      navigate(-1, { replace: true })
+    } else if (isChecked) {
+      dispatch(setModalState(''))
+    } else {
       onSubmit()
-    }
-    return () => {
-      dispatch(setModalMsg(true))
     }
   }, [roomId])
 
   const onSubmit = () => {
+    console.log(1)
     setAuthError('')
-    const data = { roomPw: isLocked ? roomPw : '' }
     game
-      .join(roomId, data)
+      .join(roomId, { roomPw })
       .then((result) => {
-        if (!result.data.roomId) return setAuthError('잘못된 비밀번호입니다')
-        dispatch(setRoomInfo(result.data))
+        if (!result.data) return setAuthError('잘못된 비밀번호입니다')
+        dispatch(setIsChecked(true))
         dispatch(setModalState(''))
       })
       .catch((error) => {
         setAuthError('잘못된 접근입니다')
       })
-    dispatch(setModalState('')) // API 구현되면 지우기
   }
 
   return (
     <div>
       <input onChange={(e) => setRoomPw(e.target.value)} type="password" />
-      {authError}
       <button onClick={onSubmit}>입장</button>
       <button
         onClick={() => {
           dispatch(setModalState(''))
-          navigate('/game')
+          navigate(-1, { replace: true })
         }}
       >
         취소
       </button>
+      {authError}
     </div>
   )
 }

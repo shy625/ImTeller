@@ -15,16 +15,16 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 이렇게 하면 JPA가 SQL생성할 때 이 옵션을 넣어서 DDL을 만든다 - 자동으로 Identity하게 id값을 생성한다.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private Long id = null;
 
     @CreatedDate
-    @Column(updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    // @Column(columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
 }

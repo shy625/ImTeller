@@ -1,15 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+export const isChecked = createSlice({
+  name: 'isChecked',
+  initialState: false,
+  reducers: {
+    setIsChecked(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setIsChecked } = isChecked.actions
+
 export const roomList = createSlice({
   name: 'roomList',
   initialState: [
     {
       roomId: 1,
       roomName: '내가 최고다',
-      isLocked: true,
+      isLocked: false,
       peopleNum: 3,
       maxPeopleNum: 5,
-      type: '라운드',
+      type: 'socre',
       typeNum: 3,
     },
     {
@@ -18,7 +29,7 @@ export const roomList = createSlice({
       isLocked: true,
       peopleNum: 5,
       maxPeopleNum: 6,
-      type: '점수',
+      type: 'times',
       typeNum: 30,
     },
     {
@@ -27,7 +38,7 @@ export const roomList = createSlice({
       isLocked: false,
       peopleNum: 5,
       maxPeopleNum: 6,
-      type: '점수',
+      type: 'socre',
       typeNum: 50,
     },
     {
@@ -36,7 +47,7 @@ export const roomList = createSlice({
       isLocked: true,
       peopleNum: 5,
       maxPeopleNum: 6,
-      type: '라운드',
+      type: 'socre',
       typeNum: 5,
     },
     {
@@ -45,7 +56,7 @@ export const roomList = createSlice({
       isLocked: true,
       peopleNum: 5,
       maxPeopleNum: 6,
-      type: '점수',
+      type: 'times',
       typeNum: 20,
     },
     {
@@ -54,7 +65,7 @@ export const roomList = createSlice({
       isLocked: false,
       peopleNum: 5,
       maxPeopleNum: 6,
-      type: '라운드',
+      type: 'socre',
       typeNum: 3,
     },
     {
@@ -63,7 +74,7 @@ export const roomList = createSlice({
       isLocked: false,
       peopleNum: 5,
       maxPeopleNum: 6,
-      type: '라운드',
+      type: 'times',
       typeNum: 4,
     },
     {
@@ -72,7 +83,7 @@ export const roomList = createSlice({
       isLocked: true,
       peopleNum: 5,
       maxPeopleNum: 6,
-      type: '라운드',
+      type: 'socre',
       typeNum: 8,
     },
   ],
@@ -92,7 +103,7 @@ export const roomInfo = createSlice({
     isLocked: false,
     peopleNum: 3,
     maxPeopleNum: 6,
-    type: 0,
+    type: 'score',
     typeNum: 10,
   },
   reducers: {
@@ -222,8 +233,8 @@ export const itemState = createSlice({
   reducers: {},
 })
 
-export const cards = createSlice({
-  name: 'cards',
+export const gameCards = createSlice({
+  name: 'gameCards',
   initialState: [
     {
       cardId: 1,
@@ -293,15 +304,15 @@ export const cards = createSlice({
     },
   ],
   reducers: {
-    setCards(state, action) {
+    setGameCards(state, action) {
       return action.payload
     },
-    addCard(state, action) {
+    addGameCard(state, action) {
       state.push(action.payload)
     },
   },
 })
-export const { setCards, addCard } = cards.actions
+export const { setGameCards, addGameCard } = gameCards.actions
 
 export const selectedCards = createSlice({
   name: 'selectedCards',

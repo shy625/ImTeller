@@ -1,16 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const isBgmOn = createSlice({
-  name: 'isBgmOn',
-  initialState: true,
-  reducers: {
-    setIsBgmOn(state, action) {
-      return !state
-    },
-  },
-})
-export const { setIsBgmOn } = isBgmOn.actions
-
 export const bgmSrc = createSlice({
   name: 'bgmSrc',
   initialState: 'assets/audio/mainBgm.mp3',
@@ -22,27 +11,60 @@ export const bgmSrc = createSlice({
 })
 export const { setBgmSrc } = bgmSrc.actions
 
-export const volume = createSlice({
-  name: 'volume',
+export const isBgmOn = createSlice({
+  name: 'isBgmOn',
+  initialState: true,
+  reducers: {
+    setIsBgmOn(state, action) {
+      return !action.payload
+    },
+  },
+})
+export const { setIsBgmOn } = isBgmOn.actions
+
+export const bgmVolume = createSlice({
+  name: 'bgmVolume',
   initialState: 50,
   reducers: {
-    setVolume(state, action) {
+    setBgmVolume(state, action) {
       return action.payload
     },
   },
 })
-export const { setVolume } = volume.actions
+export const { setBgmVolume } = bgmVolume.actions
 
-export const soundEffect = createSlice({
-  name: 'soundEffect',
+export const isEffectOn = createSlice({
+  name: 'isEffectOn',
   initialState: true,
   reducers: {
-    setSoundEffect(state, action) {
-      return !state
+    setIsEffectOn(state, action) {
+      return action.payload
     },
   },
 })
-export const { setSoundEffect } = soundEffect.actions
+export const { setIsEffectOn } = isEffectOn.actions
+
+export const effectVolume = createSlice({
+  name: 'effectVolume',
+  initialState: 50,
+  reducers: {
+    setEffectVolume(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setEffectVolume } = effectVolume.actions
+
+export const isMouseEffectOn = createSlice({
+  name: 'isMouseEffectOn',
+  initialState: true,
+  reducers: {
+    setIsMouseEffectOn(state, action) {
+      return action.payload
+    },
+  },
+})
+export const { setIsMouseEffectOn } = isMouseEffectOn.actions
 
 export const modalState = createSlice({
   name: 'modalState',
