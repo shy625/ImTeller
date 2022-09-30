@@ -35,7 +35,7 @@ export default function CardList(props: any) {
       const selling = await createCard(walletAddress, image)
     }
   }
-  const registerCard = async (
+  const registerSale = async (
     walletAddress: string,
     image: any,
     token_id: any,
@@ -51,14 +51,32 @@ export default function CardList(props: any) {
   let tempImg = 'https://imtellercard.s3.ap-northeast-2.amazonaws.com/20222729012744-하트.png'
   return (
     <div>
+      <button onClick={() => registerSale(currentUser.wallet, tempImg, 5, 10)}>
+        {/* <img src={tempImg} alt="" /> */}
+        카드 등록하기
+      </button>
       {cardList.length ? (
         cardList[0].cardId ? (
           cardList.map((card) => {
-            return <Card card={card} key={card.cardId} />
+            return (
+              <div
+                key={card.cardId}
+                onClick={() => registerSale(currentUser.wallet, card.cardImageURL, 1, 10)}
+              >
+                <Card card={card} />
+              </div>
+            )
           })
         ) : (
           cardList.map((paint) => {
-            return <Paint paint={paint} key={paint.paintId} />
+            return (
+              <div
+                key={paint.paintId}
+                onClick={() => mintPaint(currentUser.wallet, paint.paintImageURL)}
+              >
+                <Paint paint={paint} />
+              </div>
+            )
           })
         )
       ) : (

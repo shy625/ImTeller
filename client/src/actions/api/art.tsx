@@ -43,6 +43,13 @@ const art = {
       url: `${END_POINT}/paints`,
     })
   },
+  cardNFT(data) {
+    return api({
+      method: 'patch',
+      url: `${END_POINT}/nft`,
+      data: data,
+    })
+  },
 }
 
 export default art

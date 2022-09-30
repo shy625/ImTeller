@@ -435,4 +435,5 @@ const dealABI: AbiItem[] = [
     type: 'function',
   },
 ]
+
 export default dealABI

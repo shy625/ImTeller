@@ -435,7 +435,8 @@ const marketABI: AbiItem[] = [
     type: 'function',
   },
 ]
+
 export const web3 = new Web3(window.ethereum)
 
-export const marketAddress = '0xd9145CCE52D386f254917e481eB44e9943F39138'
+export const marketAddress = '0x1c5A661e24D681833Bf59B65e3B13feDfCeCEfD8'
 export const marketContract = new web3.eth.Contract(marketABI, marketAddress)
