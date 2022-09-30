@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import Web3 from 'web3'
-import { setWallet } from 'store/modules/user'
-import { useSelector, useDispatch } from 'react-redux'
+
 export default function Test() {
-  const [metamaskWallet, setMetamaskWallet] = useState('')
-  const dispatch = useDispatch()
-  const metamaskLogin = () => {
+  const [wallet, setWallet] = useState('')
+
+  useEffect(() => {
     if (!window.ethereum) {
-      // alert('메타마스크 설치해')
-      window.open('https://metamask.io/download.html')
+      alert('메타마스크 설치해')
     } else {
       window.ethereum
         .request({ method: 'eth_requestAccounts' })
         .then((result: any) => {
           console.log(result)
-          setMetamaskWallet(result[0])
-          dispatch(setWallet(result[0]))
+          setWallet(result[0])
         })
         .then((res) => {
           window.ethereum
@@ -38,17 +35,17 @@ export default function Test() {
           window.ethereum
             .request({
               method: 'eth_getBalance',
-              params: [metamaskWallet, 'pending'],
+              params: [wallet, 'pending'],
             })
             .then((result) => {
               console.log(result)
             })
         })
     }
-  }
+  }, [])
   return (
     <main>
-      <button onClick={metamaskLogin}>metamask 연결</button>
+      <button>mattermost 연결</button>
     </main>
   )
 }

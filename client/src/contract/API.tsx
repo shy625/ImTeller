@@ -1,6 +1,6 @@
 //import
 import { coinContract } from './CoinABI'
-import { cardContract } from './CardABI'
+import { cardAddress, cardContract } from './CardABI'
 import { web3, marketContract } from './MarketABI'
 import dealABI from './DealABI'
 
@@ -9,13 +9,10 @@ export const createCard = async (walletAddress: string, image: any) => {
   const admin = '0x3f317D1680B8B60da4323bbB1328a8F0DD44edfb'
   const wallet = walletAddress
   const tokenURI = image
-  //   console.log('coinContract', typeof coinContract, coinContract)
-  // object 타입이네
-  const approvalToPay = await coinContract.methods.transfer(admin, 10).send({ from: wallet })
+  const approvalToPay = await coinContract.methods.approve(cardAddress, 10).send({ from: wallet })
   let token_id: any
   if (approvalToPay.status) {
     token_id = await cardContract.methods.create(tokenURI).send({ from: wallet })
-    //이렇게 하면 return되는 값에 tokenId 오는건가???
   }
   console.log(token_id.events.Transfer.returnValues.tokenId)
 }
@@ -36,7 +33,6 @@ export const sellCard = async (
   // '판매가격'
   const price = 10
   console.log('거래 등록')
-  console.log(tokenURL)
   const dealCA = await marketContract.methods.createDeal(tokenId, price).send({ from: wallet })
   console.log('거래 등록 완료')
   console.log('deal', dealCA)

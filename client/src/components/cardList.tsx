@@ -51,28 +51,14 @@ export default function CardList(props: any) {
   let tempImg = 'https://imtellercard.s3.ap-northeast-2.amazonaws.com/20222729012744-하트.png'
   return (
     <div>
-      <button onClick={() => registerCard(currentUser.wallet, tempImg, 3, 10)}>
-        카드 등록 test
-      </button>
       {cardList.length ? (
         cardList[0].cardId ? (
           cardList.map((card) => {
-            return (
-              <div key={card.cardId}>
-                <Card card={card} />
-              </div>
-            )
+            return <Card card={card} key={card.cardId} />
           })
         ) : (
           cardList.map((paint) => {
-            return (
-              <div
-                key={paint.paintId}
-                onClick={() => mintPaint(currentUser.wallet, paint.paintImageURL)}
-              >
-                <Paint paint={paint} />
-              </div>
-            )
+            return <Paint paint={paint} key={paint.paintId} />
           })
         )
       ) : (

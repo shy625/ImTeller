@@ -1,8 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useDispatch } from 'react-redux'
+import { setMyPageTab } from 'store/modules/util'
+
 export default function MypageTabNav(props: any) {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const { setTabNo, isMyMypage } = props
 
@@ -11,7 +15,7 @@ export default function MypageTabNav(props: any) {
       <div>
         <div
           onClick={() => {
-            setTabNo(0)
+            dispatch(setMyPageTab(0))
           }}
         >
           NFT 카드
@@ -20,7 +24,7 @@ export default function MypageTabNav(props: any) {
           <>
             <div
               onClick={() => {
-                setTabNo(1)
+                dispatch(setMyPageTab(1))
               }}
             >
               내 그림

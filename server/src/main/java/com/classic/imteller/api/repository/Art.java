@@ -5,6 +5,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -46,9 +48,21 @@ public class Art extends BaseEntity {
     @Column
     private Integer recentPrice;
 
+    @OneToMany(mappedBy = "art")
+    private List<Deal> dealList = new ArrayList<>();
+
     public void updatePaint(String url, String title, String desc) {
         this.url = url;
         this.title = title;
         this.description = desc;
+    }
+
+    public void insertNft(Long tokenId){
+        this.tokenId = tokenId;
+    }
+
+    public void updateOwner(User owner, String ownerNickname){
+        this.owner = owner;
+        this.ownerNickname = ownerNickname;
     }
 }
