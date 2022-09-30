@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20//IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
+//v.5
 contract Market is Ownable {
     IERC721 public cardContract;
     IERC20 public coinContract;
