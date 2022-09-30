@@ -56,7 +56,7 @@ export default function CardList(props: any) {
     <div>
       <button onClick={() => registerSale(currentUser.wallet, tempImg, 1, 10)}>
         {/* <img src={tempImg} alt="" /> */}
-        카드 등록하기
+        카드 판매하기
       </button>
       <button
         onClick={() => buyNft('0xb471f8E694Dc424123AE7dD4b02b061B497baEf7', currentUser.wallet, 10)}
