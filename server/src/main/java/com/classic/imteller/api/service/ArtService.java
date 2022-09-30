@@ -4,10 +4,7 @@ import com.classic.imteller.api.dto.art.CardsResDto;
 import com.classic.imteller.api.dto.art.PaintEditReqDto;
 import com.classic.imteller.api.dto.art.PaintSaveReqDto;
 import com.classic.imteller.api.dto.art.PaintsResDto;
-import com.classic.imteller.api.repository.Art;
-import com.classic.imteller.api.repository.ArtRepository;
-import com.classic.imteller.api.repository.User;
-import com.classic.imteller.api.repository.UserRepository;
+import com.classic.imteller.api.repository.*;
 import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +20,7 @@ import java.util.List;
 public class ArtService {
     private final ArtRepository artRepository;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
@@ -128,11 +126,17 @@ public class ArtService {
 
     @Transactional
     public boolean onVote(Long id, String email) {
-        System.out.println(id + " " + email);
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        if (art.getOwner().getEmail().equals(email)) {
+        boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), true);
+
+        if (!chk && art.getOwner().getEmail().equals(email)) {
             art.updateIsVote(true);
             artRepository.save(art);
+            Vote vote = Vote.builder()
+                .art(art)
+                .count(0)
+                .isVoting(true).build();
+            voteRepository.save(vote);
             return true;
         }
         else return false;
@@ -141,9 +145,13 @@ public class ArtService {
     @Transactional
     public boolean offVote(Long id, String email) {
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        if (art.getOwner().getEmail().equals(email)) {
+        boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), true);
+        if (chk && art.getOwner().getEmail().equals(email)) {
             art.updateIsVote(false);
             artRepository.save(art);
+            Vote vote = voteRepository.findByArtIdAndIsVoting(art.getId(), true).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            vote.updateIsVoting(false);
+            voteRepository.save(vote);
             return true;
         }
         else return false;
