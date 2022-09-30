@@ -55,10 +55,10 @@ public class DealController {
 
     @PatchMapping("/{dealId}/end")
     @ApiOperation(value = "Deal is closed", notes = "Change owner of Card & Update Deal info - finishedAt")
-    public ResponseEntity<String> closeDeal(@PathVariable Long dealId, @RequestBody DealEndReqDto dealEndReqDto){
+    public ResponseEntity<ResponseDto> closeDeal(@PathVariable Long dealId, @RequestBody DealEndReqDto dealEndReqDto){
         artService.editOwner(dealEndReqDto.getOwner(), dealEndReqDto.getTokenId());
         dealService.endDeal(dealId);
-        return new ResponseEntity<String>("소유자 변경 성공", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new ResponseDto("거래 종료"), HttpStatus.OK);
     }
 
 }
