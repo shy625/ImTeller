@@ -20,7 +20,7 @@ const art = {
   paintCreate(data) {
     return api({
       method: 'post',
-      url: `${END_POINT}/paints`,
+      url: `${END_POINT}/paints/save`,
       data: data,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -30,7 +30,7 @@ const art = {
   paintUpdate(data) {
     return api({
       method: 'petch',
-      url: `${END_POINT}/paints`,
+      url: `${END_POINT}/paints/edit`,
       data: data,
       headers: {
         'Content-Type': 'multipart/form-data',

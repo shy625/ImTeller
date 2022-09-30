@@ -144,4 +144,11 @@ public class DealService {
         dealRepository.deleteById(dealId);
     }
 
+
+    @Transactional
+    public void endDeal(Long dealId) {
+        Deal deal = dealRepository.findById(dealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        deal.updateFinishAt();
+    }
+
 }

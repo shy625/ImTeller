@@ -43,5 +43,9 @@ export default function Test() {
         })
     }
   }, [])
-  return <main>test</main>
+  return (
+    <main>
+      <button>mattermost 연결</button>
+    </main>
+  )
 }
