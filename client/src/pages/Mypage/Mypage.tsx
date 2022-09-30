@@ -9,8 +9,8 @@ import art from 'actions/api/art'
 import MypageTabNav from 'pages/Mypage/mypageTabNav'
 import CardList from 'components/cardList'
 
-import { setUserDetail, setCardList } from 'store/modules/user'
-import { setPaintList } from 'store/modules/art'
+import { setUserDetail } from 'store/modules/user'
+import { setCardList, setPaintList } from 'store/modules/art'
 
 export default function Mypage() {
   const dispatch = useDispatch()
@@ -38,33 +38,33 @@ export default function Mypage() {
       .catch((error) => {
         console.error(error)
       })
-    art
-      .cardList({ nickname: nick })
-      .then((result) => {
-        console.log(result.data)
-        dispatch(setCardList(result.data))
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    // art
+    //   .cardList({ nickname: nick })
+    //   .then((result) => {
+    //     console.log(result.data)
+    //     dispatch(setCardList(result.data))
+    //   })
+    //   .catch((error) => {
+    //     console.error(error)
+    //   })
   }, [nick, nickname])
 
-  useEffect(() => {
-    if (isMyMypage) {
-      art
-        .paintList({ nickname: nick })
-        .then((result) => {
-          dispatch(setPaintList(result.data))
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }, [isMyMypage])
+  // useEffect(() => {
+  //   if (isMyMypage) {
+  //     art
+  //       .paintList({ nickname: nick })
+  //       .then((result) => {
+  //         dispatch(setPaintList(result.data))
+  //       })
+  //       .catch((error) => {
+  //         console.error(error)
+  //       })
+  //   }
+  // }, [isMyMypage])
 
   const tabs = {
-    0: <CardList cardList={cardList} />,
-    1: <CardList cardList={paintList} />,
+    0: <CardList cardList={cardList} isCard={true} />,
+    1: <CardList cardList={paintList} isCard={false} type={0} />,
   }
 
   return (

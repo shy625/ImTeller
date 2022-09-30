@@ -8,15 +8,15 @@ import { css } from '@emotion/react'
 import art from 'actions/api/art'
 
 import Layout from 'layout/layout'
-import paintBucketIcon from '../../assets/image/paintBucket.png'
-import paintBrushIcon from '../../assets/image/paintBrush.png'
-import eraserIcon from '../../assets/image/eraser.png'
-import trashIcon from '../../assets/image/trash.png'
-import undoIcon from '../../assets/image/undo.png'
-import saveIcon from '../../assets/image/save.png'
+import paintBucketIcon from 'assets/image/paintBucket.png'
+import paintBrushIcon from 'assets/image/paintBrush.png'
+import eraserIcon from 'assets/image/eraser.png'
+import trashIcon from 'assets/image/trash.png'
+import undoIcon from 'assets/image/undo.png'
+import saveIcon from 'assets/image/save.png'
 
 // style
-import { input, textarea, imgIcon } from '../../style/commonStyle'
+import { input, textarea, imgIcon } from 'style/commonStyle'
 
 export default function Paint() {
   // form 전송용
@@ -25,7 +25,7 @@ export default function Paint() {
   const [content, setContent] = useState('')
 
   const location = useLocation()
-  const { isNew } = location.state
+  const { isEdit, paint } = location.state
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
   const colorRef = useRef(null)

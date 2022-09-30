@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
+
 import GameHeader from 'pages/Game/gameHeader'
 import Items from 'pages/Game/items'
 import GameTeller from 'pages/Game/gameTeller'
@@ -11,7 +12,6 @@ import GameChoice from 'pages/Game/gameChoice'
 import GameResult from 'pages/Game/gameResult'
 import GameRoom from 'pages/Game/gameRoom'
 import GameEnd from 'pages/Game/gameEnd'
-
 import Chat from 'components/chat'
 import GameProfile from 'components/gameProfile'
 

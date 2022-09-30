@@ -18,7 +18,7 @@ export default function Search() {
 
   const inputFilter = (event) => {
     let keyword = event.target.value
-    keyword = keyword.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]/g, '')
+    keyword = keyword.replace(/[^a-z|A-Z|0-9|ㄱ-ㅎ|가-힣]/g, '') // uri에 / 같은게 들어가면 안됨
     if (keyword.length > 20) {
       keyword = keyword.slice(0, 20)
     }
@@ -27,15 +27,18 @@ export default function Search() {
   }
 
   const onSubmit = () => {
-    const params = {
-      keyword,
-      target,
-      sort,
-      status,
-    }
-    deal.dealList(params).then((result) => {
-      dispatch(setDealList(result.data.response))
-    })
+    console.log(
+      'dp 하나 이상 쌓이고 주석풀면됨. 더미데이터가 완벽하지 않아서 구매하기 누르면 없는정보 참조로 에러남',
+    )
+    // const params = {
+    //   keyword,
+    //   target,
+    //   sort,
+    //   status,
+    // }
+    // deal.dealList(params).then((result) => {
+    //   dispatch(setDealList(result.data.response))
+    // })
   }
 
   return (
