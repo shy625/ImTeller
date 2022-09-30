@@ -153,4 +153,8 @@ public class RoomService {
     public void randomSelect(long sessionId) {
         roomRepository.randomSelect(sessionId);
     }
+
+    public void scoreCalc(long sessionId) {
+        roomRepository.scoreCalc(sessionId);
+    }
 }

@@ -10,4 +10,8 @@ public class TableDto {
     private long cardId;
     private String cardUrl;
     private boolean isTeller;
+
+    public boolean getIsTeller() {
+        return this.isTeller;
+    }
 }

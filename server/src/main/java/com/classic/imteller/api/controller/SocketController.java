@@ -173,9 +173,11 @@ public class SocketController {
 
     public void phase4(long sessionId) {
         roomService.setPhase(sessionId, 4);
+        roomService.scoreCalc(sessionId);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
+                roomService.statusReset(sessionId);
                 HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
                 phase1(sessionId);

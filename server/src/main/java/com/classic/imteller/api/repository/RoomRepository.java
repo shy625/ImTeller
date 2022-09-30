@@ -398,4 +398,57 @@ public class RoomRepository {
             }
         }
     }
+
+    public void scoreCalc(long sessionId) {
+        HashMap<String, Integer> scores = new HashMap<>();
+        List<TableDto> tables = roomList.get(sessionId).getTable();
+        HashMap<String, Long> choice = roomList.get(sessionId).getChoice();
+        String teller = roomList.get(sessionId).getTeller();
+        List<String> players = roomList.get(sessionId).getPlayers();
+
+        // 해당 턴의 점수 HashMap인 scores를 초기화
+        for (String player : players) {
+            scores.put(player, 0);
+        }
+
+        // 점수계산
+        int answerPlayer = 0;
+        int normalPlayerNum = players.size() - 1;
+        // 카드 주인에게 2점씩, 텔러꺼 골랐으면 6점
+        for (String player : players) {
+            // 텔러는 체크안함
+            if (player == teller) continue;
+            // 나머지케이스 체크
+            for (TableDto table : tables) {
+                if (choice.get(player) == table.getCardId()){
+                    if (table.getNickname() == teller) {
+                        int newScore = scores.get(player) + 3;
+                        scores.replace(player, newScore);
+                        ++answerPlayer;
+                    }
+                    else {
+                        int newScore = scores.get(table.getNickname()) + 2;
+                        scores.replace(table.getNickname(), newScore);
+                    }
+                    break;
+                }
+            }
+        }
+        // 텔러는 특별계산 - 모두가 못맞추거나 다맞추면 0점, 나머지 케이스는 6점
+        if (!(answerPlayer == normalPlayerNum || answerPlayer == 0)) {
+            scores.replace(teller, 6);
+        }
+
+        // 아이템처리
+        List<EffectDto> activatedItem = roomList.get(sessionId).getActivated();
+        for (EffectDto item : activatedItem) {
+            if (item.getEffect() == 4 && scores.get(item.getNickname()) != 0) {
+                int newScore = scores.get(item.getNickname()) + item.getEffectNum();
+                scores.replace(item.getNickname(), newScore);
+            }
+            // 전체 추가점수 만들기
+        }
+
+
+    }
 }

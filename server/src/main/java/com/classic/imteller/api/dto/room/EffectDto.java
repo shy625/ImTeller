@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class EffectDto {
     private long uid;
+    private String nickname;
     private int effect;
     private int effectNum;
 }
