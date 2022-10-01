@@ -36,38 +36,35 @@ export default function CardList(props: any) {
 			const selling = await createCard(walletAddress, image)
 		}
 	}
-	const registerSale = async (
-		walletAddress: string,
-		image: any,
-		token_id: any,
-		wantedPrice: any,
-	) => {
+	const registerSale = async (walletAddress: string, tokenId: any, instantPrice: any) => {
 		const check = await metamaskConnected()
 		console.log(connectedWallet)
 		if (connectedWallet === currentUser.wallet) {
 			console.log('카드 팔아야지')
-			const selling = await sellCard(walletAddress, image, token_id, wantedPrice)
+			const selling = await sellCard(walletAddress, tokenId, instantPrice)
 		}
 	}
-	const buyNft = async (dealId: any, walletAddress: any, wantedPrice: any) => {
-		purchaseCard(dealId, currentUser.wallet, 10)
+	const buyNft = async (walletAddress: any, dealAddress: any, instantPrice: any) => {
+		purchaseCard(currentUser.wallet, dealAddress, 10)
 	}
-	const cancel = async (dealId: any) => {
-		cancelDeal(dealId)
+	const cancel = async (walletAddress: any, dealAddress: any) => {
+		cancelDeal(currentUser.wallet, dealAddress)
 	}
 	let tempImg = 'https://imtellercard.s3.ap-northeast-2.amazonaws.com/20222729012744-하트.png'
 	return (
 		<div>
-			<button onClick={() => registerSale(currentUser.wallet, tempImg, 3, 13)}>
+			<button onClick={() => registerSale(currentUser.wallet, 3, 13)}>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 판매하기
 			</button>
-			<button onClick={() => cancel('0xFc0a9e87D869a5F83a1B7ADFc8632EaD585BFc3C')}>
+			<button
+				onClick={() => cancel(currentUser.wallet, '0xFc0a9e87D869a5F83a1B7ADFc8632EaD585BFc3C')}
+			>
 				{/* <img src={tempImg} alt="" /> */}
 				판매취소
 			</button>
 			<button
-				onClick={() => buyNft('0xE8738b3057a697E90e8Ee365f0eBac09BEBf9F58', currentUser.wallet, 10)}
+				onClick={() => buyNft(currentUser.wallet, '0xE8738b3057a697E90e8Ee365f0eBac09BEBf9F58', 10)}
 			>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 구매하기
@@ -76,10 +73,7 @@ export default function CardList(props: any) {
 				cardList[0].cardId ? (
 					cardList.map((card) => {
 						return (
-							<div
-								key={card.cardId}
-								onClick={() => registerSale(currentUser.wallet, card.cardImageURL, 1, 10)}
-							>
+							<div key={card.cardId} onClick={() => registerSale(currentUser.wallet, 1, 10)}>
 								<Card card={card} />
 							</div>
 						)
