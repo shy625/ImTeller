@@ -3,7 +3,7 @@
 import React from 'react'
 import { css } from '@emotion/react'
 
-import defaultProfile from 'assets/image/defaultProfile.png'
+import defaultProfile from 'assets/image/defaultProfile.webp'
 
 // 텔러면 왕관 씌우기? 점수도 같이 표시
 export default function GameProfile(props: any) {

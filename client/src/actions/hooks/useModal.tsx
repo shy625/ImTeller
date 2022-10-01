@@ -17,6 +17,9 @@ export const useModal = (modalMsg = '') => {
   const setMsg = (action: any) => {
     dispatch(setModalMsg(action))
   }
+  const setResult = (action: any) => {
+    dispatch(setModalResult(action))
+  }
 
-  return [setState, setMsg]
+  return [setState, setMsg, setResult]
 }

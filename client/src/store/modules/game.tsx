@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { stat } from 'fs'
 
 export const isChecked = createSlice({
   name: 'isChecked',
@@ -347,7 +348,14 @@ export const selectedCards = createSlice({
   initialState: [],
   reducers: {
     setSelectedCards(state, action) {
-      return action.payload
+      if (state.includes(action.payload)) {
+        const idx = state.indexOf(action.payload)
+        state.splice(idx, 1)
+      } else {
+        if (state.length < 6) {
+          state.push(action.payload)
+        }
+      }
     },
   },
 })

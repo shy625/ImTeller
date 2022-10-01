@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
-import back from 'assets/image/arrow.png'
+import back from 'assets/image/arrow.webp'
 
 const RoomInfo = (props: any) => {
   const navigate = useNavigate()

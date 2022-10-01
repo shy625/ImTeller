@@ -18,7 +18,7 @@ export default function CardSelectModal(props: any) {
       <div>
         <CardList cardList={cardList} isCard={true} type={1} />
       </div>
-      <button onClick={() => dispatch(setModalState(''))}>취소</button>
+      <button onClick={() => dispatch(setModalState(''))}>확인</button>
     </div>
   )
 }

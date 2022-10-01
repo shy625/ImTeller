@@ -12,7 +12,7 @@ export default function JoinRoomModal(props: any) {
   const dispatch = useDispatch()
 
   const isChecked = useSelector((state: any) => state.isChecked)
-  const [roomPw, setRoomPw] = useState('')
+  const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
 
   const path = window.location.pathname
@@ -27,18 +27,17 @@ export default function JoinRoomModal(props: any) {
     if (!roomId) {
       dispatch(setModalState(''))
       navigate(-1, { replace: true })
-    } else if (isChecked) {
-      dispatch(setModalState(''))
+      // } else if (isChecked) {
+      //   dispatch(setModalState(''))
     } else {
       onSubmit()
     }
   }, [roomId])
 
   const onSubmit = () => {
-    console.log(1)
     setAuthError('')
     game
-      .join(roomId, { roomPw })
+      .join(roomId, { password })
       .then((result) => {
         if (!result.data) return setAuthError('잘못된 비밀번호입니다')
         dispatch(setIsChecked(true))
@@ -51,7 +50,7 @@ export default function JoinRoomModal(props: any) {
 
   return (
     <div>
-      <input onChange={(e) => setRoomPw(e.target.value)} type="password" />
+      <input onChange={(e) => setPassword(e.target.value)} type="password" />
       <button onClick={onSubmit}>입장</button>
       <button
         onClick={() => {

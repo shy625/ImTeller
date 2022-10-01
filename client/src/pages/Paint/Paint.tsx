@@ -10,12 +10,12 @@ import art from 'actions/api/art'
 import { setMyPageTab } from 'store/modules/user'
 
 import Layout from 'layout/layout'
-import paintBucketIcon from 'assets/image/paintBucket.png'
-import paintBrushIcon from 'assets/image/paintBrush.png'
-import eraserIcon from 'assets/image/eraser.png'
-import trashIcon from 'assets/image/trash.png'
-import undoIcon from 'assets/image/undo.png'
-import saveIcon from 'assets/image/save.png'
+import paintBucketIcon from 'assets/image/paintBucket.webp'
+import paintBrushIcon from 'assets/image/paintBrush.webp'
+import eraserIcon from 'assets/image/eraser.webp'
+import trashIcon from 'assets/image/trash.webp'
+import undoIcon from 'assets/image/undo.webp'
+import saveIcon from 'assets/image/save.webp'
 
 // style
 import { input, textarea, imgIcon } from 'style/commonStyle'
@@ -32,6 +32,8 @@ export default function Paint() {
 
   const location = useLocation()
   const { isEdit, paint } = location.state
+
+  console.log(isEdit, paint)
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
   const colorRef = useRef(null)
@@ -90,6 +92,7 @@ export default function Paint() {
   //   ctx.beginPath()
   //   ctx.moveTo(nativeEvent.offsetX, nativeEvent.offsetY)
   // }
+
   function onMouseDown() {
     setIsDrawing(true)
     ctx.beginPath()

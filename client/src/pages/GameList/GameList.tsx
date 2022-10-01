@@ -22,7 +22,7 @@ export default function GameList() {
   const roomList = useSelector((state: any) => state.roomList)
   const currentUser = useSelector((state: any) => state.currentUser)
 
-  const [playPause, volumeControl] = useBGM({ src: 'assets/audio/gameListBgm.mp3' })
+  useBGM('gameList')
 
   useEffect(() => {
     game.roomList().then((result) => {

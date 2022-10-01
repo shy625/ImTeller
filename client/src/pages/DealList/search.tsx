@@ -27,18 +27,17 @@ export default function Search() {
   }
 
   const onSubmit = () => {
-    console.log(
-      'dp 하나 이상 쌓이고 주석풀면됨. 더미데이터가 완벽하지 않아서 구매하기 누르면 없는정보 참조로 에러남',
-    )
-    // const params = {
-    //   keyword,
-    //   target,
-    //   sort,
-    //   status,
-    // }
-    // deal.dealList(params).then((result) => {
-    //   dispatch(setDealList(result.data.response))
-    // })
+    console.log('더미데이터가 완벽하지 않아서 구매하기 누르면 없는정보 참조로 에러남')
+    const params = {
+      keyword,
+      target,
+      sort,
+      status,
+    }
+    deal.dealList(params).then((result) => {
+      console.log(result.data.response)
+      // dispatch(setDealList(result.data.response))
+    })
   }
 
   return (

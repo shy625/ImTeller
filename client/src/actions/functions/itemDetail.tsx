@@ -17,5 +17,14 @@ export default function (effect, effectNum) {
     6: '',
   }[effect]
 
-  return [effectPre, effectPost]
+  const effectName = {
+    1: '시간단축',
+    2: '시야방해',
+    3: '땡겨쓰기',
+    4: '보너스',
+    5: '우린하나',
+    6: '흑과백',
+  }[effect]
+
+  return [effectPre, effectPost, effectName]
 }

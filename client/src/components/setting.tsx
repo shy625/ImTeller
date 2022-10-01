@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import { useModal } from 'actions/hooks/useModal'
-import setting from 'assets/image/setting.png'
+import setting from 'assets/image/setting.webp'
 
 const Setting = () => {
   const [setModalState, setModalMsg] = useModal('')

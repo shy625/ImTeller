@@ -14,7 +14,7 @@ export default function Chat() {
   const { roomId } = useParams()
   const { currentRoomId, chats } = useSelector((state: any) => state.chats)
   const { nickname } = useSelector((state: any) => state.currentUser)
-  const email = useSelector((state: any) => state.email)
+  const email = useSelector((state: any) => state.email) || localStorage.getItem('email')
   const [msgInput, setMsgInput] = useState('')
 
   useEffect(() => {

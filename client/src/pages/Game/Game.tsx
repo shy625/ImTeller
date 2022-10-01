@@ -43,12 +43,12 @@ export default function Game() {
   const selectedCard = useSelector((state: any) => state.selectedCards)
 
   const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2면 gameEnd
-  const [turn, setTurn] = useState(0) // 0이면 teller 단계(텔러면 문장 적기, 아니면 유사 그림 선택), 1이면 choice단계, 2면 result단계
+  const [turn, setTurn] = useState(0) // state가 1일때 작동 : 0이면 teller 단계(텔러면 문장 적기, 아니면 유사 그림 선택), 1이면 choice단계, 2면 result단계
   const [imteller, setImteller] = useState(false)
   const [result, setResult] = useState([])
-  const [playPause, volumeControl] = useBGM({ src: 'assets/audio/gameBgm.mp3' })
-
   const [setModalState, setModalMsg] = useModal('')
+
+  useBGM('game')
 
   const blockRefresh = (event) => {
     event.preventDefault()
@@ -71,18 +71,18 @@ export default function Game() {
 
   let stompClient = useWebSocket({
     email,
-    roomId,
     onConnect(frame, client) {
       // 서버와 다른 사용자들에게 들어왔음을 알림
       client.publish({
         destination: `/pub/room/${roomId}/join`,
         body: JSON.stringify({
-          nickname: nickname,
+          nickname,
         }),
       })
 
       // 다른 플레이어들 상태 변경
       client.subscribe(`/sub/room/${roomId}/join`, (action) => {
+        console.log(action)
         const content = JSON.parse(action.body)
         console.log(content)
         // dispatch(setPlayers(content))
@@ -167,25 +167,18 @@ export default function Game() {
       })
     },
 
-    beforeDisconnected(frame, client) {
-      client.publish({
-        destination: 'exit',
-        body: JSON.stringify({
-          nickname,
-        }),
-      })
-    },
+    beforeDisconnected(frame, client) {},
   })
 
   useEffect(() => {
-    console.log(123, isChecked)
-    if (!isChecked) {
-      setModalState('joinRoom')
-    }
+    // if (!isChecked) {
+    setModalState('joinRoom') // 비번이 없어도 방 가득 찼는지 확인을 위해 필요함
+    // }
     return () => {
-      setIsChecked(false)
+      dispatch(setIsChecked(false))
+      // 연결 끊기
     }
-  }, [])
+  }, [roomId])
 
   const mainComponent = () => {
     if (state === 0) return <GameRoom stompClient={stompClient} /> // 대기실

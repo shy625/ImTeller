@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setBgmSrc } from 'store/modules/util'
+import { setEffectSrc } from 'store/modules/util'
 
-export const useBGM = (src: any) => {
+export const useSound = (src: any) => {
   const dispatch = useDispatch()
-  const isBgmOn = useSelector((state: any) => state.isBgmOn)
+  const isEffectOn = useSelector((state: any) => state.isEffectOn)
 
-  const bgm = {
+  const effect = {
     main: 'assets/audio/mainBgm.mp3',
     gameList: 'assets/audio/gameListBgm.mp3',
     game: 'assets/audio/gameBgm/mp3',
@@ -14,10 +14,10 @@ export const useBGM = (src: any) => {
 
   useEffect(() => {
     if (src) {
-      dispatch(setBgmSrc(bgm[src]))
+      dispatch(setEffectSrc(effect[src]))
     }
     return () => {
-      dispatch(setBgmSrc(bgm['main']))
+      dispatch(setEffectSrc(effect['main']))
     }
   }, [])
 }

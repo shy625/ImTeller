@@ -18,9 +18,10 @@ import {
 } from 'store/modules/game'
 import { cardList, paintList, selectedPaint, dealList, dealDetail } from 'store/modules/art'
 import {
-  isBgmOn,
   bgmSrc,
+  isBgmOn,
   bgmVolume,
+  effectSrc,
   isEffectOn,
   effectVolume,
   isMouseEffectOn,
@@ -55,9 +56,10 @@ export default configureStore({
     dealList: dealList.reducer,
     dealDetail: dealDetail.reducer,
 
-    isBgmOn: isBgmOn.reducer,
     bgmSrc: bgmSrc.reducer,
+    isBgmOn: isBgmOn.reducer,
     bgmVolume: bgmVolume.reducer,
+    effectSrc: effectSrc.reducer,
     isEffectOn: isEffectOn.reducer,
     effectVolume: effectVolume.reducer,
     isMouseEffectOn: isMouseEffectOn.reducer,

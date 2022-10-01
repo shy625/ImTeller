@@ -28,7 +28,7 @@ export default function App() {
   const currentUser = useSelector((state: any) => state.currentUser)
 
   return (
-    <div>
+    <div className="App">
       <BrowserRouter>
         <BgmLayer>
           <ModalLayer>

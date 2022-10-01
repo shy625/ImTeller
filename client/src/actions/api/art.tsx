@@ -37,10 +37,10 @@ const art = {
       },
     })
   },
-  paintDelete() {
+  paintDelete(paintId) {
     return api({
       method: 'delete',
-      url: `${END_POINT}/paints`,
+      url: `${END_POINT}/paints/${paintId}`,
     })
   },
   paintRegist(paintId) {

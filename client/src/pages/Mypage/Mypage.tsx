@@ -66,7 +66,7 @@ export default function Mypage() {
   // }, [isMyMypage])
 
   const tabs = {
-    0: <CardList cardList={cardList} isCard={true} />,
+    0: <CardList cardList={cardList} isCard={true} type={0} />,
     1: <CardList cardList={paintList} isCard={false} type={0} />,
   }
 
