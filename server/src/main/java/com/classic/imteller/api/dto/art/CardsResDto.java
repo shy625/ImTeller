@@ -13,8 +13,8 @@ public class CardsResDto {
     private String cardImageURL;
     private String description;
     private String grade;
-    private int effect;
-    private int effectDetail;
+    private Integer effect;
+    private Integer effectDetail;
     private LocalDateTime createdDT;
     private Integer recentPrice;
 }

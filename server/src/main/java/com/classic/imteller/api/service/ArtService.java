@@ -37,7 +37,7 @@ public class ArtService {
                     .description(card.getDescription())
                     .grade(card.getEffect().getGrade())
                     .effect(card.getEffect().getEffect())
-                    .effectDetail(card.getEffect().getDetail())
+                    .effectDetail(card.getEffect().getEffectNum())
                     .createdDT(card.getEffect().getCreatedAt())
                     .recentPrice(card.getRecentPrice()).build();
             data.add(singleCard);
