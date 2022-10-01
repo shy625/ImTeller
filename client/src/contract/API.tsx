@@ -1,12 +1,8 @@
 //import
 import { coinContract } from './CoinABI'
 import { cardAddress, cardContract } from './CardABI'
-//text1
 import { web3, marketContract } from './MarketABI'
 import dealABI from './DealABI'
-//test2
-import { exchangeAddress, exchangeContract } from './ExchangeABI'
-import saleABI from './SaleABI'
 
 //mint
 export const createCard = async (walletAddress: string, image: any) => {
@@ -42,38 +38,21 @@ export const sellCard = async (
 	console.log('deal', dealCA)
 	const contract_id = dealCA.events.NewDeal.returnValues.dealAddress
 	await cardContract.methods.setApprovalForAll(contract_id, true).send({ from: wallet })
-
-	//   await cardContract.methods.transferFrom(wallet, contract_id, tokenId).send({ from: wallet })
 }
 
 //Card 구매
 export const purchaseCard = async (dealId: any, walletAddress: any, wantedPrice: any) => {
 	//   const dealCA = '내가 살 카드의 거래 CA'
 	const dealCA = dealId
+	console.log(dealCA)
 	const dealInstance = new web3.eth.Contract(dealABI, dealCA)
 	//   const wallet = 'wallet은 유저의 account Address'
 	const wallet = walletAddress
 	//   const price = '해당 카드 가격'
 	const price = wantedPrice
-	console.log('구매 시작')
-	const approvalToPay = await coinContract.methods.transfer(dealCA, price).send({ from: wallet })
-	console.log('권한 허용')
-	if (approvalToPay.status) {
-		return await dealInstance.methods.transaction().send({ from: wallet })
-	}
-}
-//Card 구매
-export const purchaseOrignal = async (dealId: any, walletAddress: any, wantedPrice: any) => {
-	//   const dealCA = '내가 살 카드의 거래 CA'
-	const dealCA = '0x0e6e16fa917750221b2dc86df1a36ad03bb5caab'
-	const dealInstance = new web3.eth.Contract(dealABI, dealCA)
-	//   const wallet = 'wallet은 유저의 account Address'
-	const wallet = walletAddress
-	//   const price = '해당 카드 가격'
-	const price = wantedPrice
-	console.log('구매 시작')
+	console.log('구매 시작 market purchase')
 	const approvalToPay = await coinContract.methods.approve(dealCA, price).send({ from: wallet })
-	console.log('권한 허용')
+	console.log('권한 허용 완료')
 	if (approvalToPay.status) {
 		return await dealInstance.methods.purchase().send({ from: wallet })
 	}
@@ -84,6 +63,9 @@ export const cancelDeal = async () => {
 	const dealCA = '내가 살 카드의 거래 CA'
 	const dealInstance = new web3.eth.Contract(dealABI, dealCA)
 	const wallet = 'wallet은 유저의 account Address'
-
+	//내가 cardContract에 setapprovalforall false하고 dealInstance는 상태값 변화만 시키는 거로 바꾸기
+	const disapproval = await cardContract.methods
+		.setApprovalForAll(dealCA, false)
+		.send({ from: wallet })
 	return await dealInstance.methods.cancelDeal().send({ from: wallet })
 }

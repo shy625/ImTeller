@@ -187,18 +187,5 @@ const dealABI: AbiItem[] = [
 		stateMutability: 'payable',
 		type: 'function',
 	},
-	{
-		inputs: [],
-		name: 'transaction',
-		outputs: [
-			{
-				internalType: 'uint256',
-				name: '',
-				type: 'uint256',
-			},
-		],
-		stateMutability: 'payable',
-		type: 'function',
-	},
 ]
 export default dealABI

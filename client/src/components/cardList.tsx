@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Card from 'components/card'
 import Paint from 'components/paint'
 
-import { createCard, sellCard, purchaseCard } from 'contract/API'
+import { createCard, sellCard, purchaseCard, exchangePurchase, exchangeTrx } from 'contract/API'
 import { allowedNodeEnvironmentFlags } from 'process'
 
 export default function CardList(props: any) {
@@ -60,7 +60,7 @@ export default function CardList(props: any) {
 				카드 판매하기
 			</button>
 			<button
-				onClick={() => buyNft('0xb471f8E694Dc424123AE7dD4b02b061B497baEf7', currentUser.wallet, 10)}
+				onClick={() => buyNft('0xd491BAF8fe3e1600FBD512Cb8Cfd0bd7b7DFd8f9', currentUser.wallet, 10)}
 			>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 구매하기

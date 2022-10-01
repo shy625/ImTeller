@@ -27,7 +27,7 @@ contract Market is Ownable {
     /*
     @params cardId- db의 token_id, price - 판매가격
     @return 신규생성된 거래CA
-    warning: 거래 생성 후에 프론트에서 return 받은 address에 card 소유권 권한 부여 setapproval 필요.
+    warning: 거래 생성 후에 프론트에서 return 받은 deal address에 card 소유권 변경 권한 부여 setapproval 필요.
     */
     function createDeal(uint256 _cardId, uint256 _price)
         public
@@ -110,35 +110,9 @@ contract Deal {
     }
 
     /*
-    카드 구매
-    warning: 함수 호출 전에 IERC20.transfer로 코인 송금하기
+    카드판매취소
     */
-    function transaction() public payable duringDeal returns (uint256) {
-        address buyer = msg.sender;
-
-        //0.거래조건 확인
-        require(seller != buyer, "You can't buy your own Card");
-
-        //1.SSF 송금
-        coinContract.transfer(seller, price);
-
-        //2. NFT 소유권 이전
-        cardContract.transferFrom(seller, address(this), cardId);
-        cardContract.transferFrom(address(this), buyer, cardId);
-
-        //3. 거래 종료
-        dealState = false;
-
-        emit DealEnded(address(this), cardId, buyer, price);
-
-        return cardId;
-    }
-
-
     function cancelDeal() public payable duringDeal onlySeller returns (bool) {
-        //거래에게 준 권한 취소
-        cardContract.setApprovalForAll(address(this), false);
-
         //판매 상태를 완료로 전환
         dealState = false;
         emit DealCanceled(address(this), cardId, seller);
