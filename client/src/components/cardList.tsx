@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Card from 'components/card'
 import Paint from 'components/paint'
 
-import { createCard, sellCard, purchaseCard, exchangePurchase, exchangeTrx } from 'contract/API'
+import { createCard, sellCard, purchaseCard } from 'contract/API'
 import { allowedNodeEnvironmentFlags } from 'process'
 
 export default function CardList(props: any) {
