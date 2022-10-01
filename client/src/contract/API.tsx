@@ -1,8 +1,12 @@
 //import
 import { coinContract } from './CoinABI'
 import { cardAddress, cardContract } from './CardABI'
+//text1
 import { web3, marketContract } from './MarketABI'
 import dealABI from './DealABI'
+//test2
+import { exchangeAddress, exchangeContract } from './ExchangeABI'
+import saleABI from './SaleABI'
 
 //mint
 export const createCard = async (walletAddress: string, image: any) => {
@@ -29,7 +33,7 @@ export const sellCard = async (
 	// '판매할 카드 url'
 	const tokenURL = image
 	//'판매할 카드의 token Id'
-	const tokenId = 13
+	const tokenId = token_id
 	// '판매가격'
 	const price = 10
 	console.log('거래 등록 ' + tokenId)
@@ -61,7 +65,7 @@ export const purchaseCard = async (dealId: any, walletAddress: any, wantedPrice:
 //Card 구매
 export const purchaseOrignal = async (dealId: any, walletAddress: any, wantedPrice: any) => {
 	//   const dealCA = '내가 살 카드의 거래 CA'
-	const dealCA = dealId
+	const dealCA = '0x0e6e16fa917750221b2dc86df1a36ad03bb5caab'
 	const dealInstance = new web3.eth.Contract(dealABI, dealCA)
 	//   const wallet = 'wallet은 유저의 account Address'
 	const wallet = walletAddress

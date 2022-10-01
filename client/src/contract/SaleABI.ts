@@ -1,8 +1,8 @@
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
-//v10
-const dealABI: AbiItem[] = [
+//v1
+const saleABI: AbiItem[] = [
 	{
 		inputs: [
 			{
@@ -201,4 +201,5 @@ const dealABI: AbiItem[] = [
 		type: 'function',
 	},
 ]
-export default dealABI
+
+export default saleABI

@@ -1,32 +1,8 @@
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
-//v10
-const marketABI: AbiItem[] = [
-	{
-		inputs: [
-			{
-				internalType: 'uint256',
-				name: '_cardId',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: '_price',
-				type: 'uint256',
-			},
-		],
-		name: 'createDeal',
-		outputs: [
-			{
-				internalType: 'address',
-				name: '',
-				type: 'address',
-			},
-		],
-		stateMutability: 'payable',
-		type: 'function',
-	},
+//v1
+const exchangeABI: AbiItem[] = [
 	{
 		inputs: [
 			{
@@ -90,26 +66,6 @@ const marketABI: AbiItem[] = [
 	},
 	{
 		inputs: [],
-		name: 'renounceOwnership',
-		outputs: [],
-		stateMutability: 'nonpayable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'address',
-				name: 'newOwner',
-				type: 'address',
-			},
-		],
-		name: 'transferOwnership',
-		outputs: [],
-		stateMutability: 'nonpayable',
-		type: 'function',
-	},
-	{
-		inputs: [],
 		name: 'cardContract',
 		outputs: [
 			{
@@ -135,6 +91,30 @@ const marketABI: AbiItem[] = [
 		type: 'function',
 	},
 	{
+		inputs: [
+			{
+				internalType: 'uint256',
+				name: '_cardId',
+				type: 'uint256',
+			},
+			{
+				internalType: 'uint256',
+				name: '_price',
+				type: 'uint256',
+			},
+		],
+		name: 'createDeal',
+		outputs: [
+			{
+				internalType: 'address',
+				name: '',
+				type: 'address',
+			},
+		],
+		stateMutability: 'payable',
+		type: 'function',
+	},
+	{
 		inputs: [],
 		name: 'owner',
 		outputs: [
@@ -147,8 +127,29 @@ const marketABI: AbiItem[] = [
 		stateMutability: 'view',
 		type: 'function',
 	},
+	{
+		inputs: [],
+		name: 'renounceOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'newOwner',
+				type: 'address',
+			},
+		],
+		name: 'transferOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
 ]
+
 export const web3 = new Web3(window.ethereum)
 
-export const marketAddress = '0x76063fc4792c834a97b6827F8A89F3F7110e6C3B'
-export const marketContract = new web3.eth.Contract(marketABI, marketAddress)
+export const exchangeAddress = '0x8365DCF831b810b05a624c4048962E52482bbeF5'
+export const exchangeContract = new web3.eth.Contract(exchangeABI, exchangeAddress)

@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20//IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 //v.10
-contract Market is Ownable {
+contract Exchange is Ownable {
     IERC721 public cardContract;
     IERC20 public coinContract;
     address private cardCA;
@@ -40,13 +40,13 @@ contract Market is Ownable {
             "You are not an owner of this card"
         );
 
-        Deal deal = new Deal(seller, _cardId, _price, cardCA);
-        emit NewDeal(seller, _cardId, _price, address(deal));
-        return address(deal);
+        Sale sale = new Sale(seller, _cardId, _price, cardCA);
+        emit NewDeal(seller, _cardId, _price, address(sale));
+        return address(sale);
     }
 }
 
-contract Deal {
+contract Sale {
     address private seller;
     uint256 private cardId;
     uint256 private price;
@@ -98,7 +98,6 @@ contract Deal {
         coinContract.transferFrom(buyer, seller, price);
 
         //2. NFT 소유권 이전
-        cardContract.transferFrom(seller, address(this), cardId);
         cardContract.transferFrom(address(this), buyer, cardId);
 
         //3. 거래 종료
@@ -123,7 +122,6 @@ contract Deal {
         coinContract.transfer(seller, price);
 
         //2. NFT 소유권 이전
-        cardContract.transferFrom(seller, address(this), cardId);
         cardContract.transferFrom(address(this), buyer, cardId);
 
         //3. 거래 종료
@@ -134,10 +132,9 @@ contract Deal {
         return cardId;
     }
 
-
     function cancelDeal() public payable duringDeal onlySeller returns (bool) {
         //거래에게 준 권한 취소
-        cardContract.setApprovalForAll(address(this), false);
+        cardContract.transferFrom(address(this), seller, cardId);
 
         //판매 상태를 완료로 전환
         dealState = false;
