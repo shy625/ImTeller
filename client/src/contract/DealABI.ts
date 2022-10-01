@@ -1,141 +1,191 @@
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
-//v5
+//v10
 const dealABI: AbiItem[] = [
 	{
-		"inputs": [
+		inputs: [
 			{
-				"internalType": "address",
-				"name": "_seller",
-				"type": "address"
+				internalType: 'address',
+				name: '_seller',
+				type: 'address',
 			},
 			{
-				"internalType": "uint256",
-				"name": "_cardId",
-				"type": "uint256"
+				internalType: 'uint256',
+				name: '_cardId',
+				type: 'uint256',
 			},
 			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
+				internalType: 'uint256',
+				name: '_price',
+				type: 'uint256',
 			},
 			{
-				"internalType": "address",
-				"name": "_cardAddress",
-				"type": "address"
-			}
+				internalType: 'address',
+				name: '_cardAddress',
+				type: 'address',
+			},
 		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		stateMutability: 'nonpayable',
+		type: 'constructor',
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		anonymous: false,
+		inputs: [
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "dealCA",
-				"type": "address"
+				indexed: false,
+				internalType: 'address',
+				name: 'dealCA',
+				type: 'address',
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "cardId",
-				"type": "uint256"
+				indexed: false,
+				internalType: 'uint256',
+				name: 'cardId',
+				type: 'uint256',
 			},
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "seller",
-				"type": "address"
-			}
+				indexed: false,
+				internalType: 'address',
+				name: 'seller',
+				type: 'address',
+			},
 		],
-		"name": "DealCanceled",
-		"type": "event"
+		name: 'DealCanceled',
+		type: 'event',
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		anonymous: false,
+		inputs: [
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "dealCA",
-				"type": "address"
+				indexed: false,
+				internalType: 'address',
+				name: 'dealCA',
+				type: 'address',
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "cardId",
-				"type": "uint256"
+				indexed: false,
+				internalType: 'uint256',
+				name: 'cardId',
+				type: 'uint256',
 			},
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "buyer",
-				"type": "address"
+				indexed: false,
+				internalType: 'address',
+				name: 'buyer',
+				type: 'address',
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
+				indexed: false,
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
 		],
-		"name": "DealEnded",
-		"type": "event"
+		name: 'DealEnded',
+		type: 'event',
 	},
 	{
-		"inputs": [],
-		"name": "cancelDeal",
-		"outputs": [
+		anonymous: false,
+		inputs: [
 			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
+				indexed: false,
+				internalType: 'uint256',
+				name: 'cardId',
+				type: 'uint256',
+			},
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'price',
+				type: 'uint256',
+			},
+			{
+				indexed: false,
+				internalType: 'address',
+				name: 'seller',
+				type: 'address',
+			},
+			{
+				indexed: false,
+				internalType: 'bool',
+				name: 'dealState',
+				type: 'bool',
+			},
+			{
+				indexed: false,
+				internalType: 'address',
+				name: 'owner',
+				type: 'address',
+			},
 		],
-		"stateMutability": "payable",
-		"type": "function"
+		name: 'information',
+		type: 'event',
 	},
 	{
-		"inputs": [],
-		"name": "cardContract",
-		"outputs": [
+		inputs: [],
+		name: 'cancelDeal',
+		outputs: [
 			{
-				"internalType": "contract IERC721",
-				"name": "",
-				"type": "address"
-			}
+				internalType: 'bool',
+				name: '',
+				type: 'bool',
+			},
 		],
-		"stateMutability": "view",
-		"type": "function"
+		stateMutability: 'payable',
+		type: 'function',
 	},
 	{
-		"inputs": [],
-		"name": "coinContract",
-		"outputs": [
+		inputs: [],
+		name: 'cardContract',
+		outputs: [
 			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
+				internalType: 'contract IERC721',
+				name: '',
+				type: 'address',
+			},
 		],
-		"stateMutability": "view",
-		"type": "function"
+		stateMutability: 'view',
+		type: 'function',
 	},
 	{
-		"inputs": [],
-		"name": "purchase",
-		"outputs": [
+		inputs: [],
+		name: 'coinContract',
+		outputs: [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
+				internalType: 'contract IERC20',
+				name: '',
+				type: 'address',
+			},
 		],
-		"stateMutability": "payable",
-		"type": "function"
-	}
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'getInfo',
+		outputs: [
+			{
+				internalType: 'bool',
+				name: '',
+				type: 'bool',
+			},
+		],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'purchase',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'payable',
+		type: 'function',
+	},
 ]
 export default dealABI
