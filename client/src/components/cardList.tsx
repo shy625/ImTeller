@@ -9,7 +9,7 @@ import { createCard, sellCard, purchaseCard, cancelDeal } from 'contract/API'
 import { allowedNodeEnvironmentFlags } from 'process'
 
 export default function CardList(props: any) {
-	const { cardList } = props
+	const { cardList, isCard, type } = props
 	const currentUser = useSelector((state: any) => state.currentUser)
 
 	const [connectedWallet, setConnectedWallet] = useState('')
@@ -81,12 +81,12 @@ export default function CardList(props: any) {
 				) : (
 					cardList.map((paint) => {
 						return (
-							<div
-								key={paint.paintId}
-								onClick={() => mintPaint(currentUser.wallet, paint.paintImageURL)}
-							>
-								<Paint paint={paint} />
-							</div>
+							// <div
+							// 	key={paint.paintId}
+							// 	onClick={() => mintPaint(currentUser.wallet, paint.paintImageURL)}
+							// >
+							<Paint paint={paint} key={paint.paintId} type={type} />
+							// </div>
 						)
 					})
 				)
