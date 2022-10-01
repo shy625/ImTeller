@@ -140,6 +140,10 @@ public class SocketController {
             public void run() {
                 // 시간 지나면 강제로 hand의 맨 앞 카드 제출
                 roomService.forcedCard(sessionId);
+                List<GameCardDto> gameCardList = roomService.getTable(sessionId);
+                // 선택한 게임카드들 전송
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/table", gameCardList);
+                // 다음페이즈로
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
                 phase3(sessionId);
             }
@@ -160,6 +164,10 @@ public class SocketController {
         // 모두가 제출했는지 여부 확인
         if (chk) {
             roomService.stopTimer(sessionId);
+            // 제출한 카드리스트 전송
+            List<GameCardDto> gameCardList = roomService.getTable(sessionId);
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/table", gameCardList);
+            // 다음페이즈로
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
             phase3(sessionId);
         }
@@ -274,7 +282,7 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/roominfo")
     public void getRoom(@DestinationVariable long sessionId) {
         Room room = roomService.getRoom(sessionId);
-        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/all", room);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/roominfo", room);
     }
 
 }
