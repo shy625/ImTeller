@@ -43,5 +43,4 @@ contract ClassicNFT is ERC721URIStorage, Ownable {
     function current() public view returns (uint256) {
         return Counters.current(_cardIds);
     }
-
 }

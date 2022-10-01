@@ -4,164 +4,151 @@ import Web3 from 'web3'
 //v9
 const marketABI: AbiItem[] = [
 	{
-		"inputs": [
+		inputs: [
 			{
-				"internalType": "address",
-				"name": "_cardAddress",
-				"type": "address"
-			}
+				internalType: 'address',
+				name: '_cardAddress',
+				type: 'address',
+			},
 		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		stateMutability: 'nonpayable',
+		type: 'constructor',
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		anonymous: false,
+		inputs: [
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "seller",
-				"type": "address"
+				indexed: false,
+				internalType: 'address',
+				name: 'seller',
+				type: 'address',
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "cardId",
-				"type": "uint256"
+				indexed: false,
+				internalType: 'uint256',
+				name: 'cardId',
+				type: 'uint256',
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
+				indexed: false,
+				internalType: 'uint256',
+				name: 'price',
+				type: 'uint256',
 			},
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "CA",
-				"type": "address"
-			}
+				indexed: false,
+				internalType: 'address',
+				name: 'dealAddress',
+				type: 'address',
+			},
 		],
-		"name": "NewDeal",
-		"type": "event"
+		name: 'NewDeal',
+		type: 'event',
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		anonymous: false,
+		inputs: [
 			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
+				indexed: true,
+				internalType: 'address',
+				name: 'previousOwner',
+				type: 'address',
 			},
 			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
+				indexed: true,
+				internalType: 'address',
+				name: 'newOwner',
+				type: 'address',
+			},
 		],
-		"name": "OwnershipTransferred",
-		"type": "event"
+		name: 'OwnershipTransferred',
+		type: 'event',
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		inputs: [],
+		name: 'cardContract',
+		outputs: [
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "CA",
-				"type": "address"
-			}
+				internalType: 'contract IERC721',
+				name: '',
+				type: 'address',
+			},
 		],
-		"name": "checkAddress",
-		"type": "event"
+		stateMutability: 'view',
+		type: 'function',
 	},
 	{
-		"inputs": [],
-		"name": "cardContract",
-		"outputs": [
+		inputs: [],
+		name: 'coinContract',
+		outputs: [
 			{
-				"internalType": "contract IERC721",
-				"name": "",
-				"type": "address"
-			}
+				internalType: 'contract IERC20',
+				name: '',
+				type: 'address',
+			},
 		],
-		"stateMutability": "view",
-		"type": "function"
+		stateMutability: 'view',
+		type: 'function',
 	},
 	{
-		"inputs": [],
-		"name": "coinContract",
-		"outputs": [
+		inputs: [
 			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_cardId",
-				"type": "uint256"
+				internalType: 'uint256',
+				name: '_cardId',
+				type: 'uint256',
 			},
 			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			}
+				internalType: 'uint256',
+				name: '_price',
+				type: 'uint256',
+			},
 		],
-		"name": "createDeal",
-		"outputs": [
+		name: 'createDeal',
+		outputs: [
 			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
+				internalType: 'address',
+				name: '',
+				type: 'address',
+			},
 		],
-		"stateMutability": "payable",
-		"type": "function"
+		stateMutability: 'payable',
+		type: 'function',
 	},
 	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
+		inputs: [],
+		name: 'owner',
+		outputs: [
 			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
+				internalType: 'address',
+				name: '',
+				type: 'address',
+			},
 		],
-		"stateMutability": "view",
-		"type": "function"
+		stateMutability: 'view',
+		type: 'function',
 	},
 	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		inputs: [],
+		name: 'renounceOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
 	},
 	{
-		"inputs": [
+		inputs: [
 			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
+				internalType: 'address',
+				name: 'newOwner',
+				type: 'address',
+			},
 		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
+		name: 'transferOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
 ]
 export const web3 = new Web3(window.ethereum)
 
-export const marketAddress = '0xd9145CCE52D386f254917e481eB44e9943F39138'
+export const marketAddress = '0x6e1F611074a81DbD9A8aFC19b4DC3b3BfD326BA5'
 export const marketContract = new web3.eth.Contract(marketABI, marketAddress)

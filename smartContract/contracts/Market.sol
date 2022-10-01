@@ -5,14 +5,18 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20//IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-//v.5
+//v.9
 contract Market is Ownable {
     IERC721 public cardContract;
     IERC20 public coinContract;
     address private cardCA;
 
-    event NewDeal(address seller, uint256 cardId, uint256 price);
-    event checkAddress(address CA);
+    event NewDeal(
+        address seller,
+        uint256 cardId,
+        uint256 price,
+        address dealAddress
+    );
 
     constructor(address _cardAddress) {
         coinContract = IERC20(0x0c54E456CE9E4501D2c43C38796ce3F06846C966);
@@ -37,9 +41,7 @@ contract Market is Ownable {
         );
 
         Deal deal = new Deal(seller, _cardId, _price, cardCA);
-        emit NewDeal(seller, _cardId, _price);
-        emit checkAddress(address(deal));
-
+        emit NewDeal(seller, _cardId, _price, address(deal));
         return address(deal);
     }
 }
@@ -102,7 +104,7 @@ contract Deal {
 
     /*
     카드 구매
-    warning: 함수 호출 전에 IERC20.approve로 코인송금 권한 부여 필요
+    warning: 함수 호출 전에 IERC20.transfer로 코인 송금하기
     */
     function transaction() public payable duringDeal returns (uint256) {
         address buyer = msg.sender;
@@ -140,7 +142,7 @@ contract Deal {
         _;
     }
     modifier onlySeller() {
-        require(msg.sender == seller, "Deal: You are not seller.");
+        require(msg.sender == seller, "Only Seller can cancel Sale");
         _;
     }
 }
