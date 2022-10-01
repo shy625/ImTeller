@@ -72,4 +72,8 @@ public class Art extends BaseEntity {
         this.owner = owner;
         this.ownerNickname = ownerNickname;
     }
+
+    public void updateEffect(Effect effect) {
+        this.effect = effect;
+    }
 }

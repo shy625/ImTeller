@@ -90,11 +90,28 @@ public class RoomService {
     @Transactional
     public HashMap<String, List<GameCardDto>> selectCards(long sessionId, SelectReqDto selectReqDto) {
         boolean chk = roomRepository.selectCards(sessionId, selectReqDto);
+        // 모두가 내면 firstHands 반환
         if (chk && roomRepository.getRoom(sessionId).getCards().size() == roomRepository.getRoom(sessionId).getPlayers().size()) {
             HashMap<String, List<GameCardDto>> firstHands = roomRepository.draw(sessionId);
             return firstHands;
         }
         else return null;
+    }
+
+    @Transactional
+    public List<GameCardDto> getTable(long sessionId) {
+        List<TableDto> tables = roomRepository.getRoom(sessionId).getTable();
+        // 테이블에서 GameCardDto정보만 제공
+        List<GameCardDto> gameCardList = new ArrayList<>();
+        for (TableDto table: tables) {
+            GameCardDto gameCard = GameCardDto.builder()
+                    .cardId(table.getCardId())
+                    .cardUrl(table.getCardUrl()).build();
+            gameCardList.add(gameCard);
+        }
+        // 한번 셔플
+        Collections.shuffle(gameCardList);
+        return gameCardList;
     }
 
     @Transactional
