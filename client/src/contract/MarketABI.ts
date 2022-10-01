@@ -1,161 +1,154 @@
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
-//v5
+//v10
 const marketABI: AbiItem[] = [
 	{
-		"inputs": [
+		inputs: [
 			{
-				"internalType": "address",
-				"name": "_cardAddress",
-				"type": "address"
-			}
+				internalType: 'address',
+				name: '_cardAddress',
+				type: 'address',
+			},
 		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		stateMutability: 'nonpayable',
+		type: 'constructor',
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		anonymous: false,
+		inputs: [
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "seller",
-				"type": "address"
+				indexed: false,
+				internalType: 'address',
+				name: 'seller',
+				type: 'address',
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "cardId",
-				"type": "uint256"
+				indexed: false,
+				internalType: 'uint256',
+				name: 'cardId',
+				type: 'uint256',
 			},
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "NewDeal",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
+				indexed: false,
+				internalType: 'uint256',
+				name: 'price',
+				type: 'uint256',
 			},
 			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
+				indexed: false,
+				internalType: 'address',
+				name: 'dealAddress',
+				type: 'address',
+			},
 		],
-		"name": "OwnershipTransferred",
-		"type": "event"
+		name: 'NewDeal',
+		type: 'event',
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		anonymous: false,
+		inputs: [
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "CA",
-				"type": "address"
-			}
-		],
-		"name": "checkAddress",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "cardContract",
-		"outputs": [
-			{
-				"internalType": "contract IERC721",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "coinContract",
-		"outputs": [
-			{
-				"internalType": "contract IERC20",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_cardId",
-				"type": "uint256"
+				indexed: true,
+				internalType: 'address',
+				name: 'previousOwner',
+				type: 'address',
 			},
 			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			}
+				indexed: true,
+				internalType: 'address',
+				name: 'newOwner',
+				type: 'address',
+			},
 		],
-		"name": "createDeal",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "payable",
-		"type": "function"
+		name: 'OwnershipTransferred',
+		type: 'event',
 	},
 	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
+		inputs: [],
+		name: 'cardContract',
+		outputs: [
 			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
+				internalType: 'contract IERC721',
+				name: '',
+				type: 'address',
+			},
 		],
-		"stateMutability": "view",
-		"type": "function"
+		stateMutability: 'view',
+		type: 'function',
 	},
 	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		inputs: [],
+		name: 'coinContract',
+		outputs: [
+			{
+				internalType: 'contract IERC20',
+				name: '',
+				type: 'address',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
 	},
 	{
-		"inputs": [
+		inputs: [
 			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
+				internalType: 'uint256',
+				name: '_cardId',
+				type: 'uint256',
+			},
+			{
+				internalType: 'uint256',
+				name: '_price',
+				type: 'uint256',
+			},
 		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
+		name: 'createDeal',
+		outputs: [
+			{
+				internalType: 'address',
+				name: '',
+				type: 'address',
+			},
+		],
+		stateMutability: 'payable',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'owner',
+		outputs: [
+			{
+				internalType: 'address',
+				name: '',
+				type: 'address',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'renounceOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'newOwner',
+				type: 'address',
+			},
+		],
+		name: 'transferOwnership',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
 ]
 export const web3 = new Web3(window.ethereum)
 
-export const marketAddress = '0x9EA403aD27C2f0DB63EDc986157B09393d43810e'
+export const marketAddress = '0xE5a2EB56e177d707336A375387Aed828982cf1e3'
 export const marketContract = new web3.eth.Contract(marketABI, marketAddress)
