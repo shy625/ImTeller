@@ -79,7 +79,7 @@ public class ArtController {
     }
 
     @PatchMapping("/paints/offvote/{id}")
-    @ApiOperation(value = "내 그림 투표 제출", notes = "내 그림을 투표에서 내린다")
+    @ApiOperation(value = "내 그림 투표 제출 해제", notes = "내 그림을 투표에서 내린다")
     public ResponseEntity<String> offVote (@PathVariable Long id, @RequestHeader(value="Authorization") String email) {
         boolean chk = artService.offVote(id, email);
         if (chk) return new ResponseEntity<String>("제출 해제 성공", HttpStatus.ACCEPTED);
@@ -87,14 +87,7 @@ public class ArtController {
     }
 
     @PatchMapping("/nft")
-    @ApiOperation(value="save TokenId", notes = "Save tokenId after success to Mint")
-    public ResponseEntity<ResponseDto> saveTokenId(@RequestBody NftReqDto nftReqDto){
-        artService.insertTokenId(nftReqDto.getArtId(), nftReqDto.getTokenId());
-        return new ResponseEntity<>(new ResponseDto("NFT tokenId 저장 성공"), HttpStatus.ACCEPTED);
-    }
-
-    @PatchMapping("/nft")
-    @ApiOperation(value="save TokenId", notes = "Save tokenId after success to Mint")
+    @ApiOperation(value="토큰 아이디 저장", notes = "민팅에 성공한 후에 토큰 아이디를 저장한다.")
     public ResponseEntity<ResponseDto> saveTokenId(@RequestBody NftReqDto nftReqDto){
         artService.insertTokenId(nftReqDto.getArtId(), nftReqDto.getTokenId());
         return new ResponseEntity<>(new ResponseDto("NFT tokenId 저장 성공"), HttpStatus.ACCEPTED);
