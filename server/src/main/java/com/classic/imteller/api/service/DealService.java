@@ -23,7 +23,7 @@ public class DealService {
 
     @Transactional
     public Long registerDeal(RegisterDealReqDto requestDto) {
-        Art art = artRepository.findById(requestDto.getArtId()).orElseThrow();
+        Art art = artRepository.findById(requestDto.getArtId()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         if (art.getTokenId() == null) {
             throw new CustomException((ErrorCode.BAD_REQUEST));
         }

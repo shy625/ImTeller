@@ -32,6 +32,7 @@ public class ArtService {
         for(Art card : allCards) {
             CardsResDto singleCard = CardsResDto.builder()
                     .cardId(card.getId())
+                    .tokenId(card.getTokenId())
                     .cardTitle(card.getTitle())
                     .cardImageURL(card.getUrl())
                     .description(card.getDescription())

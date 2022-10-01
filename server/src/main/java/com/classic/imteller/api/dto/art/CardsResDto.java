@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CardsResDto {
     private Long cardId;
+    private Long tokenId;
     private String cardTitle;
     private String cardImageURL;
     private String description;
