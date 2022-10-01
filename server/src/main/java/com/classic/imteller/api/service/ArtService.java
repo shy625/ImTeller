@@ -14,13 +14,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+
 @Service
 @RequiredArgsConstructor
 public class ArtService {
     private final ArtRepository artRepository;
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
+    private final EffectRepository effectRepository;
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
@@ -167,5 +171,45 @@ public class ArtService {
         Art art = artRepository.findByTokenId(tokenId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         User user = userRepository.findByNickname(owner).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         art.updateOwner(user, user.getNickname());
+    }
+
+    @Transactional
+    public void insertEffect(Long artId) {
+        Art art = artRepository.findById(artId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        // 등급뽑기
+        String grade;
+        int randomNum = (int)(Math.random() * 100);
+        if (randomNum >= 0 && randomNum < 5) grade = "S";
+        else if (randomNum >= 5 && randomNum < 35) grade = "A";
+        else grade = "B";
+
+        // 아이템 종류뽑기
+        long randomId;
+        int typeRandomNum = (int)(Math.random() * 100);
+        if (grade.equals("S")) {
+            if (typeRandomNum >= 0 && typeRandomNum < 30) randomId = 1;
+            else if (typeRandomNum >= 30 && typeRandomNum < 60) randomId = 2;
+            else if (typeRandomNum >= 60 && typeRandomNum < 75) randomId = 3;
+            else randomId = 4;
+        }
+        else if (grade.equals("A")) {
+            if (typeRandomNum >= 0 && typeRandomNum < 15) randomId = 5;
+            else if (typeRandomNum >= 15 && typeRandomNum < 35) randomId = 6;
+            else if (typeRandomNum >= 35 && typeRandomNum < 40) randomId = 7;
+            else if (typeRandomNum >= 40 && typeRandomNum < 55) randomId = 8;
+            else if (typeRandomNum >= 55 && typeRandomNum < 75) randomId = 9;
+            else randomId = 10;
+        }
+        else {
+            if (typeRandomNum >= 0 && typeRandomNum < 30) randomId = 11;
+            else if (typeRandomNum >= 30 && typeRandomNum < 60) randomId = 12;
+            else if (typeRandomNum >= 60 && typeRandomNum < 75) randomId = 13;
+            else randomId = 14;
+        }
+
+        // Effect 테이블에서 추출해서 art에 넣고 저장
+        Effect effect = effectRepository.findById(randomId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        art.updateEffect(effect);
+        artRepository.save(art);
     }
 }
