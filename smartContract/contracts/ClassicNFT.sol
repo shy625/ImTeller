@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract ClassicNFT is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _cardIds;
-    address admin = 0x3f317D1680B8B60da4323bbB1328a8F0DD44edfb;
+    address admin = 0xc37d13B5523C1D80bA15DDFA5Cd3bD1AbB482aaF;
 
     mapping(uint256 => string) tokenURIs;
 
