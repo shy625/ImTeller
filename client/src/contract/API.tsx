@@ -59,10 +59,10 @@ export const purchaseCard = async (dealId: any, walletAddress: any, wantedPrice:
 }
 
 //판매 취소
-export const cancelDeal = async () => {
-	const dealCA = '내가 살 카드의 거래 CA'
+export const cancelDeal = async (dealId: any) => {
+	const dealCA = dealId
 	const dealInstance = new web3.eth.Contract(dealABI, dealCA)
-	const wallet = 'wallet은 유저의 account Address'
+	const wallet = '0xc37d13b5523c1d80ba15ddfa5cd3bd1abb482aaf'
 	//내가 cardContract에 setapprovalforall false하고 dealInstance는 상태값 변화만 시키는 거로 바꾸기
 	const disapproval = await cardContract.methods
 		.setApprovalForAll(dealCA, false)

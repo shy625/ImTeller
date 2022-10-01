@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Card from 'components/card'
 import Paint from 'components/paint'
 
-import { createCard, sellCard, purchaseCard } from 'contract/API'
+import { createCard, sellCard, purchaseCard, cancelDeal } from 'contract/API'
 import { allowedNodeEnvironmentFlags } from 'process'
 
 export default function CardList(props: any) {
@@ -52,15 +52,22 @@ export default function CardList(props: any) {
 	const buyNft = async (dealId: any, walletAddress: any, wantedPrice: any) => {
 		purchaseCard(dealId, currentUser.wallet, 10)
 	}
+	const cancel = async (dealId: any) => {
+		cancelDeal(dealId)
+	}
 	let tempImg = 'https://imtellercard.s3.ap-northeast-2.amazonaws.com/20222729012744-하트.png'
 	return (
 		<div>
-			<button onClick={() => registerSale(currentUser.wallet, tempImg, 1, 13)}>
+			<button onClick={() => registerSale(currentUser.wallet, tempImg, 3, 13)}>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 판매하기
 			</button>
+			<button onClick={() => cancel('0xFc0a9e87D869a5F83a1B7ADFc8632EaD585BFc3C')}>
+				{/* <img src={tempImg} alt="" /> */}
+				판매취소
+			</button>
 			<button
-				onClick={() => buyNft('0xd491BAF8fe3e1600FBD512Cb8Cfd0bd7b7DFd8f9', currentUser.wallet, 10)}
+				onClick={() => buyNft('0xE8738b3057a697E90e8Ee365f0eBac09BEBf9F58', currentUser.wallet, 10)}
 			>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 구매하기
