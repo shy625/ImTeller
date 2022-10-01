@@ -100,6 +100,31 @@ contract Deal {
         return cardId;
     }
 
+    /*
+    카드 구매
+    warning: 함수 호출 전에 IERC20.approve로 코인송금 권한 부여 필요
+    */
+    function transaction() public payable duringDeal returns (uint256) {
+        address buyer = msg.sender;
+
+        //0.거래조건 확인
+        require(seller != buyer, "You can't buy your own Card");
+
+        //1.SSF 송금
+        coinContract.transferFrom(address(this), seller, price);
+
+        //2. NFT 소유권 이전
+        cardContract.transferFrom(seller, address(this), cardId);
+        cardContract.transferFrom(address(this), buyer, cardId);
+
+        //3. 거래 종료
+        dealState = false;
+
+        emit DealEnded(address(this), cardId, buyer, price);
+
+        return cardId;
+    }
+
     function cancelDeal() public payable duringDeal onlySeller returns (bool) {
         //거래에게 준 권한 취소
         cardContract.setApprovalForAll(address(this), false);

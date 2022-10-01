@@ -52,6 +52,22 @@ export const purchaseCard = async (dealId: any, walletAddress: any, wantedPrice:
   //   const price = '해당 카드 가격'
   const price = wantedPrice
   console.log('구매 시작')
+  const approvalToPay = await coinContract.methods.transfer(dealCA, price).send({ from: wallet })
+  console.log('권한 허용')
+  if (approvalToPay.status) {
+    return await dealInstance.methods.transaction().send({ from: wallet })
+  }
+}
+//Card 구매
+export const purchaseOrignal = async (dealId: any, walletAddress: any, wantedPrice: any) => {
+  //   const dealCA = '내가 살 카드의 거래 CA'
+  const dealCA = dealId
+  const dealInstance = new web3.eth.Contract(dealABI, dealCA)
+  //   const wallet = 'wallet은 유저의 account Address'
+  const wallet = walletAddress
+  //   const price = '해당 카드 가격'
+  const price = wantedPrice
+  console.log('구매 시작')
   const approvalToPay = await coinContract.methods.approve(dealCA, price).send({ from: wallet })
   console.log('권한 허용')
   if (approvalToPay.status) {

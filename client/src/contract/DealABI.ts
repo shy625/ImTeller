@@ -1,7 +1,7 @@
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
-//v5
+//v9
 const dealABI: AbiItem[] = [
 	{
 		"inputs": [
@@ -86,6 +86,32 @@ const dealABI: AbiItem[] = [
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "CA",
+				"type": "address"
+			}
+		],
+		"name": "check",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint104",
+				"name": "num",
+				"type": "uint104"
+			}
+		],
+		"name": "stage",
+		"type": "event"
+	},
+	{
 		"inputs": [],
 		"name": "cancelDeal",
 		"outputs": [
@@ -127,6 +153,19 @@ const dealABI: AbiItem[] = [
 	{
 		"inputs": [],
 		"name": "purchase",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "transaction",
 		"outputs": [
 			{
 				"internalType": "uint256",

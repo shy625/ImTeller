@@ -1,7 +1,7 @@
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
-//v5
+//v9
 const marketABI: AbiItem[] = [
 	{
 		"inputs": [
@@ -34,6 +34,12 @@ const marketABI: AbiItem[] = [
 				"internalType": "uint256",
 				"name": "price",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "CA",
+				"type": "address"
 			}
 		],
 		"name": "NewDeal",
@@ -157,5 +163,5 @@ const marketABI: AbiItem[] = [
 ]
 export const web3 = new Web3(window.ethereum)
 
-export const marketAddress = '0x9EA403aD27C2f0DB63EDc986157B09393d43810e'
+export const marketAddress = '0xd9145CCE52D386f254917e481eB44e9943F39138'
 export const marketContract = new web3.eth.Contract(marketABI, marketAddress)
