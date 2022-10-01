@@ -19,6 +19,7 @@ import saveIcon from 'assets/image/save.png'
 
 // style
 import { input, textarea, imgIcon } from 'style/commonStyle'
+import axios from 'axios'
 
 export default function Paint() {
   const navigate = useNavigate()
@@ -45,21 +46,44 @@ export default function Paint() {
   const [restore, setRestore] = useState([])
   const [index, setIndex] = useState(-1)
 
-  // 그림 수정용
-  let paintId: string
-  let paintProps: any
-
   useEffect(() => {
+    if (isEdit) {
+      setTitle(paint.paintTitle)
+      setContent(paint.content)
+    }
     const canvas = canvasRef.current
     canvas.width = CANVAS_WIDTH
     canvas.height = CANVAS_HEIGHT
     setCanvas(canvas)
-
+    if (!canvasRef) return
     const context = canvas.getContext('2d')
     contextRef.current = context
     setCtx(contextRef.current)
+
+    const img = new Image()
+    if (isEdit) {
+      // axios
+      //   .get(paint.paintImageURL)
+      //   .then((res) => console.log(res.data))
+      //   .then((blob) => {
+      //     console.log(blob)
+      //   })
+      // const url = URL.createObjectURL(paint.paintImageURL)
+      img.src = paint.paintImageURL
+      // img.crossOrigin = 'Anonymous'
+      img.onload = function () {
+        context.drawImage(img, 0, 0)
+      }
+    }
   }, [])
 
+  function loadImage() {
+    const img = new Image()
+    img.src = paint.paintImageURL
+    img.onload = function () {
+      ctx.drawImage(img, 0, 0)
+    }
+  }
   function start({ nativeEvent }) {
     if (!restore) {
       ctx.fillStyle = 'white'
@@ -159,7 +183,14 @@ export default function Paint() {
   }
   function savePic() {
     // 이름이나 설명이 비어있으면 안됨
-
+    if (!email) {
+      alert('로그인 해주세요')
+      return
+    }
+    if (!title) {
+      alert('제목은 비어있을 수 없습니다')
+      return
+    }
     let imgDataUrl = canvas.toDataURL('image/png')
 
     let imgData = atob(imgDataUrl.split(',')[1])
@@ -274,11 +305,13 @@ export default function Paint() {
                 placeholder="작품 제목"
                 type="text"
                 css={input}
+                value={title}
               />
               <textarea
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="작품 설명 작성"
                 css={textarea}
+                value={content}
               />
             </div>
             <div>
@@ -287,6 +320,11 @@ export default function Paint() {
               </button>
               <button css={'none' /*normalBtn*/}>취소</button>
             </div>
+            {isEdit ? (
+              <div>
+                <button onClick={loadImage}>원본 이미지 불러오기</button>
+              </div>
+            ) : null}
           </div>
           <canvas
             ref={canvasRef}

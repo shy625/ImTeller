@@ -33,6 +33,10 @@ export default function Header() {
       .catch((error) => {
         console.log(error)
       })
+    let email = localStorage.getItem('email')
+    if (email) {
+      dispatch(setEmail(email))
+    }
   }, [])
 
   return (
