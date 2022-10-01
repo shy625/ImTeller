@@ -54,18 +54,18 @@ export default function Mypage() {
     //   })
   }, [nick, nickname])
 
-  // useEffect(() => {
-  //   if (isMyMypage) {
-  //     art
-  //       .paintList({ nickname: nick })
-  //       .then((result) => {
-  //         dispatch(setPaintList(result.data))
-  //       })
-  //       .catch((error) => {
-  //         console.error(error)
-  //       })
-  //   }
-  // }, [isMyMypage])
+  useEffect(() => {
+    if (isMyMypage) {
+      art
+        .paintList({ nickname: nick })
+        .then((result) => {
+          dispatch(setPaintList(result.data))
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  }, [isMyMypage])
 
   const tabs = {
     0: <CardList cardList={cardList} isCard={true} type={0} />,
