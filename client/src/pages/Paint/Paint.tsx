@@ -295,6 +295,7 @@ export default function Paint() {
 												type="range"
 												min="1"
 												max="100"
+												defaultValue={lineWidth}
 											/>
 										</div>
 									)}

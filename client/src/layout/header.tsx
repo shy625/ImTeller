@@ -105,7 +105,7 @@ const loginCss = css({
 })
 const loginBtnCss = css({
 	margin: 5,
-	cursor: 'pointer',
+	cursor: "url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto",
 })
 const logoTitleCss = css({
 	fontFamily: 'Yeongdo-Rg',
@@ -113,5 +113,5 @@ const logoTitleCss = css({
 	textAlign: 'center',
 	margin: 20,
 	marginLeft: 40,
-	cursor: 'pointer',
+	cursor: "url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto",
 })

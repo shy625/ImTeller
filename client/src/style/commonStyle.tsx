@@ -1,23 +1,23 @@
 import { css } from '@emotion/react'
 
 // 와이어프레임에 나온 기본 버튼
-const normalBtn = css({
-	outline: 'none',
-	cursor: 'pointer',
-	border: 0,
-	padding: '6px 12px',
-	margin: '0px 10px 5px 10px',
-	color: '#1b5198',
-	backgroundColor: '#d1e4ff',
-	borderRadius: 12,
-	fontSize: 13,
-	width: '8em',
-	fontFamily: 'GongGothicMedium',
-})
+const normalBtn = css`
+	outline: 'none';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	border: 0;
+	padding: '6px 12px';
+	margin: '0px 10px 5px 10px';
+	color: '#1b5198';
+	backgroundcolor: '#d1e4ff';
+	borderradius: 12;
+	fontsize: 13;
+	width: '8em';
+	fontfamily: 'GongGothicMedium';
+`
 // text만 적혀있는 버튼
-const textBtn = css({
-	cursor: 'pointer',
-})
+const textBtn = css`
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+`
 const input = css({
 	padding: '10px 10px',
 	margin: 10,

@@ -63,7 +63,7 @@ const cardCss = css`
 		display: flex;
 		font-size: 1.5em;
 		color: rgb(88 199 250 / 0%);
-		cursor: pointer;
+		cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 		font-family: cursive;
 		z-index: 100;
 	}

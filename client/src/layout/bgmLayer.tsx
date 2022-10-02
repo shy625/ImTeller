@@ -1,5 +1,8 @@
+/** @jsxImportSource @emotion/react */
+
 import React, { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { css } from '@emotion/react'
 
 export default function BgmLayer(props: any) {
 	const bgm: any = useRef()
