@@ -22,6 +22,7 @@ export default function Card(props: any) {
 	} = props.card
 	const type = props.type
 	const dispatch = useDispatch()
+	console.log(props.card)
 
 	const selectedCards = useSelector((state: any) => state.selectedCards)
 	const [selected, setSelected] = useState(false)

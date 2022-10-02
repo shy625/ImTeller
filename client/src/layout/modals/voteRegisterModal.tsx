@@ -13,6 +13,8 @@ export default function VoteRegisterModal(props: any) {
 	const paintList = useSelector((state: any) => state.paintList)
 	const selectedPaint = useSelector((state: any) => state.selectedPaint)
 
+	console.log(selectedPaint)
+
 	const onSubmit = () => {
 		art
 			.paintRegist(selectedPaint)

@@ -53,13 +53,13 @@ const art = {
 	paintRegist(paintId) {
 		return api({
 			method: 'patch',
-			url: `${END_POINT}/onvote/${paintId}`,
+			url: `${END_POINT}/paints/onvote/${paintId}`,
 		})
 	},
 	cancelRegist(paintId) {
 		return api({
 			method: 'patch',
-			url: `${END_POINT}/offvote/${paintId}`,
+			url: `${END_POINT}/paints/offvote/${paintId}`,
 		})
 	},
 }

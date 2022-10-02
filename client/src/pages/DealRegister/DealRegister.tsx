@@ -47,6 +47,7 @@ export default function DealRegister() {
 		}
 		setInstantPrice(event.target.value)
 	}
+
 	const onSubmit = async () => {
 		if (isLoading) return alert('로딩중입니다.')
 		if (!selectedCard) {

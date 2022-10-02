@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
+import Web3 from 'web3'
 
 import art from 'actions/api/art'
 import { useModal } from 'actions/hooks/useModal'
@@ -72,6 +73,7 @@ export default function Paint(props: any) {
 			setModalState('alert')
 			return
 		}
+
 		const tokenId = await createCard(currentUser.wallet, paintImageURL)
 
 		art

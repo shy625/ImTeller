@@ -19,12 +19,13 @@ export const createCard = async (walletAddress: string, image: any) => {
 	A가 msg.sender의 지갑에서 SSF를 amount 만큼 옮기는걸 허가
 	*/
 	const approvalToPay = await coinContract.methods.approve(cardAddress, 10).send({ from: wallet })
+	console.log(approvalToPay)
 
 	let tokenId: any //uint256 민팅된 카드의 id(블록체인에서의 index)
 	if (approvalToPay.status) {
 		tokenId = await cardContract.methods.create(tokenURI).send({ from: wallet })
 	}
-	console.log(tokenId.events.Transfer.returnValues.tokenId)
+	console.log(tokenId)
 	return tokenId.events.Transfer.returnValues.tokenId
 }
 
