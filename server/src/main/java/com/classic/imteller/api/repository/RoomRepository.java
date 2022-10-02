@@ -75,13 +75,16 @@ public class RoomRepository {
     @Transactional
     public String exitRoom (long sessionId, ExitReqDto exitReqDto) {
         try {
-            // exit할때
-            // 나간사람이 방장이면 방장 바꾸기
             // 만약 1명뿐이라면 특수케이스
             if (roomList.get(sessionId).getPlayers().size() > 1) {
-                String nextLeader = roomList.get(sessionId).getPlayers().get(1);
-                if (nextLeader.equals(exitReqDto.getNickname())) nextLeader = roomList.get(sessionId).getPlayers().get(0);
-                roomList.get(sessionId).setLeader(nextLeader);
+                // 나간사람이 방장이면 방장 바꾸기
+                // 그게 아니면 바꿀 필요 없음
+                String originalLeader = roomList.get(sessionId).getLeader();
+                if (originalLeader.equals(exitReqDto.getNickname())) {
+                    // 맨 앞에 있는 사람이 방장이니까 다음 사람으로 바꿈
+                    String nextLeader = roomList.get(sessionId).getPlayers().get(1);
+                    roomList.get(sessionId).setLeader(nextLeader);
+                }
             }
             // players에서 없애기
             List<String> players = roomList.get(sessionId).getPlayers();
