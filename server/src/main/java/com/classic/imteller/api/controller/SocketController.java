@@ -11,9 +11,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.security.Principal;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -30,9 +28,7 @@ public class SocketController {
     // sessionId는 stomp에서 생성한 방의 sessionId
     @MessageMapping("/room/{sessionId}/join")
     public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
-        System.out.println(userSessionId + sessionId);
         Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
-        System.out.println(room);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
     }
 
@@ -256,17 +252,22 @@ public class SocketController {
     public void item(@DestinationVariable long sessionId, UseItemDto useItemDto) {
         roomService.useItem(sessionId, useItemDto);
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
+        // 누군가가 아이템을 사용했음을 모두에게 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/item", activatedItems);
+        // 아이템을 사용한 유저에게 자신의 아이템 상태를 다시 보내줌
+        List<ItemDto> myItems= roomRepository.getMyItems(sessionId, useItemDto.getNickname());
+        String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
+        template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정
     @MessageMapping("/room/{sessionId}/end")
     public void end(@DestinationVariable long sessionId) {
+        // DB에 점수 반영
+        roomService.updateExp(sessionId);
+
         // 각종 변수들 초기화
         roomService.gameEnd(sessionId);
-
-        // DB에 점수 반영
-        roomService.finalResult(sessionId);
 
         // 끝났음을 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "end");
