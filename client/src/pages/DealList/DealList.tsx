@@ -23,7 +23,7 @@ export default function DealList() {
 				<Search />
 				<button onClick={onMove}>판매 등록</button>
 				<div>
-					{dealList.map((deal) => (
+					{dealList.map((deal: any) => (
 						<Deal deal={deal} key={deal.dealId} />
 					))}
 				</div>
