@@ -14,7 +14,6 @@ import { setModalState } from 'store/modules/util'
 export default function Main() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	useBGM('main')
 
 	return (
 		<Layout>

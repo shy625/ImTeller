@@ -8,6 +8,7 @@ import { css } from '@emotion/react'
 import Loading from 'components/loading'
 
 import art from 'actions/api/art'
+import { setMyPageTab } from 'store/modules/user'
 import { setLoading } from 'store/modules/util'
 import { useModal } from 'actions/hooks/useModal'
 import { setPaintList, setSelectedPaint } from 'store/modules/art'
@@ -76,6 +77,7 @@ export default function Paint(props: any) {
 			.createNft({ artId: paintId, tokenId })
 			.then((result) => {
 				console.log(result)
+				dispatch(setMyPageTab(0))
 				setModalMsg('민팅에 성공했습니다.')
 				setModalState('alert')
 			})
@@ -86,33 +88,35 @@ export default function Paint(props: any) {
 
 	return (
 		<div>
-			<div css={type === 0 ? type0CSS : type === 1 && selected ? type1CSS : null} onClick={select}>
+			<div css={type === 1 && selected ? type1CSS : type === 0 ? type0CSS : null} onClick={select}>
 				<img style={{ height: '15vh' }} src={paintImageURL} alt="" />
-				<div css={!isVote && type === 0 ? type0InfoCSS : { display: 'none' }}>
-					<div
-						onClick={() => {
-							navigate('/paint', { state: { isEdit: true, paint: props.paint } })
-						}}
-					>
-						수정하기
+				{!isVote ? (
+					<div css={type === 0 ? type0InfoCSS : displayNoneCSS}>
+						<span
+							onClick={() => {
+								navigate('/paint', { state: { isEdit: true, paint: props.paint } })
+							}}
+						>
+							수정하기
+						</span>
+						<br />
+						<span
+							onClick={() => {
+								setModalState('voteRegister')
+							}}
+						>
+							출품하기
+						</span>
+						<br />
+						<span onClick={onMint}>민팅하기</span>
+						<br />
+						<span onClick={onDelete}>삭제하기</span>
 					</div>
-					<div
-						onClick={() => {
-							setModalState('voteRegister')
-						}}
-					>
-						출품하기
-					</div>
-					<div key={paintId} onClick={onMint}>
-						민팅하기
-					</div>
-					<div onClick={onDelete}>삭제하기</div>
-				</div>
-				<div css={type === 1 && selected ? type1InfoCSS : { display: 'none' }}>✔</div>
+				) : null}
 			</div>
+			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
 			{paintTitle}
 			{description}
-			{loading ? <Loading msg="거래가 진행중입니다. 잠시만 기다려주세요" /> : null}
 		</div>
 	)
 }

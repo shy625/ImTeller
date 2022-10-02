@@ -42,16 +42,21 @@ export default function Mypage() {
 			.catch((error) => {
 				console.error(error)
 			})
-		art
-			.cardList({ nickname: nick })
-			.then((result) => {
-				console.log(result.data)
-				dispatch(setCardList(result.data))
-			})
-			.catch((error) => {
-				console.error(error)
-			})
 	}, [nick, nickname])
+
+	useEffect(() => {
+		if (myPageTab === 0) {
+			art
+				.cardList({ nickname: nick })
+				.then((result) => {
+					console.log(result.data)
+					dispatch(setCardList(result.data))
+				})
+				.catch((error) => {
+					console.error(error)
+				})
+		}
+	}, [myPageTab])
 
 	useEffect(() => {
 		if (isMyMypage) {
@@ -76,7 +81,7 @@ export default function Mypage() {
 			<main>
 				여긴 mypage
 				<div>
-					<img src={profile} alt="" css={profileCss} />
+					<img src={profile} alt="" css={profileCSS} />
 					<div>{nickname}</div>
 					<div>Lv. {Math.floor(exp / 50) + 1}</div>
 					<div>

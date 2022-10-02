@@ -22,7 +22,6 @@ export default function Card(props: any) {
 	} = props.card
 	const type = props.type
 	const dispatch = useDispatch()
-	console.log(props.card)
 
 	const selectedCards = useSelector((state: any) => state.selectedCards)
 	const [selected, setSelected] = useState(false)
@@ -55,8 +54,8 @@ export default function Card(props: any) {
 					<div>{effectName}</div>
 					<div>{`${effectNum} ${effectPost}`}</div>
 				</div>
-				<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
 			</div>
+			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
 			{type === 0 ? (
 				<div>
 					{cardTitle}
@@ -91,8 +90,8 @@ const type1CSS = css`
 	filter: brightness(0.5);
 `
 const type1InfoCSS = css`
-	position: absolute;
-	top: 5vh;
+	position: relative;
+	top: -9vh;
 	left: 4.5vh;
 `
 const displayNoneCSS = css`

@@ -13,14 +13,18 @@ export default function VoteRegisterModal(props: any) {
 	const paintList = useSelector((state: any) => state.paintList)
 	const selectedPaint = useSelector((state: any) => state.selectedPaint)
 
-	console.log(selectedPaint)
-
 	const onSubmit = () => {
+		if (!selectedPaint) {
+			dispatch(setModalMsg('선택된 작품이 없습니다.'))
+			dispatch(setModalState('alert'))
+			return
+		}
+
 		art
 			.paintRegist(selectedPaint)
 			.then((result) => {
 				console.log(result)
-				if (result.data === '제출 완료') {
+				if (result.data === '제출 성공') {
 					dispatch(setModalMsg('출품이 완료되었습니다.'))
 					dispatch(setModalState('alert'))
 				} else {
