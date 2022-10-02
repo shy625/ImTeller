@@ -35,6 +35,7 @@ import {
 	modalState,
 	modalMsg,
 	modalResult,
+	loading,
 } from 'store/modules/util'
 
 export default configureStore({
@@ -56,10 +57,10 @@ export default configureStore({
 		description: description.reducer,
 		table: table.reducer,
 		endResult: endResult.reducer,
+		myPageTab: myPageTab.reducer,
 
 		cardList: cardList.reducer,
 		paintList: paintList.reducer,
-		selectedCard: selectedCard.reducer,
 		selectedPaint: selectedPaint.reducer,
 		dealList: dealList.reducer,
 		dealDetail: dealDetail.reducer,
@@ -74,6 +75,6 @@ export default configureStore({
 		modalState: modalState.reducer,
 		modalMsg: modalMsg.reducer,
 		modalResult: modalResult.reducer,
-		myPageTab: myPageTab.reducer,
+		loading: loading.reducer,
 	},
 })

@@ -17,13 +17,6 @@ const art = {
 			data: data,
 		})
 	},
-	createNft(data) {
-		return api({
-			method: 'patch',
-			url: `${END_POINT}/nft`,
-			data: data,
-		})
-	},
 	paintCreate(data) {
 		return api({
 			method: 'post',
@@ -47,7 +40,7 @@ const art = {
 	paintDelete(paintId) {
 		return api({
 			method: 'delete',
-			url: `${END_POINT}/paints/${paintId}`,
+			url: `${END_POINT}/paints/delete/${paintId}`,
 		})
 	},
 	paintRegist(paintId) {
@@ -60,6 +53,13 @@ const art = {
 		return api({
 			method: 'patch',
 			url: `${END_POINT}/offvote/${paintId}`,
+		})
+	},
+	updateNFTToken(data) {
+		return api({
+			method: 'patch',
+			url: `${END_POINT}/nft`,
+			data: data,
 		})
 	},
 }

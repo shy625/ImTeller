@@ -110,3 +110,14 @@ export const modalResult = createSlice({
 	},
 })
 export const { setModalResult } = modalResult.actions
+// 0이면 응답받지 않음, 1이면 확인, 2면 취소
+export const loading = createSlice({
+	name: 'loading',
+	initialState: false,
+	reducers: {
+		setLoading(state, action) {
+			return action.payload
+		},
+	},
+})
+export const { setLoading } = loading.actions
