@@ -2,6 +2,7 @@ package com.classic.imteller.api.repository;
 
 import com.classic.imteller.api.controller.UserController;
 import com.classic.imteller.api.dto.user.EditReqDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
 import org.hibernate.annotations.OnDelete;
@@ -17,6 +18,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length=256)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false, length=256)
     private String password;
 
@@ -35,6 +37,7 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "int default 0")
     private int lose;
 
+    @JsonIgnore
     @Column(length=256)
     private String wallet;
 
@@ -64,5 +67,9 @@ public class User extends BaseEntity {
 
     public void plusLose() {
         ++this.lose;
+    }
+
+    public void updateExp(int score) {
+        this.exp += score;
     }
 }

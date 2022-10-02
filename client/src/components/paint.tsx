@@ -1,6 +1,4 @@
-/** @jsxImportSource @emotion/react */
-
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
@@ -70,7 +68,7 @@ export default function Paint(props: any) {
 			dispatch(setLoading(false))
 			return
 		}
-
+		dispatch(setLoading(true))
 		const tokenId = await createCard(currentUser.wallet, paintImageURL).catch((error) => {
 			setModalMsg('민팅에 실패했습니다.')
 			setModalState('alert')
@@ -86,10 +84,12 @@ export default function Paint(props: any) {
 				dispatch(setLoading(false))
 				setModalMsg('민팅에 성공했습니다.')
 				setModalState('alert')
+				dispatch(setLoading(false))
 			})
 			.catch((error) => {
 				dispatch(setLoading(false))
 				console.error(error)
+				dispatch(setLoading(false))
 			})
 	}
 
@@ -122,6 +122,7 @@ export default function Paint(props: any) {
 				) : null}
 			</div>
 			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
+			<Loading msg={'민팅이 진행중입니다. 잠시만 기다려주세요'} />
 			{paintTitle}
 			{description}
 		</div>

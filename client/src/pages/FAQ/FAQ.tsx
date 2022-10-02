@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import Layout from 'layout/layout'
 import FaqTabNavbar from 'pages/FAQ/faqTabNav'
