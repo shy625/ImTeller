@@ -28,7 +28,7 @@ public interface ArtRepository extends JpaRepository<Art, Long> {
 
     void deleteById(Long id);
 
-    @Query(value="SELECT * FROM art WHERE owner_id = :email AND token_id IS NULL AND is_vote = true", nativeQuery = true)
+    @Query(value="SELECT * FROM art a JOIN user u WHERE u.email = :email AND token_id IS NULL AND is_vote = true", nativeQuery = true)
     List<Art> findAllByTokenIdAndIsVote(String email);
 
     @Query(value="SELECT * FROM art WHERE token_id IS NULL AND is_vote = true", nativeQuery = true)
