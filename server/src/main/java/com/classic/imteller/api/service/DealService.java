@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -42,15 +43,43 @@ public class DealService {
 
     @Transactional(readOnly = true)
     public List<SearchDealResDto> search(String keyword, int target, int sort, int status) {
-        List<Deal> dealList = null;
-        if (target == 0) {  // 작품명
-            dealList = dealRepository.searchByCardTitleLike(keyword);
-        } else if (target == 1) {   // 제작자
-            dealList = dealRepository.searchByCardDesignerLike(keyword);
-        } else if (target == 2) {   // 소유자(판매자)
-            dealList = dealRepository.searchByCardOwnerLike(keyword);
-        }
+        List<Deal> dealList = getDealList(keyword, target, status);
+        List<SearchDealResDto> resDtoList = getResponseDtoList(dealList);
+        sortList(sort, resDtoList);
+        return resDtoList;
+    }
 
+    private void sortList(int sort, List<SearchDealResDto> resDtoList) {
+        if (sort == 1) {
+            Collections.sort(resDtoList, (o1, o2) -> {
+                if (o1.getFinalBidPrice().equals(o2.getFinalBidPrice())) {
+                    return Long.compare(o2.getDealId(), o1.getDealId());
+                } else {
+                    return Integer.compare(o2.getFinalBidPrice(), o1.getFinalBidPrice());
+                }
+            });
+        } else if (sort == 2) {
+            Collections.sort(resDtoList, (o1, o2) -> {
+                if (o1.getFinalBidPrice().equals(o2.getFinalBidPrice())) {
+                    return Long.compare(o2.getDealId(), o1.getDealId());
+                } else {
+                    return Integer.compare(o1.getFinalBidPrice(), o2.getFinalBidPrice());
+                }
+            });
+        } else if (sort == 3) {
+            Collections.sort(resDtoList, (o1, o2) -> {
+                if (o1.getFinishedAt().equals(o2.getFinishedAt())) {
+                    return Long.compare(o2.getDealId(), o1.getDealId());
+                } else {
+                    return o2.getFinishedAt().compareTo(o1.getFinishedAt());
+                }
+            });
+        } else {
+            Collections.sort(resDtoList, (o1, o2) -> Long.compare(o2.getDealId(), o1.getDealId()));
+        }
+    }
+
+    private List<SearchDealResDto> getResponseDtoList(List<Deal> dealList) {
         List<SearchDealResDto> resDtoList = new ArrayList<>();
         for (Deal d : dealList) {
             Integer finalBidPrice = d.getLowPrice();
@@ -74,8 +103,47 @@ public class DealService {
                     .build();
             resDtoList.add(resDto);
         }
-
         return resDtoList;
+    }
+
+    private List<Deal> getDealList(String keyword, int target, int status) {
+        List<Deal> dealList = null;
+        if (keyword == null) {
+            if (status == 1) {
+                dealList = dealRepository.findByFinishedAtAfter(LocalDateTime.now());
+            } else if (status == 2) {
+                dealList = dealRepository.findByFinishedAtBefore(LocalDateTime.now());
+            } else {
+                dealList = dealRepository.findAll();
+            }
+        } else {
+            if (target == 1) {   // 제작자
+                if (status == 1) {
+                    dealList = dealRepository.searchByCardDesignerLikeAndFinishedAtAfter(keyword, LocalDateTime.now());
+                } else if (status == 2) {
+                    dealList = dealRepository.searchByCardDesignerLikeAndFinishedAtBefore(keyword, LocalDateTime.now());
+                } else {
+                    dealList = dealRepository.searchByCardDesignerLike(keyword);
+                }
+            } else if (target == 2) {   // 소유자(판매자)
+                if (status == 1) {
+                    dealList = dealRepository.searchByCardOwnerLikeAndFinishedAtAfter(keyword, LocalDateTime.now());
+                } else if (status == 2) {
+                    dealList = dealRepository.searchByCardOwnerLikeAndFinishedAtBefore(keyword, LocalDateTime.now());
+                } else {
+                    dealList = dealRepository.searchByCardOwnerLike(keyword);
+                }
+            } else {  // 작품명
+                if (status == 1) {
+                    dealList = dealRepository.searchByCardTitleLikeAndFinishedAtAfter(keyword, LocalDateTime.now());
+                } else if (status == 2) {
+                    dealList = dealRepository.searchByCardTitleLikeAndFinishedAtBefore(keyword, LocalDateTime.now());
+                } else {
+                    dealList = dealRepository.searchByCardTitleLike(keyword);
+                }
+            }
+        }
+        return dealList;
     }
 
     @Transactional(readOnly = true)
@@ -89,6 +157,7 @@ public class DealService {
                 .dealId(deal.getId())
                 .instantPrice(deal.getInstantPrice())
                 .finalBidPrice(finalBidPrice)
+                .dealAddress(deal.getDealAddress())
                 .tag(deal.getTag())
                 .finishedAt(deal.getFinishedAt())
                 .build();
@@ -99,6 +168,7 @@ public class DealService {
                 .cardTitle(card.getTitle())
                 .cardImageURL(card.getUrl())
                 .description(card.getDescription())
+                .tokenId(card.getTokenId())
                 .designerId(card.getDesigner().getId())
                 .designerNickname(card.getDesigner().getNickname())
                 .ownerId(card.getOwner().getId())
