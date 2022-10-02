@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'

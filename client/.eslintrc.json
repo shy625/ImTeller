@@ -15,7 +15,8 @@
 		"react/jsx-uses-vars": "error",
 		"semi": "off",
 		"space-before-function-paren": "off",
-		"react/no-unknown-property": ["error", { "ignore": ["css"] }]
+		"react/no-unknown-property": ["error", { "ignore": ["css"] }],
+		"react/react-in-jsx-scope": "off"
 	},
 	"settings": {
 		"react": {

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+/** @jsxImportSource @emotion/react */
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
@@ -16,7 +17,7 @@ export default function MakeRoomModal(props: any) {
 	const [roomName, setRoomName] = useState('')
 	const [isLocked, setIsLocked] = useState(false)
 	const [maxNum, setMaxNum] = useState(6)
-	const [type, setType] = useState('0')
+	const [type, setType] = useState('times')
 	const [typeNum, setTypeNum] = useState(10)
 	const [roomPw, setRoomPw] = useState('')
 
@@ -35,7 +36,7 @@ export default function MakeRoomModal(props: any) {
 		if (!isLocked) {
 			roomInfo.roomPw = ''
 		}
-
+		// console.log(roomInfo)
 		game
 			.make(roomInfo)
 			.then((result) => {
@@ -50,70 +51,103 @@ export default function MakeRoomModal(props: any) {
 
 	// 라디오 말고 버튼으로 만들면 더 꾸미기 좋을듯. radio 기본값 선택
 	return (
-		<div>
-			<form>
-				<input onChange={(e) => setRoomName(e.target.value)} placeholder="방 제목"></input>
-				<select onChange={(e: any) => setMaxNum(e.target.value)}>
-					<option value={0} disabled>
-						인원
-					</option>
-					<option value={3}>3명</option>
-					<option value={4}>4명</option>
-					<option value={5}>5명</option>
-					<option value={6}>6명</option>
-				</select>
-				<label>
-					<input onChange={() => setType('times')} type="radio" name="type"></input>
-					라운드
-				</label>
-				<label>
-					<input onChange={() => setType('score')} type="radio" name="type"></input>
-					점수
-				</label>
-				{!type ? (
-					<input onChange={(e: any) => setTypeNum(e.target.value)} placeholder="승리 점수"></input>
-				) : (
-					<select onChange={(e: any) => setTypeNum(e.target.value)}>
-						<option value={0} disabled>
-							승리 조건
-						</option>
-						<option value={2}>2라운드</option>
-						<option value={3}>3라운드</option>
-						<option value={4}>4라운드</option>
-						<option value={5}>5라운드</option>
-					</select>
-				)}
-				<label>
-					<input
-						onChange={(e) => setIsLocked(false)}
-						type="radio"
-						name="lock"
-						value={'공개'}
-					></input>
-					공개
-				</label>
-				<label>
-					<input onChange={(e) => setIsLocked(true)} type="radio" name="lock"></input>
-					비공개
-				</label>
-				{isLocked ? (
-					<input onChange={(e) => setRoomPw(e.target.value)} placeholder="비밀번호"></input>
-				) : null}
-			</form>
-
-			<button onClick={onSubmit}>완료</button>
-			<button
-				onClick={() => {
-					dispatch(setModalState(''))
-				}}
-			>
-				취소
-			</button>
+		<div css={makeRoomModalCSS}>
+			<div className="openModal modal">
+				<section>
+					<header>방 만들기</header>
+					<main>
+						<form>
+							<input onChange={(e) => setRoomName(e.target.value)} placeholder="방 제목"></input>
+							<select onChange={(e: any) => setMaxNum(e.target.value)}>
+								<option value={0} disabled selected>
+									인원
+								</option>
+								<option value={3}>3명</option>
+								<option value={4}>4명</option>
+								<option value={5}>5명</option>
+								<option value={6}>6명</option>
+							</select>
+							<div className="options">
+								<label>게입 타입</label>
+								<label>
+									<input
+										onChange={() => setType('score')}
+										type="radio"
+										name="type"
+										checked={type == 'score'}
+									></input>
+									점수
+								</label>
+								<label>
+									<input
+										onChange={() => setType('times')}
+										type="radio"
+										name="type"
+										checked={type == 'times'}
+									></input>
+									라운드
+								</label>
+							</div>
+							{type == 'score' ? (
+								<input
+									onChange={(e: any) => setTypeNum(e.target.value)}
+									placeholder="승리 점수"
+								></input>
+							) : (
+								<select onChange={(e: any) => setTypeNum(e.target.value)}>
+									<option value={0} disabled selected>
+										승리 조건
+									</option>
+									<option value={2}>2라운드</option>
+									<option value={3}>3라운드</option>
+									<option value={4}>4라운드</option>
+									<option value={5}>5라운드</option>
+								</select>
+							)}
+							<div className="options">
+								<label>공개 여부</label>
+								<label>
+									<input
+										onChange={(e) => setIsLocked(false)}
+										type="radio"
+										name="lock"
+										value={'공개'}
+										checked={!isLocked}
+									></input>
+									공개
+								</label>
+								<label>
+									<input
+										onChange={(e) => setIsLocked(true)}
+										type="radio"
+										name="lock"
+										checked={isLocked}
+									></input>
+									비공개
+								</label>
+							</div>
+							{isLocked ? (
+								<input onChange={(e) => setRoomPw(e.target.value)} placeholder="비밀번호"></input>
+							) : null}
+						</form>
+					</main>
+					<footer>
+						<button onClick={onSubmit}>생성</button>
+						<button
+							onClick={() => {
+								dispatch(setModalState(''))
+							}}
+						>
+							취소
+						</button>
+					</footer>
+				</section>
+			</div>
 		</div>
 	)
 }
 
-const makeRoomModal = css`
+const makeRoomModalCSS = css`
 	.modal {
 		display: none;
 		position: fixed;
@@ -128,7 +162,7 @@ const makeRoomModal = css`
 		width: 90%;
 		max-width: 450px;
 		margin: 0 auto;
-		border-radius: 0.3rem;
+		border-radius: 25px;
 		background-color: #fff;
 		/* 팝업이 열릴때 스르륵 열리는 효과 */
 		animation: modal-show 0.3s;
@@ -136,13 +170,41 @@ const makeRoomModal = css`
 	}
 	header {
 		position: relative;
-		padding: 16px 16px 0px 16px;
-		font-weight: 700;
+		padding: 25px 16px 16px 16px;
 		display: flex;
 		justify-content: center;
+		font-family: 'GongGothicMedium';
+		font-size: 25px;
 	}
 	main {
 		padding: 16px;
+		font-family: 'GmarketSansMedium';
+	}
+	form {
+		display: flex;
+		flex-direction: column;
+	}
+	input {
+		font-family: 'GmarketSansMedium';
+		border-radius: 50px;
+		border-color: #c9c9c9;
+		padding: 8px;
+		margin: 3px 10px 10px 10px;
+	}
+	select {
+		font-family: 'GmarketSansMedium';
+		border-radius: 50px;
+		border-color: #c9c9c9;
+		padding: 8px;
+		margin: 0px 10px 0px 10px;
+	}
+	.options {
+		margin: 20px 20px 3px 20px;
+		display: flex;
+		justify-content: space-between;
+	}
+	.options input {
+		border: none;
 	}
 	footer {
 		padding: 12px 16px;
@@ -161,6 +223,7 @@ const makeRoomModal = css`
 		border-radius: 12px;
 		font-size: 13px;
 		width: 8em;
+		font-family: 'GongGothicMedium';
 	}
 	.openModal {
 		display: flex;

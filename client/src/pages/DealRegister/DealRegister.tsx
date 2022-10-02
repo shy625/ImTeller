@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import Layout from 'layout/layout'
+import Loading from 'components/loading'
 
 import art from 'actions/api/art'
 import deal from 'actions/api/deal'
@@ -10,13 +11,16 @@ import { setCardList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 import connectMetaMask from 'actions/functions/connectMetaMask'
 import { sellCard } from 'contract/API'
+import { useAppSelector } from 'store/store'
 
 export default function DealRegister() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	const currentUser = useSelector((state: any) => state.currentUser)
-	const selectedCard = useSelector((state: any) => state.selectedCard)
+	const currentUser = useAppSelector((state) => state.currentUser)
+	const selectedCard = useAppSelector((state) => state.selectedCard)
+
+	console.log('selectedCard', selectedCard)
 
 	const [lowPrice, setLowPrice] = useState(0)
 	const [instantPrice, setInstantPrice] = useState(100000)
@@ -34,6 +38,10 @@ export default function DealRegister() {
 		})
 	}, [])
 
+	useEffect(() => {
+		console.log(selectedCard)
+	}, [selectedCard])
+
 	const lowPriceFilter = (event) => {
 		if (event.target.value > instantPrice) {
 			event.target.value = instantPrice
@@ -47,15 +55,14 @@ export default function DealRegister() {
 		}
 		setInstantPrice(event.target.value)
 	}
-
 	const onSubmit = async () => {
 		if (isLoading) return alert('로딩중입니다.')
+		console.log(selectedCard)
 		if (!selectedCard) {
 			setModalMsg('카드를 선택하세요')
 			setModalState('alert')
 			return setIsLoading(false)
 		}
-
 		const check: any = await connectMetaMask()
 		if (!check) {
 			alert('지갑을 연결하세요')
@@ -68,7 +75,10 @@ export default function DealRegister() {
 			setIsLoading(false)
 			return
 		}
-		const contractId = await sellCard(check, selectedCard.tokenId, instantPrice)
+		setIsLoading(true)
+		const contractId = await sellCard(check, selectedCard.tokenId, instantPrice).catch((err) => {
+			setIsLoading(false)
+		})
 		console.log(contractId)
 		const now = new Date()
 		let date: any = new Date(now.setDate(now.getDate() + day))
@@ -134,7 +144,7 @@ export default function DealRegister() {
 				<div>
 					<button onClick={() => navigate(-1)}>뒤로가기</button>
 					<button onClick={onSubmit}>등록하기</button>
-					{isLoading ? '로딩중' : null}
+					{isLoading ? <Loading msg={'민팅이 진행중입니다. 잠시만 기다려주세요'} /> : null}
 				</div>
 			</main>
 		</Layout>

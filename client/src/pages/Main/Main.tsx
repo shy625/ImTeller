@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
@@ -19,7 +19,9 @@ export default function Main() {
 		<Layout>
 			<div css={fullDisplay}>
 				<div className="cardLoc" css={cardCss}>
-					<div className="card">ImTeller</div>
+					<div className="card" onClick={() => useBGM('main')}>
+						ImTeller
+					</div>
 					<div className="blur"></div>
 				</div>
 				<button
@@ -28,13 +30,6 @@ export default function Main() {
 					}}
 				>
 					시작하기
-				</button>
-				<button
-					onClick={() => {
-						dispatch(setModalState('setting'))
-					}}
-				>
-					모달 띄우기
 				</button>
 				<Timer />
 			</div>
