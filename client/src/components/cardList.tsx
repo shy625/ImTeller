@@ -11,7 +11,7 @@ export default function CardList(props: any) {
 			{cardList.length ? (
 				isCard ? (
 					cardList.map((card) => {
-						return <Card card={card} type={1} key={card.cardId} />
+						return <Card card={card} type={type} key={card.cardId} />
 					})
 				) : (
 					cardList.map((paint) => {
