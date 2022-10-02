@@ -1,4 +1,3 @@
-//import
 import { coinContract } from './CoinABI'
 import { cardAddress, cardContract } from './CardABI'
 import { web3, marketContract } from './MarketABI'

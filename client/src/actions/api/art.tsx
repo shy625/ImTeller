@@ -24,6 +24,7 @@ const art = {
 			data: data,
 		})
 	},
+
 	paintCreate(data) {
 		return api({
 			method: 'post',
@@ -47,7 +48,7 @@ const art = {
 	paintDelete(paintId) {
 		return api({
 			method: 'delete',
-			url: `${END_POINT}/paints/${paintId}`,
+			url: `${END_POINT}/paints/delete/${paintId}`,
 		})
 	},
 	paintRegist(paintId) {

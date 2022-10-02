@@ -110,3 +110,14 @@ export const modalResult = createSlice({
 	},
 })
 export const { setModalResult } = modalResult.actions
+
+export const loading = createSlice({
+	name: 'loading',
+	initialState: false,
+	reducers: {
+		setLoading(state, action) {
+			return action.payload
+		},
+	},
+})
+export const { setLoading } = loading.actions

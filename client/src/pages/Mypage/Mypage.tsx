@@ -76,7 +76,7 @@ export default function Mypage() {
 			<main>
 				여긴 mypage
 				<div>
-					<img src={profile} alt="" css={profileCSS} />
+					<img src={profile} alt="" css={profileCss} />
 					<div>{nickname}</div>
 					<div>Lv. {Math.floor(exp / 50) + 1}</div>
 					<div>

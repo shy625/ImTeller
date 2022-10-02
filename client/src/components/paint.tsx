@@ -4,9 +4,11 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
-import Web3 from 'web3'
+
+import Loading from 'components/loading'
 
 import art from 'actions/api/art'
+import { setLoading } from 'store/modules/util'
 import { useModal } from 'actions/hooks/useModal'
 import { setPaintList, setSelectedPaint } from 'store/modules/art'
 import { createCard } from 'contract/API'
@@ -18,10 +20,11 @@ export default function Paint(props: any) {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	const currentUser = useSelector((state: any) => state.currentUser)
 	const selectedPaint = useSelector((state: any) => state.selectedPaint)
-	const modalResult = useSelector((state: any) => state.modalResult)
+	const loading = useSelector((state: any) => state.loading)
 	const [selected, setSelected] = useState(false)
+	const currentUser = useSelector((state: any) => state.currentUser)
+	const [connectedWallet, setConnectedWallet] = useState('')
 	const [setModalState, setModalMsg, setModalResult] = useModal('')
 
 	useEffect(() => {
@@ -36,31 +39,19 @@ export default function Paint(props: any) {
 	// type 1: 출품 모달에서 사용
 
 	const select = () => {
-		if (type === 1) {
-			dispatch(setSelectedPaint(paintId))
-		}
+		dispatch(setSelectedPaint(paintId))
 	}
 
 	const onDelete = () => {
 		const result = confirm('정말 삭제하시겠습니까?')
 		if (!result) return
 		art.paintDelete(paintId).then((result) => {
-			console.log(result)
+			art.paintList({ nickname: currentUser.nickname }).then((result) => {
+				console.log(result)
+				dispatch(setPaintList(result.data))
+			})
 		})
 	}
-
-	useEffect(() => {
-		if (modalResult === 1) {
-			art.paintDelete(paintId).then((result) => {
-				console.log(result)
-				art.paintList({ nickname: currentUser.nickname }).then((result) => {
-					console.log(result.data)
-					dispatch(setPaintList(result.data))
-				})
-			})
-		}
-		setModalResult(0)
-	}, [modalResult])
 
 	const onMint = async () => {
 		const check: any = await connectMetaMask()
@@ -74,12 +65,19 @@ export default function Paint(props: any) {
 			return
 		}
 
-		const tokenId = await createCard(currentUser.wallet, paintImageURL)
+		const tokenId = await createCard(currentUser.wallet, paintImageURL).catch((error) => {
+			setModalMsg('민팅에 실패했습니다.')
+			setModalState('alert')
+			dispatch(setLoading(false))
+			return
+		})
 
 		art
 			.createNft({ artId: paintId, tokenId })
 			.then((result) => {
 				console.log(result)
+				setModalMsg('민팅에 성공했습니다.')
+				setModalState('alert')
 			})
 			.catch((error) => {
 				console.error(error)
@@ -88,35 +86,33 @@ export default function Paint(props: any) {
 
 	return (
 		<div>
-			<div css={type === 1 && selected ? type1CSS : type === 0 ? type0CSS : null} onClick={select}>
+			<div css={type === 0 ? type0CSS : type === 1 && selected ? type1CSS : null} onClick={select}>
 				<img style={{ height: '15vh' }} src={paintImageURL} alt="" />
-				{!isVote ? (
-					<div css={type === 0 ? type0InfoCSS : displayNoneCSS}>
-						<span
-							onClick={() => {
-								navigate('/paint', { state: { isEdit: true, paint: props.paint } })
-							}}
-						>
-							수정하기
-						</span>
-						<br />
-						<span
-							onClick={() => {
-								setModalState('voteRegister')
-							}}
-						>
-							출품하기
-						</span>
-						<br />
-						<span onClick={onMint}>민팅하기</span>
-						<br />
-						<span onClick={onDelete}>삭제하기</span>
+				<div css={!isVote && type === 0 ? type0InfoCSS : { display: 'none' }}>
+					<div
+						onClick={() => {
+							navigate('/paint', { state: { isEdit: true, paint: props.paint } })
+						}}
+					>
+						수정하기
 					</div>
-				) : null}
+					<div
+						onClick={() => {
+							setModalState('voteRegister')
+						}}
+					>
+						출품하기
+					</div>
+					<div key={paintId} onClick={onMint}>
+						민팅하기
+					</div>
+					<div onClick={onDelete}>삭제하기</div>
+				</div>
+				<div css={type === 1 && selected ? type1InfoCSS : { display: 'none' }}>✔</div>
 			</div>
-			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
 			{paintTitle}
 			{description}
+			{loading ? <Loading msg="거래가 진행중입니다. 잠시만 기다려주세요" /> : null}
 		</div>
 	)
 }
