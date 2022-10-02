@@ -1,5 +1,3 @@
-import React from 'react'
-
 import user from 'actions/api/user'
 
 export default function PwCertificate(props: any) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import FaqGameTab from 'pages/FAQ/faqGameTab'
 import FaqDealTab from 'pages/FAQ/faqDealTab'
