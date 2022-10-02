@@ -105,6 +105,7 @@ public class SocketController {
     // 텔러 카드 제출 phase1
     public void phase1(long sessionId) {
         roomService.setPhase(sessionId, 1);
+        roomService.resetTurn(sessionId);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {

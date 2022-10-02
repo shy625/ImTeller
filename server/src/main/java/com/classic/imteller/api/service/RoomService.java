@@ -214,6 +214,11 @@ public class RoomService {
     }
 
     @Transactional
+    public void resetTurn(long sessionId) {
+        roomRepository.resetTurn(sessionId);
+    }
+
+    @Transactional
     public int getTurn(long sessionId) {
         return roomRepository.getTurn(sessionId);
     }

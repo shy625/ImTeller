@@ -248,6 +248,13 @@ public class RoomRepository {
         return basicHand;
     }
 
+    public void resetTurn(long sessionId) {
+        // 제출 카드, 선택 목록, 아이템 발동 내역 삭제
+        roomList.get(sessionId).setTable(new ArrayList<TableDto>());
+        roomList.get(sessionId).setChoice(new HashMap<String, Long>());
+        roomList.get(sessionId).setActivated(new ArrayList<EffectDto>());
+    }
+
     public void setPhase (long sessionId, int phase) {
         roomList.get(sessionId).setTurn(phase);
     }
