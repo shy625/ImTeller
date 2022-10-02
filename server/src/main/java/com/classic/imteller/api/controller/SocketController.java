@@ -30,9 +30,7 @@ public class SocketController {
     // sessionId는 stomp에서 생성한 방의 sessionId
     @MessageMapping("/room/{sessionId}/join")
     public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
-        System.out.println(userSessionId + sessionId);
         Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
-        System.out.println(room);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
     }
 
