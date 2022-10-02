@@ -64,7 +64,7 @@ export default function CardList(props: any) {
 				판매취소
 			</button>
 			<button
-				onClick={() => buyNft(currentUser.wallet, '0xc37d13B5523C1D80bA15DDFA5Cd3bD1AbB482aaF', 13)}
+				onClick={() => buyNft(currentUser.wallet, '0x66895EB10dF32CF8A869D07DF252f980cD6fEB2c', 10)}
 			>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 구매하기

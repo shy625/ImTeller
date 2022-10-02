@@ -55,6 +55,13 @@ const art = {
 			url: `${END_POINT}/offvote/${paintId}`,
 		})
 	},
+	updateNFTToken(data) {
+		return api({
+			method: 'patch',
+			url: `${END_POINT}/nft`,
+			data: data,
+		})
+	},
 }
 
 export default art

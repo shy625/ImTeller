@@ -6,10 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
-import { setSelectedPaint } from 'store/modules/art'
+import { setSelectedPaint, setPaintList } from 'store/modules/art'
+import { setLoading } from 'store/modules/util'
 import { useModal } from 'actions/hooks/useModal'
 
 import { createCard, sellCard, purchaseCard, cancelDeal } from 'contract/API'
+
+import Loading from './loading'
 
 export default function Paint(props: any) {
 	const { paintId, paintTitle, paintImageURL, description, isVote } = props.paint
@@ -19,6 +22,7 @@ export default function Paint(props: any) {
 
 	const selectedPaint = useSelector((state: any) => state.selectedPaint)
 	const modalResult = useSelector((state: any) => state.modalResult)
+	const loading = useSelector((state: any) => state.loading)
 	const [selected, setSelected] = useState(false)
 	const currentUser = useSelector((state: any) => state.currentUser)
 	const [connectedWallet, setConnectedWallet] = useState('')
@@ -40,12 +44,19 @@ export default function Paint(props: any) {
 	}
 
 	const onDelete = async () => {
-		setModalMsg('정말 삭제하시겠습니까?')
-		setModalState('confirm')
-		if (modalResult === 1) {
+		// setModalMsg('정말 삭제하시겠습니까?')
+		// setModalState('confirm')
+		const confirmed = confirm('정말 삭제하시겠습닉까?')
+		if (confirmed) {
 			art.paintDelete(paintId).then((result) => {
 				console.log(result)
-				// 삭제됐으면 그림 리스트 다시 받아오기
+				if (result.data == '삭제 성공') {
+					// 삭제됐으면 그림 리스트 다시 받아오기
+					console.log('라스트 새로 받아오기')
+					art.paintList({ nickname: currentUser.nickname }).then((result) => {
+						dispatch(setPaintList(result.data))
+					})
+				}
 			})
 			setModalResult(0)
 		}
@@ -58,20 +69,29 @@ export default function Paint(props: any) {
 			return false
 		} else {
 			window.ethereum.request({ method: 'eth_requestAccounts' }).then((result: any) => {
-				console.log('메타메스크 로그인 완료')
+				alert('로그인이 확인되었습니다.')
 				setConnectedWallet(result[0])
 				return true
 			})
 		}
 	}
 	const mintPaint = async (walletAddress: any, image: any) => {
-		console.log('민팅 함수 시작')
-		console.log(walletAddress)
 		const check = await metamaskConnected()
-		console.log(connectedWallet)
 		if (connectedWallet === currentUser.wallet) {
-			console.log('카드 팔아야지')
-			const selling = await createCard(walletAddress, image)
+			dispatch(setLoading(true))
+			const selling = await createCard(walletAddress, image).catch((error) => {
+				dispatch(setLoading(false))
+				alert('거래가 예기치못한 이유로 종료되었습니다. ')
+			})
+			if (selling) {
+				art.updateNFTToken({ artId: paintId, tokenId: selling }).then((result) => {
+					console.log(result)
+					if (result.data == 'NFT tokenId 저장 성공') {
+						console.log('카드 정보 업데이트 완료')
+					}
+				})
+				dispatch(setLoading(false))
+			}
 		}
 	}
 
@@ -104,15 +124,16 @@ export default function Paint(props: any) {
 					>
 						출품하기
 					</div>
-					<button key={paintId} onClick={() => mintPaint(currentUser.wallet, paintImageURL)}>
+					<div key={paintId} onClick={() => mintPaint(currentUser.wallet, paintImageURL)}>
 						민팅하기
-					</button>
+					</div>
 					<div onClick={onDelete}>삭제하기</div>
 				</div>
 				<div css={type === 1 && selected ? type1InfoCSS : { display: 'none' }}>✔</div>
 			</div>
 			{paintTitle}
 			{description}
+			{loading ? <Loading msg="거래가 진행중입니다. 잠시만 기다려주세요" /> : null}
 		</div>
 	)
 }
