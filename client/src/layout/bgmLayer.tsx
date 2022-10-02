@@ -16,6 +16,8 @@ export default function BgmLayer(props: any) {
 	const effectVolume = useSelector((state: any) => state.effectVolume)
 	const isEffectOn = useSelector((state: any) => state.isEffectOn)
 
+	const isMouseEffectOn = useSelector((state: any) => state.isMouseEffectOn)
+
 	useEffect(() => {
 		if (isBgmOn) {
 			bgm.current.load()
@@ -49,6 +51,9 @@ export default function BgmLayer(props: any) {
 	}, [effectSrc])
 
 	useEffect(() => {
+		setTimeout(() => {
+			bgm.current.load()
+		}, 3000)
 		return () => {
 			if (bgm.current) {
 				bgm.current.pause()
@@ -59,8 +64,14 @@ export default function BgmLayer(props: any) {
 		}
 	}, [])
 
+	const clickSound = () => {
+		if (!isMouseEffectOn) return
+		const audio = new Audio('assets/audio/click.wav')
+		audio.play()
+	}
+
 	return (
-		<div>
+		<div onClick={clickSound}>
 			{props.children}
 			<audio ref={bgm} autoPlay loop></audio>
 			<audio ref={effect} autoPlay></audio>

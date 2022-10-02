@@ -46,8 +46,18 @@ export default function SettingModal(props: any) {
 		<div>
 			<label htmlFor="isBgmOn">배경음악 재생</label>
 			<div id="isBgmOn">
-				<div onClick={() => dispatch(setIsBgmOn(true))}>On</div>
-				<div onClick={() => dispatch(setIsBgmOn(false))}>Off</div>
+				<div
+					onClick={() => dispatch(setIsBgmOn(true))}
+					style={isBgmOn ? { backgroundColor: 'white' } : null}
+				>
+					On
+				</div>
+				<div
+					onClick={() => dispatch(setIsBgmOn(false))}
+					style={!isBgmOn ? { backgroundColor: 'white' } : null}
+				>
+					Off
+				</div>
 			</div>
 			<label htmlFor="bgmVolume">배경음악 볼륨</label>
 			<input
@@ -64,8 +74,18 @@ export default function SettingModal(props: any) {
 			<hr />
 			<label htmlFor="isEffectOn">효과음 재생</label>
 			<div id="isEffectOn">
-				<div onClick={() => dispatch(setIsEffectOn(true))}>On</div>
-				<div onClick={() => dispatch(setIsEffectOn(false))}>Off</div>
+				<div
+					onClick={() => dispatch(setIsEffectOn(true))}
+					style={isEffectOn ? { backgroundColor: 'white' } : null}
+				>
+					On
+				</div>
+				<div
+					onClick={() => dispatch(setIsEffectOn(false))}
+					style={!isEffectOn ? { backgroundColor: 'white' } : null}
+				>
+					Off
+				</div>
 			</div>
 			<label htmlFor="effectVolume">효과음 볼륨</label>
 			<input
@@ -82,12 +102,22 @@ export default function SettingModal(props: any) {
 			<hr />
 			<label htmlFor="isMouseEffectOn">마우스 효과</label>
 			<div id="isMouseEffectOn">
-				<div onClick={() => dispatch(setIsMouseEffectOn(true))}>On</div>
-				<div onClick={() => dispatch(setIsMouseEffectOn(false))}>Off</div>
+				<div
+					onClick={() => dispatch(setIsMouseEffectOn(true))}
+					style={isMouseEffectOn ? { backgroundColor: 'white' } : null}
+				>
+					On
+				</div>
+				<div
+					onClick={() => dispatch(setIsMouseEffectOn(false))}
+					style={!isMouseEffectOn ? { backgroundColor: 'white' } : null}
+				>
+					Off
+				</div>
 			</div>
 			<hr />
-			<button onClick={() => dispatch(setModalState(''))}>확인</button>
 			<button onClick={onCancle}>취소</button>
+			<button onClick={() => dispatch(setModalState(''))}>확인</button>
 		</div>
 	)
 }

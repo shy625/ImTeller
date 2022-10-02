@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
 
 import Profile from 'components/profile'
+import Setting from 'components/setting'
+
 import { setCurrentUser, setEmail, setLogout } from 'store/modules/user'
 import user from 'actions/api/user'
 
-// style
 import logo from 'assets/image/logo2.png'
 import { textBtn } from 'style/commonStyle'
 
@@ -80,6 +81,7 @@ export default function Header() {
 						</div>
 					</div>
 				)}
+				<Setting />
 			</div>
 		</div>
 	)

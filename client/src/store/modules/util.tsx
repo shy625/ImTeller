@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const bgmSrc = createSlice({
 	name: 'bgmSrc',
-	initialState: 'assets/audio/mainBgm.mp3',
+	initialState: 'assets/audio/main.mp3',
 	reducers: {
 		setBgmSrc(state, action) {
 			return action.payload
@@ -16,7 +16,7 @@ export const isBgmOn = createSlice({
 	initialState: true,
 	reducers: {
 		setIsBgmOn(state, action) {
-			return !action.payload
+			return action.payload
 		},
 	},
 })
