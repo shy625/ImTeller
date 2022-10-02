@@ -34,7 +34,6 @@ export default function Paint() {
 	const location = useLocation()
 	const { isEdit, paint } = location.state
 
-	console.log(isEdit, paint)
 	const canvasRef = useRef(null)
 	const contextRef = useRef(null)
 	const colorRef = useRef(null)
