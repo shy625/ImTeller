@@ -66,7 +66,7 @@ export default function Paint(props: any) {
 			setModalState('alert')
 			return
 		}
-
+		dispatch(setLoading(true))
 		const tokenId = await createCard(currentUser.wallet, paintImageURL).catch((error) => {
 			setModalMsg('민팅에 실패했습니다.')
 			setModalState('alert')
@@ -81,9 +81,11 @@ export default function Paint(props: any) {
 				dispatch(setMyPageTab(0))
 				setModalMsg('민팅에 성공했습니다.')
 				setModalState('alert')
+				dispatch(setLoading(false))
 			})
 			.catch((error) => {
 				console.error(error)
+				dispatch(setLoading(false))
 			})
 	}
 
