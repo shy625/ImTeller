@@ -166,6 +166,10 @@ public class RoomRepository {
     public void start (long sessionId) {
         // 시작변수 변경
         roomList.get(sessionId).setStarted(true);
+
+        // 최초 텔러는 방장
+        String leader = roomList.get(sessionId).getLeader();
+        roomList.get(sessionId).setTeller(leader);
     }
 
     public boolean selectCards (long sessionId, SelectReqDto selectReqDto) {
