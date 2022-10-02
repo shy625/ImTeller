@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function FaqTabNav(props: any) {
 	const { setTabNo } = props
 
