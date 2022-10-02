@@ -17,6 +17,13 @@ const art = {
 			data: data,
 		})
 	},
+	createNft(data) {
+		return api({
+			method: 'patch',
+			url: `${END_POINT}/nft`,
+			data: data,
+		})
+	},
 	paintCreate(data) {
 		return api({
 			method: 'post',

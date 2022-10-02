@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
-import { setSelectedPaint } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
+import { setPaintList, setSelectedPaint } from 'store/modules/art'
+import { createCard } from 'contract/API'
+import connectMetaMask from 'actions/functions/connectMetaMask'
 
 export default function Paint(props: any) {
 	const { paintId, paintTitle, paintImageURL, description, isVote } = props.paint
@@ -15,6 +17,7 @@ export default function Paint(props: any) {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
+	const currentUser = useSelector((state: any) => state.currentUser)
 	const selectedPaint = useSelector((state: any) => state.selectedPaint)
 	const modalResult = useSelector((state: any) => state.modalResult)
 	const [selected, setSelected] = useState(false)
@@ -32,47 +35,84 @@ export default function Paint(props: any) {
 	// type 1: 출품 모달에서 사용
 
 	const select = () => {
-		dispatch(setSelectedPaint(paintId))
+		if (type === 1) {
+			dispatch(setSelectedPaint(paintId))
+		}
 	}
 
 	const onDelete = () => {
-		setModalMsg('정말 삭제하시겠습니까?')
-		setModalState('confirm')
+		const result = confirm('정말 삭제하시겠습니까?')
+		if (!result) return
+		art.paintDelete(paintId).then((result) => {
+			console.log(result)
+		})
 	}
 
 	useEffect(() => {
 		if (modalResult === 1) {
 			art.paintDelete(paintId).then((result) => {
 				console.log(result)
-				// 삭제됐으면 그림 리스트 다시 받아오기
+				art.paintList({ nickname: currentUser.nickname }).then((result) => {
+					console.log(result.data)
+					dispatch(setPaintList(result.data))
+				})
 			})
 		}
 		setModalResult(0)
 	}, [modalResult])
 
+	const onMint = async () => {
+		const check: any = await connectMetaMask()
+		if (!check) {
+			alert('지갑을 연결하세요')
+			return
+		}
+		if (check !== currentUser.wallet) {
+			setModalMsg('등록된 지갑주소와 동일한 메타마스크 지갑주소를 연결해야 합니다')
+			setModalState('alert')
+			return
+		}
+		const tokenId = await createCard(currentUser.wallet, paintImageURL)
+
+		art
+			.createNft({ artId: paintId, tokenId })
+			.then((result) => {
+				console.log(result)
+			})
+			.catch((error) => {
+				console.error(error)
+			})
+	}
+
 	return (
 		<div>
-			<div css={type === 0 ? type0CSS : type === 1 && selected ? type1CSS : null} onClick={select}>
+			<div css={type === 1 && selected ? type1CSS : type === 0 ? type0CSS : null} onClick={select}>
 				<img style={{ height: '15vh' }} src={paintImageURL} alt="" />
-				<div css={!isVote && type === 0 ? type0InfoCSS : { display: 'none' }}>
-					<div
-						onClick={() => {
-							navigate('/paint', { state: { isEdit: true, paint: props.paint } })
-						}}
-					>
-						수정하기
+				{!isVote ? (
+					<div css={type === 0 ? type0InfoCSS : displayNoneCSS}>
+						<span
+							onClick={() => {
+								navigate('/paint', { state: { isEdit: true, paint: props.paint } })
+							}}
+						>
+							수정하기
+						</span>
+						<br />
+						<span
+							onClick={() => {
+								setModalState('voteRegister')
+							}}
+						>
+							출품하기
+						</span>
+						<br />
+						<span onClick={onMint}>민팅하기</span>
+						<br />
+						<span onClick={onDelete}>삭제하기</span>
 					</div>
-					<div
-						onClick={() => {
-							setModalState('voteRegister')
-						}}
-					>
-						출품하기
-					</div>
-					<div onClick={onDelete}>삭제하기</div>
-				</div>
-				<div css={type === 1 && selected ? type1InfoCSS : { display: 'none' }}>✔</div>
+				) : null}
 			</div>
+			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
 			{paintTitle}
 			{description}
 		</div>
@@ -101,7 +141,10 @@ const type1CSS = css`
 	filter: brightness(0.5);
 `
 const type1InfoCSS = css`
-	position: absolute;
-	top: 6vh;
+	position: relative;
+	top: -9vh;
 	left: 4.5vh;
+`
+const displayNoneCSS = css`
+	display: none;
 `
