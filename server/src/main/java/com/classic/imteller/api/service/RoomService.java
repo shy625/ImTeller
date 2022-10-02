@@ -238,13 +238,18 @@ public class RoomService {
     }
 
     @Transactional
+    public void itemOneCardDraw(long sessionId, String nickname) {
+        roomRepository.itemOneCardDraw(sessionId, nickname);
+    }
+
+    @Transactional
     public HashMap<String, List<GameCardDto>> getHand(long sessionId) {
         return roomRepository.getHand(sessionId);
     }
 
     @Transactional
-    public void useItem (long sessionId, UseItemDto useItemDto) {
-        roomRepository.useItem(sessionId, useItemDto);
+    public int useItem (long sessionId, UseItemDto useItemDto) {
+        return roomRepository.useItem(sessionId, useItemDto);
     }
 
     @Transactional

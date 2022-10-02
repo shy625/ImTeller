@@ -508,7 +508,7 @@ public class RoomRepository {
         return roomList.get(sessionId).getHand();
     }
 
-    public void useItem(long sessionId, UseItemDto useItemDto){
+    public int useItem(long sessionId, UseItemDto useItemDto){
         // 아이템 쓴사람이 보유한 아이템 현황
         List<ItemDto> afterUsed = roomList.get(sessionId).getItems().get(useItemDto.getNickname());
 
@@ -522,19 +522,23 @@ public class RoomRepository {
         roomList.get(sessionId).getItems().replace(useItemDto.getNickname(), afterUsed);
 
         // 아이템의 적용
+        // 드로우 아이템은 중복적용 가능하게
         boolean chk = true;
         List<EffectDto> activated = roomList.get(sessionId).getActivated();
-        for (int i = 0; i < activated.size(); ++i) {
-            if (activated.get(i).getEffect() == useItemDto.getEffect()) {
-                if (activated.get(i).getEffectNum() >= useItemDto.getEffectNum()) {
-                    chk = false;
-                    break;
-                } else {
-                    activated.remove(i);
-                    break;
+        if (useItemDto.getEffect() != 3) {
+            for (int i = 0; i < activated.size(); ++i) {
+                if (activated.get(i).getEffect() == useItemDto.getEffect()) {
+                    if (activated.get(i).getEffectNum() >= useItemDto.getEffectNum()) {
+                        chk = false;
+                        break;
+                    } else {
+                        activated.remove(i);
+                        break;
+                    }
                 }
             }
         }
+
 
         // 추가해도 되는 상황이면 추가하기
         if (chk) {
@@ -545,6 +549,19 @@ public class RoomRepository {
                     .effectNum(useItemDto.getEffectNum()).build();
             activated.add(newEffect);
         }
+
+        return useItemDto.getEffect();
+    }
+
+    // 아이템을 사용한 카드 한장 드로우
+    public void itemOneCardDraw(long sessionId, String nickname) {
+        // 덱에서 맨 앞에꺼 빼오기
+        Long newCardId = roomList.get(sessionId).getDeck().remove(0);
+        Art art = artRepository.findById(newCardId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        GameCardDto tmpCard = GameCardDto.builder()
+                .cardId(newCardId)
+                .cardUrl(art.getUrl()).build();
+        roomList.get(sessionId).getHand().get(nickname).add(tmpCard);
     }
 
     public List<EffectDto> getActivated (long sessionId) {

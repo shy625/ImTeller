@@ -256,7 +256,16 @@ public class SocketController {
     // 아이템 사용 : 아이템의 사용을 서버에 알림
     @MessageMapping("/room/{sessionId}/item")
     public void item(@DestinationVariable long sessionId, UseItemDto useItemDto) {
-        roomService.useItem(sessionId, useItemDto);
+        int itemNum = roomService.useItem(sessionId, useItemDto);
+
+        // 드로우카드 썼다면 아이템 발동하고 그 사람에게 새로운 핸드 전달
+        if (itemNum == 3) {
+            roomService.itemOneCardDraw(sessionId, useItemDto.getNickname());
+            List<GameCardDto> newHand = roomService.getHand(sessionId).get(useItemDto.getNickname());
+            String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHand);
+        }
+
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
         // 누군가가 아이템을 사용했음을 모두에게 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/item", activatedItems);
