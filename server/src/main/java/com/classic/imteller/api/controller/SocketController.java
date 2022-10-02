@@ -241,6 +241,9 @@ public class SocketController {
             template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHands.get(player));
         }
 
+        // table에 있는 카드들을 덱의 맨 뒤로 돌리기
+        roomService.tableToDeck(sessionId);
+
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {

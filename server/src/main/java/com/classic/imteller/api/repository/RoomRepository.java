@@ -575,6 +575,15 @@ public class RoomRepository {
         return roomList.get(sessionId).getActivated();
     }
 
+    public void tableToDeck (long sessionId) {
+        List<TableDto> tables = roomList.get(sessionId).getTable();
+        // 한번 셔플한다
+        Collections.shuffle(tables);
+        for (TableDto table : tables) {
+            roomList.get(sessionId).getDeck().add(table.getCardId());
+        }
+    }
+
     @Transactional
     public void updateExp(long sessionId) {
         HashMap<String, Integer> score = roomList.get(sessionId).getScore();

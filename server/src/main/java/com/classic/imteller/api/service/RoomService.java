@@ -262,6 +262,12 @@ public class RoomService {
         return roomRepository.getActivated(sessionId);
     }
 
+    // 테이블에 있는 카드를 덱으로 이동
+    @Transactional
+    public void tableToDeck (long sessionId) {
+        roomRepository.tableToDeck(sessionId);
+    }
+
     // 변수 초기화
     @Transactional
     public void gameEnd(long sessionId) {
