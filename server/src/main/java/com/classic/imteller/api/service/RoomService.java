@@ -214,6 +214,11 @@ public class RoomService {
     }
 
     @Transactional
+    public void resetTurn(long sessionId) {
+        roomRepository.resetTurn(sessionId);
+    }
+
+    @Transactional
     public int getTurn(long sessionId) {
         return roomRepository.getTurn(sessionId);
     }
@@ -238,18 +243,29 @@ public class RoomService {
     }
 
     @Transactional
+    public void itemOneCardDraw(long sessionId, String nickname) {
+        roomRepository.itemOneCardDraw(sessionId, nickname);
+    }
+
+    @Transactional
     public HashMap<String, List<GameCardDto>> getHand(long sessionId) {
         return roomRepository.getHand(sessionId);
     }
 
     @Transactional
-    public void useItem (long sessionId, UseItemDto useItemDto) {
-        roomRepository.useItem(sessionId, useItemDto);
+    public int useItem (long sessionId, UseItemDto useItemDto) {
+        return roomRepository.useItem(sessionId, useItemDto);
     }
 
     @Transactional
     public List<EffectDto> getActivated (long sessionId) {
         return roomRepository.getActivated(sessionId);
+    }
+
+    // 테이블에 있는 카드를 덱으로 이동
+    @Transactional
+    public void tableToDeck (long sessionId) {
+        roomRepository.tableToDeck(sessionId);
     }
 
     // 변수 초기화

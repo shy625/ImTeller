@@ -63,6 +63,12 @@ public class SocketController {
             }
         }
 
+        // 세명 미만으로 남은 경우 처리
+        if (roomService.getRoom(sessionId).getPlayers().size() < 3) {
+            roomService.stopTimer(sessionId);
+            end(sessionId);
+        }
+
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/exit", room);
     }
 
@@ -99,6 +105,7 @@ public class SocketController {
     // 텔러 카드 제출 phase1
     public void phase1(long sessionId) {
         roomService.setPhase(sessionId, 1);
+        roomService.resetTurn(sessionId);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
@@ -234,6 +241,9 @@ public class SocketController {
             template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHands.get(player));
         }
 
+        // table에 있는 카드들을 덱의 맨 뒤로 돌리기
+        roomService.tableToDeck(sessionId);
+
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
@@ -250,7 +260,16 @@ public class SocketController {
     // 아이템 사용 : 아이템의 사용을 서버에 알림
     @MessageMapping("/room/{sessionId}/item")
     public void item(@DestinationVariable long sessionId, UseItemDto useItemDto) {
-        roomService.useItem(sessionId, useItemDto);
+        int itemNum = roomService.useItem(sessionId, useItemDto);
+
+        // 드로우카드 썼다면 아이템 발동하고 그 사람에게 새로운 핸드 전달
+        if (itemNum == 3) {
+            roomService.itemOneCardDraw(sessionId, useItemDto.getNickname());
+            List<GameCardDto> newHand = roomService.getHand(sessionId).get(useItemDto.getNickname());
+            String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHand);
+        }
+
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
         // 누군가가 아이템을 사용했음을 모두에게 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/item", activatedItems);
@@ -263,8 +282,10 @@ public class SocketController {
     // 끝 : 게임이 끝나고 최종 우승자를 선정
     @MessageMapping("/room/{sessionId}/end")
     public void end(@DestinationVariable long sessionId) {
+
+        // end시 player가 3명 이상일 때만 DB반영
         // DB에 점수 반영
-        roomService.updateExp(sessionId);
+        if (roomService.getRoom(sessionId).getPlayers().size() >= 3) roomService.updateExp(sessionId);
 
         // 각종 변수들 초기화
         roomService.gameEnd(sessionId);
