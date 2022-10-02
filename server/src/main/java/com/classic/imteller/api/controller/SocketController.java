@@ -262,11 +262,11 @@ public class SocketController {
     // 끝 : 게임이 끝나고 최종 우승자를 선정
     @MessageMapping("/room/{sessionId}/end")
     public void end(@DestinationVariable long sessionId) {
+        // DB에 점수 반영
+        roomService.updateExp(sessionId);
+
         // 각종 변수들 초기화
         roomService.gameEnd(sessionId);
-
-        // DB에 점수 반영
-        roomService.finalResult(sessionId);
 
         // 끝났음을 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "end");

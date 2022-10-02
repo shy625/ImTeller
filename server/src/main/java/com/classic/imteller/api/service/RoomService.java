@@ -255,8 +255,9 @@ public class RoomService {
     }
 
     @Transactional
-    public void finalResult(long sessionId) {
+    public void updateExp(long sessionId) {
         // DB에 경험치 반영 로직 - 이야기 더 해봐야함
         // roomRepository의 score를 받아서 적절하게 DB의 경험치(exp)에 반영해주면 된다
+        roomRepository.updateExp(sessionId);
     }
 }

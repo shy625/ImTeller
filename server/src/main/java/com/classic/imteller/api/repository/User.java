@@ -68,4 +68,8 @@ public class User extends BaseEntity {
     public void plusLose() {
         ++this.lose;
     }
+
+    public void updateExp(int score) {
+        this.exp += score;
+    }
 }
