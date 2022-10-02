@@ -157,6 +157,7 @@ public class DealService {
                 .dealId(deal.getId())
                 .instantPrice(deal.getInstantPrice())
                 .finalBidPrice(finalBidPrice)
+                .dealAddress(deal.getDealAddress())
                 .tag(deal.getTag())
                 .finishedAt(deal.getFinishedAt())
                 .build();
@@ -167,13 +168,14 @@ public class DealService {
                 .cardTitle(card.getTitle())
                 .cardImageURL(card.getUrl())
                 .description(card.getDescription())
+                .tokenId(card.getTokenId())
                 .designerId(card.getDesigner().getId())
                 .designerNickname(card.getDesigner().getNickname())
                 .ownerId(card.getOwner().getId())
                 .ownerNickname(card.getOwner().getNickname())
                 .grade(card.getEffect().getGrade())
                 .effect(card.getEffect().getEffect())
-                .effectDetail(card.getEffect().getDetail())
+                .effectNum(card.getEffect().getDetail())
                 .createdAt(card.getCreatedAt())
                 .build();
 
