@@ -28,6 +28,7 @@ public class DealDetailResDto {
         private Integer instantPrice;
         private Integer finalBidPrice;
         private String tag;
+        private String dealAddress;
         private LocalDateTime finishedAt;
     }
 
@@ -38,6 +39,7 @@ public class DealDetailResDto {
         private String cardTitle;
         private String cardImageURL;
         private String description;
+        private Long tokenId;
         private Long designerId;
         private String designerNickname;
         private Long ownerId;
