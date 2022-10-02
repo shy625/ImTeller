@@ -39,9 +39,10 @@ public class ArtService {
                     .cardTitle(card.getTitle())
                     .cardImageURL(card.getUrl())
                     .description(card.getDescription())
+                    .tokenId(card.getTokenId())
                     .grade(card.getEffect().getGrade())
                     .effect(card.getEffect().getEffect())
-                    .effectDetail(card.getEffect().getEffectNum())
+                    .effectNum(card.getEffect().getEffectNum())
                     .createdDT(card.getEffect().getCreatedAt())
                     .recentPrice(card.getRecentPrice()).build();
             data.add(singleCard);
@@ -60,6 +61,7 @@ public class ArtService {
                     .paintId(card.getId())
                     .paintTitle(card.getTitle())
                     .paintImageURL(card.getUrl())
+                    .isVote(card.getIsVote())
                     .content(card.getDescription()).build();
             data.add(singlePaint);
         }
@@ -115,7 +117,6 @@ public class ArtService {
             e.printStackTrace();
             return "에러가 발생했습니다.";
         }
-
     }
 
     @Transactional
