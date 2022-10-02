@@ -24,7 +24,7 @@ public class VoteController {
     @GetMapping("/paints")
     @ApiOperation(value = "투표중인 그림 반환", notes = "현재 투표중인 모든 그림을 전달받는 API")
     // detailResDto 재활용
-    public ResponseEntity<ResponseDto> allOnVotePaints(@RequestHeader(value="Authorization") String email) {
+    public ResponseEntity<ResponseDto> allOnVotePaints() {
         List<Art> Paints = voteService.getVotePaints();
         return new ResponseEntity<ResponseDto>(new ResponseDto(Paints), HttpStatus.ACCEPTED);
     }
