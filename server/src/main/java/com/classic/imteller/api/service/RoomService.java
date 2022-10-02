@@ -29,6 +29,10 @@ public class RoomService {
         // 인원수가 초과됐어도 방에 들어갈 수 없어야 함
         if (roomRepository.getRoom(sessionId).getPlayers().size() >= roomRepository.getRoom(sessionId).getMaxNum()) return null;
 
+        // 같은 닉네임을 가진 유저가 있어도 방에 들어갈 수 없어야 함
+        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+        if (players.contains(joinReqDto.getNickname())) return null;
+
         boolean isGood = roomRepository.joinRoom(userSessionId, sessionId, joinReqDto);
         if (isGood) {
             Room room = roomRepository.getRoom(sessionId);
@@ -255,8 +259,15 @@ public class RoomService {
     }
 
     @Transactional
-    public void finalResult(long sessionId) {
+    public void updateExp(long sessionId) {
         // DB에 경험치 반영 로직 - 이야기 더 해봐야함
         // roomRepository의 score를 받아서 적절하게 DB의 경험치(exp)에 반영해주면 된다
+        roomRepository.updateExp(sessionId);
     }
+
+    @Transactional
+    public List<ItemDto> getMyItems(long sessionId, String nickname) {
+        return roomRepository.getMyItems(sessionId, nickname);
+    }
+
 }

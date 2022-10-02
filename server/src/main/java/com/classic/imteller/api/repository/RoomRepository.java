@@ -539,6 +539,22 @@ public class RoomRepository {
         return roomList.get(sessionId).getActivated();
     }
 
+    @Transactional
+    public void updateExp(long sessionId) {
+        HashMap<String, Integer> score = roomList.get(sessionId).getScore();
+        List<String> players = roomList.get(sessionId).getPlayers();
+        // DB에 현재까지의 최종 score를 그대로 경험치로 반영한다
+        for (String player : players) {
+            User user = userRepository.findByNickname(player).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            user.updateExp(score.get(player));
+            userRepository.save(user);
+        }
+    }
+
+    public List<ItemDto> getMyItems(long sessionId, String nickname) {
+        return roomList.get(sessionId).getItems().get(nickname);
+    }
+
     public void gameEnd(long sessionId) {
         // 레디 초기화
         HashMap<String, Boolean> readyMap = roomList.get(sessionId).getReady();
