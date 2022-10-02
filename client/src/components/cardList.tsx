@@ -1,9 +1,13 @@
-import React from 'react'
-
 import Card from 'components/card'
 import Paint from 'components/paint'
 
-export default function CardList(props: any) {
+interface CardListProps {
+	cardList: any[]
+	isCard?: boolean
+	type?: number
+}
+
+export default function CardList(props: CardListProps) {
 	const { cardList, isCard, type } = props
 
 	return (
