@@ -406,8 +406,11 @@ public class RoomRepository {
     }
 
     public HashMap<String, Integer> scoreCalc(long sessionId) {
+        // 이번 턴의 점수
         HashMap<String, Integer> scores = new HashMap<>();
+        // 제출한 카드
         List<TableDto> tables = roomList.get(sessionId).getTable();
+        // 일반 유저 선택
         HashMap<String, Long> choice = roomList.get(sessionId).getChoice();
         String teller = roomList.get(sessionId).getTeller();
         List<String> players = roomList.get(sessionId).getPlayers();
@@ -423,11 +426,11 @@ public class RoomRepository {
         // 카드 주인에게 2점씩, 텔러꺼 골랐으면 6점
         for (String player : players) {
             // 텔러는 체크안함
-            if (player == teller) continue;
+            if (player.equals(teller)) continue;
             // 나머지케이스 체크
             for (TableDto table : tables) {
                 if (choice.get(player) == table.getCardId()){
-                    if (table.getNickname() == teller) {
+                    if (table.getNickname().equals(teller)) {
                         int newScore = scores.get(player) + 3;
                         scores.replace(player, newScore);
                         ++answerPlayer;
@@ -441,7 +444,9 @@ public class RoomRepository {
             }
         }
         // 텔러는 특별계산 - 모두가 못맞추거나 다맞추면 0점, 나머지 케이스는 6점
-        if (!(answerPlayer == normalPlayerNum || answerPlayer == 0)) {
+        if (answerPlayer == normalPlayerNum || answerPlayer == 0)  {
+            scores.replace(teller, 0);
+        }  else {
             scores.replace(teller, 6);
         }
 
