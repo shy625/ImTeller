@@ -9,11 +9,12 @@ import Loading from 'components/loading'
 
 import art from 'actions/api/art'
 import { setMyPageTab } from 'store/modules/user'
+import { setSelectedPaint, setPaintList } from 'store/modules/art'
 import { setLoading } from 'store/modules/util'
 import { useModal } from 'actions/hooks/useModal'
-import { setPaintList, setSelectedPaint } from 'store/modules/art'
-import { createCard } from 'contract/API'
 import connectMetaMask from 'actions/functions/connectMetaMask'
+
+import { createCard } from 'contract/API'
 
 export default function Paint(props: any) {
 	const { paintId, paintTitle, paintImageURL, description, isVote } = props.paint
