@@ -53,7 +53,7 @@ export default function CardList(props: any) {
 	let tempImg = 'https://imtellercard.s3.ap-northeast-2.amazonaws.com/20222729012744-하트.png'
 	return (
 		<div>
-			<button onClick={() => registerSale(currentUser.wallet, 3, 13)}>
+			<button onClick={() => registerSale(currentUser.wallet, 8, 10)}>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 판매하기
 			</button>
@@ -64,7 +64,7 @@ export default function CardList(props: any) {
 				판매취소
 			</button>
 			<button
-				onClick={() => buyNft(currentUser.wallet, '0xE8738b3057a697E90e8Ee365f0eBac09BEBf9F58', 10)}
+				onClick={() => buyNft(currentUser.wallet, '0xc37d13B5523C1D80bA15DDFA5Cd3bD1AbB482aaF', 13)}
 			>
 				{/* <img src={tempImg} alt="" /> */}
 				카드 구매하기

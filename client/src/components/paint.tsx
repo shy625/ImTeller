@@ -9,6 +9,8 @@ import art from 'actions/api/art'
 import { setSelectedPaint } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 
+import { createCard, sellCard, purchaseCard, cancelDeal } from 'contract/API'
+
 export default function Paint(props: any) {
 	const { paintId, paintTitle, paintImageURL, description, isVote } = props.paint
 	const type = props.type
@@ -18,6 +20,8 @@ export default function Paint(props: any) {
 	const selectedPaint = useSelector((state: any) => state.selectedPaint)
 	const modalResult = useSelector((state: any) => state.modalResult)
 	const [selected, setSelected] = useState(false)
+	const currentUser = useSelector((state: any) => state.currentUser)
+	const [connectedWallet, setConnectedWallet] = useState('')
 	const [setModalState, setModalMsg, setModalResult] = useModal('')
 
 	useEffect(() => {
@@ -35,7 +39,7 @@ export default function Paint(props: any) {
 		dispatch(setSelectedPaint(paintId))
 	}
 
-	const onDelete = () => {
+	const onDelete = async () => {
 		setModalMsg('정말 삭제하시겠습니까?')
 		setModalState('confirm')
 		if (modalResult === 1) {
@@ -44,6 +48,30 @@ export default function Paint(props: any) {
 				// 삭제됐으면 그림 리스트 다시 받아오기
 			})
 			setModalResult(0)
+		}
+	}
+
+	const metamaskConnected = () => {
+		if (!window.ethereum) {
+			// alert('메타마스크 설치해')
+			window.open('https://metamask.io/download.html')
+			return false
+		} else {
+			window.ethereum.request({ method: 'eth_requestAccounts' }).then((result: any) => {
+				console.log('메타메스크 로그인 완료')
+				setConnectedWallet(result[0])
+				return true
+			})
+		}
+	}
+	const mintPaint = async (walletAddress: any, image: any) => {
+		console.log('민팅 함수 시작')
+		console.log(walletAddress)
+		const check = await metamaskConnected()
+		console.log(connectedWallet)
+		if (connectedWallet === currentUser.wallet) {
+			console.log('카드 팔아야지')
+			const selling = await createCard(walletAddress, image)
 		}
 	}
 
@@ -76,6 +104,9 @@ export default function Paint(props: any) {
 					>
 						출품하기
 					</div>
+					<button key={paintId} onClick={() => mintPaint(currentUser.wallet, paintImageURL)}>
+						민팅하기
+					</button>
 					<div onClick={onDelete}>삭제하기</div>
 				</div>
 				<div css={type === 1 && selected ? type1InfoCSS : { display: 'none' }}>✔</div>
