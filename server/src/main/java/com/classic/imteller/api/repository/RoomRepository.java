@@ -551,6 +551,10 @@ public class RoomRepository {
         }
     }
 
+    public List<ItemDto> getMyItems(long sessionId, String nickname) {
+        return roomList.get(sessionId).getItems().get(nickname);
+    }
+
     public void gameEnd(long sessionId) {
         // 레디 초기화
         HashMap<String, Boolean> readyMap = roomList.get(sessionId).getReady();

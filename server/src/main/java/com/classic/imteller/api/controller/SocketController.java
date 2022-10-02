@@ -254,7 +254,12 @@ public class SocketController {
     public void item(@DestinationVariable long sessionId, UseItemDto useItemDto) {
         roomService.useItem(sessionId, useItemDto);
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
+        // 누군가가 아이템을 사용했음을 모두에게 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/item", activatedItems);
+        // 아이템을 사용한 유저에게 자신의 아이템 상태를 다시 보내줌
+        List<ItemDto> myItems= roomRepository.getMyItems(sessionId, useItemDto.getNickname());
+        String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
+        template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정

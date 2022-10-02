@@ -264,4 +264,10 @@ public class RoomService {
         // roomRepository의 score를 받아서 적절하게 DB의 경험치(exp)에 반영해주면 된다
         roomRepository.updateExp(sessionId);
     }
+
+    @Transactional
+    public List<ItemDto> getMyItems(long sessionId, String nickname) {
+        return roomRepository.getMyItems(sessionId, nickname);
+    }
+
 }
