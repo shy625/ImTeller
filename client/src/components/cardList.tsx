@@ -11,22 +11,19 @@ export default function CardList(props: any) {
 
 	return (
 		<div>
-			<button onClick={() => registerSale(currentUser.wallet, 8, 10)}>
-				{/* <img src={tempImg} alt="" /> */}
-				카드 판매하기
-			</button>
-			<button
-				onClick={() => cancel(currentUser.wallet, '0xFc0a9e87D869a5F83a1B7ADFc8632EaD585BFc3C')}
-			>
-				{/* <img src={tempImg} alt="" /> */}
-				판매취소
-			</button>
-			<button
+			{/* <button onClick={() => registerSale(currentUser.wallet, 8, 10)}> */}
+			{/* 카드 판매하기 */}
+			{/* </button> */}
+			{/* <button */}
+			{/* onClick={() => cancel(currentUser.wallet, '0xFc0a9e87D869a5F83a1B7ADFc8632EaD585BFc3C')} */}
+			{/* > */}
+			{/* 판매취소 */}
+			{/* </button> */}
+			{/* <button
 				onClick={() => buyNft(currentUser.wallet, '0x66895EB10dF32CF8A869D07DF252f980cD6fEB2c', 10)}
 			>
-				{/* <img src={tempImg} alt="" /> */}
 				카드 구매하기
-			</button>
+			</button> */}
 			{cardList.length ? (
 				isCard ? (
 					cardList.map((card) => {
