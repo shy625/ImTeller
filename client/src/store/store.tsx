@@ -37,8 +37,9 @@ import {
 	modalResult,
 	loading,
 } from 'store/modules/util'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
-export default configureStore({
+const store = configureStore({
 	reducer: {
 		email: email.reducer,
 		currentUser: currentUser.reducer,
@@ -64,6 +65,7 @@ export default configureStore({
 		selectedPaint: selectedPaint.reducer,
 		dealList: dealList.reducer,
 		dealDetail: dealDetail.reducer,
+		selectedCard: selectedCard.reducer,
 
 		bgmSrc: bgmSrc.reducer,
 		isBgmOn: isBgmOn.reducer,
@@ -78,3 +80,11 @@ export default configureStore({
 		loading: loading.reducer,
 	},
 })
+
+type RootState = ReturnType<typeof store.getState>
+type AppDispatch = typeof store.dispatch
+
+export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+
+export default store

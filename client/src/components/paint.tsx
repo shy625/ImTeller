@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -118,6 +116,7 @@ export default function Paint(props: any) {
 				) : null}
 			</div>
 			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
+			<Loading msg={'민팅이 진행중입니다. 잠시만 기다려주세요'} />
 			{paintTitle}
 			{description}
 		</div>
