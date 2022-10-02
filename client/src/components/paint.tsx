@@ -9,8 +9,6 @@ import art from 'actions/api/art'
 import { setSelectedPaint, setPaintList } from 'store/modules/art'
 import { setLoading } from 'store/modules/util'
 import { useModal } from 'actions/hooks/useModal'
-import { setPaintList, setSelectedPaint } from 'store/modules/art'
-import { createCard } from 'contract/API'
 import connectMetaMask from 'actions/functions/connectMetaMask'
 
 import { createCard, sellCard, purchaseCard, cancelDeal } from 'contract/API'
@@ -96,6 +94,20 @@ export default function Paint(props: any) {
 				dispatch(setLoading(false))
 			}
 		}
+	}
+	const registerSale = async (walletAddress: string, tokenId: any, instantPrice: any) => {
+		const check = await metamaskConnected()
+		console.log(connectedWallet)
+		if (connectedWallet === currentUser.wallet) {
+			console.log('카드 팔아야지')
+			const selling = await sellCard(walletAddress, tokenId, instantPrice)
+		}
+	}
+	const buyNft = async (walletAddress: any, dealAddress: any, instantPrice: any) => {
+		purchaseCard(currentUser.wallet, dealAddress, 10)
+	}
+	const cancel = async (walletAddress: any, dealAddress: any) => {
+		cancelDeal(currentUser.wallet, dealAddress)
 	}
 
 	// useEffect(() => {
