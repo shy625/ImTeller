@@ -175,7 +175,7 @@ public class DealService {
                 .ownerNickname(card.getOwner().getNickname())
                 .grade(card.getEffect().getGrade())
                 .effect(card.getEffect().getEffect())
-                .effectNum(card.getEffect().getDetail())
+                .effectNum(card.getEffect().getEffectNum())
                 .createdAt(card.getCreatedAt())
                 .build();
 

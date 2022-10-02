@@ -1,25 +1,22 @@
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { setBgmSrc, setIsBgmOn, setBgmVolume } from 'store/modules/util'
+import { useDispatch } from 'react-redux'
+import { setBgmSrc } from 'store/modules/util'
 
-export const useBGM = (props: any) => {
-  const dispatch = useDispatch()
-  const isBgmOn = useSelector((state: any) => state.isBgmOn)
+export const useBGM = (src: any) => {
+	const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (props.src) {
-      dispatch(setBgmSrc(props.src))
-    }
-    return () => {
-      dispatch(setBgmSrc('assets/audio/mainBgm.mp3'))
-    }
-  }, [])
+	const bgm = {
+		main: 'assets/audio/main.mp3',
+		gameList: 'assets/audio/gameList.mp3',
+		game: 'assets/audio/game/mp3',
+	}
 
-  const playPause = () => {
-    dispatch(setIsBgmOn(!isBgmOn))
-  }
-  const volumeControl = (volume) => {
-    dispatch(setBgmVolume(volume / 100))
-  }
-  return [playPause, volumeControl]
+	useEffect(() => {
+		if (src) {
+			dispatch(setBgmSrc(bgm[src]))
+		}
+		return () => {
+			dispatch(setBgmSrc(bgm['main']))
+		}
+	}, [])
 }

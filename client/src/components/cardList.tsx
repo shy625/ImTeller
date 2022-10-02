@@ -1,26 +1,30 @@
-import React from 'react'
-
 import Card from 'components/card'
 import Paint from 'components/paint'
 
-export default function CardList(props: any) {
-  const { cardList } = props
+interface CardListProps {
+	cardList: any[]
+	isCard?: boolean
+	type?: number
+}
 
-  return (
-    <div>
-      {cardList.length ? (
-        cardList[0].cardId ? (
-          cardList.map((card) => {
-            return <Card card={card} key={card.cardId} />
-          })
-        ) : (
-          cardList.map((paint) => {
-            return <Paint paint={paint} key={paint.paintId} />
-          })
-        )
-      ) : (
-        <div>작품이 없습니다</div>
-      )}
-    </div>
-  )
+export default function CardList(props: CardListProps) {
+	const { cardList, isCard, type } = props
+
+	return (
+		<div>
+			{cardList.length ? (
+				isCard ? (
+					cardList.map((card) => {
+						return <Card card={card} type={type} key={card.cardId} />
+					})
+				) : (
+					cardList.map((paint) => {
+						return <Paint paint={paint} type={type} key={paint.paintId} />
+					})
+				)
+			) : (
+				<div>{isCard ? 'NFT' : '그림'} 작품이 없습니다</div>
+			)}
+		</div>
+	)
 }

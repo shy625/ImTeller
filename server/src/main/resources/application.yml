@@ -1,5 +1,8 @@
-#mysql JPA
 spring:
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  #mysql JPA
   jpa:
     hibernate:
       naming:

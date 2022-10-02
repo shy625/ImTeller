@@ -39,6 +39,9 @@ public class Art extends BaseEntity {
     @Column(nullable = false, length=256)
     private String url;
 
+    @Column(nullable = false)
+    private Boolean isVote;
+
     @Column(nullable = false, length=20)
     private String title;
 
@@ -57,6 +60,10 @@ public class Art extends BaseEntity {
         this.description = desc;
     }
 
+    public void updateIsVote(boolean b) {
+        this.isVote = b;
+    }
+
     public void insertNft(Long tokenId){
         this.tokenId = tokenId;
     }
@@ -64,5 +71,9 @@ public class Art extends BaseEntity {
     public void updateOwner(User owner, String ownerNickname){
         this.owner = owner;
         this.ownerNickname = ownerNickname;
+    }
+
+    public void updateEffect(Effect effect) {
+        this.effect = effect;
     }
 }

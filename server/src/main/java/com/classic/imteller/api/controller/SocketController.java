@@ -14,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -32,7 +30,9 @@ public class SocketController {
     // sessionId는 stomp에서 생성한 방의 sessionId
     @MessageMapping("/room/{sessionId}/join")
     public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
+        System.out.println(userSessionId + sessionId);
         Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
+        System.out.println(room);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
     }
 
@@ -40,6 +40,33 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/exit")
     public void exit(@DestinationVariable("sessionId") long sessionId, ExitReqDto exitReqDto) {
         Room room = roomService.exitRoom(sessionId, exitReqDto);
+
+        // 텔러가 첫 페이즈에서 나간 경우
+        // 진짜면 텔러 바꾸고 종료조건 확인
+        if (roomService.getTurn(sessionId) == 1) {
+            roomService.setNextTeller(sessionId);
+            if (roomService.endCheck(sessionId)) {
+                roomService.stopTimer(sessionId);
+                end(sessionId);
+            }
+        }
+
+        // 일반 유저가 혼자만 제출 안한 상태로 두 번째 페이즈에서 나간 경우
+        // 해당 턴 종료조건 확인
+        if (roomService.getTurn(sessionId) == 2) {
+            if (roomService.checkStatus(sessionId)) {
+                phase3(sessionId);
+            }
+        }
+
+        // 일반 유저가 혼자만 선택 안한 상태로 세 번째 페이즈에서 나간 경우
+        // 해당 턴 종료조건 확인
+        if (roomService.getTurn(sessionId) == 3) {
+            if (roomService.checkStatus(sessionId)) {
+                phase4(sessionId);
+            }
+        }
+
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/exit", room);
     }
 
@@ -67,49 +94,182 @@ public class SocketController {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
                 template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", firstHands.get(player));
             }
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
+            phase1(sessionId);
         }
+    }
+
+    // 게임 진행
+    // 텔러 카드 제출 phase1
+    public void phase1(long sessionId) {
+        roomService.setPhase(sessionId, 1);
+        TimerTask m_task = new TimerTask() {
+            @Override
+            public void run() {
+                // 여기서 제출을 안한 경우 종료조건 확인 후에 끝내거나, 끝나지 않았다면 텔러를 다음 사람에게 넘김
+                if (roomService.endCheck(sessionId)) end(sessionId);
+                else {
+                    roomService.setNextTeller(sessionId);
+                    sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
+                    phase1(sessionId);
+                }
+            }
+        };
+        roomService.startTimer(sessionId, m_task);
     }
 
     // 텔러 카드선택 : 텔러가 선택한 카드와 텔러의 문장이 전달됨
     @MessageMapping("/room/{sessionId}/teller")
-    public void teller(@DestinationVariable long sessionId) {
+    public void teller(@DestinationVariable long sessionId, TellerDto tellerDto) {
+        roomService.setPhase(sessionId, 2);
+        roomService.saveTellerInfo(sessionId, tellerDto);
+        roomService.stopTimer(sessionId);
 
+        HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase2");
+        phase2(sessionId);
     }
 
-    // 드로우 : 카드를 사용해서 패가 줄었을 때 다시 채워주기
-    @MessageMapping("/room/{sessionId}/draw")
-    public void draw(@DestinationVariable long sessionId) {
+    // 유저 카드 제출 phase2
+    public void phase2(long sessionId) {
+        roomService.setPhase(sessionId, 2);
 
+        TimerTask m_task = new TimerTask() {
+            @Override
+            public void run() {
+                // 시간 지나면 강제로 hand의 맨 앞 카드 제출
+                roomService.forcedCard(sessionId);
+                List<GameCardDto> gameCardList = roomService.getTable(sessionId);
+                // 선택한 게임카드들 전송
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/table", gameCardList);
+                // 다음페이즈로
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
+                phase3(sessionId);
+            }
+        };
+        roomService.startTimer(sessionId, m_task);
     }
 
-    // 유저 카드선택 : 텔러를 제외한 유저들이 카드를 제출
+    // 유저 카드 제출 : 텔러를 제외한 유저들이 카드를 제출
     @MessageMapping("/room/{sessionId}/others")
-    public void others(@DestinationVariable long sessionId) {
+    public void others(@DestinationVariable long sessionId, UserCardDto userCardDto) {
+        // 제출한 카드 처리
+        boolean chk = roomService.getUserCard(sessionId, userCardDto);
 
+        // 유저들에게 제출 상태값 변경된거 전달
+        HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+
+        // 모두가 제출했는지 여부 확인
+        if (chk) {
+            roomService.stopTimer(sessionId);
+            // 제출한 카드리스트 전송
+            List<GameCardDto> gameCardList = roomService.getTable(sessionId);
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/table", gameCardList);
+            // 다음페이즈로
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
+            phase3(sessionId);
+        }
+    }
+
+    // 카드 선택 phase 3
+    public void phase3(long sessionId) {
+        roomService.setPhase(sessionId, 3);
+        // 모든 플레이어의 상태값을 초기화 시킨다
+        roomService.statusReset(sessionId);
+        // 텔러의 상태값은 true로 변경함
+        roomService.updateTellerStatus(sessionId);
+
+        TimerTask m_task = new TimerTask() {
+            @Override
+            public void run() {
+                roomService.randomSelect(sessionId);
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase4");
+                phase4(sessionId);
+            }
+        };
+        roomService.startTimer(sessionId, m_task);
     }
 
     // 유저 카드 선택 : 텔러를 제외한 유저들이 카드를 선택
     @MessageMapping("/room/{sessionId}/choice")
-    public void choice(@DestinationVariable long sessionId) {
+    public void choice(@DestinationVariable long sessionId, ChoiceCardDto choiceCardDto) {
+        boolean chk = roomService.choice(sessionId, choiceCardDto);
 
+        // 매번 선택할 때마다 누가 선택했는지 상태 List를 사용자에게 보내준다
+        HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+        // 모두가 제출했는지 여부 확인
+        if (chk) {
+            roomService.stopTimer(sessionId);
+            sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase4");
+            phase4(sessionId);
+        }
     }
 
-    // 해당 턴의 결과 : 유저 점수 업데이트
-    @MessageMapping("/room/{sessionId}/result")
-    public void result(@DestinationVariable long sessionId) {
+    public void phase4(long sessionId) {
+        roomService.setPhase(sessionId, 4);
 
+        // 이번 턴 유저의 점수를 result 소켓에 반환
+        HashMap<String, Integer> nowScore = roomService.scoreCalc(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/result", nowScore);
+
+        // 전체 합산 점수를 반환
+
+        HashMap<String, Integer> totalScore = roomService.getTotalScore(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/totalresult", totalScore);
+
+        // 게임 종료조건 확인
+        boolean chk = roomService.endCheck(sessionId);
+        if (chk) {
+            roomService.stopTimer(sessionId);
+            end(sessionId);
+        }
+
+        // 카드 드로우 - phase4 종료시 카드가 6장 미만이면 다시 1장 채워주기
+        roomService.oneCardDraw(sessionId);
+
+        // 드로우된 카드상태를 각 유저에게 전달하기
+        HashMap<String, List<GameCardDto>> newHands = roomService.getHand(sessionId);
+        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+        for (String player : players) {
+            String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHands.get(player));
+        }
+
+        TimerTask m_task = new TimerTask() {
+            @Override
+            public void run() {
+                roomService.statusReset(sessionId);
+                HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
+                phase1(sessionId);
+            }
+        };
+        roomService.startTimer(sessionId, m_task);
     }
 
     // 아이템 사용 : 아이템의 사용을 서버에 알림
     @MessageMapping("/room/{sessionId}/item")
-    public void item(@DestinationVariable long sessionId) {
-
+    public void item(@DestinationVariable long sessionId, UseItemDto useItemDto) {
+        roomService.useItem(sessionId, useItemDto);
+        List<EffectDto> activatedItems = roomService.getActivated(sessionId);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/item", activatedItems);
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정
     @MessageMapping("/room/{sessionId}/end")
     public void end(@DestinationVariable long sessionId) {
+        // 각종 변수들 초기화
+        roomService.gameEnd(sessionId);
 
+        // DB에 점수 반영
+        roomService.finalResult(sessionId);
+
+        // 끝났음을 알림
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "end");
     }
 
     // 채팅 : 채팅 보내기
@@ -122,7 +282,7 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/roominfo")
     public void getRoom(@DestinationVariable long sessionId) {
         Room room = roomService.getRoom(sessionId);
-        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/all", room);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/roominfo", room);
     }
 
 }

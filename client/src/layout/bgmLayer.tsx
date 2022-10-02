@@ -1,41 +1,80 @@
+/** @jsxImportSource @emotion/react */
+
 import React, { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { css } from '@emotion/react'
 
 export default function BgmLayer(props: any) {
-  const ref: any = useRef()
+	const bgm: any = useRef()
+	const effect: any = useRef()
 
-  const bgmSrc = useSelector((state: any) => state.bgmSrc)
-  const bgmVolume = useSelector((state: any) => state.bgmVolume)
-  const isBgmOn = useSelector((state: any) => state.isBgmOn)
+	const bgmSrc = useSelector((state: any) => state.bgmSrc)
+	const bgmVolume = useSelector((state: any) => state.bgmVolume)
+	const isBgmOn = useSelector((state: any) => state.isBgmOn)
 
-  useEffect(() => {
-    if (isBgmOn) {
-      ref.current.load()
-    } else {
-      ref.current.pause()
-    }
-  }, [isBgmOn])
+	const effectSrc = useSelector((state: any) => state.effectSrc)
+	const effectVolume = useSelector((state: any) => state.effectVolume)
+	const isEffectOn = useSelector((state: any) => state.isEffectOn)
 
-  useEffect(() => {
-    ref.current.volume = bgmVolume / 100
-  }, [bgmVolume])
+	const isMouseEffectOn = useSelector((state: any) => state.isMouseEffectOn)
 
-  useEffect(() => {
-    ref.current.src = bgmSrc
-  }, [bgmSrc])
+	useEffect(() => {
+		if (isBgmOn) {
+			bgm.current.load()
+		} else {
+			bgm.current.pause()
+		}
+	}, [isBgmOn])
 
-  useEffect(() => {
-    return () => {
-      if (ref.current) {
-        ref.current.pause()
-      }
-    }
-  }, [])
+	useEffect(() => {
+		bgm.current.volume = bgmVolume / 100
+	}, [bgmVolume])
 
-  return (
-    <div>
-      {props.children}
-      <audio ref={ref} loop controls></audio>
-    </div>
-  )
+	useEffect(() => {
+		bgm.current.src = bgmSrc
+	}, [bgmSrc])
+
+	useEffect(() => {
+		if (isEffectOn) {
+			effect.current.load()
+		} else {
+			effect.current.pause()
+		}
+	}, [isEffectOn])
+
+	useEffect(() => {
+		effect.current.volume = effectVolume / 100
+	}, [effectVolume])
+
+	useEffect(() => {
+		effect.current.src = effectSrc
+	}, [effectSrc])
+
+	useEffect(() => {
+		setTimeout(() => {
+			bgm.current.load()
+		}, 3000)
+		return () => {
+			if (bgm.current) {
+				bgm.current.pause()
+			}
+			if (effect.current) {
+				effect.current.pause()
+			}
+		}
+	}, [])
+
+	const clickSound = () => {
+		if (!isMouseEffectOn) return
+		const audio = new Audio('assets/audio/click.wav')
+		audio.play()
+	}
+
+	return (
+		<div onClick={clickSound}>
+			{props.children}
+			<audio ref={bgm} autoPlay loop></audio>
+			<audio ref={effect} autoPlay></audio>
+		</div>
+	)
 }

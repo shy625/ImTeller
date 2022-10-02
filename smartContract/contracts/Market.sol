@@ -5,13 +5,18 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20//IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
+//v.10
 contract Market is Ownable {
     IERC721 public cardContract;
     IERC20 public coinContract;
     address private cardCA;
 
-    event NewDeal(address seller, uint256 cardId, uint256 price);
-    event checkAddress(address CA);
+    event NewDeal(
+        address seller,
+        uint256 cardId,
+        uint256 price,
+        address dealAddress
+    );
 
     constructor(address _cardAddress) {
         coinContract = IERC20(0x0c54E456CE9E4501D2c43C38796ce3F06846C966);
@@ -22,7 +27,7 @@ contract Market is Ownable {
     /*
     @params cardId- db의 token_id, price - 판매가격
     @return 신규생성된 거래CA
-    warning: 거래 생성 후에 프론트에서 return 받은 address에 card 소유권 권한 부여 setapproval 필요.
+    warning: 거래 생성 후에 프론트에서 return 받은 deal address에 card 소유권 변경 권한 부여 setapproval 필요.
     */
     function createDeal(uint256 _cardId, uint256 _price)
         public
@@ -36,9 +41,7 @@ contract Market is Ownable {
         );
 
         Deal deal = new Deal(seller, _cardId, _price, cardCA);
-        emit NewDeal(seller, _cardId, _price);
-        emit checkAddress(address(deal));
-
+        emit NewDeal(seller, _cardId, _price, address(deal));
         return address(deal);
     }
 }
@@ -59,6 +62,7 @@ contract Deal {
         address buyer,
         uint256 amount
     );
+    event information(uint cardId, uint price, address seller, bool dealState, address owner);
 
     constructor(
         address _seller,
@@ -72,6 +76,12 @@ contract Deal {
         cardId = _cardId;
         price = _price;
         seller = _seller;
+    }
+
+    function getInfo() public returns(bool){
+        address owner = cardContract.ownerOf(cardId);
+        emit information(cardId, price, seller, dealState, owner);
+        return true;
     }
 
     /*
@@ -99,10 +109,10 @@ contract Deal {
         return cardId;
     }
 
+    /*
+    카드판매취소
+    */
     function cancelDeal() public payable duringDeal onlySeller returns (bool) {
-        //거래에게 준 권한 취소
-        cardContract.setApprovalForAll(address(this), false);
-
         //판매 상태를 완료로 전환
         dealState = false;
         emit DealCanceled(address(this), cardId, seller);
@@ -114,7 +124,7 @@ contract Deal {
         _;
     }
     modifier onlySeller() {
-        require(msg.sender == seller, "Deal: You are not seller.");
+        require(msg.sender == seller, "Only Seller can cancel Sale");
         _;
     }
 }

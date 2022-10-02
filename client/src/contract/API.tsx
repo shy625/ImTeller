@@ -1,69 +1,98 @@
-//import
 import { coinContract } from './CoinABI'
 import { cardAddress, cardContract } from './CardABI'
 import { web3, marketContract } from './MarketABI'
 import dealABI from './DealABI'
 
-//mint
+/**
+ * 그림을 카드로 민팅
+ * @params
+ * - walletAddress (string)현재 로그인된 유저의 지갑주소
+ * - image (string) 민팅할 그림의 s3 url
+ * @returns: (int) 민팅된 카드의 token_id (!=art_id)
+ */
 export const createCard = async (walletAddress: string, image: any) => {
-  const admin = '0x3f317D1680B8B60da4323bbB1328a8F0DD44edfb'
-  const wallet = walletAddress
-  const tokenURI = image
-  const approvalToPay = await coinContract.methods.approve(cardAddress, 10).send({ from: wallet })
-  let token_id: any
-  if (approvalToPay.status) {
-    token_id = await cardContract.methods.create(tokenURI).send({ from: wallet })
-  }
-  console.log(token_id.events.Transfer.returnValues.tokenId)
+	const wallet = walletAddress
+	const tokenURI = image
+	/*
+	approve(address A, uint amount)
+	A가 msg.sender의 지갑에서 SSF를 amount 만큼 옮기는걸 허가
+	*/
+	const approvalToPay = await coinContract.methods.approve(cardAddress, 10).send({ from: wallet })
+	console.log(approvalToPay)
+
+	let tokenId: any //uint256 민팅된 카드의 id(블록체인에서의 index)
+	if (approvalToPay.status) {
+		tokenId = await cardContract.methods.create(tokenURI).send({ from: wallet })
+	}
+	console.log(tokenId)
+	return tokenId.events.Transfer.returnValues.tokenId
 }
 
-//new Deal
-export const sellCard = async (
-  walletAddress: string,
-  image: any,
-  token_id: any,
-  wantedPrice: any,
-) => {
-  // 'wallet은 유저의 account Address'
-  const wallet = walletAddress
-  // '판매할 카드 url'
-  const tokenURL = image
-  //'판매할 카드의 token Id'
-  const tokenId = 1
-  // '판매가격'
-  const price = 10
-  console.log('거래 등록')
-  const dealCA = await marketContract.methods.createDeal(tokenId, price).send({ from: wallet })
-  console.log('거래 등록 완료')
-  console.log('deal', dealCA)
-  const contract_id = dealCA.events.NewDeal.address
-  await cardContract.methods.setApprovalForAll(contract_id, true).send({ from: wallet })
-
-  //   await cardContract.methods.transferFrom(wallet, contract_id, tokenId).send({ from: wallet })
+/*
+신규 거래 등록
+@params:
+- walletAddress (string) 현재 로그인된 유저의 지갑주소
+- tokenId (int)현재 로그인된 유저의 지갑주소
+- wantedPrice (int) 민팅할 그림의 s3 url
+@returns: (string) 거래주소
+ */
+export const sellCard = async (walletAddress: string, tokenId: any, instantPrice: any) => {
+	const wallet = walletAddress
+	const cardId = tokenId
+	const price = instantPrice
+	console.log('거래 등록 ' + tokenId)
+	const dealCA = await marketContract.methods.createDeal(cardId, price).send({ from: wallet })
+	console.log('deal', dealCA)
+	const contractId = dealCA.events.NewDeal.returnValues.dealAddress
+	/*
+	setApprovalForAll(address A, true)
+	A가 msg.sender의 NFT들을 거래할 수 있게 권한 허용
+	*/
+	await cardContract.methods.setApprovalForAll(contractId, true).send({ from: wallet })
+	return contractId
 }
 
-//Card 구매
-export const purchaseCard = async (dealId: any, walletAddress: any, wantedPrice: any) => {
-  //   const dealCA = '내가 살 카드의 거래 CA'
-  const dealCA = dealId
-  const dealInstance = new web3.eth.Contract(dealABI, dealCA)
-  //   const wallet = 'wallet은 유저의 account Address'
-  const wallet = walletAddress
-  //   const price = '해당 카드 가격'
-  const price = wantedPrice
-  console.log('구매 시작')
-  const approvalToPay = await coinContract.methods.approve(dealCA, price).send({ from: wallet })
-  console.log('권한 허용')
-  if (approvalToPay.status) {
-    return await dealInstance.methods.purchase().send({ from: wallet })
-  }
+/*
+카드 구매하기
+@params:
+- walletAddress (string) 현재 로그인된 유저의 지갑주소
+- dealAddress (string) 내가 선택한 거래의 주소(블록체인상에서의 주소)
+- instantPrice (int) 즉시구매가
+@returns: (string) 거래주소
+ */
+export const purchaseCard = async (walletAddress: any, dealAddress: any, instantPrice: any) => {
+	const dealCA = dealAddress
+	const wallet = walletAddress
+	const price = instantPrice
+	const dealInstance = new web3.eth.Contract(dealABI, dealCA)
+	console.log('구매 시작 market purchase')
+	/*
+	approve(address A, uint amount)
+	A가 msg.sender의 지갑에서 SSF를 amount 만큼 옮기는걸 허가
+	*/
+	const approvalToPay = await coinContract.methods.approve(dealCA, price).send({ from: wallet })
+	if (approvalToPay.status) {
+		return await dealInstance.methods.purchase().send({ from: wallet })
+	}
 }
 
-//판매 취소
-export const cancelDeal = async () => {
-  const dealCA = '내가 살 카드의 거래 CA'
-  const dealInstance = new web3.eth.Contract(dealABI, dealCA)
-  const wallet = 'wallet은 유저의 account Address'
-
-  return await dealInstance.methods.cancelDeal().send({ from: wallet })
+/*
+판매 취소하기
+@params:
+- walletAddress (string) 현재 로그인된 유저의 지갑주소
+- dealAddress (string) 내가 선택한 거래의 주소(블록체인상에서의 주소)
+warning: 판매자만 취소 가능.
+ */
+export const cancelDeal = async (walletAddress: any, dealId: any) => {
+	const wallet = walletAddress
+	const dealCA = dealId
+	const dealInstance = new web3.eth.Contract(dealABI, dealCA)
+	/*
+	setApprovalForAll(address A, false)
+	A가 msg.sender의 NFT들을 거래할 수 있게 권한 취소
+	*/
+	const disapproval = await cardContract.methods
+		.setApprovalForAll(dealCA, false)
+		.send({ from: wallet })
+	return await dealInstance.methods.cancelDeal().send({ from: wallet })
 }

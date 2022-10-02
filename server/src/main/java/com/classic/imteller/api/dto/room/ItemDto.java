@@ -8,7 +8,11 @@ import lombok.Getter;
 public class ItemDto {
     private long cardId;
     private String grade;
-    private long effect;
+    private int effect;
     private int effectNum;
     private boolean isUsed;
+
+    public void makeUsed() {
+        this.isUsed = true;
+    }
 }
