@@ -28,8 +28,9 @@ export default function AddWalletModal(props: any) {
 	}, [window.ethereum])
 
 	const connectWallet = async () => {
-		const wallets = await window.ethereum.send('eth_requestAccounts')
-		setWallet(wallets.result[0])
+		window.ethereum.request({ method: 'eth_requestAccounts' }).then((result: any) => {
+			setWallet(result[0])
+		})
 	}
 
 	const onSubmit = () => {

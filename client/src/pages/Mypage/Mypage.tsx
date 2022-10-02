@@ -10,7 +10,6 @@ import art from 'actions/api/art'
 
 import MypageTabNav from 'pages/Mypage/mypageTabNav'
 import CardList from 'components/cardList'
-import Test from 'pages/test'
 
 import { setUserDetail } from 'store/modules/user'
 import { setCardList, setPaintList } from 'store/modules/art'
@@ -43,15 +42,15 @@ export default function Mypage() {
 			.catch((error) => {
 				console.error(error)
 			})
-		// art
-		//   .cardList({ nickname: nick })
-		//   .then((result) => {
-		//     console.log(result.data)
-		//     dispatch(setCardList(result.data))
-		//   })
-		//   .catch((error) => {
-		//     console.error(error)
-		//   })
+		art
+			.cardList({ nickname: nick })
+			.then((result) => {
+				console.log(result.data)
+				dispatch(setCardList(result.data))
+			})
+			.catch((error) => {
+				console.error(error)
+			})
 	}, [nick, nickname])
 
 	useEffect(() => {
@@ -103,6 +102,6 @@ export default function Mypage() {
 		</Layout>
 	)
 }
-const profileCss = css({
+const profileCSS = css({
 	width: 100,
 })

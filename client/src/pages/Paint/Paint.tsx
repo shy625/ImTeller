@@ -71,7 +71,7 @@ export default function Paint() {
 			//   })
 			// const url = URL.createObjectURL(paint.paintImageURL)
 			img.src = paint.paintImageURL
-			img.crossOrigin = 'Anonymous'
+			// img.crossOrigin = 'Anonymous'
 			img.onload = function () {
 				context.drawImage(img, 0, 0)
 			}
@@ -135,7 +135,6 @@ export default function Paint() {
 			setIsDrawing(false)
 		}
 		if (nativeEvent.type != 'mouseout') {
-			console.log(restore)
 			setRestore([...restore, ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)])
 			setIndex(index + 1)
 		}

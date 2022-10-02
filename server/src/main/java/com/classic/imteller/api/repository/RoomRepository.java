@@ -180,7 +180,7 @@ public class RoomRepository {
                         .cardId(art.getId())
                         .grade(art.getEffect().getGrade())
                         .effect(art.getEffect().getEffect())
-                        .effectNum(art.getEffect().getDetail())
+                        .effectNum(art.getEffect().getEffectNum())
                         .isUsed(false).build();
                 itemList.add(item);
             }

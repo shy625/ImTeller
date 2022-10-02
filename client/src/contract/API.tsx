@@ -48,6 +48,7 @@ export const sellCard = async (walletAddress: string, tokenId: any, instantPrice
 	A가 msg.sender의 NFT들을 거래할 수 있게 권한 허용
 	*/
 	await cardContract.methods.setApprovalForAll(contractId, true).send({ from: wallet })
+	return contractId
 }
 
 /*

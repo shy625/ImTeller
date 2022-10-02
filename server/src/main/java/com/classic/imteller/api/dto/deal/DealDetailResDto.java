@@ -44,7 +44,7 @@ public class DealDetailResDto {
         private String ownerNickname;
         private String grade;
         private Integer effect;
-        private Integer effectDetail;
+        private Integer effectNum;
         private LocalDateTime createdAt;
     }
 

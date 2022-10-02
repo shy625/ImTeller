@@ -16,7 +16,14 @@ import {
 	table,
 	endResult,
 } from 'store/modules/game'
-import { cardList, paintList, selectedPaint, dealList, dealDetail } from 'store/modules/art'
+import {
+	cardList,
+	paintList,
+	selectedCard,
+	selectedPaint,
+	dealList,
+	dealDetail,
+} from 'store/modules/art'
 import {
 	bgmSrc,
 	isBgmOn,

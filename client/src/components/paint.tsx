@@ -9,6 +9,9 @@ import art from 'actions/api/art'
 import { setSelectedPaint, setPaintList } from 'store/modules/art'
 import { setLoading } from 'store/modules/util'
 import { useModal } from 'actions/hooks/useModal'
+import { setPaintList, setSelectedPaint } from 'store/modules/art'
+import { createCard } from 'contract/API'
+import connectMetaMask from 'actions/functions/connectMetaMask'
 
 import { createCard, sellCard, purchaseCard, cancelDeal } from 'contract/API'
 
@@ -160,7 +163,10 @@ const type1CSS = css`
 	filter: brightness(0.5);
 `
 const type1InfoCSS = css`
-	position: absolute;
-	top: 6vh;
+	position: relative;
+	top: -9vh;
 	left: 4.5vh;
+`
+const displayNoneCSS = css`
+	display: none;
 `

@@ -18,9 +18,10 @@ export const cardList = createSlice({
 			description: '기본카드1.',
 			grade: 'B',
 			effect: 4,
-			effectDetail: 0,
+			effectNum: 0,
 			createdDT: 'asdf',
 			recentPrice: 100,
+			tokenId: 1,
 		},
 		{
 			cardId: 2,
@@ -29,9 +30,10 @@ export const cardList = createSlice({
 			description: '기본카드2.',
 			grade: 'S',
 			effect: 1,
-			effectDetail: 10,
+			effectNum: 10,
 			createdDT: 'asdf',
 			recentPrice: 100,
+			tokenId: 1,
 		},
 		{
 			cardId: 3,
@@ -40,9 +42,10 @@ export const cardList = createSlice({
 			description: '기본카드3.',
 			grade: 'S',
 			effect: 2,
-			effectDetail: 60,
+			effectNum: 60,
 			createdDT: 'asdf',
 			recentPrice: 100,
+			tokenId: 1,
 		},
 		{
 			cardId: 4,
@@ -51,9 +54,10 @@ export const cardList = createSlice({
 			description: '기본카드4.',
 			grade: 'S',
 			effect: 3,
-			effectDetail: 0,
+			effectNum: 0,
 			createdDT: 'asdf',
 			recentPrice: 100,
+			tokenId: 1,
 		},
 		{
 			cardId: 5,
@@ -62,9 +66,10 @@ export const cardList = createSlice({
 			description: '기본카드5.',
 			grade: 'S',
 			effect: 4,
-			effectDetail: 3,
+			effectNum: 3,
 			createdDT: 'asdf',
 			recentPrice: 100,
+			tokenId: 1,
 		},
 		{
 			cardId: 6,
@@ -73,9 +78,10 @@ export const cardList = createSlice({
 			description: '기본카드6.',
 			grade: 'S',
 			effect: 5,
-			effectDetail: 2.5,
+			effectNum: 2.5,
 			createdDT: 'asdf',
 			recentPrice: 100,
+			tokenId: 1,
 		},
 		{
 			cardId: 7,
@@ -84,9 +90,10 @@ export const cardList = createSlice({
 			description: '기본카드7.',
 			grade: 'A',
 			effect: 6,
-			effectDetail: 0,
+			effectNum: 0,
 			createdDT: 'asdf',
 			recentPrice: 100,
+			tokenId: 1,
 		},
 	],
 	reducers: {
@@ -105,12 +112,14 @@ export const paintList = createSlice({
 			paintTitle: '기본카드1',
 			paintImageURL: card1,
 			description: '기본카드1.',
+			isVote: false,
 		},
 		{
 			paintId: 2,
 			paintTitle: '기본카드2',
 			paintImageURL: card2,
 			description: '기본카드2.',
+			isVote: false,
 		},
 	],
 	reducers: {
@@ -120,6 +129,17 @@ export const paintList = createSlice({
 	},
 })
 export const { setPaintList } = paintList.actions
+
+export const selectedCard = createSlice({
+	name: 'selectedCard',
+	initialState: {},
+	reducers: {
+		setSelectedCard(state, action) {
+			return action.payload
+		},
+	},
+})
+export const { setSelectedCard } = selectedCard.actions
 
 export const selectedPaint = createSlice({
 	name: 'selectedPaint',
@@ -136,32 +156,32 @@ export const dealList = createSlice({
 	name: 'dealList',
 	initialState: [
 		{
-			dealId: 1,
-			instantPrice: 1000,
-			finalBidPrice: 700,
-			tag: ['맛집', '역삼'],
-			finishedAt: '2022-09-28T16:04:30',
 			cardId: '1',
 			cardImageURL: card1,
-			designerId: 'tester',
+			dealId: 1,
+			designerId: 1,
 			description: '기본그림1',
 			designerNickname: 'test',
-			grade: 'S',
+			finalBidPrice: 700,
+			finishedAt: '2022-09-28 16:04:30',
+			instantPrice: 1000,
 			effect: 1,
+			grade: 'S',
+			tag: 'tag',
 		},
 		{
-			dealId: 2,
-			instantPrice: 1500,
-			finalBidPrice: 200,
-			tag: '#맛집 #역삼',
-			finishedAt: '2022-09-28T16:04:30',
-			cardId: '2',
+			cardId: '1',
 			cardImageURL: card2,
-			designerId: 'testerasdf',
+			dealId: 2,
+			designerId: 2,
 			description: '기본그림2',
-			designerNickname: 'testtets',
+			designerNickname: 'testtest',
+			finalBidPrice: 800,
+			finishedAt: '2022-09-28 16:04:30',
+			instantPrice: 1500,
+			effect: 1,
 			grade: 'A',
-			effect: 4,
+			tag: 'tag',
 		},
 	],
 	reducers: {
@@ -174,7 +194,41 @@ export const { setDealList } = dealList.actions
 
 export const dealDetail = createSlice({
 	name: 'dealDetail',
-	initialState: {},
+	initialState: {
+		cardInfo: {
+			cardId: 1,
+			cardImageURL: 'test',
+			cardTitle: 'test',
+			createdAt: '2022-10-03T16:01:40',
+			description: 'test1',
+			designerId: 2,
+			designerNickname: 'shy',
+			effect: 1,
+			effectNum: 10,
+			grade: 'S',
+			ownerId: 2,
+			ownerNickname: 'MoCCo',
+			tokenId: 1,
+		},
+		dealHistoryList: [
+			{
+				sellerId: 1,
+				sellerNickname: 'IMTELLER',
+				buyerId: 2,
+				buyerNickname: 'MoCCo',
+				price: 1000,
+				dealedAt: '2022-09-30 05:21:07',
+			},
+		],
+		dealInfo: {
+			dealId: 1,
+			finalBidPrice: 100,
+			finishedAt: '2022-10-20 05:21:07',
+			instantPrice: 1000,
+			lowPrice: 50,
+			dealAddress: '0xasdfasdfasdfasdfasdf',
+		},
+	},
 	reducers: {
 		setDealDetail(state, action) {
 			return action.payload

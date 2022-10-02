@@ -90,6 +90,7 @@ public class ArtController {
     @ApiOperation(value="토큰 아이디 저장", notes = "민팅에 성공한 후에 토큰 아이디를 저장한다.")
     public ResponseEntity<ResponseDto> saveTokenId(@RequestBody NftReqDto nftReqDto){
         artService.insertTokenId(nftReqDto.getArtId(), nftReqDto.getTokenId());
+        artService.insertEffect(nftReqDto.getArtId());
         return new ResponseEntity<>(new ResponseDto("NFT tokenId 저장 성공"), HttpStatus.ACCEPTED);
     }
 
