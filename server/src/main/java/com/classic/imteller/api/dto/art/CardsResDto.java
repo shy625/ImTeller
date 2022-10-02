@@ -15,7 +15,7 @@ public class CardsResDto {
     private Long tokenId;
     private String grade;
     private Integer effect;
-    private Integer effectDetail;
+    private Integer effectNum;
     private LocalDateTime createdDT;
     private Integer recentPrice;
 }
