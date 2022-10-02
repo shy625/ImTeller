@@ -7,7 +7,7 @@ import Card from 'components/card'
 import { setModalState } from 'store/modules/util'
 import { setSelectedCard } from 'store/modules/art'
 
-export default function VoteRegisterModal(props: any) {
+export default function DealRegisterModal(props: any) {
 	const dispatch = useDispatch()
 
 	const cardList = useSelector((state: any) => state.cardList)
