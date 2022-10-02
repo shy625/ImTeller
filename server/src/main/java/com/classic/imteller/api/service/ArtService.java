@@ -39,6 +39,7 @@ public class ArtService {
                     .cardTitle(card.getTitle())
                     .cardImageURL(card.getUrl())
                     .description(card.getDescription())
+                    .tokenId(card.getTokenId())
                     .grade(card.getEffect().getGrade())
                     .effect(card.getEffect().getEffect())
                     .effectDetail(card.getEffect().getEffectNum())
