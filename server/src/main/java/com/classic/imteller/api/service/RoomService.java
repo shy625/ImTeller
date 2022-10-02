@@ -29,6 +29,10 @@ public class RoomService {
         // 인원수가 초과됐어도 방에 들어갈 수 없어야 함
         if (roomRepository.getRoom(sessionId).getPlayers().size() >= roomRepository.getRoom(sessionId).getMaxNum()) return null;
 
+        // 같은 닉네임을 가진 유저가 있어도 방에 들어갈 수 없어야 함
+        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+        if (players.contains(joinReqDto.getNickname())) return null;
+
         boolean isGood = roomRepository.joinRoom(userSessionId, sessionId, joinReqDto);
         if (isGood) {
             Room room = roomRepository.getRoom(sessionId);
