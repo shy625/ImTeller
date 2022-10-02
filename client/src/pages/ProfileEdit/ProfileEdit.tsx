@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import Layout from 'layout/layout'
 import PwCertificate from 'pages/ProfileEdit/pwCertificate'
 import ProfileImage from 'pages/ProfileEdit/profileImage'
-import AddWallet from 'pages/ProfileEdit/addWallet'
 
 import user from 'actions/api/user'
 import { useModal } from 'actions/hooks/useModal'
@@ -25,7 +24,6 @@ export default function ProfileEdit(props: any) {
 
 	const [nickError, setNickError] = useState('') // 체크 에러문구
 	const [isChangePw, setIsChangePw] = useState(false) // 비밀번호 수정 여부
-	const [isAddWallet, setIsAddWallet] = useState(false) // 지갑 추가 여부
 
 	const [setModalState, setModalMsg] = useModal('')
 
@@ -65,7 +63,7 @@ export default function ProfileEdit(props: any) {
 			.checkNickname({ nickname: nickname.value })
 			.then((result) => {
 				console.log(result)
-				if (result.data == '사용가능한 닉네임입니다.') {
+				if (result.data.response == '사용가능한 닉네임입니다.') {
 					setNickChecked(true)
 				}
 			})
@@ -128,7 +126,7 @@ export default function ProfileEdit(props: any) {
 		user
 			.profileEdit(formdata)
 			.then((result) => {
-				if (result.data === '사용자의 정보를 변경했습니다.') {
+				if (result.data.response === '사용자의 정보를 변경했습니다.') {
 					navigate(-1, { replace: true })
 					setModalMsg('회원정보가 수정되었습니다')
 					setModalState('alert')
@@ -144,8 +142,6 @@ export default function ProfileEdit(props: any) {
 			<main>
 				{!password ? (
 					<PwCertificate setPassword={setPassword} />
-				) : isAddWallet ? (
-					<AddWallet />
 				) : (
 					<>
 						<div>

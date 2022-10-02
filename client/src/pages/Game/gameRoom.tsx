@@ -26,7 +26,7 @@ export default function GameRoom(props: any) {
 
 	useEffect(() => {
 		art.cardList({ nickname }).then((result) => {
-			dispatch(setCardList(result.data))
+			dispatch(setCardList(result.data.response))
 		})
 	}, [])
 

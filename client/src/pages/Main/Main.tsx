@@ -8,9 +8,6 @@ import Timer from 'components/timer'
 import { css, keyframes } from '@emotion/react'
 import { fullDisplay } from 'style/commonStyle'
 
-import { useBGM } from 'actions/hooks/useBGM'
-import { setModalState } from 'store/modules/util'
-
 export default function Main() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -19,9 +16,7 @@ export default function Main() {
 		<Layout>
 			<div css={fullDisplay}>
 				<div className="cardLoc" css={cardCss}>
-					<div className="card" onClick={() => useBGM('main')}>
-						ImTeller
-					</div>
+					<div className="card">ImTeller</div>
 					<div className="blur"></div>
 				</div>
 				<button

@@ -54,6 +54,7 @@ export default function Search() {
 				<option value={0}>최신순</option>
 				<option value={1}>높은가격순</option>
 				<option value={2}>낮은가격순</option>
+				<option value={3}>남은시간순</option>
 			</select>
 			<select name="status" onChange={(e: any) => setStatus(e.target.value)}>
 				<option value={0}>전체</option>

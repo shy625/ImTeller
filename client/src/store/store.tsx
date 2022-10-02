@@ -23,6 +23,7 @@ import {
 	selectedPaint,
 	dealList,
 	dealDetail,
+	voteList,
 } from 'store/modules/art'
 import {
 	bgmSrc,
@@ -64,6 +65,7 @@ export default configureStore({
 		selectedPaint: selectedPaint.reducer,
 		dealList: dealList.reducer,
 		dealDetail: dealDetail.reducer,
+		voteList: voteList.reducer,
 
 		bgmSrc: bgmSrc.reducer,
 		isBgmOn: isBgmOn.reducer,

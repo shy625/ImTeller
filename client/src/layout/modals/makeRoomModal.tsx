@@ -41,7 +41,7 @@ export default function MakeRoomModal(props: any) {
 			.then((result) => {
 				dispatch(setIsChecked(true))
 				dispatch(setModalState(''))
-				navigate(`/game/${result.data}`)
+				navigate(`/game/${result.data.response}`)
 			})
 			.catch((error) => {
 				console.error(error)

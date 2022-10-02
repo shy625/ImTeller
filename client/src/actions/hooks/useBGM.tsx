@@ -8,7 +8,7 @@ export const useBGM = (src: any) => {
 	const bgm = {
 		main: 'assets/audio/main.mp3',
 		gameList: 'assets/audio/gameList.mp3',
-		game: 'assets/audio/game/mp3',
+		game: 'assets/audio/game.mp3',
 	}
 
 	useEffect(() => {

@@ -30,7 +30,7 @@ export default function DealRegister() {
 	useEffect(() => {
 		art.cardList({ nickname: currentUser.nickname }).then((result) => {
 			console.log(result)
-			dispatch(setCardList(result.data))
+			dispatch(setCardList(result.data.response))
 		})
 	}, [])
 
@@ -85,8 +85,8 @@ export default function DealRegister() {
 		deal
 			.register(data)
 			.then((result) => {
-				console.log(result.data)
-				navigate(`/deal/${result.data}`)
+				console.log(result.data.response)
+				navigate(`/deal/${result.data.response}`)
 				setIsLoading(false)
 			})
 			.catch((error) => {

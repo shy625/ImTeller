@@ -37,14 +37,15 @@ export default function Login(props: any) {
 		user
 			.login(credentials)
 			.then((result) => {
-				if (result.data === '올바른 비밀번호입니다.') {
+				console.log(result)
+				if (result.data.response === '올바른 비밀번호입니다.') {
 					localStorage.setItem('email', credentials.email)
 					dispatch(setEmail(credentials.email))
 					user
 						.currentUser()
 						.then((result) => {
 							console.log(result.data)
-							dispatch(setCurrentUser(result.data))
+							dispatch(setCurrentUser(result.data.response))
 							navigate(-1, { replace: true })
 						})
 						.catch((error) => {

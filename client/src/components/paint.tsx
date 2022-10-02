@@ -26,7 +26,6 @@ export default function Paint(props: any) {
 	const loading = useSelector((state: any) => state.loading)
 	const [selected, setSelected] = useState(false)
 	const currentUser = useSelector((state: any) => state.currentUser)
-	const [connectedWallet, setConnectedWallet] = useState('')
 	const [setModalState, setModalMsg, setModalResult] = useModal('')
 
 	useEffect(() => {
@@ -50,20 +49,25 @@ export default function Paint(props: any) {
 		art.paintDelete(paintId).then((result) => {
 			art.paintList({ nickname: currentUser.nickname }).then((result) => {
 				console.log(result)
-				dispatch(setPaintList(result.data))
+				dispatch(setPaintList(result.data.response))
 			})
 		})
 	}
 
 	const onMint = async () => {
+		if (loading) return
+		dispatch(setLoading(true))
+
 		const check: any = await connectMetaMask()
 		if (!check) {
 			alert('지갑을 연결하세요')
+			dispatch(setLoading(false))
 			return
 		}
 		if (check !== currentUser.wallet) {
 			setModalMsg('등록된 지갑주소와 동일한 메타마스크 지갑주소를 연결해야 합니다')
 			setModalState('alert')
+			dispatch(setLoading(false))
 			return
 		}
 
@@ -79,10 +83,12 @@ export default function Paint(props: any) {
 			.then((result) => {
 				console.log(result)
 				dispatch(setMyPageTab(0))
+				dispatch(setLoading(false))
 				setModalMsg('민팅에 성공했습니다.')
 				setModalState('alert')
 			})
 			.catch((error) => {
+				dispatch(setLoading(false))
 				console.error(error)
 			})
 	}

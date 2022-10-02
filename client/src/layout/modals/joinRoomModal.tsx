@@ -39,7 +39,7 @@ export default function JoinRoomModal(props: any) {
 		game
 			.join(roomId, { password })
 			.then((result) => {
-				if (!result.data) return setAuthError('잘못된 비밀번호입니다')
+				if (!result.data.response) return setAuthError('잘못된 비밀번호입니다')
 				dispatch(setIsChecked(true))
 				dispatch(setModalState(''))
 			})

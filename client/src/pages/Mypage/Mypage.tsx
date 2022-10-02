@@ -37,7 +37,7 @@ export default function Mypage() {
 		user
 			.userDetail({ nickname: nick })
 			.then((result) => {
-				dispatch(setUserDetail(result.data))
+				dispatch(setUserDetail(result.data.response))
 			})
 			.catch((error) => {
 				console.error(error)
@@ -50,7 +50,7 @@ export default function Mypage() {
 				.cardList({ nickname: nick })
 				.then((result) => {
 					console.log(result.data)
-					dispatch(setCardList(result.data))
+					dispatch(setCardList(result.data.response))
 				})
 				.catch((error) => {
 					console.error(error)

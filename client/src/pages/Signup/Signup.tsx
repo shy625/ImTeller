@@ -41,7 +41,7 @@ export default function Signup(props: any) {
 			.checkEmail(data)
 			.then((result) => {
 				console.log(result)
-				if (result.data == '사용가능한 이메일입니다.') {
+				if (result.data.response == '사용가능한 이메일입니다.') {
 					setEmailChecked(true)
 				}
 			})
@@ -60,7 +60,7 @@ export default function Signup(props: any) {
 			.checkNickname(data)
 			.then((result) => {
 				console.log(result)
-				if (result.data == '사용가능한 닉네임입니다.') {
+				if (result.data.response == '사용가능한 닉네임입니다.') {
 					setNickChecked(true)
 				}
 			})
@@ -87,7 +87,7 @@ export default function Signup(props: any) {
 		user
 			.signup(credentials)
 			.then((result) => {
-				if (result.data == '가입 성공') {
+				if (result.data.response == '가입 성공') {
 					setIsLoading(false)
 					alert('회원가입에 성공했습니다. 이메일을 확인해 주세요') // alert modal
 					navigate('/login', { replace: true })

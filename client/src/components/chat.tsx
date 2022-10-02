@@ -16,6 +16,7 @@ export default function Chat() {
 	const { nickname } = useSelector((state: any) => state.currentUser)
 	const email = useSelector((state: any) => state.email) || localStorage.getItem('email')
 	const [msgInput, setMsgInput] = useState('')
+	const [ws, setWs] = useState<any>('')
 
 	useEffect(() => {
 		if (roomId !== currentRoomId) {
@@ -23,22 +24,35 @@ export default function Chat() {
 		}
 	}, [])
 
-	let stompClient = useWebSocket({
-		email,
-		roomId,
-		onConnect(frame, client) {
+	useEffect(() => {
+		const client = useWebSocket({ email })
+		client.onConnect = (frame) => {
 			client.subscribe(`/sub/room/${roomId}/chat`, (response) => {
 				const content = JSON.parse(response.body)
 				const time = new Date()
 				content.time = time.toLocaleString()
 				dispatch(addChat(content))
 			})
-		},
-		beforeDisconnected() {},
-	})
+		}
+		client.activate()
+		setWs(client)
+	}, [])
+
+	// let stompClient = useWebSocket({
+	// 	email,
+	// 	onConnect(frame, client) {
+	// client.subscribe(`/sub/room/${roomId}/chat`, (response) => {
+	// 	const content = JSON.parse(response.body)
+	// 	const time = new Date()
+	// 	content.time = time.toLocaleString()
+	// 	dispatch(addChat(content))
+	// })
+	// 	},
+	// 	beforeDisconnected() {},
+	// })
 
 	const send = () => {
-		stompClient.publish({
+		ws.publish({
 			destination: `/pub/room/${roomId}/chat`,
 			body: JSON.stringify({
 				nickname,
@@ -56,13 +70,15 @@ export default function Chat() {
 	return (
 		<div css={chat}>
 			<div>
-				{chats.map((chat, idx) => (
-					<div key={chat.time + String(idx)}>
-						<div>{chat.nickname}</div>
-						<div>{chat.msg}</div>
-						<div>{chat.time}</div>
-					</div>
-				))}
+				{chats.length
+					? chats.map((chat, idx) => (
+							<div key={chat.time + String(idx)}>
+								<div>{chat.nickname}</div>
+								<div>{chat.msg}</div>
+								<div>{chat.time}</div>
+							</div>
+					  ))
+					: null}
 			</div>
 			<div>
 				<input
