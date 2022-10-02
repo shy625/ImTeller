@@ -10,4 +10,5 @@ public class PaintsResDto {
     private String paintTitle;
     private String paintImageURL;
     private String content;
+    private Boolean isVote;
 }
