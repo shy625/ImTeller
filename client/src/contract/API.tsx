@@ -27,16 +27,6 @@ export const createCard = async (walletAddress: string, image: any) => {
 	console.log(tokenId)
 	return tokenId.events.Transfer.returnValues.tokenId
 }
-/**
- * 그림을 카드로 민팅
- * @params
- * - walletAddress (string)현재 로그인된 유저의 지갑주소
- * - image (string) 민팅할 그림의 s3 url
- * @returns: (int) 민팅된 카드의 token_id (!=art_id)
- */
-export const mintCard = async (walletAddress: string, image: any) => {
-	const wallet = walletAddress
-	const tokenURI = image
 
 /**
  * 그림을 카드로 민팅 - 투표 당선작 무료로 민팅
