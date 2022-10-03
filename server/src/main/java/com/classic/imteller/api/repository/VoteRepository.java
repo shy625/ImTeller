@@ -12,4 +12,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     boolean existsByArtIdAndIsVoting(long artId, int isVoting);
 
     Optional<Vote> findByArtIdAndIsVoting(long artId, int isVoting);
+
+    List<Vote> findByIsVoting(int isVoting);
+
 }
