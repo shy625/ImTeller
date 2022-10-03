@@ -92,6 +92,8 @@ public class SocketController {
         HashMap<String, List<GameCardDto>> firstHands = roomService.selectCards(sessionId, selectReqDto);
         if(firstHands != null) {
             List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+            // 패를 나눠주고 나서 최초 텔러 설정 (players List의 맨 앞 유저)
+            roomRepository.getRoom(sessionId).setTeller(players.get(0));
             for (String player : players) {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
                 sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
