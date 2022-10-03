@@ -85,17 +85,11 @@ export default function Paint() {
 
 	function loadImage() {
 		const img = new Image()
-		axios
-			.get(decodeURIComponent(paint.paintImageURL), {
-				responseType: 'blob',
-				withCredentials: false,
-			})
-			.then(async (blob) => {
-				const objURL = URL.createObjectURL(blob.data)
-				const image = await loadImage()
-				img.src = objURL
-				ctx.drawImage(img, 0, 0)
-			})
+		img.src = paint.paintImageURL
+		img.crossOrigin = 'Anonymous'
+		img.onload = function () {
+			ctx.drawImage(img, 0, 0)
+		}
 	}
 	function start({ nativeEvent }) {
 		if (!restore) {
