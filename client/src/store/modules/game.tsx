@@ -135,7 +135,7 @@ export const players = createSlice({
 		},
 		clearStatus(state: any) {
 			for (let key in state) {
-				state[key][status] = false
+				state[key].status = false
 			}
 		},
 	},
