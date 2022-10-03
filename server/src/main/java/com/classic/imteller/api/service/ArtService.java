@@ -12,11 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -166,12 +163,6 @@ public class ArtService {
     public void insertTokenId(Long artId, Long tokenId) {
         Art art = artRepository.findById(artId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         art.insertNft(tokenId);
-    }
-    @Transactional
-    public void editOwner(String owner, Long tokenId) {
-        Art art = artRepository.findByTokenId(tokenId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        User user = userRepository.findByNickname(owner).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        art.updateOwner(user, user.getNickname());
     }
 
     @Transactional

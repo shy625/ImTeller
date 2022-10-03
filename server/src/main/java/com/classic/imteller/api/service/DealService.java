@@ -1,9 +1,6 @@
 package com.classic.imteller.api.service;
 
-import com.classic.imteller.api.dto.deal.BidReqDto;
-import com.classic.imteller.api.dto.deal.DealDetailResDto;
-import com.classic.imteller.api.dto.deal.RegisterDealReqDto;
-import com.classic.imteller.api.dto.deal.SearchDealResDto;
+import com.classic.imteller.api.dto.deal.*;
 import com.classic.imteller.api.repository.*;
 import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
@@ -226,9 +223,29 @@ public class DealService {
 
 
     @Transactional
-    public void endDeal(Long dealId) {
+    public Long completeDeal(Long dealId, CompleteDealReqDto requestDto) {
         Deal deal = dealRepository.findById(dealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+
+        if (requestDto.getBidderNickname() == null || requestDto.getTokenId() == null) {
+            deal.updateFinalBid(null);
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
+        Bid finalBid = deal.getFinalBid();
+        User bidder = userRepository.findByNickname(requestDto.getBidderNickname())
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        Art card = artRepository.findByTokenId(requestDto.getTokenId())
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+
+        if (!finalBid.getBidder().getId().equals(bidder.getId())
+                || !deal.getArt().getId().equals(card.getId())) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
+        card.changeOwner(bidder, bidder.getNickname(), finalBid.getBidPrice());
         deal.updateFinishAt();
+
+        return deal.getId();
     }
 
     @Transactional
