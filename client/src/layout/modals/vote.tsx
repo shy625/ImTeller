@@ -22,7 +22,7 @@ export default function VoteModal(props: any) {
 	useEffect(() => {
 		art.paintList({ nickname: currentUser.nickname }).then((result) => {
 			console.log(result)
-			dispatch(setPaintList(result.data))
+			dispatch(setPaintList(result.data.response))
 		})
 	}, [])
 

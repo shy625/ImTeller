@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -63,14 +64,19 @@ export default function Paint() {
 		const img = new Image()
 		if (isEdit) {
 			// axios
-			//   .get(paint.paintImageURL)
-			//   .then((res) => console.log(res.data))
-			//   .then((blob) => {
-			//     console.log(blob)
-			//   })
+			// 	.get(decodeURIComponent(paint.paintImageURL), {
+			// 		responseType: 'blob',
+			// 		withCredentials: false,
+			// 	})
+			// 	.then(async (blob) => {
+			// 		const objURL = URL.createObjectURL(blob.data)
+			// 		const image = await loadImage()
+			// 		img.src = objURL
+			// 		context.drawImage(img, 0, 0)
+			// 	})
 			// const url = URL.createObjectURL(paint.paintImageURL)
 			img.src = paint.paintImageURL
-			// img.crossOrigin = 'Anonymous'
+			img.crossOrigin = 'Anonymous'
 			img.onload = function () {
 				context.drawImage(img, 0, 0)
 			}
@@ -80,6 +86,7 @@ export default function Paint() {
 	function loadImage() {
 		const img = new Image()
 		img.src = paint.paintImageURL
+		img.crossOrigin = 'Anonymous'
 		img.onload = function () {
 			ctx.drawImage(img, 0, 0)
 		}
@@ -105,6 +112,7 @@ export default function Paint() {
 			return
 		}
 	}
+
 	// function onMove({ nativeEvent }) {
 	//   if (isDrawing) {
 	//     ctx.lineCap = 'round'
@@ -204,17 +212,26 @@ export default function Paint() {
 		let imgBlob = new Blob([new Uint8Array(array)], { type: 'image/png' })
 		let imgFile = new File([imgBlob], 'blobtofile.png')
 
-		const data: any = new FormData()
+		const dataSave: any = new FormData()
+		const dataUpdate: any = new FormData()
 		let save = {
 			email: email,
 			paintTitle: title,
 			description: content,
 		}
-		data.append('saveInfo', new Blob([JSON.stringify(save)], { type: 'application/json' }))
-		data.append('file', imgFile)
+		let update = {
+			paintId: paint.paintId,
+			email: email,
+			paintTitle: title,
+			description: content,
+		}
+		dataSave.append('saveInfo', new Blob([JSON.stringify(save)], { type: 'application/json' }))
+		dataSave.append('file', imgFile)
+		dataUpdate.append('editInfo', new Blob([JSON.stringify(update)], { type: 'application/json' }))
+		dataUpdate.append('file', imgFile)
 		if (!isEdit) {
 			art
-				.paintCreate(data)
+				.paintCreate(dataSave)
 				.then((result) => {
 					// 결과 확인용
 					// console.log(result)
@@ -225,7 +242,7 @@ export default function Paint() {
 					//   console.log(value)
 					// }
 
-					if (result.data === '저장 성공') {
+					if (result.data.response === '저장 성공') {
 						// 성공했다는 alert modal
 						dispatch(setMyPageTab(1))
 						navigate(`/mypage/${nickname}`)
@@ -238,6 +255,12 @@ export default function Paint() {
 				})
 		} else {
 			// 처음 만드는게 아니면 수정
+			art.paintUpdate(dataUpdate).then((result) => {
+				if (result.data.response === '수정 성공') {
+					dispatch(setMyPageTab(1))
+					navigate(`/mypage/${nickname}`)
+				}
+			})
 		}
 	}
 

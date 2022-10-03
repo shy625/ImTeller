@@ -2,6 +2,7 @@ package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.ResponseDto;
 import com.classic.imteller.api.dto.vote.ElectReqDto;
+import com.classic.imteller.api.dto.art.VoteReqDto;
 import com.classic.imteller.api.repository.Art;
 import com.classic.imteller.api.service.VoteService;
 import io.swagger.annotations.Api;
@@ -44,5 +45,12 @@ public class VoteController {
         System.out.println(electReqDto.getArtId());
         voteService.electedPaint(electReqDto.getArtId());
         return new ResponseEntity<ResponseDto>(new ResponseDto("민팅 대기 완료"), HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/like")
+    @ApiOperation(value = "그림 좋아요", notes = "그림에 좋아요를 전송하는 API")
+    public ResponseEntity<ResponseDto> votePaint(@RequestBody VoteReqDto voteReqDto){
+        String result = voteService.votePaint(voteReqDto.getUserNickname(), voteReqDto.getArtId());
+        return new ResponseEntity<ResponseDto>(new ResponseDto(result), HttpStatus.ACCEPTED);
     }
 }

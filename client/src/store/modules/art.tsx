@@ -238,3 +238,27 @@ export const dealDetail = createSlice({
 	},
 })
 export const { setDealDetail } = dealDetail.actions
+
+export const voteList = createSlice({
+	name: 'voteList',
+	initialState: [
+		{
+			id: 101,
+			url: 'asdf',
+			title: 'test',
+			description: 'test',
+			isVote: true,
+			designer: {
+				nickname: 'MoCCo',
+				profile: 'asdf',
+			},
+			ownerNickname: 'MoCCo',
+		},
+	],
+	reducers: {
+		setVoteList(state, action) {
+			return action.payload
+		},
+	},
+})
+export const { setVoteList } = voteList.actions

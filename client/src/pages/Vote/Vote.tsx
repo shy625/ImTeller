@@ -7,17 +7,19 @@ import VoteCard from 'pages/Vote/voteCard'
 
 import vote from 'actions/api/vote'
 import { useModal } from 'actions/hooks/useModal'
+import { setVoteList } from 'store/modules/art'
 
 export default function Vote() {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const paintList = useSelector((state: any) => state.paintList)
+	const voteList = useSelector((state: any) => state.voteList)
 	const [setModalState, setModalMsg] = useModal('')
 
 	useEffect(() => {
 		vote.paintList().then((result) => {
-			console.log(result.data)
+			console.log(result.data.response)
+			dispatch(setVoteList(result.data.response))
 		})
 	}, [])
 
@@ -30,9 +32,9 @@ export default function Vote() {
 					<button onClick={() => setModalState('voteRegister')}>나도 출품하기</button>
 				</div>
 				<div>
-					{paintList.map((paint) => (
-						<VoteCard paint={paint} key={paint.paintId} />
-					))}
+					{voteList.length
+						? voteList.map((paint) => <VoteCard paint={paint} key={paint.id} />)
+						: null}
 				</div>
 			</main>
 		</Layout>

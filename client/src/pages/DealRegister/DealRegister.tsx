@@ -34,7 +34,7 @@ export default function DealRegister() {
 	useEffect(() => {
 		art.cardList({ nickname: currentUser.nickname }).then((result) => {
 			console.log(result)
-			dispatch(setCardList(result.data))
+			dispatch(setCardList(result.data.response))
 		})
 	}, [])
 
@@ -80,9 +80,10 @@ export default function DealRegister() {
 			setIsLoading(false)
 		})
 		console.log(contractId)
+
 		const now = new Date()
 		let date: any = new Date(now.setDate(now.getDate() + day))
-		date = date.toISOString().replace('T', ' ').substring(0, 19)
+		date = date.toISOString().substring(0, 19)
 		const data = {
 			artId: selectedCard.cardId,
 			dealAddress: contractId,
@@ -95,8 +96,8 @@ export default function DealRegister() {
 		deal
 			.register(data)
 			.then((result) => {
-				console.log(result.data)
-				navigate(`/deal/${result.data}`)
+				console.log(result.data.response)
+				navigate(`/deal/${result.data.response}`)
 				setIsLoading(false)
 			})
 			.catch((error) => {
