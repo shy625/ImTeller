@@ -94,7 +94,7 @@ public class SocketController {
             List<String> players = roomRepository.getRoom(sessionId).getPlayers();
             for (String player : players) {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", firstHands.get(player));
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
             }
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
@@ -106,6 +106,9 @@ public class SocketController {
     public void phase1(long sessionId) {
         roomService.setPhase(sessionId, 1);
         roomService.resetTurn(sessionId);
+        // 방장 넘기기
+        String teller = roomService.getRoom(sessionId).getTeller();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/newteller", teller);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
@@ -144,7 +147,7 @@ public class SocketController {
                 // 시간 지나면 강제로 hand의 맨 앞 카드 제출
                 roomService.forcedCard(sessionId);
                 List<GameCardDto> gameCardList = roomService.getTable(sessionId);
-                // 선택한 게임카드들 전송
+                // 선택한 게임카드들 전송 (table에서 낸 사람, 그리고 누가 텔러인지 여부를 감춤)
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/table", gameCardList);
                 // 다음페이즈로
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
@@ -214,6 +217,8 @@ public class SocketController {
     public void phase4(long sessionId) {
         roomService.setPhase(sessionId, 4);
 
+
+
         // 이번 턴 유저의 점수를 result 소켓에 반환
         HashMap<String, Integer> nowScore = roomService.scoreCalc(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/result", nowScore);
@@ -222,6 +227,10 @@ public class SocketController {
 
         HashMap<String, Integer> totalScore = roomService.getTotalScore(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/totalresult", totalScore);
+
+        // 플레이어들이 낸 카드를 담은 table 전송하기
+        List<TableDto> table = roomService.getRoom(sessionId).getTable();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/submitcards", totalScore);
 
         // 게임 종료조건 확인
         boolean chk = roomService.endCheck(sessionId);
@@ -238,7 +247,7 @@ public class SocketController {
         List<String> players = roomRepository.getRoom(sessionId).getPlayers();
         for (String player : players) {
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHands.get(player));
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHands.get(player));
         }
 
         // table에 있는 카드들을 덱의 맨 뒤로 돌리기
@@ -267,7 +276,7 @@ public class SocketController {
             roomService.itemOneCardDraw(sessionId, useItemDto.getNickname());
             List<GameCardDto> newHand = roomService.getHand(sessionId).get(useItemDto.getNickname());
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
-            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHand);
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHand);
         }
 
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
