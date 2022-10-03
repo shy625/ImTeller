@@ -27,14 +27,20 @@ export default function DealDetail() {
 	const [hour, setHour] = useState(0)
 	const [min, setMin] = useState(0)
 	const [sec, setSec] = useState(0)
+	const [loading, setLoading] = useState(false)
 
 	const [effectPre, effectPost] = itemDetail(cardInfo.effect, cardInfo.effectDetail)
 
 	useEffect(() => {
-		deal.dealDetail(dealId).then((result) => {
-			console.log(result.data)
-			dispatch(setDealDetail(result.data.response))
-		})
+		deal
+			.dealDetail(dealId)
+			.then((result) => {
+				console.log(result.data)
+				dispatch(setDealDetail(result.data.response))
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}, [])
 
 	useEffect(() => {
@@ -89,14 +95,27 @@ export default function DealDetail() {
 	}
 
 	const onBuy = () => {
-		buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice).then((result) => {
-			console.log(result)
-			deal
-				.dealEnd(dealInfo.dealId, { owner: currentUser.nickname, tokenId: cardInfo.tokenId })
-				.then((result) => {
-					console.log(result.data)
-				})
-		})
+		if (loading) return
+		setLoading(true)
+		buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice)
+			.then((result) => {
+				console.log(result)
+				setLoading(false)
+				deal
+					.dealEnd(dealInfo.dealId, { owner: currentUser.nickname, tokenId: cardInfo.tokenId })
+					.then((result) => {
+						console.log(result.data)
+						setLoading(false)
+					})
+					.catch((err) => {
+						setLoading(false)
+					})
+			})
+			.catch((err) => {
+				console.log(err)
+				setLoading(false)
+			})
+		setLoading(false)
 	}
 
 	return (

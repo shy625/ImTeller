@@ -6,7 +6,7 @@ import vote from 'actions/api/vote'
 import { useModal } from 'actions/hooks/useModal'
 
 export default function VoteCard(props: any) {
-	const { paintId, paintTitle, paintImageURL, description } = props.paint
+	const { paintId, title, url, description, ownerNickname } = props.paint
 	const currentUser = useSelector((state: any) => state.currentUser)
 	const [setModalState, setModalMsg] = useModal('')
 
@@ -28,8 +28,8 @@ export default function VoteCard(props: any) {
 	return (
 		<div>
 			<div onClick={onClick}>
-				<img src={paintImageURL} />
-				{paintTitle}
+				<img src={url} alt="그림" />
+				{title}
 				{description}
 				<div>좋아요수</div>
 			</div>
