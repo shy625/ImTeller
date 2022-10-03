@@ -18,7 +18,7 @@ import undoIcon from 'assets/image/undo.webp'
 import saveIcon from 'assets/image/save.webp'
 
 // style
-import { input, textarea, imgIcon, normalBtn } from 'style/commonStyle'
+import { input, textarea, imgIcon, normalBtn, fullDisplay } from 'style/commonStyle'
 import axios from 'axios'
 
 export default function Paint() {
@@ -275,7 +275,7 @@ export default function Paint() {
 
 	return (
 		<Layout>
-			<main>
+			<main css={fullDisplay}>
 				<div css={center}>
 					<div className="canvas" css={vertical}>
 						<div className="controller" css={center}>

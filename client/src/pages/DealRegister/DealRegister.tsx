@@ -25,7 +25,7 @@ export default function DealRegister() {
 	console.log('selectedCard', selectedCard)
 
 	const [lowPrice, setLowPrice] = useState(0)
-	const [instantPrice, setInstantPrice] = useState(100000)
+	const [instantPrice, setInstantPrice] = useState(10)
 	const [day, setDay] = useState(1)
 	const [tag, setTag] = useState('')
 

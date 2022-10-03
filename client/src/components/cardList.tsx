@@ -43,5 +43,5 @@ const paintListCSS = css`
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
-	width: 80%;
+	width: 60%;
 `

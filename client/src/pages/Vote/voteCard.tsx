@@ -7,10 +7,11 @@ import art from 'actions/api/art'
 import { setVoteList } from 'store/modules/art'
 
 import { useModal } from 'actions/hooks/useModal'
+import axios from 'axios'
 
 export default function VoteCard(props: any) {
 	const dispatch = useDispatch()
-	const { id, title, url, description, ownerNickname } = props.paint
+	const { vote, like } = props.paint
 	const currentUser = useSelector((state: any) => state.currentUser)
 	const [setModalState, setModalMsg] = useModal('')
 
@@ -27,7 +28,7 @@ export default function VoteCard(props: any) {
 		vote
 			.vote({
 				userNickname: currentUser.nickname,
-				artId: id,
+				artId: vote.art.id,
 			})
 			.then((result) => {
 				console.log(result)
@@ -35,7 +36,7 @@ export default function VoteCard(props: any) {
 	}
 	const cancelRegiser = () => {
 		art
-			.cancelRegist(id)
+			.cancelRegist(vote.art.id)
 			.then((result) => {
 				vote.paintList().then((result) => {
 					dispatch(setVoteList(result.data.response))
@@ -53,13 +54,13 @@ export default function VoteCard(props: any) {
 	return (
 		<div>
 			<div onClick={onClick}>
-				<img src={url} alt="그림" />
-				{title}
-				{description}
-				<div>좋아요수</div>
+				<img src={vote.art.url} alt="그림" />
+				{vote.art.title}
+				{vote.art.description}
+				<div>좋아요수{vote.art.count}</div>
 			</div>
 			<button onClick={onVote}>추천하기</button>
-			{ownerNickname === currentUser.nickname ? (
+			{vote.art.owner.nickname === currentUser.nickname ? (
 				<button onClick={cancelRegiser}>출품 취소하기</button>
 			) : null}
 		</div>

@@ -1,7 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import { css } from '@emotion/react'
 import DealHistory from 'pages/DealDetail/dealHistory'
 import Layout from 'layout/layout'
 
@@ -109,23 +110,57 @@ export default function DealDetail() {
 	const onBuy = () => {
 		if (loading) return
 		setLoading(true)
-		buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice)
+		// bid type 0은 입찰, 1은 즉시구매 - 근데 뭐든지 넣어도 상관없음
+		const data = {
+			bidPrice: dealInfo.instantPrice,
+			bidType: 1,
+			bidderNickname: currentUser.nickname,
+		}
+		deal
+			.bid(dealId, data)
 			.then((result) => {
 				console.log(result)
-				setLoading(false)
-				deal
-					.dealEnd(dealInfo.dealId, { owner: currentUser.nickname, tokenId: cardInfo.tokenId })
-					.then((result) => {
-						console.log(result.data)
-						setLoading(false)
-					})
-					.catch((err) => {
-						setLoading(false)
-					})
+				console.log('bid 성공적으로 보냄')
 			})
 			.catch((err) => {
 				console.log(err)
 				setLoading(false)
+				setModalMsg('예기치 못한 오류로 구매가 이루어지지 않았습니다.')
+				setModalState('alert')
+			})
+		buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice)
+			.then((result) => {
+				console.log(result)
+				deal
+					.dealEnd(dealInfo.dealId, {
+						bidderNickname: currentUser.nickname,
+						tokenId: cardInfo.tokenId,
+					})
+					.then((result) => {
+						console.log(result.data)
+						setLoading(false)
+						setModalMsg('거래가 성공적으로 이루어졌습니다')
+						setModalState('alert')
+					})
+					.catch((err) => {
+						setLoading(false)
+						setModalMsg('예기치 못한 오류로 구매가 이루어지지 않았습니다.')
+						setModalState('alert')
+					})
+			})
+			.catch((err) => {
+				console.log(err)
+				deal
+					.dealEnd(null, null)
+					.then((result) => {
+						console.log(result)
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+				setLoading(false)
+				setModalMsg('예기치 못한 오류로 구매가 이루어지지 않았습니다.')
+				setModalState('alert')
 			})
 		setLoading(false)
 	}
@@ -133,9 +168,9 @@ export default function DealDetail() {
 	return (
 		<Layout>
 			<main>
-				<div>
+				<div css={dealDetailCSS}>
 					<div>
-						<img src={cardInfo.cardImageUrl} alt="" />
+						<img src={cardInfo.cardImageURL} alt="" />
 						by. {cardInfo.designerNickname}
 					</div>
 					<hr />
@@ -179,3 +214,6 @@ export default function DealDetail() {
 		</Layout>
 	)
 }
+const dealDetailCSS = css`
+	color: white;
+`

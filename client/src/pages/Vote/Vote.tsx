@@ -40,7 +40,7 @@ export default function Vote() {
 					<div className="headline">당신의 카드에 투표하세요!</div>
 					<div>
 						한 달에 한 작품씩 가장 많이 추천받은 작품을 무료로 NFT로 변환해 드립니다. <br></br>
-						하루에 한 번, 가장 매력적인 카드에 투표해 주세요
+						유저들의 상상력 가득한 그림중에서 가장 매력적인 카드에 투표해 주세요
 					</div>
 					<div>
 						<button css={normalBtn} onClick={() => navigate('/rank')}>
