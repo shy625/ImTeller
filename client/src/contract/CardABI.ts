@@ -228,6 +228,25 @@ const cardABI: AbiItem[] = [
 		type: 'function',
 	},
 	{
+		inputs: [
+			{
+				internalType: 'string',
+				name: '_tokenURI',
+				type: 'string',
+			},
+		],
+		name: 'mint',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'payable',
+		type: 'function',
+	},
+	{
 		inputs: [],
 		name: 'name',
 		outputs: [
@@ -439,5 +458,5 @@ const cardABI: AbiItem[] = [
 
 export const web3 = new Web3(window.ethereum)
 
-export const cardAddress = '0x0Ded7446dbef192726E83Ea4D7fd4657B32A97f8'
+export const cardAddress = '0x09Db3B19A3DC32fB7256Fa577030d439dc161065'
 export const cardContract = new web3.eth.Contract(cardABI, cardAddress)

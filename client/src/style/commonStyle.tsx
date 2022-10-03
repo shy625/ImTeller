@@ -8,11 +8,11 @@ const normalBtn = css`
 	padding: '6px 12px';
 	margin: '0px 10px 5px 10px';
 	color: '#1b5198';
-	backgroundcolor: '#d1e4ff';
-	borderradius: 12;
-	fontsize: 13;
+	background-color: '#d1e4ff';
+	border-radius: 12px;
+	font-size: 13px;
 	width: '8em';
-	fontfamily: 'GongGothicMedium';
+	font-family: 'GongGothicMedium';
 `
 // text만 적혀있는 버튼
 const textBtn = css`
