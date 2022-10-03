@@ -29,7 +29,7 @@ export default function Header() {
 		user
 			.currentUser()
 			.then((result) => {
-				dispatch(setCurrentUser(result.data))
+				dispatch(setCurrentUser(result.data.response))
 			})
 			.catch((error) => {
 				console.log(error)
