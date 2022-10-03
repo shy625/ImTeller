@@ -1,17 +1,22 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import DealHistory from 'pages/DealDetail/dealHistory'
 import Layout from 'layout/layout'
 
 import deal from 'actions/api/deal'
 import itemDetail from 'actions/functions/itemDetail'
+import Loading from 'components/loading'
 import { setDealDetail } from 'store/modules/art'
 import { purchaseCard, cancelDeal } from 'contract/API'
+import { setModalMsg, setModalState } from 'store/modules/util'
 
 export default function DealDetail() {
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { dealId } = useParams()
 
 	const dealDetail = useSelector((state: any) => state.dealDetail)
@@ -27,14 +32,20 @@ export default function DealDetail() {
 	const [hour, setHour] = useState(0)
 	const [min, setMin] = useState(0)
 	const [sec, setSec] = useState(0)
+	const [loading, setLoading] = useState(false)
 
 	const [effectPre, effectPost] = itemDetail(cardInfo.effect, cardInfo.effectDetail)
 
 	useEffect(() => {
-		deal.dealDetail(dealId).then((result) => {
-			console.log(result.data)
-			dispatch(setDealDetail(result.data.response))
-		})
+		deal
+			.dealDetail(dealId)
+			.then((result) => {
+				console.log(result.data)
+				dispatch(setDealDetail(result.data.response))
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}, [])
 
 	useEffect(() => {
@@ -77,48 +88,74 @@ export default function DealDetail() {
 				deal
 					.cancelDeal(dealInfo.dealId)
 					.then((result) => {
+						setModalMsg('취소가 성공적으로 이루어졌습니다.')
+						setModalState('alert')
 						console.log(result)
+						navigate('/deal')
 					})
 					.catch((error) => {
+						setModalMsg('예기치 못한 오류로 취소가 이루어지지 않았습니다.')
+						setModalState('alert')
+						navigate(`/deal/${dealId}`)
 						console.error(error)
 					})
 			})
 			.catch((error) => {
+				setModalMsg('예기치 못한 오류로 취소가 이루어지지 않았습니다.')
+				setModalState('alert')
+				navigate(`/deal/${dealId}`)
 				console.log(error)
 			})
 	}
 
 	const onBuy = () => {
-		buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice).then((result) => {
-			console.log(result)
-			deal
-				.dealEnd(dealInfo.dealId, { owner: currentUser.nickname, tokenId: cardInfo.tokenId })
-				.then((result) => {
-					console.log(result.data)
-				})
-		})
+		if (loading) return
+		setLoading(true)
+		buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice)
+			.then((result) => {
+				console.log(result)
+				setLoading(false)
+				deal
+					.dealEnd(dealInfo.dealId, { owner: currentUser.nickname, tokenId: cardInfo.tokenId })
+					.then((result) => {
+						console.log(result.data)
+						setLoading(false)
+					})
+					.catch((err) => {
+						setLoading(false)
+					})
+			})
+			.catch((err) => {
+				console.log(err)
+				setLoading(false)
+			})
+		setLoading(false)
 	}
 
 	return (
 		<Layout>
 			<main>
-				<div>
+				<div css={box}>
 					<div>
 						<img src={cardInfo.cardImageUrl} alt="" />
 						by. {cardInfo.designerNickname}
 					</div>
-					<hr />
-					<div>
+
+					<div css={explain}>
 						<p>{dealInfo.tag}</p>
-						<p>{dealInfo.cardTitle}</p>
-						<p>{cardInfo.ownerNickname}. 소유</p>
-						<br />
+						<div css={space}>
+							<span>{dealInfo.cardTitle}</span>
+							<span>{cardInfo.ownerNickname}. 소유</span>
+						</div>
+						<hr />
 						{cardInfo.description}
 						<br />
-						{cardInfo.grade} | {effectPre + String(cardInfo.effectNum) + effectPost}
+						<div css={space}>
+							<span css={grade}>{cardInfo.grade}</span>
+							<span>{effectPre + String(cardInfo.effectNum) + effectPost}</span>
+						</div>
 						<br />
 						{day}일 {hour}시간 {min}분 {sec}초 남음
-						<hr />
 						<div>
 							{cardInfo.ownerNickname === currentUser.nickname ? (
 								<div>
@@ -126,8 +163,8 @@ export default function DealDetail() {
 								</div>
 							) : (
 								<>
-									<div>
-										즉시 구매가 {dealInfo.instantPrice}SSF
+									<div css={purchase}>
+										<div>즉시 구매가 {dealInfo.instantPrice}SSF</div>
 										<button onClick={onBuy}>즉시 구매</button>
 									</div>
 									{/* <div>
@@ -141,7 +178,37 @@ export default function DealDetail() {
 				</div>
 				<hr />
 				<DealHistory dealHistoryList={dealHistoryList} />
+				{loading ? (
+					<Loading msg={'체인에서 거래를 취소하는 중입니다.  잠시만 기다려주세요'} />
+				) : null}
 			</main>
 		</Layout>
 	)
 }
+
+const box = css`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	color: white;
+	margin: 30px;
+`
+const purchase = css`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border-radius: 5px;
+	border: 1px solid white;
+`
+const space = css`
+	display: flex;
+	justify-content: space-between;
+`
+const explain = css``
+
+const grade = css`
+	border: 3px solid rgb(163, 151, 198);
+	border-radius: 50%;
+	background-color: rgb(163, 151, 198);
+	color: black;
+`

@@ -596,6 +596,21 @@ public class RoomRepository {
         }
     }
 
+    public void updateWinOrLose(long sessionId) {
+        HashMap<String, Integer> score = roomList.get(sessionId).getScore();
+        List<String> players = roomList.get(sessionId).getPlayers();
+        int max = -1;
+        for (String player : players) {
+            if (max < score.get(player)) max = score.get(player);
+        }
+        for (String player : players) {
+            User user = userRepository.findByNickname(player).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            if (max == score.get(player)) user.plusWin();
+            else user.plusLose();
+            userRepository.save(user);
+        }
+    }
+
     public List<ItemDto> getMyItems(long sessionId, String nickname) {
         return roomList.get(sessionId).getItems().get(nickname);
     }

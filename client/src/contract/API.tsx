@@ -4,7 +4,7 @@ import { web3, marketContract } from './MarketABI'
 import dealABI from './DealABI'
 
 /**
- * 그림을 카드로 민팅
+ * 그림을 카드로 민팅 - 유료민팅
  * @params
  * - walletAddress (string)현재 로그인된 유저의 지갑주소
  * - image (string) 민팅할 그림의 s3 url
@@ -24,6 +24,21 @@ export const createCard = async (walletAddress: string, image: any) => {
 	if (approvalToPay.status) {
 		tokenId = await cardContract.methods.create(tokenURI).send({ from: wallet })
 	}
+	console.log(tokenId)
+	return tokenId.events.Transfer.returnValues.tokenId
+}
+
+/**
+ * 그림을 카드로 민팅 - 투표 당선작 무료로 민팅
+ * @params
+ * - walletAddress (string)현재 로그인된 유저의 지갑주소
+ * - image (string) 민팅할 그림의 s3 url
+ * @returns: (int) 민팅된 카드의 token_id (!=art_id)
+ */
+export const mintCard = async (walletAddress: string, image: any) => {
+	const wallet = walletAddress
+	const tokenURI = image
+	let tokenId = await cardContract.methods.mint(tokenURI).send({ from: wallet })
 	console.log(tokenId)
 	return tokenId.events.Transfer.returnValues.tokenId
 }
@@ -91,6 +106,7 @@ export const cancelDeal = async (walletAddress: any, dealId: any) => {
 	setApprovalForAll(address A, false)
 	A가 msg.sender의 NFT들을 거래할 수 있게 권한 취소
 	*/
+	console.log('취소 시작')
 	const disapproval = await cardContract.methods
 		.setApprovalForAll(dealCA, false)
 		.send({ from: wallet })

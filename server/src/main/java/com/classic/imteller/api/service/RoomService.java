@@ -281,6 +281,10 @@ public class RoomService {
         roomRepository.updateExp(sessionId);
     }
 
+    public void updateWinOrLose(long sessionId) {
+        roomRepository.updateWinOrLose(sessionId);
+    }
+
     @Transactional
     public List<ItemDto> getMyItems(long sessionId, String nickname) {
         return roomRepository.getMyItems(sessionId, nickname);

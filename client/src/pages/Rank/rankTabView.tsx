@@ -1,20 +1,18 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-import FaqGameTab from 'pages/FAQ/faqGameTab'
-import FaqDealTab from 'pages/FAQ/faqDealTab'
-import FaqVoteTab from 'pages/FAQ/faqVoteTab'
-import FaqRankTab from 'pages/FAQ/faqRankTab'
-import FaqNftTab from 'pages/FAQ/faqNftTab'
+import RankLevelTab from './rankLevelTab'
+import RankMonthlyTab from './rankMonthlyTab'
+import RankNFTTab from './rankNFTTab'
+import RankWinTab from './rankWinTab'
 
-export default function FaqTabViewer(props: any) {
+export default function RankTabViewer(props: any) {
 	const { tabNo } = props
 	const [page, setPage] = useState([0, 1])
 	const tabs = {
-		0: <FaqGameTab page={page} setPage={setPage} />,
-		1: <FaqDealTab page={page} setPage={setPage} />,
-		2: <FaqVoteTab page={page} setPage={setPage} />,
-		3: <FaqRankTab page={page} setPage={setPage} />,
-		4: <FaqNftTab page={page} setPage={setPage} />,
+		0: <RankNFTTab page={page} setPage={setPage} />,
+		1: <RankWinTab page={page} setPage={setPage} />,
+		2: <RankLevelTab page={page} setPage={setPage} />,
+		3: <RankMonthlyTab page={page} setPage={setPage} />,
 	}
 
 	const goForw = () => {

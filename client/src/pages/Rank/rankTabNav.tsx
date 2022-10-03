@@ -1,4 +1,4 @@
-export default function FaqTabNav(props: any) {
+export default function RankTabNav(props: any) {
 	const { setTabNo } = props
 
 	return (
@@ -8,35 +8,28 @@ export default function FaqTabNav(props: any) {
 					setTabNo(0)
 				}}
 			>
-				게임
+				NFT
 			</div>
 			<div
 				onClick={() => {
 					setTabNo(1)
 				}}
 			>
-				거래소
+				승률
 			</div>
 			<div
 				onClick={() => {
 					setTabNo(2)
 				}}
 			>
-				투표
+				레벨
 			</div>
 			<div
 				onClick={() => {
 					setTabNo(3)
 				}}
 			>
-				랭킹
-			</div>
-			<div
-				onClick={() => {
-					setTabNo(4)
-				}}
-			>
-				NFT
+				이달의 NFT
 			</div>
 		</div>
 	)

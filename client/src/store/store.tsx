@@ -37,6 +37,7 @@ import {
 	modalMsg,
 	modalResult,
 	loading,
+	rankTabNo,
 } from 'store/modules/util'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
@@ -80,6 +81,7 @@ const store = configureStore({
 		modalMsg: modalMsg.reducer,
 		modalResult: modalResult.reducer,
 		loading: loading.reducer,
+		rankTabNo: rankTabNo.reducer,
 	},
 })
 
