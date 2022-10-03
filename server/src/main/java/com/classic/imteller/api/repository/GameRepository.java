@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
-        Optional<Game> findBySession(Long session);
+        Optional<Game> findBySessionAndIsOpen(Long session, Boolean isOpen);
 }

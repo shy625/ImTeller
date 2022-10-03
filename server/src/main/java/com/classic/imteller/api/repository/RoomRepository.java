@@ -15,7 +15,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RoomRepository {
     private static final HashMap<Long, Room> roomList = new HashMap<>();
-    private static final List<Long> usingId = new ArrayList<>();
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
     private final ArtRepository artRepository;
@@ -29,15 +28,10 @@ public class RoomRepository {
         return roomList;
     }
 
-    public List<Long> getUsingId () {
-        return usingId;
-    }
-
     @Transactional
     public void createRoom (Room room) {
         try {
             roomList.put(room.getId(), room);
-            usingId.add(room.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +86,8 @@ public class RoomRepository {
             roomList.get(sessionId).setPlayers(players);
             // 만약 모든 플레이어가 다 나갔다면?
             if (players.size() == 0) {
-                Game game = gameRepository.findBySession(sessionId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                Game game = gameRepository.findBySessionAndIsOpen(sessionId, true).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                game.closedRoom();
                 game.deleteSession();
                 gameRepository.save(game);
                 // 게임소켓방에서도 나가기
