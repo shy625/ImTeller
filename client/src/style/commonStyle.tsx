@@ -4,15 +4,15 @@ import { css } from '@emotion/react'
 const normalBtn = css`
 	outline: 'none';
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
-	border: 0;
-	padding: '6px 12px';
-	margin: '0px 10px 5px 10px';
-	color: '#1b5198';
-	backgroundcolor: '#d1e4ff';
-	borderradius: 12;
-	fontsize: 13;
+	border: 0px;
+	padding: 6px 20px 6px 20px;
+	margin: 0px 10px 5px 10px;
+	color: #1b5198;
+	background-color: #d1e4ff;
+	border-radius: 12px;
+	font-size: 13px;
 	width: '8em';
-	fontfamily: 'GongGothicMedium';
+	font-family: 'GongGothicMedium';
 `
 // text만 적혀있는 버튼
 const textBtn = css`
@@ -27,15 +27,16 @@ const input = css({
 	width: '95%',
 	fontFamily: 'GongGothicMedium',
 })
-const textarea = css({
-	padding: '10px 10px',
-	margin: 10,
-	boxSizing: 'border-box',
-	border: 'none',
-	borderRadius: '12px',
-	width: '95%',
-	fontFamily: 'GongGothicMedium',
-})
+const textarea = css`
+	padding: 10px 10px;
+	margin: 10px;
+	box-sizing: border-box;
+	border: none;
+	border-radius: 12px;
+	width: 95%;
+	font-family: 'GongGothicMedium';
+	resize: vertical;
+`
 // 아이콘용 이미지 크기 조절
 const imgIcon = css({
 	width: 20,

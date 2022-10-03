@@ -59,5 +59,4 @@ public class GameController {
 
         return new ResponseEntity<ResponseDto>(new ResponseDto(newRoomId), HttpStatus.OK);
     }
-
 }

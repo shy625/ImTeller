@@ -40,7 +40,7 @@ public class Art extends BaseEntity {
     private String url;
 
     @Column(nullable = false)
-    private Boolean isVote;
+    private Integer isVote;
 
     @Column(nullable = false, length=20)
     private String title;
@@ -60,7 +60,7 @@ public class Art extends BaseEntity {
         this.description = desc;
     }
 
-    public void updateIsVote(boolean b) {
+    public void updateIsVote(Integer b) {
         this.isVote = b;
     }
 
@@ -68,9 +68,10 @@ public class Art extends BaseEntity {
         this.tokenId = tokenId;
     }
 
-    public void updateOwner(User owner, String ownerNickname){
+    public void changeOwner(User owner, String ownerNickname, Integer recentPrice){
         this.owner = owner;
         this.ownerNickname = ownerNickname;
+        this.recentPrice = recentPrice;
     }
 
     public void updateEffect(Effect effect) {

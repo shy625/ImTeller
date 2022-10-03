@@ -63,6 +63,12 @@ public class SocketController {
             }
         }
 
+        // 세명 미만으로 남은 경우 처리
+        if (roomService.getRoom(sessionId).getPlayers().size() < 3) {
+            roomService.stopTimer(sessionId);
+            end(sessionId);
+        }
+
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/exit", room);
     }
 
@@ -75,8 +81,8 @@ public class SocketController {
 
     // 게임시작 : 방장만 게임시작
     @MessageMapping("/room/{sessionId}/start")
-    public void start(@Header("simpSessionId") String userSessionId, @DestinationVariable long sessionId) {
-        boolean isStart = roomService.start(userSessionId, sessionId);
+    public void start(@DestinationVariable long sessionId) {
+        boolean isStart = roomService.start(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/start", isStart);
     }
 
@@ -86,9 +92,14 @@ public class SocketController {
         HashMap<String, List<GameCardDto>> firstHands = roomService.selectCards(sessionId, selectReqDto);
         if(firstHands != null) {
             List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+            // 패를 나눠주고 나서 최초 텔러 설정 (players List의 맨 앞 유저)
+            roomRepository.getRoom(sessionId).setTeller(players.get(0));
             for (String player : players) {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", firstHands.get(player));
+                sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
+                // 아이템도 같이 받아오기
+                List<ItemDto> myItems = roomService.getMyItems(sessionId, selectReqDto.getNickname());
+                sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
             }
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
@@ -99,6 +110,11 @@ public class SocketController {
     // 텔러 카드 제출 phase1
     public void phase1(long sessionId) {
         roomService.setPhase(sessionId, 1);
+        roomService.resetTurn(sessionId);
+        roomService.statusReset(sessionId);
+        // 텔러 넘기기
+        String teller = roomService.getRoom(sessionId).getTeller();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/newteller", teller);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
@@ -118,9 +134,13 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/teller")
     public void teller(@DestinationVariable long sessionId, TellerDto tellerDto) {
         roomService.setPhase(sessionId, 2);
+        // 텔러가 제출하면 status 변경
         roomService.saveTellerInfo(sessionId, tellerDto);
         roomService.stopTimer(sessionId);
 
+        // 텔러 정보 전달
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/teller", tellerDto.getCardMsg());
+        System.out.println(tellerDto.getCardMsg());
         HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase2");
@@ -137,7 +157,7 @@ public class SocketController {
                 // 시간 지나면 강제로 hand의 맨 앞 카드 제출
                 roomService.forcedCard(sessionId);
                 List<GameCardDto> gameCardList = roomService.getTable(sessionId);
-                // 선택한 게임카드들 전송
+                // 선택한 게임카드들 전송 (table에서 낸 사람, 그리고 누가 텔러인지 여부를 감춤)
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/table", gameCardList);
                 // 다음페이즈로
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase3");
@@ -216,6 +236,10 @@ public class SocketController {
         HashMap<String, Integer> totalScore = roomService.getTotalScore(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/totalresult", totalScore);
 
+        // 플레이어들이 낸 카드를 담은 table 전송하기
+        List<TableDto> table = roomService.getRoom(sessionId).getTable();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/submitcards", table);
+
         // 게임 종료조건 확인
         boolean chk = roomService.endCheck(sessionId);
         if (chk) {
@@ -231,14 +255,19 @@ public class SocketController {
         List<String> players = roomRepository.getRoom(sessionId).getPlayers();
         for (String player : players) {
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHands.get(player));
+            sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHands.get(player));
         }
+
+        // table에 있는 카드들을 덱의 맨 뒤로 돌리기
+        roomService.tableToDeck(sessionId);
 
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
                 roomService.statusReset(sessionId);
                 HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+                // 텔러 다음으로 옮기기
+                roomService.setNextTeller(sessionId);
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
                 phase1(sessionId);
@@ -250,21 +279,36 @@ public class SocketController {
     // 아이템 사용 : 아이템의 사용을 서버에 알림
     @MessageMapping("/room/{sessionId}/item")
     public void item(@DestinationVariable long sessionId, UseItemDto useItemDto) {
-        roomService.useItem(sessionId, useItemDto);
+        int itemNum = roomService.useItem(sessionId, useItemDto);
+
+        // 드로우카드 썼다면 아이템 발동하고 그 사람에게 새로운 핸드 전달
+        if (itemNum == 3) {
+            roomService.itemOneCardDraw(sessionId, useItemDto.getNickname());
+            List<GameCardDto> newHand = roomService.getHand(sessionId).get(useItemDto.getNickname());
+            String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
+            sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHand);
+        }
+
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
         // 누군가가 아이템을 사용했음을 모두에게 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/item", activatedItems);
         // 아이템을 사용한 유저에게 자신의 아이템 상태를 다시 보내줌
         List<ItemDto> myItems= roomRepository.getMyItems(sessionId, useItemDto.getNickname());
         String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
-        template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
+        sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정
-    @MessageMapping("/room/{sessionId}/end")
     public void end(@DestinationVariable long sessionId) {
+
+        // end시 player가 3명 이상일 때만 DB반영
         // DB에 점수 반영
-        roomService.updateExp(sessionId);
+        if (roomService.getRoom(sessionId).getPlayers().size() >= 3) {
+            roomService.updateExp(sessionId);
+
+            // 3명 이상일 때만 승패 반영
+            roomService.updateWinOrLose(sessionId);
+        }
 
         // 각종 변수들 초기화
         roomService.gameEnd(sessionId);

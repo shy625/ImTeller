@@ -22,9 +22,13 @@ public class Vote extends BaseEntity {
     private Integer count;
 
     @Column
-    private Boolean isVoting;
+    private Integer isVoting;
 
-    public void updateIsVoting (boolean b) {
+    public void updateIsVoting (Integer b) {
         this.isVoting = b;
+    }
+
+    public void updateCoutn(int a ){
+        this.count += a;
     }
 }

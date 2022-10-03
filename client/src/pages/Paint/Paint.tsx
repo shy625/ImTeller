@@ -19,7 +19,7 @@ import undoIcon from 'assets/image/undo.webp'
 import saveIcon from 'assets/image/save.webp'
 
 // style
-import { input, textarea, imgIcon } from 'style/commonStyle'
+import { input, textarea, imgIcon, normalBtn } from 'style/commonStyle'
 import axios from 'axios'
 
 export default function Paint() {
@@ -65,14 +65,19 @@ export default function Paint() {
 		const img = new Image()
 		if (isEdit) {
 			// axios
-			//   .get(paint.paintImageURL)
-			//   .then((res) => console.log(res.data))
-			//   .then((blob) => {
-			//     console.log(blob)
-			//   })
+			// 	.get(decodeURIComponent(paint.paintImageURL), {
+			// 		responseType: 'blob',
+			// 		withCredentials: false,
+			// 	})
+			// 	.then(async (blob) => {
+			// 		const objURL = URL.createObjectURL(blob.data)
+			// 		const image = await loadImage()
+			// 		img.src = objURL
+			// 		context.drawImage(img, 0, 0)
+			// 	})
 			// const url = URL.createObjectURL(paint.paintImageURL)
 			img.src = paint.paintImageURL
-			// img.crossOrigin = 'Anonymous'
+			img.crossOrigin = 'Anonymous'
 			img.onload = function () {
 				context.drawImage(img, 0, 0)
 			}
@@ -82,6 +87,7 @@ export default function Paint() {
 	function loadImage() {
 		const img = new Image()
 		img.src = paint.paintImageURL
+		img.crossOrigin = 'Anonymous'
 		img.onload = function () {
 			ctx.drawImage(img, 0, 0)
 		}
@@ -194,6 +200,13 @@ export default function Paint() {
 		a.click()
 	}
 
+	function cancelDrawing() {
+		const result = confirm('지금까지 그린 그림이 모두 사라집니다. 취소하시겠습니까?')
+		if (result) {
+			navigate(-1)
+		}
+	}
+
 	function savePic() {
 		// 이름이나 설명이 비어있으면 안됨
 		if (!email) {
@@ -216,17 +229,17 @@ export default function Paint() {
 		let imgBlob = new Blob([new Uint8Array(array)], { type: 'image/png' })
 		let imgFile = new File([imgBlob], 'blobtofile.png')
 
-		const data: any = new FormData()
-		let save = {
-			email: email,
-			paintTitle: title,
-			description: content,
-		}
-		data.append('saveInfo', new Blob([JSON.stringify(save)], { type: 'application/json' }))
-		data.append('file', imgFile)
 		if (!isEdit) {
+			const dataSave: any = new FormData()
+			let save = {
+				email: email,
+				paintTitle: title,
+				description: content,
+			}
+			dataSave.append('saveInfo', new Blob([JSON.stringify(save)], { type: 'application/json' }))
+			dataSave.append('file', imgFile)
 			art
-				.paintCreate(data)
+				.paintCreate(dataSave)
 				.then((result) => {
 					// 결과 확인용
 					// console.log(result)
@@ -249,7 +262,25 @@ export default function Paint() {
 					console.log(error)
 				})
 		} else {
+			const dataUpdate: any = new FormData()
+			let update = {
+				paintId: paint.paintId,
+				email: email,
+				paintTitle: title,
+				description: content,
+			}
+			dataUpdate.append(
+				'editInfo',
+				new Blob([JSON.stringify(update)], { type: 'application/json' }),
+			)
+			dataUpdate.append('file', imgFile)
 			// 처음 만드는게 아니면 수정
+			art.paintUpdate(dataUpdate).then((result) => {
+				if (result.data.response === '수정 성공') {
+					dispatch(setMyPageTab(1))
+					navigate(`/mypage/${nickname}`)
+				}
+			})
 		}
 	}
 
@@ -329,14 +360,18 @@ export default function Paint() {
 							/>
 						</div>
 						<div>
-							<button css={'none' /*normalBtn*/} onClick={savePic}>
+							<button css={normalBtn} onClick={savePic}>
 								저장
 							</button>
-							<button css={'none' /*normalBtn*/}>취소</button>
+							<button css={normalBtn} onClick={cancelDrawing}>
+								취소
+							</button>
 						</div>
 						{isEdit ? (
 							<div>
-								<button onClick={loadImage}>원본 이미지 불러오기</button>
+								<button onClick={loadImage} css={normalBtn}>
+									원본 이미지 불러오기
+								</button>
 							</div>
 						) : null}
 					</div>

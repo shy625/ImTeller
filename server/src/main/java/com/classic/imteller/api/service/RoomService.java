@@ -62,7 +62,7 @@ public class RoomService {
     }
 
     @Transactional
-    public boolean start(String userSessionId, long sessionId) {
+    public boolean start(long sessionId) {
         Room room = roomRepository.getRoom(sessionId);
         if (room == null) return false;
 
@@ -81,14 +81,7 @@ public class RoomService {
         // 3명 이상인지 확인
         if(players.size() < 3) return false;
 
-        // 방장의 sessionId와 시작요청을 보낸 사람이 같은지 확인
-        HashMap<String, String> usids = room.getUserSessionIds();
-        String leader = room.getLeader();
-        if (usids.get(leader).equals(userSessionId)) {
-            roomRepository.start(sessionId);
-            return true;
-        }
-        else return false;
+        return true;
     }
 
     @Transactional
@@ -214,6 +207,11 @@ public class RoomService {
     }
 
     @Transactional
+    public void resetTurn(long sessionId) {
+        roomRepository.resetTurn(sessionId);
+    }
+
+    @Transactional
     public int getTurn(long sessionId) {
         return roomRepository.getTurn(sessionId);
     }
@@ -238,18 +236,29 @@ public class RoomService {
     }
 
     @Transactional
+    public void itemOneCardDraw(long sessionId, String nickname) {
+        roomRepository.itemOneCardDraw(sessionId, nickname);
+    }
+
+    @Transactional
     public HashMap<String, List<GameCardDto>> getHand(long sessionId) {
         return roomRepository.getHand(sessionId);
     }
 
     @Transactional
-    public void useItem (long sessionId, UseItemDto useItemDto) {
-        roomRepository.useItem(sessionId, useItemDto);
+    public int useItem (long sessionId, UseItemDto useItemDto) {
+        return roomRepository.useItem(sessionId, useItemDto);
     }
 
     @Transactional
     public List<EffectDto> getActivated (long sessionId) {
         return roomRepository.getActivated(sessionId);
+    }
+
+    // 테이블에 있는 카드를 덱으로 이동
+    @Transactional
+    public void tableToDeck (long sessionId) {
+        roomRepository.tableToDeck(sessionId);
     }
 
     // 변수 초기화
@@ -263,6 +272,10 @@ public class RoomService {
         // DB에 경험치 반영 로직 - 이야기 더 해봐야함
         // roomRepository의 score를 받아서 적절하게 DB의 경험치(exp)에 반영해주면 된다
         roomRepository.updateExp(sessionId);
+    }
+
+    public void updateWinOrLose(long sessionId) {
+        roomRepository.updateWinOrLose(sessionId);
     }
 
     @Transactional
