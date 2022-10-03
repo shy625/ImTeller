@@ -137,6 +137,8 @@ export default function Paint(props: any) {
 							<span onClick={onMint}>민팅하기</span>
 							<br></br>
 							<span onClick={onDelete}>삭제하기</span>
+							<br></br>
+							{}
 						</div>
 					</div>
 				) : null}
