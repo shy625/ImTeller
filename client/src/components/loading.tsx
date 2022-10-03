@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import spinner from '../assets/image/spinner.gif'
+import spinner from 'assets/image/spinner.gif'
 
 const Loading = (props: any) => {
 	const msg = props.msg

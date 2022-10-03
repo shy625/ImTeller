@@ -75,13 +75,16 @@ public class RoomRepository {
     @Transactional
     public String exitRoom (long sessionId, ExitReqDto exitReqDto) {
         try {
-            // exit할때
-            // 나간사람이 방장이면 방장 바꾸기
             // 만약 1명뿐이라면 특수케이스
             if (roomList.get(sessionId).getPlayers().size() > 1) {
-                String nextLeader = roomList.get(sessionId).getPlayers().get(1);
-                if (nextLeader.equals(exitReqDto.getNickname())) nextLeader = roomList.get(sessionId).getPlayers().get(0);
-                roomList.get(sessionId).setLeader(nextLeader);
+                // 나간사람이 방장이면 방장 바꾸기
+                // 그게 아니면 바꿀 필요 없음
+                String originalLeader = roomList.get(sessionId).getLeader();
+                if (originalLeader.equals(exitReqDto.getNickname())) {
+                    // 맨 앞에 있는 사람이 방장이니까 다음 사람으로 바꿈
+                    String nextLeader = roomList.get(sessionId).getPlayers().get(1);
+                    roomList.get(sessionId).setLeader(nextLeader);
+                }
             }
             // players에서 없애기
             List<String> players = roomList.get(sessionId).getPlayers();
@@ -163,6 +166,10 @@ public class RoomRepository {
     public void start (long sessionId) {
         // 시작변수 변경
         roomList.get(sessionId).setStarted(true);
+
+        // 최초 텔러는 방장
+        String leader = roomList.get(sessionId).getLeader();
+        roomList.get(sessionId).setTeller(leader);
     }
 
     public boolean selectCards (long sessionId, SelectReqDto selectReqDto) {
@@ -239,6 +246,13 @@ public class RoomRepository {
         // 할당한 내용 hand변수에 반영하고 반환하기
         roomList.get(sessionId).setHand(basicHand);
         return basicHand;
+    }
+
+    public void resetTurn(long sessionId) {
+        // 제출 카드, 선택 목록, 아이템 발동 내역 삭제
+        roomList.get(sessionId).setTable(new ArrayList<TableDto>());
+        roomList.get(sessionId).setChoice(new HashMap<String, Long>());
+        roomList.get(sessionId).setActivated(new ArrayList<EffectDto>());
     }
 
     public void setPhase (long sessionId, int phase) {
@@ -399,8 +413,11 @@ public class RoomRepository {
     }
 
     public HashMap<String, Integer> scoreCalc(long sessionId) {
+        // 이번 턴의 점수
         HashMap<String, Integer> scores = new HashMap<>();
+        // 제출한 카드
         List<TableDto> tables = roomList.get(sessionId).getTable();
+        // 일반 유저 선택
         HashMap<String, Long> choice = roomList.get(sessionId).getChoice();
         String teller = roomList.get(sessionId).getTeller();
         List<String> players = roomList.get(sessionId).getPlayers();
@@ -416,11 +433,11 @@ public class RoomRepository {
         // 카드 주인에게 2점씩, 텔러꺼 골랐으면 6점
         for (String player : players) {
             // 텔러는 체크안함
-            if (player == teller) continue;
+            if (player.equals(teller)) continue;
             // 나머지케이스 체크
             for (TableDto table : tables) {
                 if (choice.get(player) == table.getCardId()){
-                    if (table.getNickname() == teller) {
+                    if (table.getNickname().equals(teller)) {
                         int newScore = scores.get(player) + 3;
                         scores.replace(player, newScore);
                         ++answerPlayer;
@@ -434,7 +451,9 @@ public class RoomRepository {
             }
         }
         // 텔러는 특별계산 - 모두가 못맞추거나 다맞추면 0점, 나머지 케이스는 6점
-        if (!(answerPlayer == normalPlayerNum || answerPlayer == 0)) {
+        if (answerPlayer == normalPlayerNum || answerPlayer == 0)  {
+            scores.replace(teller, 0);
+        }  else {
             scores.replace(teller, 6);
         }
 
@@ -496,7 +515,7 @@ public class RoomRepository {
         return roomList.get(sessionId).getHand();
     }
 
-    public void useItem(long sessionId, UseItemDto useItemDto){
+    public int useItem(long sessionId, UseItemDto useItemDto){
         // 아이템 쓴사람이 보유한 아이템 현황
         List<ItemDto> afterUsed = roomList.get(sessionId).getItems().get(useItemDto.getNickname());
 
@@ -510,19 +529,23 @@ public class RoomRepository {
         roomList.get(sessionId).getItems().replace(useItemDto.getNickname(), afterUsed);
 
         // 아이템의 적용
+        // 드로우 아이템은 중복적용 가능하게
         boolean chk = true;
         List<EffectDto> activated = roomList.get(sessionId).getActivated();
-        for (int i = 0; i < activated.size(); ++i) {
-            if (activated.get(i).getEffect() == useItemDto.getEffect()) {
-                if (activated.get(i).getEffectNum() >= useItemDto.getEffectNum()) {
-                    chk = false;
-                    break;
-                } else {
-                    activated.remove(i);
-                    break;
+        if (useItemDto.getEffect() != 3) {
+            for (int i = 0; i < activated.size(); ++i) {
+                if (activated.get(i).getEffect() == useItemDto.getEffect()) {
+                    if (activated.get(i).getEffectNum() >= useItemDto.getEffectNum()) {
+                        chk = false;
+                        break;
+                    } else {
+                        activated.remove(i);
+                        break;
+                    }
                 }
             }
         }
+
 
         // 추가해도 되는 상황이면 추가하기
         if (chk) {
@@ -533,10 +556,48 @@ public class RoomRepository {
                     .effectNum(useItemDto.getEffectNum()).build();
             activated.add(newEffect);
         }
+
+        return useItemDto.getEffect();
+    }
+
+    // 아이템을 사용한 카드 한장 드로우
+    public void itemOneCardDraw(long sessionId, String nickname) {
+        // 덱에서 맨 앞에꺼 빼오기
+        Long newCardId = roomList.get(sessionId).getDeck().remove(0);
+        Art art = artRepository.findById(newCardId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        GameCardDto tmpCard = GameCardDto.builder()
+                .cardId(newCardId)
+                .cardUrl(art.getUrl()).build();
+        roomList.get(sessionId).getHand().get(nickname).add(tmpCard);
     }
 
     public List<EffectDto> getActivated (long sessionId) {
         return roomList.get(sessionId).getActivated();
+    }
+
+    public void tableToDeck (long sessionId) {
+        List<TableDto> tables = roomList.get(sessionId).getTable();
+        // 한번 셔플한다
+        Collections.shuffle(tables);
+        for (TableDto table : tables) {
+            roomList.get(sessionId).getDeck().add(table.getCardId());
+        }
+    }
+
+    @Transactional
+    public void updateExp(long sessionId) {
+        HashMap<String, Integer> score = roomList.get(sessionId).getScore();
+        List<String> players = roomList.get(sessionId).getPlayers();
+        // DB에 현재까지의 최종 score를 그대로 경험치로 반영한다
+        for (String player : players) {
+            User user = userRepository.findByNickname(player).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            user.updateExp(score.get(player));
+            userRepository.save(user);
+        }
+    }
+
+    public List<ItemDto> getMyItems(long sessionId, String nickname) {
+        return roomList.get(sessionId).getItems().get(nickname);
     }
 
     public void gameEnd(long sessionId) {

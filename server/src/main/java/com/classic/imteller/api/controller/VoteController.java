@@ -1,7 +1,6 @@
 package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.ResponseDto;
-import com.classic.imteller.api.dto.user.DetailResDto;
 import com.classic.imteller.api.repository.Art;
 import com.classic.imteller.api.service.VoteService;
 import io.swagger.annotations.Api;

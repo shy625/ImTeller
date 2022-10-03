@@ -105,6 +105,7 @@ export default function Paint() {
 			return
 		}
 	}
+
 	// function onMove({ nativeEvent }) {
 	//   if (isDrawing) {
 	//     ctx.lineCap = 'round'
@@ -225,7 +226,7 @@ export default function Paint() {
 					//   console.log(value)
 					// }
 
-					if (result.data === '저장 성공') {
+					if (result.data.response === '저장 성공') {
 						// 성공했다는 alert modal
 						dispatch(setMyPageTab(1))
 						navigate(`/mypage/${nickname}`)

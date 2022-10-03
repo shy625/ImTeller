@@ -121,7 +121,7 @@ export const chats = createSlice({
 		chats: [
 			{
 				nickname: 'test',
-				msg: 'testtesttest',
+				userMsg: 'testtesttest',
 				time: '9/24/2022, 10:10:10 AM',
 			},
 		],

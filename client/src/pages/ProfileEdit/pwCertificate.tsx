@@ -15,7 +15,7 @@ export default function PwCertificate(props: any) {
 		user
 			.login(credentials)
 			.then((result) => {
-				if (result.data === '올바른 비밀번호입니다.') {
+				if (result.data.response === '올바른 비밀번호입니다.') {
 					props.setPassword(password)
 				}
 			})

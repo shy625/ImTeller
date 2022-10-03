@@ -10,7 +10,6 @@ import Setting from 'components/setting'
 import { setCurrentUser, setEmail, setLogout } from 'store/modules/user'
 import user from 'actions/api/user'
 
-import logo from 'assets/image/logo2.png'
 import { textBtn } from 'style/commonStyle'
 
 export default function Header() {

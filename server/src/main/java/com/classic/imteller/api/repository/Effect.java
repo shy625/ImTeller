@@ -12,8 +12,8 @@ public class Effect extends BaseEntity {
     private String grade;
 
     @Column
-    private int effect;
+    private Integer effect;
 
     @Column
-    private int effectNum;
+    private Integer effectNum;
 }

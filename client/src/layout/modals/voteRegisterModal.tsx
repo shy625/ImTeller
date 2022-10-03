@@ -24,7 +24,7 @@ export default function VoteRegisterModal(props: any) {
 			.paintRegist(selectedPaint)
 			.then((result) => {
 				console.log(result)
-				if (result.data === '제출 성공') {
+				if (result.data.response === '제출 성공') {
 					dispatch(setModalMsg('출품이 완료되었습니다.'))
 					dispatch(setModalState('alert'))
 				} else {

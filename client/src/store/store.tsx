@@ -23,6 +23,7 @@ import {
 	selectedPaint,
 	dealList,
 	dealDetail,
+	voteList,
 } from 'store/modules/art'
 import {
 	bgmSrc,
@@ -62,10 +63,11 @@ const store = configureStore({
 
 		cardList: cardList.reducer,
 		paintList: paintList.reducer,
+		selectedCard: selectedCard.reducer,
 		selectedPaint: selectedPaint.reducer,
 		dealList: dealList.reducer,
 		dealDetail: dealDetail.reducer,
-		selectedCard: selectedCard.reducer,
+		voteList: voteList.reducer,
 
 		bgmSrc: bgmSrc.reducer,
 		isBgmOn: isBgmOn.reducer,

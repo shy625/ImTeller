@@ -29,6 +29,10 @@ public class RoomService {
         // 인원수가 초과됐어도 방에 들어갈 수 없어야 함
         if (roomRepository.getRoom(sessionId).getPlayers().size() >= roomRepository.getRoom(sessionId).getMaxNum()) return null;
 
+        // 같은 닉네임을 가진 유저가 있어도 방에 들어갈 수 없어야 함
+        List<String> players = roomRepository.getRoom(sessionId).getPlayers();
+        if (players.contains(joinReqDto.getNickname())) return null;
+
         boolean isGood = roomRepository.joinRoom(userSessionId, sessionId, joinReqDto);
         if (isGood) {
             Room room = roomRepository.getRoom(sessionId);
@@ -210,6 +214,11 @@ public class RoomService {
     }
 
     @Transactional
+    public void resetTurn(long sessionId) {
+        roomRepository.resetTurn(sessionId);
+    }
+
+    @Transactional
     public int getTurn(long sessionId) {
         return roomRepository.getTurn(sessionId);
     }
@@ -234,18 +243,29 @@ public class RoomService {
     }
 
     @Transactional
+    public void itemOneCardDraw(long sessionId, String nickname) {
+        roomRepository.itemOneCardDraw(sessionId, nickname);
+    }
+
+    @Transactional
     public HashMap<String, List<GameCardDto>> getHand(long sessionId) {
         return roomRepository.getHand(sessionId);
     }
 
     @Transactional
-    public void useItem (long sessionId, UseItemDto useItemDto) {
-        roomRepository.useItem(sessionId, useItemDto);
+    public int useItem (long sessionId, UseItemDto useItemDto) {
+        return roomRepository.useItem(sessionId, useItemDto);
     }
 
     @Transactional
     public List<EffectDto> getActivated (long sessionId) {
         return roomRepository.getActivated(sessionId);
+    }
+
+    // 테이블에 있는 카드를 덱으로 이동
+    @Transactional
+    public void tableToDeck (long sessionId) {
+        roomRepository.tableToDeck(sessionId);
     }
 
     // 변수 초기화
@@ -255,8 +275,15 @@ public class RoomService {
     }
 
     @Transactional
-    public void finalResult(long sessionId) {
+    public void updateExp(long sessionId) {
         // DB에 경험치 반영 로직 - 이야기 더 해봐야함
         // roomRepository의 score를 받아서 적절하게 DB의 경험치(exp)에 반영해주면 된다
+        roomRepository.updateExp(sessionId);
     }
+
+    @Transactional
+    public List<ItemDto> getMyItems(long sessionId, String nickname) {
+        return roomRepository.getMyItems(sessionId, nickname);
+    }
+
 }

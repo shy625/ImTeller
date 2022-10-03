@@ -26,8 +26,8 @@ export default function GameList() {
 
 	useEffect(() => {
 		game.roomList().then((result) => {
-			console.log(result.data)
-			dispatch(setRoomList(result.data))
+			console.log(result.data.response)
+			dispatch(setRoomList(result.data.response))
 		})
 	}, [])
 
@@ -52,11 +52,13 @@ export default function GameList() {
 				<h2>게임방 목록입니다</h2>
 				<button onClick={makeRoom}>방만들기</button>
 				<div css={roomListCSS}>
-					{roomList.map((room: any) => (
-						<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.isLocked)}>
-							<Room room={room} />
-						</div>
-					))}
+					{roomList.length
+						? roomList.map((room: any) => (
+								<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.isLocked)}>
+									<Room room={room} />
+								</div>
+						  ))
+						: null}
 				</div>
 			</main>
 		</Layout>
