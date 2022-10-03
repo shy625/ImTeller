@@ -42,7 +42,6 @@ public class VoteController {
     @ApiOperation(value = "그림 당선처리", notes = "당선된 그림의 nft화 대기를 위해 체크해놓는 API")
     // detailResDto 재활용
     public ResponseEntity<ResponseDto> electedPaint(@RequestBody ElectReqDto electReqDto) {
-        System.out.println(electReqDto.getArtId());
         voteService.electedPaint(electReqDto.getArtId());
         return new ResponseEntity<ResponseDto>(new ResponseDto("민팅 대기 완료"), HttpStatus.ACCEPTED);
     }

@@ -40,7 +40,7 @@ public class Art extends BaseEntity {
     private String url;
 
     @Column(nullable = false)
-    private Boolean isVote;
+    private Integer isVote;
 
     @Column(nullable = false, length=20)
     private String title;
@@ -60,7 +60,7 @@ public class Art extends BaseEntity {
         this.description = desc;
     }
 
-    public void updateIsVote(boolean b) {
+    public void updateIsVote(Integer b) {
         this.isVote = b;
     }
 
