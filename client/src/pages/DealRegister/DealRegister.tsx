@@ -80,9 +80,10 @@ export default function DealRegister() {
 			setIsLoading(false)
 		})
 		console.log(contractId)
+
 		const now = new Date()
 		let date: any = new Date(now.setDate(now.getDate() + day))
-		date = date.toISOString().replace('T', ' ').substring(0, 19)
+		date = date.toISOString().substring(0, 19)
 		const data = {
 			artId: selectedCard.cardId,
 			dealAddress: contractId,

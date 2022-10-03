@@ -9,11 +9,10 @@ const vote = {
 			url: `${END_POINT}/paints`,
 		})
 	},
-	paintSubmit(data) {
+	paintSubmit(artId) {
 		return api({
-			method: 'post',
-			url: `${END_POINT}/submit`,
-			data: data,
+			method: 'patch',
+			url: `${END_POINT}/onVote/${artId}`,
 		})
 	},
 	vote(data) {
