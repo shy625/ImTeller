@@ -9,7 +9,7 @@ export default function rankList(props: any) {
 	return (
 		<div css={box}>
 			<div css={title}>랭킹 탭이름 props 받아서 넣어야될 것 같은디</div>
-			<div css={list}>왜 배경이 꽉안차고 fitcontent 느낌이지</div>
+			<div css={list}>왜 배경이 꽉안차는걸까 css는 어렵다</div>
 		</div>
 	)
 }
