@@ -7,7 +7,9 @@ import { css } from '@emotion/react'
 import CardList from 'components/cardList'
 
 import { setModalState, setModalMsg } from 'store/modules/util'
+import { setVoteList } from 'store/modules/art'
 import art from 'actions/api/art'
+import vote from 'actions/api/vote'
 
 export default function VoteRegisterModal(props: any) {
 	const dispatch = useDispatch()
@@ -29,6 +31,10 @@ export default function VoteRegisterModal(props: any) {
 			.then((result) => {
 				console.log(result)
 				if (result.data.response === '제출 성공') {
+					vote.paintList().then((result) => {
+						dispatch(setVoteList(result.data.response))
+						console.log('업데이트까지 끝')
+					})
 					dispatch(setModalMsg('출품이 완료되었습니다.'))
 					dispatch(setModalState('alert'))
 					navigate('/vote')
