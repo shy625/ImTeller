@@ -99,13 +99,13 @@ export default function Paint(props: any) {
 				<img style={{ height: '15vh' }} src={paintImageURL} alt="" />
 				{!isVote ? (
 					<div css={type === 0 ? type0InfoCSS : displayNoneCSS}>
-						<span
+						{/* <span
 							onClick={() => {
 								navigate('/paint', { state: { isEdit: true, paint: props.paint } })
 							}}
 						>
 							수정하기
-						</span>
+						</span> */}
 						<br />
 						<span
 							onClick={() => {

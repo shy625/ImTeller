@@ -33,12 +33,12 @@ export default function Login(props: any) {
 			email: email.value,
 			password: password.value,
 		}
-
+		console.log('실행됨')
+		console.log(credentials)
 		user
 			.login(credentials)
 			.then((result) => {
-				console.log(result)
-				if (result.data.response === '올바른 비밀번호입니다.') {
+				if (result.data.response == '올바른 비밀번호입니다.') {
 					localStorage.setItem('email', credentials.email)
 					dispatch(setEmail(credentials.email))
 					user
