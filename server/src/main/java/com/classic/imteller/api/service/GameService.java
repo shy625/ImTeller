@@ -91,7 +91,7 @@ public class GameService {
 
     @Transactional
     public long createRoom(MakeReqDto roomInfo) {
-        long newRoomId = this.getRoomId();
+        long newRoomId = getRoomId();
 
         Room room = Room.builder()
                 .id(newRoomId)
