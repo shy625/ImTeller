@@ -12,41 +12,30 @@ export default function VoteModal(props: any) {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const currentUser = useSelector((state: any) => state.currentUser)
-	const paintList = useSelector((state: any) => state.paintList)
-	const { paintId, paintTitle, paintImageURL, description } = useSelector(
-		(state: any) => state.modalMsg,
-	)
+	const { id, title, url, description, designer } = useSelector((state: any) => state.modalMsg)
 
 	const [isMyPaint, setIsMyPaint] = useState(false)
 
 	useEffect(() => {
-		art.paintList({ nickname: currentUser.nickname }).then((result) => {
-			console.log(result)
-			dispatch(setPaintList(result.data.response))
-		})
-	}, [])
-
-	useEffect(() => {
-		if (
-			paintList.some((paint) => {
-				if (paint.paintId === paintId) return true
-			})
-		) {
+		if (currentUser.nickname === designer.nickname) {
 			setIsMyPaint(true)
 		}
-	}, [paintList])
+	}, [])
 
 	const onCancel = () => {
-		art.cancelRegist(paintId).then((result) => {
-			console.log(result.data)
-			navigate('/vote')
+		art.cancelRegist(id).then((result) => {
+			console.log(result.data.response)
+			if (result.data.response === '제출 해제 성공') {
+				navigate('/vote')
+				dispatch(setModalState(''))
+			}
 		})
 	}
 
 	const onVote = () => {
 		const data = {
 			nickname: currentUser.nickname,
-			paintId,
+			id,
 		}
 		vote
 			.vote(data)
@@ -62,11 +51,11 @@ export default function VoteModal(props: any) {
 
 	return (
 		<div>
-			{paintTitle}
-			<img src={paintImageURL} alt="paintTitle" />
+			{title}
+			<img src={url} alt="paintTitle" />
 			{description}
 			{'좋아요 변수명 정해지면 넣기'}
-			by. {'제작자 이름'}
+			by. {designer.nickname}
 			<button onClick={() => dispatch(setModalState(''))}>돌아가기</button>
 			{isMyPaint ? (
 				<button onClick={onCancel}>출품 취소하기</button>

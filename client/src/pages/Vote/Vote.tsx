@@ -13,12 +13,11 @@ export default function Vote() {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const voteList = useSelector((state: any) => state.paintList)
+	const voteList = useSelector((state: any) => state.voteList)
 	const [setModalState, setModalMsg] = useModal('')
 
 	useEffect(() => {
 		vote.paintList().then((result) => {
-			console.log(result.data.response)
 			dispatch(setVoteList(result.data.response))
 		})
 	}, [])

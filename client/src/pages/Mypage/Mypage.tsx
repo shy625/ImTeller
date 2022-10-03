@@ -63,7 +63,7 @@ export default function Mypage() {
 			art
 				.paintList({ nickname: nick })
 				.then((result) => {
-					dispatch(setPaintList(result.data))
+					dispatch(setPaintList(result.data.response))
 				})
 				.catch((error) => {
 					console.error(error)

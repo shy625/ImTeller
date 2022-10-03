@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -84,6 +86,7 @@ export default function Paint() {
 			ctx.drawImage(img, 0, 0)
 		}
 	}
+
 	function start({ nativeEvent }) {
 		if (!restore) {
 			ctx.fillStyle = 'white'
@@ -128,6 +131,7 @@ export default function Paint() {
 		setIsDrawing(true)
 		ctx.beginPath()
 	}
+
 	function cancelPainting({ nativeEvent }) {
 		if (isDrawing) {
 			ctx.stroke()
@@ -139,12 +143,14 @@ export default function Paint() {
 			setIndex(index + 1)
 		}
 	}
+
 	function onCanvasClick() {
 		if (isFilling) {
 			ctx.fillStyle = color
 			ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 		}
 	}
+
 	function eraseAll() {
 		ctx.fillStyle = 'white'
 		ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -152,10 +158,12 @@ export default function Paint() {
 		setRestore([])
 		setIndex(-1)
 	}
+
 	function eraseStroke() {
 		setColor('white')
 		setIsFilling(false)
 	}
+
 	function onDoubleClick({ nativeEvent }) {
 		if (text) {
 			ctx.save()
@@ -166,6 +174,7 @@ export default function Paint() {
 			setIsDrawing(false)
 		}
 	}
+
 	function undo() {
 		if (index < 0) {
 			eraseAll()
@@ -175,6 +184,7 @@ export default function Paint() {
 			ctx.putImageData(restore[index], 0, 0)
 		}
 	}
+
 	function downloadPic() {
 		let imgDataUrl = canvas.toDataURL('image/png')
 
@@ -183,6 +193,7 @@ export default function Paint() {
 		a.download = `${title}.png`
 		a.click()
 	}
+
 	function savePic() {
 		// 이름이나 설명이 비어있으면 안됨
 		if (!email) {

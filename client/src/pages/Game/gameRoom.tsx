@@ -9,19 +9,17 @@ import art from 'actions/api/art'
 import { setCardList } from 'store/modules/art'
 import { setSelectedCards } from 'store/modules/game'
 import { useModal } from 'actions/hooks/useModal'
-import nftGrade from 'actions/functions/nftGrade'
+// import nftGrade from 'actions/functions/nftGrade'
 
 export default function GameRoom(props: any) {
 	const dispatch = useDispatch()
-	const roomId = useParams().roomId
-	const { stompClient } = props
+	const { nickname, client, roomId } = props
 
-	const cardList = useSelector((state: any) => state.cardList)
 	const selectedCards = useSelector((state: any) => state.selectedCards)
-	const { nickname } = useSelector((state: any) => state.currentUser)
+	const roomInfo = useSelector((state: any) => state.roomInfo)
 
-	const [cardGrade, setCardGrade] = useState('')
-
+	const [isReady, setIsReady] = useState(false)
+	const [isLeader, setIsLeader] = useState(false)
 	const [setModalState, setModalMsg] = useModal('')
 
 	useEffect(() => {
@@ -31,8 +29,48 @@ export default function GameRoom(props: any) {
 	}, [])
 
 	useEffect(() => {
-		if (selectedCards.length) setCardGrade(nftGrade(selectedCards))
-	}, selectedCards)
+		if (roomInfo.ready[nickname]) {
+			setIsReady(true)
+		} else {
+			setIsReady(false)
+		}
+	}, [roomInfo.ready])
+
+	useEffect(() => {
+		if (roomInfo.leader === nickname) {
+			setIsLeader(true)
+			client.publish({
+				destination: `/pub/room/${roomId}/ready`,
+				body: JSON.stringify({
+					nickname,
+					isReady: true,
+				}),
+			})
+		} else {
+			setIsLeader(false)
+		}
+	}, [roomInfo.leader])
+
+	const onReady = () => {
+		client.publish({
+			destination: `/pub/room/${roomId}/ready`,
+			body: JSON.stringify({
+				nickname,
+				isReady: !isReady,
+			}),
+		})
+	}
+
+	const onStart = () => {
+		client.publish({
+			destination: `/pub/room/${roomId}/start`,
+			body: JSON.stringify({
+				nickname,
+				isReady: !isReady,
+			}),
+		})
+		console.log(3)
+	}
 
 	return (
 		<div css={main}>
@@ -52,7 +90,13 @@ export default function GameRoom(props: any) {
 			>
 				취소
 			</button>
-			{cardGrade}
+			{selectedCards}
+
+			{isLeader ? (
+				<button onClick={onStart}>게임 시작</button>
+			) : (
+				<button onClick={onReady}>{isReady ? '준비 취소' : '준비'}</button>
+			)}
 		</div>
 	)
 }

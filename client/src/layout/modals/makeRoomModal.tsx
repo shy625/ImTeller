@@ -58,11 +58,11 @@ export default function MakeRoomModal(props: any) {
 					<main>
 						<form>
 							<input onChange={(e) => setRoomName(e.target.value)} placeholder="방 제목"></input>
+							<label htmlFor="승리조건">승리조건</label>
 							<select onChange={(e: any) => setMaxNum(e.target.value)}>
-								<option value={0} disabled selected>
-									인원
+								<option value={3} selected>
+									3명
 								</option>
-								<option value={3}>3명</option>
 								<option value={4}>4명</option>
 								<option value={5}>5명</option>
 								<option value={6}>6명</option>
@@ -94,15 +94,17 @@ export default function MakeRoomModal(props: any) {
 									placeholder="승리 점수"
 								></input>
 							) : (
-								<select onChange={(e: any) => setTypeNum(e.target.value)}>
-									<option value={0} disabled selected>
-										승리 조건
-									</option>
-									<option value={2}>2라운드</option>
-									<option value={3}>3라운드</option>
-									<option value={4}>4라운드</option>
-									<option value={5}>5라운드</option>
-								</select>
+								<>
+									<label htmlFor="승리조건">승리조건</label>
+									<select id="승리조건" onChange={(e: any) => setTypeNum(e.target.value)}>
+										<option value={2} selected>
+											2라운드
+										</option>
+										<option value={3}>3라운드</option>
+										<option value={4}>4라운드</option>
+										<option value={5}>5라운드</option>
+									</select>
+								</>
 							)}
 							<div className="options">
 								<label>공개 여부</label>

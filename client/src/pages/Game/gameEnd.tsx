@@ -7,7 +7,7 @@ export default function GameEnd() {
 	// profile로 하기
 	return (
 		<div>
-			1등 : {endResult[0].nickname} | {endResult[0].score}
+			{/* 1등 : {endResult[0].nickname} | {endResult[0].score}
 			<br />
 			2등 : {endResult[1].nickname} | {endResult[1].score}
 			<br />
@@ -17,7 +17,8 @@ export default function GameEnd() {
 				<div key={player.nickname}>
 					{player.nickname} | {player.score}
 				</div>
-			))}
+			))} */}
+			12341234
 		</div>
 	)
 }

@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -122,7 +124,7 @@ export default function Paint(props: any) {
 				) : null}
 			</div>
 			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
-			<Loading msg={'민팅이 진행중입니다. 잠시만 기다려주세요'} />
+			{loading ? <Loading msg={'민팅이 진행중입니다. 잠시만 기다려주세요'} /> : null}
 			{paintTitle}
 			{description}
 		</div>
@@ -143,7 +145,7 @@ const type0CSS = css`
 const type0InfoCSS = css`
 	display: none;
 	position: relative;
-	top: -15vh; // 부모인 paintImgCSS 높이만큼 올려주면 됨
+	top: -15vh; // 형제인 paintImgCSS 높이만큼 올려주면 됨
 	width: 100%;
 	height: 100%;
 `

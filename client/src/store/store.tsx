@@ -12,9 +12,10 @@ import {
 	itemState,
 	gameCards,
 	selectedCards,
+	teller,
 	description,
 	table,
-	endResult,
+	result,
 } from 'store/modules/game'
 import {
 	cardList,
@@ -56,9 +57,10 @@ const store = configureStore({
 		itemState: itemState.reducer,
 		gameCards: gameCards.reducer,
 		selectedCards: selectedCards.reducer,
+		teller: teller.reducer,
 		description: description.reducer,
 		table: table.reducer,
-		endResult: endResult.reducer,
+		result: result.reducer,
 		myPageTab: myPageTab.reducer,
 
 		cardList: cardList.reducer,

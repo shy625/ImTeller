@@ -15,7 +15,7 @@ export default function Profile(props: any) {
 			}}
 			css={profileCss}
 		>
-			<img src={profile} alt="" css={profileImgCss} />
+			<img src={profile} alt="" css={profileImgCss} title={nickname} />
 			<div>{nickname}</div>
 		</div>
 	)

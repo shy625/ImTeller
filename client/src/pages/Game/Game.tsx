@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
 import { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
 
 import GameHeader from 'pages/Game/gameHeader'
-import Items from 'pages/Game/items'
 import GameTeller from 'pages/Game/gameTeller'
 import GameChoice from 'pages/Game/gameChoice'
 import GameResult from 'pages/Game/gameResult'
@@ -19,38 +18,40 @@ import { useWebSocket } from 'actions/hooks/useWebSocket'
 import { useModal } from 'actions/hooks/useModal'
 import {
 	setIsChecked,
+	setRoomInfo,
+	setReady,
 	setPlayers,
 	setGameCards,
-	addGameCard,
 	setTime,
 	setDescription,
 	setTable,
-	setEndResult,
+	setResult,
+	setTeller,
 } from 'store/modules/game'
 import art from 'actions/api/art'
-import game from 'actions/api/game'
 import { useBGM } from 'actions/hooks/useBGM'
-import { setBgmSrc } from 'store/modules/util'
 
 export default function Game() {
-	const location = useLocation()
 	const dispatch = useDispatch()
 	const { roomId } = useParams()
+
 	const { nickname } = useSelector((state: any) => state.currentUser)
 	const email = useSelector((state: any) => state.email)
-	const isChecked = useSelector((state: any) => state.isChecked)
 	const players = useSelector((state: any) => state.players)
 	const selectedCard = useSelector((state: any) => state.selectedCards)
+	const roomInfo = useSelector((state: any) => state.roomInfo)
 
-	const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2면 gameEnd
-	const [turn, setTurn] = useState(0) // state가 1일때 작동 : 0이면 teller 단계(텔러면 문장 적기, 아니면 유사 그림 선택), 1이면 choice단계, 2면 result단계
-	const [imteller, setImteller] = useState(false)
-	const [result, setResult] = useState([])
-	const [setModalState, setModalMsg] = useModal('')
 	const [ws, setWs] = useState<any>('')
+	const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2이면 gameResult
+	const [phase, setPhase] = useState(0) // state가 1일때 작동. 1: 텔러 2: 낚시그림선택 3: 텔러맞추기 4: 결과
+	const [turnResult, setTurnResult] = useState<any>([])
+	const [submitCards, setSubmitCards] = useState<any>([])
+
+	const [setModalState, setModalMsg] = useModal('')
 
 	useBGM('game')
 
+	// 새로고침 방지
 	const blockRefresh = (event) => {
 		event.preventDefault()
 		event.returnValue = ''
@@ -70,6 +71,7 @@ export default function Game() {
 		}
 	}, [])
 
+	// 웹소켓
 	useEffect(() => {
 		const client = useWebSocket({ email })
 		client.onConnect = () => {
@@ -77,150 +79,169 @@ export default function Game() {
 				destination: `/pub/room/${roomId}/join`,
 				body: JSON.stringify({ nickname }),
 			})
+			// 출입에 따라 방정보 변경
 			client.subscribe(`/sub/room/${roomId}/join`, (action) => {
-				console.log(action)
 				const content = JSON.parse(action.body)
-				console.log(content)
+				dispatch(setRoomInfo(content))
+				console.log('join', content)
+			})
+			client.subscribe(`/sub/room/${roomId}/exit`, (action) => {
+				const content = JSON.parse(action.body)
+				dispatch(setRoomInfo(content))
+				console.log('exit', content)
+			})
+			// 레디 상태 변경
+			client.subscribe(`/sub/room/${roomId}/ready`, (action) => {
+				const content = JSON.parse(action.body)
+				dispatch(setReady(content))
+				console.log('ready', content)
+			})
+			// 시작시 선택카드 제출
+			client.subscribe(`/sub/room/${roomId}/start`, (action) => {
+				console.log('start', action.body)
+				const content = JSON.parse(action.body)
+				if (!content) return
+				client.publish({
+					destination: `/pub/room/${roomId}/select`,
+					body: JSON.stringify({
+						nickname,
+						selectedCard,
+					}),
+				})
+				client.publish({
+					destination: `/pub/room/${roomId}/roominfo`,
+				})
+			})
+			// 내 아이템 받기
+			client.subscribe(
+				`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/item`,
+				(action) => {
+					console.log('myitem', action.body)
+					const content = JSON.parse(action.body)
+					console.log('myitem', content)
+				},
+			)
+			// 내 패 최신화
+			client.subscribe(
+				`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/mycards`,
+				(action) => {
+					console.log('mycards', action.body)
+					const content = JSON.parse(action.body)
+					console.log('mycards', content)
+				},
+			)
+			// 페이즈 전환
+			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
+				if (action.body === 'phase1') {
+					setState(1)
+					setPhase(1)
+					dispatch(setTeller(''))
+					dispatch(setDescription(''))
+					dispatch(setTime(30))
+				} else if (action.body === 'phase2') {
+					setState(1)
+					setPhase(2)
+					dispatch(setTime(30))
+				} else if (action.body === 'phase3') {
+					setState(1)
+					setPhase(3)
+					dispatch(setTime(30))
+				} else if (action.body === 'phase4') {
+					setState(1)
+					setPhase(4)
+					dispatch(setTime(30))
+				} else {
+					setState(2)
+					setPhase(0)
+				}
+			})
+			// 유저 상태 변화
+			client.subscribe(`/sub/room/${roomId}/status`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('status', content)
+			})
+			// 텔러 누군지 받기
+			client.subscribe(`/sub/room/${roomId}/newteller`, (action) => {
+				console.log('newTeller', action.body)
+				dispatch(setTeller(action.body))
+			})
+			// 텔러 문구 받기
+			client.subscribe(`/sub/room/${roomId}/teller`, (action) => {
+				console.log('teller', action.body)
+				const content = JSON.parse(action.body)
+				dispatch(setDescription(content))
+			})
+			// 누군가 아이템 사용
+			client.subscribe(`/sub/room/${roomId}/item`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('item', content)
+			})
+			// 결과 받기
+			client.subscribe(`/sub/room/${roomId}/result`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('result', content)
+			})
+			client.subscribe(`/sub/room/${roomId}/totalresult`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('totalresult', content)
+			})
+			client.subscribe(`/sub/room/${roomId}/submitcards`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('submitcards', content)
+			})
+			client.subscribe(`/sub/room/${roomId}/roominfo`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('roominfo', content)
 			})
 		}
-	})
-
-	// let stompClient = useWebSocket({
-	// 	email,
-	// 	onConnect(frame, client) {
-	// 		// 서버와 다른 사용자들에게 들어왔음을 알림
-	// 		console.log(client)
-	// 		client.publish({
-	// 			destination: `/pub/room/${roomId}/join`,
-	// 			body: JSON.stringify({
-	// 				nickname,
-	// 			}),
-	// 		})
-
-	// 		// 다른 플레이어들 상태 변경
-	// 		client.subscribe(`/sub/room/${roomId}/join`, (action) => {
-	// 			console.log(action)
-	// 			const content = JSON.parse(action.body)
-	// 			console.log(content)
-	// 			// dispatch(setPlayers(content))
-	// 		})
-
-	// 		// 방장이 시작하고 서버에서 시작한다는 요청이 오면 선택했던 카드들 보내기. 보내면서 아이템 넣기
-	// 		client.subscribe(`/sub/room/${roomId}/start`, (action) => {
-	// 			client.publish({
-	// 				destination: 'select',
-	// 				body: JSON.stringify({
-	// 					nickname,
-	// 					selectedCard,
-	// 				}),
-	// 			})
-	// 		})
-
-	// 		// 서버에서 카드 나눠주면 게임 시작
-	// 		client.subscribe(`/sub/room/${roomId}/table`, (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			dispatch(setGameCards(content))
-	// 			setState(1)
-	// 			setTurn(0)
-	// 		})
-
-	// 		// 새 텔러 받으면 새 턴 시작
-	// 		client.subscribe('/sub/room/${roomId}/newteller', (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			setImteller(false)
-	// 			setState(1)
-	// 			setTurn(0)
-	// 			if (content.nickname === nickname) {
-	// 				setImteller(true)
-	// 				dispatch(setTime(45))
-	// 			}
-	// 		})
-
-	// 		// 텔러가 그림 묘사를 완료하면 그때부터 낚시그림 선택
-	// 		client.subscribe(`/sub/room/${roomId}/teller`, (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			dispatch(setDescription(content.cardMsg))
-	// 			dispatch(setTime(20))
-	// 		})
-
-	// 		// 모두 낚시그림 선택하고 서버가 모아서 보내주면 텔러그림찾기 시작
-	// 		client.subscribe(`/sub/room/${roomId}/other`, (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			dispatch(setTable(content.cardList))
-	// 			dispatch(setTime(content.time ? content.time : 45))
-	// 			setTurn(1)
-	// 		})
-
-	// 		// 아이템에 따라 효과 발동시키기
-	// 		client.subscribe(`/sub/room/${roomId}/item`, (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			// 미구현
-	// 		})
-
-	// 		// 카드 덱 채워넣기
-	// 		client.subscribe(`/sub/room/${roomId}/draw`, (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			dispatch(addGameCard(content))
-	// 		})
-
-	// 		// 유저 점수 갱신
-	// 		client.subscribe(`/sub/room/${roomId}/result`, (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			setResult(content.result) // useState result가 최신점수, useSelector가 이전 점수, 차이보여주고 useSelector에 반영
-	// 			setTurn(2)
-	// 			setTimeout(() => {
-	// 				setTurn(0)
-	// 			}, 10000)
-	// 		})
-
-	// 		// 게임 최종 결과창으로
-	// 		client.subscribe(`/sub/room/${roomId}/end`, (action) => {
-	// 			const content = JSON.parse(action.body)
-	// 			dispatch(setEndResult(content.result))
-	// 			setState(2)
-	// 			setTimeout(() => {
-	// 				setTurn(0)
-	// 			}, 12000)
-	// 		})
-	// 	},
-
-	// 	beforeDisconnected(frame, client) {},
-	// })
+		client.activate()
+		setWs(client)
+		return () => {
+			client.publish({
+				destination: `/pub/room/${roomId}/exit`,
+				body: JSON.stringify({ nickname }),
+			})
+			client.deactivate()
+		}
+	}, [])
 
 	useEffect(() => {
 		setModalState('joinRoom')
 		return () => {
 			dispatch(setIsChecked(false))
-			// 연결 끊기
-		}
+		} // 새로고침되면 roomInfo 받기
 	}, [roomId])
-
-	const mainComponent = () => {
-		if (state === 0) return <GameRoom /> // 대기실
-		if (state === 1) {
-			if (turn === 0) return <GameTeller imteller={imteller} nickname={nickname} /> // 텔러의 그림 선택 or 비슷한 그림 선택
-			if (turn === 1) return <GameChoice /> // 텔러그림 맞추기
-			if (turn === 2) return <GameResult result={result} /> // 이번턴 결과
-		}
-		if (state === 2) return <GameEnd /> // 최종 결과
-	}
 
 	return (
 		<main css={roomBg}>
 			<div>
 				<GameHeader />
 			</div>
+
 			<div css={players}>
 				{players.map((player: any) => (
 					<div key={player.nickname} css={playerOne}>
-						<GameProfile player={player} />
+						<GameProfile player={player} phase={phase} />
 					</div>
 				))}
 			</div>
-			<div>{mainComponent()}</div>
+
 			<div>
-				<Items />
+				{state === 0 ? (
+					<GameRoom nickname={nickname} client={ws} roomId={roomId} />
+				) : state === 1 ? (
+					phase === 1 || phase === 2 ? (
+						<GameTeller nickname={nickname} phase={phase} client={ws} roomId={roomId} />
+					) : phase === 3 ? (
+						<GameChoice nickname={nickname} phase={phase} client={ws} roomId={roomId} />
+					) : (
+						<GameResult phase={phase} turnResult={turnResult} submitCards={submitCards} />
+					)
+				) : (
+					<GameEnd />
+				)}
 			</div>
+
 			<div>
 				<Chat />
 			</div>

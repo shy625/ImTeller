@@ -14,7 +14,6 @@ export default function DealRegisterModal(props: any) {
 	const onSelect = (card) => {
 		dispatch(setSelectedCard(card))
 		dispatch(setModalState(''))
-		console.log('야호! 내가 선택됐다')
 	}
 
 	return (

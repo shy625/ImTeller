@@ -6,15 +6,17 @@ import defaultProfile from 'assets/image/defaultProfile.webp'
 
 // 텔러면 왕관 씌우기? 점수도 같이 표시
 export default function GameProfile(props: any) {
-	const { nickname, profile } = props.player
+	const { player, phase } = props
+
 	return (
 		<div css={profileCSS}>
-			<img css={imgSize} src={profile || defaultProfile} alt="프로필이미지" />
-			<div>{nickname}</div>
+			<img css={imgSizeCSS} src={player.profile || defaultProfile} alt="프로필이미지" />
+			<div>{player.url}</div>
 		</div>
 	)
 }
-const imgSize = css({
+
+const imgSizeCSS = css({
 	borderRadius: '100%',
 	width: '8em',
 	objectFit: 'cover',
