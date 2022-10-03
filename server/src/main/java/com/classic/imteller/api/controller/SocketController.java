@@ -134,6 +134,8 @@ public class SocketController {
         roomService.saveTellerInfo(sessionId, tellerDto);
         roomService.stopTimer(sessionId);
 
+        // 텔러 정보 전달
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/teller", tellerDto);
         HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase2");
