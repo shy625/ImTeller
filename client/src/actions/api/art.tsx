@@ -37,7 +37,7 @@ const art = {
 	},
 	paintUpdate(data) {
 		return api({
-			method: 'petch',
+			method: 'patch',
 			url: `${END_POINT}/paints/edit`,
 			data: data,
 			headers: {

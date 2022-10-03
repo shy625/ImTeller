@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
 
 import Layout from 'layout/layout'
@@ -15,7 +15,11 @@ import { setUserDetail } from 'store/modules/user'
 import { setCardList, setPaintList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 
+import pencil from '../../assets/image/pencil.webp'
+import { imgIcon } from 'style/commonStyle'
+
 export default function Mypage() {
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { nick } = useParams()
 	const { nickname, profile, exp, win, lose, wallet, createdDT } = useSelector(
@@ -63,7 +67,7 @@ export default function Mypage() {
 			art
 				.paintList({ nickname: nick })
 				.then((result) => {
-					dispatch(setPaintList(result.data))
+					dispatch(setPaintList(result.data.response))
 				})
 				.catch((error) => {
 					console.error(error)
@@ -79,34 +83,79 @@ export default function Mypage() {
 	return (
 		<Layout>
 			<main>
-				여긴 mypage
-				<div>
-					<img src={profile} alt="" css={profileCSS} />
-					<div>{nickname}</div>
-					<div>Lv. {Math.floor(exp / 50) + 1}</div>
-					<div>
-						{win} 승 {lose} 패. 승률:{' '}
-						{win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%
-					</div>
-					<div>
-						{wallet ? (
-							<>
-								<label htmlFor="wallet">등록된 지갑주소</label>
-								<input id="wallet" value={currentUser.wallet} disabled></input>
-							</>
-						) : (
-							<button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
-						)}
+				<div css={centerCSS}>
+					<div css={profileCSS}>
+						<img src={profile} alt="" css={profileImgCSS} />
+						<div>
+							<div className="nickname">
+								<div className="name">{nickname}</div>
+								<div
+									onClick={() => {
+										navigate('/profileEdit')
+									}}
+								>
+									<img src={pencil} alt="연필" css={imgIcon} />
+								</div>
+							</div>
+							<div className="info">
+								<div>Lv. {Math.floor(exp / 50) + 1}</div>
+								<div>
+									{win} 승 {lose} 패. 승률:{' '}
+									{win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%
+								</div>
+								<div>
+									{wallet ? (
+										<>
+											<label htmlFor="wallet">등록된 지갑주소 :</label>
+											<input id="wallet" value={currentUser.wallet} disabled></input>
+										</>
+									) : (
+										<button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
+									)}
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<hr />
 				<MypageTabNav isMyMypage={isMyMypage} />
-				<hr />
-				{tabs[myPageTab]}
+				<div css={centerCSS}>{tabs[myPageTab]}</div>
 			</main>
 		</Layout>
 	)
 }
-const profileCSS = css({
-	width: 100,
-})
+const centerCSS = css`
+	display: flex;
+	justify-content: center;
+`
+const profileImgCSS = css`
+	width: 150px;
+	border-radius: 50%;
+	margin: 50px 50px 30px 10px;
+`
+const profileCSS = css`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	color: white;
+	width: 80%;
+	.nickname {
+		font-family: 'GongGothicMedium';
+		font-size: 25px;
+		margin-bottom: 10px;
+		display: flex;
+		align-items: center;
+	}
+	.name {
+		margin-right: 10px;
+	}
+	.info {
+		font-family: 'GmarketSansMedium';
+	}
+	input {
+		background-color: transparent;
+		font-family: 'GmarketSansMedium';
+		color: white;
+		border: none;
+		margin-left: 20px;
+	}
+`
