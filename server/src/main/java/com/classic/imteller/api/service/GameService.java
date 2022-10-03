@@ -99,6 +99,7 @@ public class GameService {
                 .maxNum(roomInfo.getMaxNum())
                 .leader(roomInfo.getLeader())
                 .players(new ArrayList<String>())
+                .profiles(new HashMap<String, String>())
                 .type(roomInfo.getType())
                 .typeNum(roomInfo.getTypeNum())
                 .ready(new HashMap<String, Boolean>())
