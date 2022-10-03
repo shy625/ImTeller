@@ -94,7 +94,7 @@ public class SocketController {
             List<String> players = roomRepository.getRoom(sessionId).getPlayers();
             for (String player : players) {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", firstHands.get(player));
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
             }
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
@@ -244,7 +244,7 @@ public class SocketController {
         List<String> players = roomRepository.getRoom(sessionId).getPlayers();
         for (String player : players) {
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHands.get(player));
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHands.get(player));
         }
 
         // table에 있는 카드들을 덱의 맨 뒤로 돌리기
@@ -273,7 +273,7 @@ public class SocketController {
             roomService.itemOneCardDraw(sessionId, useItemDto.getNickname());
             List<GameCardDto> newHand = roomService.getHand(sessionId).get(useItemDto.getNickname());
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
-            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/select", newHand);
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHand);
         }
 
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
