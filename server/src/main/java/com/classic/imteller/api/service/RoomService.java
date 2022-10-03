@@ -151,8 +151,7 @@ public class RoomService {
         } else {
             int laps = roomRepository.getRoom(sessionId).getLaps();
             int typeNum = roomRepository.getRoom(sessionId).getTypeNum();
-            String teller = roomRepository.getRoom(sessionId).getTeller();
-            return (laps == typeNum) && (players.indexOf(teller) == players.size() - 1);
+            return (laps > typeNum);
         }
     }
 
