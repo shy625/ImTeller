@@ -111,7 +111,8 @@ public class SocketController {
     public void phase1(long sessionId) {
         roomService.setPhase(sessionId, 1);
         roomService.resetTurn(sessionId);
-        // 방장 넘기기
+        roomService.statusReset(sessionId);
+        // 텔러 넘기기
         String teller = roomService.getRoom(sessionId).getTeller();
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/newteller", teller);
         TimerTask m_task = new TimerTask() {
@@ -133,6 +134,7 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/teller")
     public void teller(@DestinationVariable long sessionId, TellerDto tellerDto) {
         roomService.setPhase(sessionId, 2);
+        // 텔러가 제출하면 status 변경
         roomService.saveTellerInfo(sessionId, tellerDto);
         roomService.stopTimer(sessionId);
 
@@ -264,6 +266,8 @@ public class SocketController {
             public void run() {
                 roomService.statusReset(sessionId);
                 HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
+                // 텔러 다음으로 옮기기
+                roomService.setNextTeller(sessionId);
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
                 phase1(sessionId);
