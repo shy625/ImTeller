@@ -24,9 +24,16 @@ public class DealService {
 
     @Transactional
     public Long registerDeal(RegisterDealReqDto requestDto) {
-        Art art = artRepository.findById(requestDto.getArtId()).orElseThrow();
+        Art art = artRepository.findById(requestDto.getArtId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         if (art.getTokenId() == null) {
             throw new CustomException((ErrorCode.BAD_REQUEST));
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        for (Deal d : art.getDealList()) {
+            if (d.getFinishedAt().isAfter(now)) {
+                throw new CustomException((ErrorCode.BAD_REQUEST));
+            }
         }
 
         Deal newDeal = Deal.builder()
