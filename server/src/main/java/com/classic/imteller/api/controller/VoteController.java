@@ -42,6 +42,6 @@ public class VoteController {
     // detailResDto 재활용
     public ResponseEntity<ResponseDto> electedPaint(ElectReqDto electReqDto) {
         voteService.electedPaint(electReqDto.getArtId());
-        new ResponseEntity<ResponseDto>(new ResponseDto("민팅 대기 완료"), HttpStatus.ACCEPTED);
+        return new ResponseEntity<ResponseDto>(new ResponseDto("민팅 대기 완료"), HttpStatus.ACCEPTED);
     }
 }
