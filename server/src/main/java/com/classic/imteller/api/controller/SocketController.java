@@ -292,12 +292,16 @@ public class SocketController {
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정
-    @MessageMapping("/room/{sessionId}/end")
     public void end(@DestinationVariable long sessionId) {
 
         // end시 player가 3명 이상일 때만 DB반영
         // DB에 점수 반영
-        if (roomService.getRoom(sessionId).getPlayers().size() >= 3) roomService.updateExp(sessionId);
+        if (roomService.getRoom(sessionId).getPlayers().size() >= 3) {
+            roomService.updateExp(sessionId);
+
+            // 3명 이상일 때만 승패 반영
+            roomService.updateWinOrLose(sessionId);
+        }
 
         // 각종 변수들 초기화
         roomService.gameEnd(sessionId);
