@@ -22,8 +22,4 @@ const box = css`
 	flex-direction: column;
 	justify-content: center;
 	width: 60%;
-	//border: 3px solid rgb(43, 27, 90);
-	background-color: rgb(43, 27, 90, 0.3);
-	border-radius: 10px;
-	box-shadow: 5px 5px 20px;
 `
