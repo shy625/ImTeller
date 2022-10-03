@@ -132,7 +132,7 @@ public class ArtService {
     @Transactional
     public boolean onVote(Long id, String email) {
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), true);
+        boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), 1);
 
         if (!chk && art.getOwner().getEmail().equals(email)) {
             art.updateIsVote(true);
@@ -140,7 +140,7 @@ public class ArtService {
             Vote vote = Vote.builder()
                 .art(art)
                 .count(0)
-                .isVoting(true).build();
+                .isVoting(1).build();
             voteRepository.save(vote);
             return true;
         }
@@ -150,12 +150,12 @@ public class ArtService {
     @Transactional
     public boolean offVote(Long id, String email) {
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), true);
+        boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), 1);
         if (chk && art.getOwner().getEmail().equals(email)) {
             art.updateIsVote(false);
             artRepository.save(art);
-            Vote vote = voteRepository.findByArtIdAndIsVoting(art.getId(), true).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-            vote.updateIsVoting(false);
+            Vote vote = voteRepository.findByArtIdAndIsVoting(art.getId(), 1).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            vote.updateIsVoting(0);
             voteRepository.save(vote);
             return true;
         }
