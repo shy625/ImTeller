@@ -4,7 +4,7 @@ import { web3, marketContract } from './MarketABI'
 import dealABI from './DealABI'
 
 /**
- * 그림을 카드로 민팅
+ * 그림을 카드로 민팅 - 유료민팅
  * @params
  * - walletAddress (string)현재 로그인된 유저의 지갑주소
  * - image (string) 민팅할 그림의 s3 url
@@ -38,19 +38,28 @@ export const mintCard = async (walletAddress: string, image: any) => {
 	const wallet = walletAddress
 	const tokenURI = image
 
-	let tokenId: any //uint256 민팅된 카드의 id(블록체인에서의 index)
-	tokenId = await cardContract.methods.mint(tokenURI).send({ from: wallet })
-
+/**
+ * 그림을 카드로 민팅 - 투표 당선작 무료로 민팅
+ * @params
+ * - walletAddress (string)현재 로그인된 유저의 지갑주소
+ * - image (string) 민팅할 그림의 s3 url
+ * @returns: (int) 민팅된 카드의 token_id (!=art_id)
+ */
+export const mintCard = async (walletAddress: string, image: any) => {
+	const wallet = walletAddress
+	const tokenURI = image
+	let tokenId = await cardContract.methods.mint(tokenURI).send({ from: wallet })
 	console.log(tokenId)
 	return tokenId.events.Transfer.returnValues.tokenId
 }
-/**
- * 신규 거래 등록
- * @params:
- * - walletAddress (string) 현재 로그인된 유저의 지갑주소
- * - tokenId (int)현재 로그인된 유저의 지갑주소
- * - wantedPrice (int) 민팅할 그림의 s3 url
- * @returns: (string) 거래주소
+
+/*
+신규 거래 등록
+@params:
+- walletAddress (string) 현재 로그인된 유저의 지갑주소
+- tokenId (int)현재 로그인된 유저의 지갑주소
+- wantedPrice (int) 민팅할 그림의 s3 url
+@returns: (string) 거래주소
  */
 export const sellCard = async (walletAddress: string, tokenId: any, instantPrice: any) => {
 	const wallet = walletAddress

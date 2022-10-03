@@ -1,6 +1,7 @@
 package com.classic.imteller.api.controller;
 
 import com.classic.imteller.api.dto.ResponseDto;
+import com.classic.imteller.api.dto.art.VoteReqDto;
 import com.classic.imteller.api.repository.Art;
 import com.classic.imteller.api.service.VoteService;
 import io.swagger.annotations.Api;
@@ -34,5 +35,11 @@ public class VoteController {
     public ResponseEntity<ResponseDto> myOnVotePaints(@RequestHeader(value="Authorization") String email) {
         List<Art> myPaints = voteService.getMyVotePaint(email);
         return new ResponseEntity<ResponseDto>(new ResponseDto(myPaints), HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<ResponseDto> votePaint(@RequestBody VoteReqDto voteReqDto){
+        String result = voteService.votePaint(voteReqDto.getUserNickname(), voteReqDto.getArtId());
+        return new ResponseEntity<ResponseDto>(new ResponseDto(result), HttpStatus.ACCEPTED);
     }
 }
