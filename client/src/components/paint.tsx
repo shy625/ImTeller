@@ -8,7 +8,7 @@ import Loading from 'components/loading'
 
 import art from 'actions/api/art'
 import { setMyPageTab } from 'store/modules/user'
-import { setSelectedPaint, setPaintList } from 'store/modules/art'
+import { setSelectedPaint, setPaintList, setCardList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 import connectMetaMask from 'actions/functions/connectMetaMask'
 
@@ -94,6 +94,16 @@ export default function Paint(props: any) {
 			.paintList({ nickname: currentUser.nickname })
 			.then((result) => {
 				dispatch(setPaintList(result.data.response))
+			})
+			.catch((error) => {
+				console.error(error)
+			})
+
+		art
+			.cardList({ nickname: currentUser.nickname })
+			.then((result) => {
+				console.log(result.data)
+				dispatch(setCardList(result.data.response))
 			})
 			.catch((error) => {
 				console.error(error)
