@@ -89,6 +89,15 @@ export default function Paint(props: any) {
 				setLoading(false)
 				console.error(error)
 			})
+
+		art
+			.paintList({ nickname: currentUser.nickname })
+			.then((result) => {
+				dispatch(setPaintList(result.data.response))
+			})
+			.catch((error) => {
+				console.error(error)
+			})
 	}
 
 	return (
