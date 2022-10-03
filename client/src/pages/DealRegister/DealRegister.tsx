@@ -145,7 +145,9 @@ export default function DealRegister() {
 				<div>
 					<button onClick={() => navigate(-1)}>뒤로가기</button>
 					<button onClick={onSubmit}>등록하기</button>
-					{isLoading ? <Loading msg={'민팅이 진행중입니다. 잠시만 기다려주세요'} /> : null}
+					{isLoading ? (
+						<Loading msg={'체인에 거래를 등록하는 중입니다. 잠시만 기다려주세요'} />
+					) : null}
 				</div>
 			</main>
 		</Layout>

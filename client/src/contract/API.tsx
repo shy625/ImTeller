@@ -106,6 +106,7 @@ export const cancelDeal = async (walletAddress: any, dealId: any) => {
 	setApprovalForAll(address A, false)
 	A가 msg.sender의 NFT들을 거래할 수 있게 권한 취소
 	*/
+	console.log('취소 시작')
 	const disapproval = await cardContract.methods
 		.setApprovalForAll(dealCA, false)
 		.send({ from: wallet })

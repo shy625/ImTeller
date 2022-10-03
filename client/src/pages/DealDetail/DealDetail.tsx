@@ -1,17 +1,20 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import DealHistory from 'pages/DealDetail/dealHistory'
 import Layout from 'layout/layout'
 
 import deal from 'actions/api/deal'
 import itemDetail from 'actions/functions/itemDetail'
+import Loading from 'components/loading'
 import { setDealDetail } from 'store/modules/art'
 import { purchaseCard, cancelDeal } from 'contract/API'
+import { setModalMsg, setModalState } from 'store/modules/util'
 
 export default function DealDetail() {
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { dealId } = useParams()
 
 	const dealDetail = useSelector((state: any) => state.dealDetail)
@@ -83,13 +86,22 @@ export default function DealDetail() {
 				deal
 					.cancelDeal(dealInfo.dealId)
 					.then((result) => {
+						setModalMsg('취소가 성공적으로 이루어졌습니다.')
+						setModalState('alert')
 						console.log(result)
+						navigate('/deal')
 					})
 					.catch((error) => {
+						setModalMsg('예기치 못한 오류로 취소가 이루어지지 않았습니다.')
+						setModalState('alert')
+						navigate(`/deal/${dealId}`)
 						console.error(error)
 					})
 			})
 			.catch((error) => {
+				setModalMsg('예기치 못한 오류로 취소가 이루어지지 않았습니다.')
+				setModalState('alert')
+				navigate(`/deal/${dealId}`)
 				console.log(error)
 			})
 	}
@@ -160,6 +172,9 @@ export default function DealDetail() {
 				</div>
 				<hr />
 				<DealHistory dealHistoryList={dealHistoryList} />
+				{loading ? (
+					<Loading msg={'체인에서 거래를 취소하는 중입니다.  잠시만 기다려주세요'} />
+				) : null}
 			</main>
 		</Layout>
 	)
