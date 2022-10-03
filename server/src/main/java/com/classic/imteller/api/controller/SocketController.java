@@ -220,8 +220,6 @@ public class SocketController {
     public void phase4(long sessionId) {
         roomService.setPhase(sessionId, 4);
 
-
-
         // 이번 턴 유저의 점수를 result 소켓에 반환
         HashMap<String, Integer> nowScore = roomService.scoreCalc(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/result", nowScore);
@@ -233,7 +231,7 @@ public class SocketController {
 
         // 플레이어들이 낸 카드를 담은 table 전송하기
         List<TableDto> table = roomService.getRoom(sessionId).getTable();
-        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/submitcards", totalScore);
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/submitcards", table);
 
         // 게임 종료조건 확인
         boolean chk = roomService.endCheck(sessionId);
