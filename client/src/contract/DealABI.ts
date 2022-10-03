@@ -1,7 +1,6 @@
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
-//v11
 const dealABI: AbiItem[] = [
 	{
 		inputs: [
