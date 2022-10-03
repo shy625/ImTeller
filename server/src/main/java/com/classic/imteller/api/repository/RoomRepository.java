@@ -49,6 +49,13 @@ public class RoomRepository {
             players.add(joinReqDto.getNickname());
             roomList.get(sessionId).setPlayers(players);
 
+            // 프로필사진
+            HashMap<String, String> profiles = roomList.get(sessionId).getProfiles();
+            User user = userRepository.findByNickname(joinReqDto.getNickname()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            profiles.put(joinReqDto.getNickname(), user.getProfile());
+            System.out.println(profiles.get(joinReqDto.getNickname()));
+            roomList.get(sessionId).setProfiles(profiles);
+
             // 레디 여부
             HashMap<String, Boolean> ready = roomList.get(sessionId).getReady();
 
@@ -94,6 +101,11 @@ public class RoomRepository {
                 roomList.remove(sessionId);
                 return "ok";
             }
+
+            // profiles에서 없애기
+            HashMap<String, String> newProfiles = roomList.get(sessionId).getProfiles();
+            newProfiles.remove(exitReqDto.getNickname());
+            roomList.get(sessionId).setProfiles(newProfiles);
             // ready에서 없애기
             HashMap<String, Boolean> newReady = roomList.get(sessionId).getReady();
             newReady.remove(exitReqDto.getNickname());

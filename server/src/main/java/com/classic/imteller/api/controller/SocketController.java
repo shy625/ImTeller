@@ -81,8 +81,8 @@ public class SocketController {
 
     // 게임시작 : 방장만 게임시작
     @MessageMapping("/room/{sessionId}/start")
-    public void start(@Header("simpSessionId") String userSessionId, @DestinationVariable long sessionId) {
-        boolean isStart = roomService.start(userSessionId, sessionId);
+    public void start(@DestinationVariable long sessionId) {
+        boolean isStart = roomService.start(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/start", isStart);
     }
 
@@ -136,6 +136,7 @@ public class SocketController {
 
         // 텔러 정보 전달
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/teller", tellerDto.getCardMsg());
+        System.out.println(tellerDto.getCardMsg());
         HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase2");

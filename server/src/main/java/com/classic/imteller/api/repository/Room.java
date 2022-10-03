@@ -31,6 +31,7 @@ public class Room implements Serializable {
     private int maxNum; // 최대인원
     private String leader; // 방장 id
     private List<String>  players; // 모든 유저 id
+    private HashMap<String, String> profiles; // 모든 유저 프로필 url
     private String type; // 게임 종료조건 (바퀴 or 점수) (times, score)
     private int typeNum; // 종료조건에 해당하는 숫자
     private HashMap<String, Boolean> ready; // 준비 여부 (Long에는 uid, Boolean에는 준비 여부가 들어감)

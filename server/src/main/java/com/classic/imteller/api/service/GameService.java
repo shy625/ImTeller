@@ -25,19 +25,21 @@ public class GameService {
         List<GameRoomDto> roomsRes = new ArrayList<>();
 
         for (long roomId : rooms.keySet()) {
-            boolean isLock;
-            if (rooms.get(roomId).getRoomPw().equals("")) isLock = false;
-            else isLock = true;
-            GameRoomDto room = GameRoomDto.builder()
-                    .roomId(rooms.get(roomId).getId())
-                    .roomName(rooms.get(roomId).getRoomName())
-                    .isLocked(isLock)
-                    .peopleNum(rooms.get(roomId).getPlayers().size())
-                    .maxPeopleNum(rooms.get(roomId).getMaxNum())
-                    .type(rooms.get(roomId).getType())
-                    .typeNum(rooms.get(roomId).getTypeNum())
-                    .isStarted(rooms.get(roomId).getStarted()).build();
-            roomsRes.add(room);
+            if (rooms.get(roomId).getPlayers().size() != 0) {
+                boolean isLock;
+                if (rooms.get(roomId).getRoomPw().equals("")) isLock = false;
+                else isLock = true;
+                GameRoomDto room = GameRoomDto.builder()
+                        .roomId(rooms.get(roomId).getId())
+                        .roomName(rooms.get(roomId).getRoomName())
+                        .isLocked(isLock)
+                        .peopleNum(rooms.get(roomId).getPlayers().size())
+                        .maxPeopleNum(rooms.get(roomId).getMaxNum())
+                        .type(rooms.get(roomId).getType())
+                        .typeNum(rooms.get(roomId).getTypeNum())
+                        .isStarted(rooms.get(roomId).getStarted()).build();
+                roomsRes.add(room);
+            }
         }
 
         // roomId 순서대로 정렬
@@ -97,6 +99,7 @@ public class GameService {
                 .maxNum(roomInfo.getMaxNum())
                 .leader(roomInfo.getLeader())
                 .players(new ArrayList<String>())
+                .profiles(new HashMap<String, String>())
                 .type(roomInfo.getType())
                 .typeNum(roomInfo.getTypeNum())
                 .ready(new HashMap<String, Boolean>())
