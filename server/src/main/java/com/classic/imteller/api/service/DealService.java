@@ -38,6 +38,7 @@ public class DealService {
 
         Deal newDeal = Deal.builder()
                 .art(art)
+                .seller(art.getOwner())
                 .lowPrice(requestDto.getLowPrice())
                 .instantPrice(requestDto.getInstantPrice())
                 .tag(requestDto.getTag())
@@ -178,8 +179,8 @@ public class DealService {
                 .tokenId(card.getTokenId())
                 .designerId(card.getDesigner().getId())
                 .designerNickname(card.getDesigner().getNickname())
-                .ownerId(card.getOwner().getId())
-                .ownerNickname(card.getOwner().getNickname())
+                .ownerId(deal.getSeller().getId())
+                .ownerNickname(deal.getSeller().getNickname())
                 .grade(card.getEffect().getGrade())
                 .effect(card.getEffect().getEffect())
                 .effectNum(card.getEffect().getEffectNum())
@@ -189,10 +190,10 @@ public class DealService {
         List<Deal> dealList = card.getDealList();
         List<DealDetailResDto.DealHistory> dealHistoryList = new ArrayList<>();
         for (Deal d : dealList) {
-            if (d.getId() == dealId) {
+            if (d.getId() == dealId || d.getFinalBid() == null) {
                 continue;
             }
-            User seller = d.getArt().getOwner();
+            User seller = d.getSeller();
             User buyer = d.getFinalBid().getBidder();
             LocalDateTime dealedAt = d.getFinishedAt();
             if (d.getFinalBid().getBidType() == 1) {
