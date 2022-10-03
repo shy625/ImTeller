@@ -445,7 +445,7 @@ public class RoomRepository {
             for (TableDto table : tables) {
                 if (choice.get(player) == table.getCardId()){
                     if (table.getNickname().equals(teller)) {
-                        int newScore = scores.get(player) + 3;
+                        int newScore = scores.get(player) + 6;
                         scores.replace(player, newScore);
                         ++answerPlayer;
                     }
@@ -457,9 +457,16 @@ public class RoomRepository {
                 }
             }
         }
-        // 텔러는 특별계산 - 모두가 못맞추거나 다맞추면 0점, 나머지 케이스는 6점
+        // 텔러는 특별계산 - 모두가 못맞추거나 다맞추면 텔러는 0점, 나머지 케이스에서 텔러는 6점
         if (answerPlayer == normalPlayerNum || answerPlayer == 0)  {
             scores.replace(teller, 0);
+            // 나머지 모든사람들에게 추가 4점
+            for (String player : players) {
+                if (!player.equals(teller)) {
+                    int newScore = scores.get(player) + 4;
+                    scores.replace(player, newScore);
+                }
+            }
         }  else {
             scores.replace(teller, 6);
         }
