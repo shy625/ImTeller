@@ -95,6 +95,9 @@ public class SocketController {
             for (String player : players) {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
                 template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
+                // 아이템도 같이 받아오기
+                List<ItemDto> myItems = roomService.getMyItems(sessionId, selectReqDto.getNickname());
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
             }
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
