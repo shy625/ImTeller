@@ -7,6 +7,7 @@ import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class VoteService {
         vote.updateIsVoting(2);
         voteRepository.save(vote);
     }
-
+    @Transactional
     public String votePaint(String userNickname, long artId){
         String result;
         User user = userRepository.findByNickname(userNickname).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
