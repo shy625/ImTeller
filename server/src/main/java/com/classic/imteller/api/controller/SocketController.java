@@ -106,6 +106,9 @@ public class SocketController {
     public void phase1(long sessionId) {
         roomService.setPhase(sessionId, 1);
         roomService.resetTurn(sessionId);
+        // 방장 넘기기
+        String teller = roomService.getRoom(sessionId).getTeller();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/newteller", teller);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
@@ -222,6 +225,9 @@ public class SocketController {
 
         HashMap<String, Integer> totalScore = roomService.getTotalScore(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/totalresult", totalScore);
+
+        // table 전송하기
+
 
         // 게임 종료조건 확인
         boolean chk = roomService.endCheck(sessionId);
