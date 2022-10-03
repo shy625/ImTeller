@@ -50,6 +50,10 @@ public class Deal extends BaseEntity {
         this.bidList = bidList;
     }
 
+    public void updateFinalBid(Bid bid) {
+        this.finalBid = bid;
+    }
+
     public void updateFinishAt(){
         this.finishedAt = LocalDateTime.now();
     }

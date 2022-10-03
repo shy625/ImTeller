@@ -1,5 +1,6 @@
 package com.classic.imteller.api.service;
 
+import com.classic.imteller.api.dto.deal.BidReqDto;
 import com.classic.imteller.api.dto.deal.DealDetailResDto;
 import com.classic.imteller.api.dto.deal.RegisterDealReqDto;
 import com.classic.imteller.api.dto.deal.SearchDealResDto;
@@ -21,6 +22,8 @@ public class DealService {
 
     private final DealRepository dealRepository;
     private final ArtRepository artRepository;
+    private final UserRepository userRepository;
+    private final BidRepository bidRepository;
 
     @Transactional
     public Long registerDeal(RegisterDealReqDto requestDto) {
@@ -228,4 +231,28 @@ public class DealService {
         deal.updateFinishAt();
     }
 
+    @Transactional
+    public Long bidForDeal(Long dealId, BidReqDto requestDto) {
+        Deal deal = dealRepository.findById(dealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        if (deal.getFinishedAt().isBefore(LocalDateTime.now())) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+        if (deal.getFinalBid() != null) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
+        User bidder = userRepository.findByNickname(requestDto.getBidderNickname())
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+
+        Bid newBid = Bid.builder()
+                .bidder(bidder)
+                .deal(deal)
+                .bidPrice(requestDto.getBidPrice())
+                .bidType(requestDto.getBidType())
+                .build();
+        Bid savedBid = bidRepository.save(newBid);
+        deal.updateFinalBid(savedBid);
+
+        return savedBid.getId();
+    }
 }
