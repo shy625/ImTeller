@@ -17,6 +17,9 @@ public class Deal extends BaseEntity {
     @ManyToOne(optional = false)
     private Art art;
 
+    @ManyToOne(optional = false)
+    private User seller;
+
     @Column(nullable = false)
     private Integer lowPrice;
 
@@ -39,8 +42,10 @@ public class Deal extends BaseEntity {
     private List<Bid> bidList = new ArrayList<>();
 
     @Builder
-    public Deal(Art art, Integer lowPrice, Integer instantPrice, String tag, Bid finalBid, String dealAddress, LocalDateTime finishedAt, List<Bid> bidList) {
+    public Deal(Art art, User seller, Integer lowPrice, Integer instantPrice, String tag, Bid finalBid,
+                String dealAddress, LocalDateTime finishedAt, List<Bid> bidList) {
         this.art = art;
+        this.seller = seller;
         this.lowPrice = lowPrice;
         this.instantPrice = instantPrice;
         this.tag = tag;
@@ -48,6 +53,10 @@ public class Deal extends BaseEntity {
         this.dealAddress = dealAddress;
         this.finishedAt = finishedAt;
         this.bidList = bidList;
+    }
+
+    public void updateFinalBid(Bid bid) {
+        this.finalBid = bid;
     }
 
     public void updateFinishAt(){

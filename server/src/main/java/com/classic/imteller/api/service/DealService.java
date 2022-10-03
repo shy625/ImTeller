@@ -1,8 +1,6 @@
 package com.classic.imteller.api.service;
 
-import com.classic.imteller.api.dto.deal.DealDetailResDto;
-import com.classic.imteller.api.dto.deal.RegisterDealReqDto;
-import com.classic.imteller.api.dto.deal.SearchDealResDto;
+import com.classic.imteller.api.dto.deal.*;
 import com.classic.imteller.api.repository.*;
 import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
@@ -21,16 +19,26 @@ public class DealService {
 
     private final DealRepository dealRepository;
     private final ArtRepository artRepository;
+    private final UserRepository userRepository;
+    private final BidRepository bidRepository;
 
     @Transactional
     public Long registerDeal(RegisterDealReqDto requestDto) {
-        Art art = artRepository.findById(requestDto.getArtId()).orElseThrow();
+        Art art = artRepository.findById(requestDto.getArtId()).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
         if (art.getTokenId() == null) {
             throw new CustomException((ErrorCode.BAD_REQUEST));
         }
 
+        LocalDateTime now = LocalDateTime.now();
+        for (Deal d : art.getDealList()) {
+            if (d.getFinishedAt().isAfter(now)) {
+                throw new CustomException((ErrorCode.BAD_REQUEST));
+            }
+        }
+
         Deal newDeal = Deal.builder()
                 .art(art)
+                .seller(art.getOwner())
                 .lowPrice(requestDto.getLowPrice())
                 .instantPrice(requestDto.getInstantPrice())
                 .tag(requestDto.getTag())
@@ -171,8 +179,8 @@ public class DealService {
                 .tokenId(card.getTokenId())
                 .designerId(card.getDesigner().getId())
                 .designerNickname(card.getDesigner().getNickname())
-                .ownerId(card.getOwner().getId())
-                .ownerNickname(card.getOwner().getNickname())
+                .ownerId(deal.getSeller().getId())
+                .ownerNickname(deal.getSeller().getNickname())
                 .grade(card.getEffect().getGrade())
                 .effect(card.getEffect().getEffect())
                 .effectNum(card.getEffect().getEffectNum())
@@ -182,10 +190,10 @@ public class DealService {
         List<Deal> dealList = card.getDealList();
         List<DealDetailResDto.DealHistory> dealHistoryList = new ArrayList<>();
         for (Deal d : dealList) {
-            if (d.getId() == dealId) {
+            if (d.getId() == dealId || d.getFinalBid() == null) {
                 continue;
             }
-            User seller = d.getArt().getOwner();
+            User seller = d.getSeller();
             User buyer = d.getFinalBid().getBidder();
             LocalDateTime dealedAt = d.getFinishedAt();
             if (d.getFinalBid().getBidType() == 1) {
@@ -216,9 +224,53 @@ public class DealService {
 
 
     @Transactional
-    public void endDeal(Long dealId) {
+    public Long completeDeal(Long dealId, CompleteDealReqDto requestDto) {
         Deal deal = dealRepository.findById(dealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+
+        if (requestDto.getBidderNickname() == null || requestDto.getTokenId() == null) {
+            deal.updateFinalBid(null);
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
+        Bid finalBid = deal.getFinalBid();
+        User bidder = userRepository.findByNickname(requestDto.getBidderNickname())
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        Art card = artRepository.findByTokenId(requestDto.getTokenId())
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+
+        if (!finalBid.getBidder().getId().equals(bidder.getId())
+                || !deal.getArt().getId().equals(card.getId())) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
+        card.changeOwner(bidder, bidder.getNickname(), finalBid.getBidPrice());
         deal.updateFinishAt();
+
+        return deal.getId();
     }
 
+    @Transactional
+    public Long bidForDeal(Long dealId, BidReqDto requestDto) {
+        Deal deal = dealRepository.findById(dealId).orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+        if (deal.getFinishedAt().isBefore(LocalDateTime.now())) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+        if (deal.getFinalBid() != null) {
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
+
+        User bidder = userRepository.findByNickname(requestDto.getBidderNickname())
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST));
+
+        Bid newBid = Bid.builder()
+                .bidder(bidder)
+                .deal(deal)
+                .bidPrice(requestDto.getBidPrice())
+                .bidType(requestDto.getBidType())
+                .build();
+        Bid savedBid = bidRepository.save(newBid);
+        deal.updateFinalBid(savedBid);
+
+        return savedBid.getId();
+    }
 }
