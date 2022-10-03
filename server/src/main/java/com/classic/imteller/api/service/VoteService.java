@@ -1,5 +1,7 @@
 package com.classic.imteller.api.service;
 
+import com.classic.imteller.api.dto.art.VoteReqDto;
+import com.classic.imteller.api.dto.vote.VoteResDto;
 import com.classic.imteller.api.repository.*;
 import com.classic.imteller.exception.CustomException;
 import com.classic.imteller.exception.ErrorCode;
@@ -7,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,9 +24,19 @@ public class VoteService {
         return res;
     }
 
-    public List<Art> getVotePaints() {
-        List<Art> res = artRepository.findAllByTokenIdAndIsVote();
-        return res;
+    public List<VoteResDto> getVotePaints(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+        List<Vote> voteList = voteRepository.findByIsVoting(1);
+        List<VoteResDto> list = new ArrayList<>();
+        for(Vote vote: voteList){
+            Boolean check = userVoteRepository.existsByUserAndVote(user, vote);
+            VoteResDto voteResDto = VoteResDto.builder()
+                    .vote(vote)
+                    .isLike(check)
+                    .build();
+            list.add(voteResDto);
+        }
+        return list;
     }
 
     @Transactional
@@ -38,7 +51,7 @@ public class VoteService {
         art.updateIsVote(2);
         artRepository.save(art);
     }
-
+    @Transactional
     public String votePaint(String userNickname, long artId){
         String result;
         User user = userRepository.findByNickname(userNickname).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
@@ -46,6 +59,7 @@ public class VoteService {
         if(userVoteRepository.existsByUserAndVote(user, vote)){
             UserVote userVote = userVoteRepository.findByUserAndVote(user, vote).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
             userVoteRepository.delete(userVote);
+            vote.updateCoutn(-1);
             result= "좋아요 취소";
         }else{
             UserVote userVote = UserVote.builder()
@@ -53,7 +67,7 @@ public class VoteService {
                     .user(user)
                     .build();
             userVoteRepository.save(userVote);
-
+            vote.updateCoutn(+1);
             result= "좋아요";
         }
         return result;
