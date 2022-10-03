@@ -232,20 +232,12 @@ public class SocketController {
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/result", nowScore);
 
         // 전체 합산 점수를 반환
-
         HashMap<String, Integer> totalScore = roomService.getTotalScore(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/totalresult", totalScore);
 
         // 플레이어들이 낸 카드를 담은 table 전송하기
         List<TableDto> table = roomService.getRoom(sessionId).getTable();
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/submitcards", table);
-
-        // 게임 종료조건 확인
-        boolean chk = roomService.endCheck(sessionId);
-        if (chk) {
-            roomService.stopTimer(sessionId);
-            end(sessionId);
-        }
 
         // 카드 드로우 - phase4 종료시 카드가 6장 미만이면 다시 1장 채워주기
         roomService.oneCardDraw(sessionId);
@@ -268,6 +260,11 @@ public class SocketController {
                 HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
                 // 텔러 다음으로 옮기기
                 roomService.setNextTeller(sessionId);
+                // 게임 종료조건 확인
+                if (roomService.endCheck(sessionId)) {
+                    roomService.stopTimer(sessionId);
+                    end(sessionId);
+                }
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
                 sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
                 phase1(sessionId);
