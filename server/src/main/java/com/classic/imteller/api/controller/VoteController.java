@@ -23,10 +23,10 @@ import java.util.List;
 public class VoteController {
     private final VoteService voteService;
 
-    @GetMapping(path = "/paints", headers = "HEADER")
+    @GetMapping(path = "/paints")
     @ApiOperation(value = "투표리스트 반환", notes = "현재 투표중인 모든 그림을 전달받는 API")
     // detailResDto 재활용
-    public ResponseEntity<ResponseDto> allOnVotePaints(@RequestHeader("HEADER") String email) {
+    public ResponseEntity<ResponseDto> allOnVotePaints(@RequestHeader(value="Authorization") String email) {
         List<VoteResDto> Paints = voteService.getVotePaints(email);
         return new ResponseEntity<ResponseDto>(new ResponseDto(Paints), HttpStatus.ACCEPTED);
     }
