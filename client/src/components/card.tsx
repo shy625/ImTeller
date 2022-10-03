@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
+import gradeS from 'assets/image/gradeS.webp'
+import gradeA from 'assets/image/gradeA.webp'
+import gradeB from 'assets/image/gradeB.webp'
 
 import { setSelectedCards } from 'store/modules/game'
 import itemDetail from 'actions/functions/itemDetail'
@@ -16,7 +19,7 @@ export default function Card(props: any) {
 		grade,
 		effect,
 		effectNum,
-		createdDt,
+		createdDT,
 		recentPrice,
 	} = props.card
 	const type = props.type
@@ -46,44 +49,105 @@ export default function Card(props: any) {
 
 	return (
 		<div>
-			<div css={type === 1 && selected ? type1CSS : type0CSS} onClick={select}>
-				<img style={{ height: '15vh' }} src={cardImageURL} alt="" />
-				<div css={!selected ? type0InfoCSS : displayNoneCSS}>
-					<div>{grade}</div>
-					<div>{effectName}</div>
-					<div>{`${effectNum} ${effectPost}`}</div>
+			<div css={cardWrapperCSS}>
+				<div css={type === 1 && selected ? type1CSS : type0CSS} onClick={select}>
+					<img css={cardImageCSS} src={cardImageURL} alt="" />
+					<div css={!selected ? type0InfoCSS : displayNoneCSS}>
+						<div>{grade}</div>
+						<div>{effectName}</div>
+						<div>{`${effectNum} ${effectPost}`}</div>
+					</div>
 				</div>
+				<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
+				{type === 0 ? (
+					<div className="cardInfo">
+						<div className="textInfo">
+							<div>{description}</div>
+							<div className="cardTitle">{cardTitle}</div>
+							<div>{createdDT.slice(0, 10)}</div>
+							{recentPrice ? <div>{recentPrice} SSF</div> : null}
+						</div>
+						{grade == 'S' ? <img src={gradeS} alt="" /> : null}
+						{grade == 'A' ? <img src={gradeA} alt="" /> : null}
+						{grade == 'B' ? <img src={gradeB} alt="" /> : null}
+					</div>
+				) : null}
 			</div>
-			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
-			{type === 0 ? (
-				<div>
-					{cardTitle}
-					{description}
-					{createdDt}
-					{recentPrice}
-				</div>
-			) : null}
 		</div>
 	)
 }
-
+const cardWrapperCSS = css`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: 15px;
+	padding: 3px;
+	margin: 10px;
+	.cardInfo {
+		font-size: 13px;
+		margin: 0px 10px 10px 10px;
+		font-family: 'GmarketSansMedium';
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.textInfo div {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		word-break: break-all;
+		width: 90px;
+	}
+	.cardInfo img {
+		margin-top: 10px;
+	}
+	.cardTitle {
+		font-family: 'GongGothicMedium';
+		font-size: 20px;
+	}
+`
 const type0CSS = css`
-	height: 15vh;
+	position: relative;
+	height: 214px;
+	width: 143px;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: 13px solid #f4f4f4;
+	margin: 10px;
 	&:hover {
 		> div {
 			display: block;
 		}
 		> img {
-			filter: brightness(0.5);
+			filter: brightness(0.4);
 		}
 	}
 `
+const cardImageCSS = css`
+	height: 222px;
+	background-color: white;
+	border-radius: 12px;
+`
 const type0InfoCSS = css`
 	display: none;
-	position: relative;
-	top: -15vh; // 형제인 paintImgCSS 높이만큼 올려주면 됨
+	position: absolute;
+	/* top: -240px; // 부모인 paintImgCSS 높이만큼 올려주면 됨 */
 	width: 100%;
 	height: 100%;
+	color: white;
+	font-family: 'GongGothicMedium';
+	.buttons {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
 `
 const type1CSS = css`
 	filter: brightness(0.5);

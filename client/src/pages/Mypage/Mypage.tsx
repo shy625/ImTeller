@@ -16,7 +16,7 @@ import { setCardList, setPaintList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 
 import pencil from '../../assets/image/pencil.webp'
-import { imgIcon } from 'style/commonStyle'
+import { imgIcon, fullDisplay } from 'style/commonStyle'
 
 export default function Mypage() {
 	const navigate = useNavigate()
@@ -82,7 +82,7 @@ export default function Mypage() {
 
 	return (
 		<Layout>
-			<main>
+			<main css={fullDisplay}>
 				<div css={centerCSS}>
 					<div css={profileCSS}>
 						<img src={profile} alt="" css={profileImgCSS} />
@@ -124,6 +124,7 @@ export default function Mypage() {
 	)
 }
 const centerCSS = css`
+	margin-top: 20px;
 	display: flex;
 	justify-content: center;
 `
@@ -137,7 +138,7 @@ const profileCSS = css`
 	align-items: center;
 	justify-content: flex-start;
 	color: white;
-	width: 80%;
+	width: 60%;
 	.nickname {
 		font-family: 'GongGothicMedium';
 		font-size: 25px;

@@ -38,6 +38,7 @@ export const createCard = async (walletAddress: string, image: any) => {
 export const mintCard = async (walletAddress: string, image: any) => {
 	const wallet = walletAddress
 	const tokenURI = image
+	console.log('민팅을 시작한다! 무려 무료로!')
 	let tokenId = await cardContract.methods.mint(tokenURI).send({ from: wallet })
 	console.log(tokenId)
 	return tokenId.events.Transfer.returnValues.tokenId

@@ -69,7 +69,7 @@ const voteCSS = css`
 	font-family: 'GmarketSansMedium';
 	.voteIntro {
 		width: 80%;
-		background-color: rgba(0, 0, 0, 0.3);
+		background-color: rgba(255, 255, 255, 0.15);
 		border-radius: 25px;
 		display: flex;
 		flex-direction: column;

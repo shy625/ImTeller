@@ -13,12 +13,14 @@ export default function CardList(props: CardListProps) {
 	const { cardList, isCard, type } = props
 
 	return (
-		<div>
+		<div css={centerCSS}>
 			{cardList.length ? (
 				isCard ? (
-					cardList.map((card) => {
-						return <Card card={card} type={type} key={card.cardId} />
-					})
+					<div css={paintListCSS}>
+						{cardList.map((card) => {
+							return <Card card={card} type={type} key={card.cardId} />
+						})}
+					</div>
 				) : (
 					<div css={paintListCSS}>
 						{cardList.map((paint) => {
@@ -32,6 +34,14 @@ export default function CardList(props: CardListProps) {
 		</div>
 	)
 }
-const paintListCSS = css`
+const centerCSS = css`
 	display: flex;
+	justify-content: center;
+`
+const paintListCSS = css`
+	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	width: 80%;
 `
