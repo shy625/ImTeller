@@ -21,12 +21,15 @@ import {
 	setRoomInfo,
 	setReady,
 	setPlayers,
+	setScore,
+	setStatus,
+	clearStatus,
 	setGameCards,
 	setTime,
-	setDescription,
 	setTable,
 	setResult,
 	setTeller,
+	setTellerMsg,
 } from 'store/modules/game'
 import art from 'actions/api/art'
 import { useBGM } from 'actions/hooks/useBGM'
@@ -83,11 +86,13 @@ export default function Game() {
 			client.subscribe(`/sub/room/${roomId}/join`, (action) => {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
+				dispatch(setPlayers(content))
 				console.log('join', content)
 			})
 			client.subscribe(`/sub/room/${roomId}/exit`, (action) => {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
+				dispatch(setPlayers(content))
 				console.log('exit', content)
 			})
 			// 레디 상태 변경
@@ -111,6 +116,14 @@ export default function Game() {
 				client.publish({
 					destination: `/pub/room/${roomId}/roominfo`,
 				})
+				client.subscribe(
+					`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/mycards`,
+					(action) => {
+						console.log('mycards', action.body)
+						const content = JSON.parse(action.body)
+						console.log('mycards', content)
+					},
+				)
 			})
 			// 내 아이템 받기
 			client.subscribe(
@@ -132,44 +145,55 @@ export default function Game() {
 			)
 			// 페이즈 전환
 			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
+				console.log(action.body)
 				if (action.body === 'phase1') {
 					setState(1)
 					setPhase(1)
 					dispatch(setTeller(''))
-					dispatch(setDescription(''))
+					dispatch(clearStatus())
 					dispatch(setTime(30))
 				} else if (action.body === 'phase2') {
 					setState(1)
 					setPhase(2)
+					dispatch(clearStatus())
 					dispatch(setTime(30))
 				} else if (action.body === 'phase3') {
 					setState(1)
 					setPhase(3)
+					dispatch(clearStatus())
 					dispatch(setTime(30))
 				} else if (action.body === 'phase4') {
 					setState(1)
 					setPhase(4)
+					dispatch(clearStatus())
 					dispatch(setTime(30))
 				} else {
 					setState(2)
 					setPhase(0)
+					dispatch(clearStatus())
 				}
 			})
 			// 유저 상태 변화
 			client.subscribe(`/sub/room/${roomId}/status`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('status', content)
+				dispatch(setStatus(content))
 			})
 			// 텔러 누군지 받기
-			client.subscribe(`/sub/room/${roomId}/newteller`, (action) => {
+			client.subscribe(`/sub/room/${roomId}/newteller`, (action: any) => {
 				console.log('newTeller', action.body)
 				dispatch(setTeller(action.body))
 			})
 			// 텔러 문구 받기
 			client.subscribe(`/sub/room/${roomId}/teller`, (action) => {
 				console.log('teller', action.body)
+				dispatch(setTellerMsg(action.body))
+			})
+			// 테이블 받기
+			client.subscribe(`/sub/room/${roomId}/table`, (action) => {
 				const content = JSON.parse(action.body)
-				dispatch(setDescription(content))
+				dispatch(setReady(content))
+				console.log('table', content)
+				dispatch(setTable(content))
 			})
 			// 누군가 아이템 사용
 			client.subscribe(`/sub/room/${roomId}/item`, (action) => {
@@ -180,14 +204,17 @@ export default function Game() {
 			client.subscribe(`/sub/room/${roomId}/result`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('result', content)
+				setTurnResult(content)
 			})
 			client.subscribe(`/sub/room/${roomId}/totalresult`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('totalresult', content)
+				dispatch(setScore(content))
 			})
 			client.subscribe(`/sub/room/${roomId}/submitcards`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('submitcards', content)
+				setSubmitCards(content)
 			})
 			client.subscribe(`/sub/room/${roomId}/roominfo`, (action) => {
 				const content = JSON.parse(action.body)
@@ -211,6 +238,19 @@ export default function Game() {
 			dispatch(setIsChecked(false))
 		} // 새로고침되면 roomInfo 받기
 	}, [roomId])
+
+	useEffect(() => {
+		try {
+			ws.subscribe(
+				`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/mycards`,
+				(action) => {
+					const content = JSON.parse(action.body)
+					console.log('mycards', content)
+					dispatch(setGameCards(content))
+				},
+			)
+		} catch {}
+	}, [roomInfo.ready, phase])
 
 	return (
 		<main css={roomBg}>

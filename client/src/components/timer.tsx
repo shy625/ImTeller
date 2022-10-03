@@ -17,11 +17,5 @@ export default function Timer() {
 		return () => clearInterval(interval.current)
 	}, [])
 
-	useEffect(() => {
-		if (initialTime.current < 0) {
-			clearInterval(interval.current)
-		}
-	}, [time])
-
-	return <div>{time !== -1 ? time + 's' : null}</div>
+	return <div>{time >= 0 ? time + 's' : null}</div>
 }

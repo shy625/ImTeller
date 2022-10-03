@@ -11,7 +11,9 @@ export default function GameProfile(props: any) {
 	return (
 		<div css={profileCSS}>
 			<img css={imgSizeCSS} src={player.profile || defaultProfile} alt="프로필이미지" />
-			<div>{player.url}</div>
+			<div>{player.nickname}</div>
+			<div>{player.score}</div>
+			<div>{player.status ? '✔' : '❌'}</div>
 		</div>
 	)
 }

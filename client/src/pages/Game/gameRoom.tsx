@@ -39,13 +39,15 @@ export default function GameRoom(props: any) {
 	useEffect(() => {
 		if (roomInfo.leader === nickname) {
 			setIsLeader(true)
-			client.publish({
-				destination: `/pub/room/${roomId}/ready`,
-				body: JSON.stringify({
-					nickname,
-					isReady: true,
-				}),
-			})
+			try {
+				client.publish({
+					destination: `/pub/room/${roomId}/ready`,
+					body: JSON.stringify({
+						nickname,
+						isReady: true,
+					}),
+				})
+			} catch {}
 		} else {
 			setIsLeader(false)
 		}
@@ -69,7 +71,6 @@ export default function GameRoom(props: any) {
 				isReady: !isReady,
 			}),
 		})
-		console.log(3)
 	}
 
 	return (

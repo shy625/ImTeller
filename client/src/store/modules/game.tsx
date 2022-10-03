@@ -46,6 +46,7 @@ export const roomInfo = createSlice({
 		maxNum: 3,
 		nftDeck: [],
 		players: [''],
+		profiles: { nickname: 'profile' },
 		ready: {},
 		roomName: '',
 		score: {},
@@ -98,26 +99,48 @@ export const players = createSlice({
 			profile: 'https://newsimg.sedaily.com/2020/11/07/1ZABD2GDRF_5.jpg',
 			ready: false,
 			score: 0,
-			nft: '',
 		},
 	],
 	reducers: {
 		setPlayers(state, action) {
-			return action.payload
+			let copy = []
+			for (let key in action.payload.profiles) {
+				copy.push({
+					nickname: key,
+					profile: action.payload.profiles[key],
+					score: action.payload.score[key] ? action.payload.score[key] : 0,
+					status: action.payload.status[key] ? action.payload.status[key] : false,
+				})
+			}
+			return copy
 		},
-		addScore(state, action) {
-			state.forEach((player: any) => {
-				for (const p of action.payload) {
-					if (player.nickname === p.nickname) {
-						player.score += p.score
+		setStatus(state, action) {
+			for (let key in action.payload) {
+				for (let player in state) {
+					if (state[player]['nickname'] === key) {
+						state[player]['status'] = action.payload[key]
 						break
 					}
 				}
-			})
+			}
+		},
+		setScore(state, action) {
+			for (let key in action.payload) {
+				for (let player in state) {
+					if (state[player]['nickname'] === key) {
+						state[player]['score'] = action.payload[key]
+					}
+				}
+			}
+		},
+		clearStatus(state: any) {
+			for (let key in state) {
+				state[key][status] = false
+			}
 		},
 	},
 })
-export const { setPlayers, addScore } = players.actions
+export const { setPlayers, setScore, setStatus, clearStatus } = players.actions
 
 export const time = createSlice({
 	name: 'time',
@@ -174,36 +197,11 @@ export const gameCards = createSlice({
 	initialState: [
 		{
 			cardId: 1,
-			cardTitle: '기본카드1',
-			cardImageURL: 'assets/image/card1',
-			description: '기본카드1.',
-			grade: '',
-			effect: 0,
-			effectDetail: 0,
-			createdDT: 'asdf',
-			recentPrice: 100,
+			cardUrl: 'assets/image/card1',
 		},
 		{
 			cardId: 2,
-			cardTitle: '기본카드2',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드2.',
-			grade: 'S',
-			effect: 1,
-			effectDetail: 10,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 3,
-			cardTitle: '기본카드3',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드3.',
-			grade: 'S',
-			effect: 2,
-			effectDetail: 60,
-			createdDT: 'asdf',
-			recentPrice: 100,
+			cardUrl: 'assets/image/card4',
 		},
 	],
 	reducers: {
@@ -243,16 +241,16 @@ export const teller = createSlice({
 })
 export const { setTeller } = teller.actions
 
-export const description = createSlice({
-	name: 'description',
+export const tellerMsg = createSlice({
+	name: 'tellerMsg',
 	initialState: '',
 	reducers: {
-		setDescription(state, action) {
+		setTellerMsg(state, action) {
 			return action.payload
 		},
 	},
 })
-export const { setDescription } = description.actions
+export const { setTellerMsg } = tellerMsg.actions
 
 export const table = createSlice({
 	name: 'table',

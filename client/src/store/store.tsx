@@ -13,7 +13,7 @@ import {
 	gameCards,
 	selectedCards,
 	teller,
-	description,
+	tellerMsg,
 	table,
 	result,
 } from 'store/modules/game'
@@ -58,7 +58,7 @@ const store = configureStore({
 		gameCards: gameCards.reducer,
 		selectedCards: selectedCards.reducer,
 		teller: teller.reducer,
-		description: description.reducer,
+		tellerMsg: tellerMsg.reducer,
 		table: table.reducer,
 		result: result.reducer,
 		myPageTab: myPageTab.reducer,

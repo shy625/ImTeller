@@ -5,8 +5,7 @@ export default function GameCard(props: any) {
 	const { phase, cardUrl } = props
 	return (
 		<div>
-			<img src={cardUrl} alt="" />
-			asdf
+			<img style={{ height: '50px' }} src={cardUrl} alt="" />
 		</div>
 	)
 }

@@ -10,7 +10,7 @@ export default function GameChoice(props: any) {
 
 	const table = useSelector((state: any) => state.table)
 	const teller = useSelector((state: any) => state.teller)
-	const description = useSelector((state: any) => state.discription)
+	const tellerMsg = useSelector((state: any) => state.tellerMsg)
 
 	const [setModalState, setModalMsg] = useModal('')
 	const [isImteller, setIsImteller] = useState(false)
@@ -34,21 +34,19 @@ export default function GameChoice(props: any) {
 			destination: `/pub/room/${roomId}/choice`,
 			body: JSON.stringify({
 				nickname,
-				cardId: choicedCard.id,
-				cardUrl: choicedCard.url,
+				cardId: choicedCard.cardId,
+				cardUrl: choicedCard.cardUrl,
 			}),
 		})
 	}
 
-	console.log(choicedCard)
-
 	return (
 		<div>
 			<div>
-				{!isImteller && choicedCard.url ? (
-					<GameCard phase={phase} cardUrl={choicedCard.url} />
+				{!isImteller && choicedCard.cardUrl ? (
+					<GameCard phase={phase} cardUrl={choicedCard.cardUrl} />
 				) : null}
-				<span>{description}</span>
+				<span>{tellerMsg}</span>
 
 				{!isImteller ? <button onClick={onSubmit}>제출하기</button> : null}
 
@@ -61,8 +59,8 @@ export default function GameChoice(props: any) {
 
 			<div>
 				{table.map((card) => (
-					<div key={card.id} onClick={() => setChoicedCard(card)}>
-						<GameCard phase={phase} cardUrl={card.url} />
+					<div key={card.cardId} onClick={() => setChoicedCard(card)}>
+						<GameCard phase={phase} cardUrl={card.cardUrl} />
 					</div>
 				))}
 			</div>
