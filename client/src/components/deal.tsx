@@ -102,9 +102,13 @@ const body = css`
 `
 
 const right = css`
+	font-size: 17px;
 	float: right;
+	margin-bottom: 5px;
 `
 
 const left = css`
+	font-family: 'GmarketSansMedium';
+	font-size: 13px;
 	float: left;
 `
