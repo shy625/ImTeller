@@ -274,8 +274,8 @@ const paintImageCSS = css`
 `
 const type0InfoCSS = css`
 	display: none;
-	position: relative;
-	top: -15vh; // 형제인 paintImgCSS 높이만큼 올려주면 됨
+	position: absolute;
+	/* top: -15vh; // 형제인 paintImgCSS 높이만큼 올려주면 됨 */
 	width: 100%;
 	height: 100%;
 	color: white;

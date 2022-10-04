@@ -89,13 +89,15 @@ export default function Mypage() {
 						<div>
 							<div className="nickname">
 								<div className="name">{nickname}</div>
-								<div
-									onClick={() => {
-										navigate('/profileEdit')
-									}}
-								>
-									<img src={pencil} alt="연필" css={imgIcon} />
-								</div>
+								{isMyMypage ? (
+									<div
+										onClick={() => {
+											navigate('/profileEdit')
+										}}
+									>
+										<img src={pencil} alt="연필" css={imgIcon} />
+									</div>
+								) : null}
 							</div>
 							<div className="info">
 								<div>Lv. {Math.floor(exp / 50) + 1}</div>
@@ -104,14 +106,16 @@ export default function Mypage() {
 									{win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%
 								</div>
 								<div>
-									{wallet ? (
-										<>
-											<label htmlFor="wallet">등록된 지갑주소 :</label>
-											<input id="wallet" value={currentUser.wallet} disabled></input>
-										</>
-									) : (
-										<button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
-									)}
+									{isMyMypage ? (
+										wallet ? (
+											<>
+												<label htmlFor="wallet">등록된 지갑주소 :</label>
+												<input id="wallet" value={currentUser.wallet} disabled></input>
+											</>
+										) : (
+											<button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
+										)
+									) : null}
 								</div>
 							</div>
 						</div>
