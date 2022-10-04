@@ -42,6 +42,7 @@ const imgIcon = css({
 	width: 20,
 	height: 20,
 })
+
 // 페이지 풀 사이즈로 키우기
 const fullDisplay = css({
 	height: 'auto',

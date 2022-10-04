@@ -1,11 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
-import vote from 'actions/api/vote'
+import voteApi from 'actions/api/vote'
 import art from 'actions/api/art'
-import { setPaintList } from 'store/modules/art'
+import { voteListProps } from 'pages/Vote/Vote'
+import { setPaintList, setVoteList } from 'store/modules/art'
 import { setModalState, setModalMsg, setModalResult } from 'store/modules/util'
 
 export default function VoteModal(props: any) {
@@ -13,12 +15,9 @@ export default function VoteModal(props: any) {
 	const dispatch = useDispatch()
 	const currentUser = useSelector((state: any) => state.currentUser)
 	const paintList = useSelector((state: any) => state.paintList)
-	const { paintId, paintTitle, paintImageURL, description } = useSelector(
-		(state: any) => state.modalMsg,
-	)
+	const { vote, like }: voteListProps = useSelector((state: any) => state.modalMsg)
 
 	const [isMyPaint, setIsMyPaint] = useState(false)
-
 	useEffect(() => {
 		art.paintList({ nickname: currentUser.nickname }).then((result) => {
 			console.log(result)
@@ -29,7 +28,7 @@ export default function VoteModal(props: any) {
 	useEffect(() => {
 		if (
 			paintList.some((paint) => {
-				if (paint.paintId === paintId) return true
+				if (paint.paintId === vote.art.id) return true
 			})
 		) {
 			setIsMyPaint(true)
@@ -37,7 +36,7 @@ export default function VoteModal(props: any) {
 	}, [paintList])
 
 	const onCancel = () => {
-		art.cancelRegist(paintId).then((result) => {
+		art.cancelRegist(vote.art.id).then((result) => {
 			console.log(result.data)
 			navigate('/vote')
 		})
@@ -46,9 +45,9 @@ export default function VoteModal(props: any) {
 	const onVote = () => {
 		const data = {
 			nickname: currentUser.nickname,
-			paintId,
+			artId: vote.art.id,
 		}
-		vote
+		voteApi
 			.vote(data)
 			.then((result) => {
 				console.log(result)
@@ -61,10 +60,10 @@ export default function VoteModal(props: any) {
 	}
 
 	return (
-		<div>
-			{paintTitle}
-			<img src={paintImageURL} alt="paintTitle" />
-			{description}
+		<div css={voteModalCSS}>
+			{vote.art.title}
+			<img src={vote.art.url} alt="paintTitle" />
+			{}
 			{'좋아요 변수명 정해지면 넣기'}
 			by. {'제작자 이름'}
 			<button onClick={() => dispatch(setModalState(''))}>돌아가기</button>
@@ -76,3 +75,6 @@ export default function VoteModal(props: any) {
 		</div>
 	)
 }
+const voteModalCSS = css`
+	color: white;
+`
