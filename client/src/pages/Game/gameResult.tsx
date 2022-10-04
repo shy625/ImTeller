@@ -7,7 +7,7 @@ import { useBGM } from 'actions/hooks/useBGM'
 
 export default function GameResult(props: any) {
 	const dispatch = useDispatch()
-	const { phase, turnResult, submitCards } = props
+	const { turnResult, submitCards } = props
 
 	const table = useSelector((state: any) => state.table)
 	useBGM('result')
@@ -57,7 +57,7 @@ export default function GameResult(props: any) {
 				<div key={card.cardId}>
 					{/* 카드 주인 */}
 					<>{cardOwner(card.cardId)}</>
-					<GameCard phase={phase} cardUrl={card.cardUrl} />
+					<GameCard cardUrl={card.cardUrl} />
 					{/* 누가 배팅했었는지, 얻는 점수와 함께 */}
 					<>{bets(card.cardId)}</>
 				</div>

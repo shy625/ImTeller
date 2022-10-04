@@ -21,14 +21,14 @@ import NotFound404 from 'pages/NotFound404/NotFound404'
 import BgmLayer from 'layout/bgmLayer'
 import ModalLayer from 'layout/modalLayer'
 
-import 'App.css'
+import './App.css'
 import 'style/fonts.css'
 
 export default function App() {
 	const currentUser = useSelector((state: any) => state.currentUser)
 
 	return (
-		<div className="App">
+		<div>
 			<BrowserRouter>
 				<BgmLayer>
 					<ModalLayer>
@@ -53,7 +53,7 @@ export default function App() {
 							) : (
 								<>
 									<Route path="/login" element={<Login />} />
-									<Route path="/signup" element={<Signup signup={true} />} />
+									<Route path="/signup" element={<Signup />} />
 								</>
 							)}
 							<Route path="/*" element={<NotFound404 />} />

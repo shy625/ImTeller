@@ -27,6 +27,7 @@ import {
 	clearStatus,
 	setGameCards,
 	setTime,
+	setPhase,
 	setTable,
 	setResult,
 	setTeller,
@@ -44,10 +45,10 @@ export default function Game() {
 	const players = useSelector((state: any) => state.players)
 	const selectedCard = useSelector((state: any) => state.selectedCards)
 	const roomInfo = useSelector((state: any) => state.roomInfo)
+	const phase = useSelector((state: any) => state.phase) // state가 1일때 작동. 1: 텔러 2: 낚시그림선택 3: 텔러맞추기 4: 결과
 
 	const [ws, setWs] = useState<any>('')
 	const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2이면 gameResult
-	const [phase, setPhase] = useState(0) // state가 1일때 작동. 1: 텔러 2: 낚시그림선택 3: 텔러맞추기 4: 결과
 	const [turnResult, setTurnResult] = useState<any>([])
 	const [submitCards, setSubmitCards] = useState<any>([])
 
@@ -74,6 +75,13 @@ export default function Game() {
 			window.removeEventListener('beforeunload', blockRefresh)
 		}
 	}, [])
+
+	useEffect(() => {
+		setModalState('joinRoom')
+		return () => {
+			dispatch(setIsChecked(false))
+		} // 새로고침되면 roomInfo 받기
+	}, [roomId])
 
 	// 웹소켓
 	useEffect(() => {
@@ -118,14 +126,6 @@ export default function Game() {
 				client.publish({
 					destination: `/pub/room/${roomId}/roominfo`,
 				})
-				client.subscribe(
-					`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/mycards`,
-					(action) => {
-						console.log('mycards', action.body)
-						const content = JSON.parse(action.body)
-						console.log('mycards', content)
-					},
-				)
 			})
 			// 내 아이템 받기
 			client.subscribe(
@@ -148,35 +148,8 @@ export default function Game() {
 			// 페이즈 전환
 			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
 				console.log(action.body)
-				if (action.body === 'phase1') {
-					dispatch(setTime(0))
-					setState(1)
-					setPhase(1)
-					dispatch(setTeller(''))
-					dispatch(clearStatus())
-					dispatch(setTime(30))
-				} else if (action.body === 'phase2') {
-					dispatch(setTime(0))
-					setState(1)
-					setPhase(2)
-					dispatch(setTime(30))
-				} else if (action.body === 'phase3') {
-					dispatch(setTime(0))
-					setState(1)
-					setPhase(3)
-					dispatch(clearStatus())
-					dispatch(setTime(30))
-				} else if (action.body === 'phase4') {
-					dispatch(setTime(0))
-					setState(1)
-					setPhase(4)
-					dispatch(setTime(10))
-				} else {
-					dispatch(setTime(0))
-					setState(2)
-					setPhase(0)
-					dispatch(setTime(15))
-				}
+				dispatch(setTime(0))
+				dispatch(setPhase(action.body))
 			})
 			// 유저 상태 변화
 			client.subscribe(`/sub/room/${roomId}/status`, (action) => {
@@ -239,13 +212,6 @@ export default function Game() {
 	}, [])
 
 	useEffect(() => {
-		setModalState('joinRoom')
-		return () => {
-			dispatch(setIsChecked(false))
-		} // 새로고침되면 roomInfo 받기
-	}, [roomId])
-
-	useEffect(() => {
 		try {
 			ws.subscribe(
 				`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/mycards`,
@@ -258,6 +224,31 @@ export default function Game() {
 		} catch {}
 	}, [roomInfo.ready, phase])
 
+	useEffect(() => {
+		console.log(phase)
+		if (phase === 'phase1') {
+			if (phase !== 'end') {
+				setState(1)
+				dispatch(setTeller(''))
+				dispatch(clearStatus())
+				dispatch(setTime(30))
+			}
+		} else if (phase === 'phase2') {
+			setState(1)
+			dispatch(setTime(30))
+		} else if (phase === 'phase3') {
+			setState(1)
+			dispatch(clearStatus())
+			dispatch(setTime(30))
+		} else if (phase === 'phase4') {
+			setState(1)
+			dispatch(setTime(10))
+		} else if (phase === 'end') {
+			setState(2)
+			dispatch(setTime(15))
+		}
+	}, [phase])
+
 	return (
 		<main css={roomBg}>
 			<div>
@@ -267,7 +258,7 @@ export default function Game() {
 			<div css={players}>
 				{players.map((player: any) => (
 					<div key={player.nickname} css={playerOne}>
-						<GameProfile player={player} phase={phase} />
+						<GameProfile player={player} />
 					</div>
 				))}
 			</div>
@@ -276,12 +267,12 @@ export default function Game() {
 				{state === 0 ? (
 					<GameRoom nickname={nickname} client={ws} roomId={roomId} />
 				) : state === 1 ? (
-					phase === 1 || phase === 2 ? (
-						<GameTeller nickname={nickname} phase={phase} client={ws} roomId={roomId} />
-					) : phase === 3 ? (
-						<GameChoice nickname={nickname} phase={phase} client={ws} roomId={roomId} />
+					phase === 'phase1' || phase === 'phase2' ? (
+						<GameTeller nickname={nickname} client={ws} roomId={roomId} />
+					) : phase === 'phase3' ? (
+						<GameChoice nickname={nickname} client={ws} roomId={roomId} />
 					) : (
-						<GameResult phase={phase} turnResult={turnResult} submitCards={submitCards} />
+						<GameResult turnResult={turnResult} submitCards={submitCards} />
 					)
 				) : (
 					<GameEnd setState={setState} />

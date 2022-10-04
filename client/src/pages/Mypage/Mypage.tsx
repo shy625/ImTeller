@@ -15,7 +15,7 @@ import { setUserDetail } from 'store/modules/user'
 import { setCardList, setPaintList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 
-import pencil from '../../assets/image/pencil.webp'
+import pencil from 'assets/image/pencil.webp'
 import { imgIcon } from 'style/commonStyle'
 
 export default function Mypage() {
@@ -94,7 +94,12 @@ export default function Mypage() {
 										navigate('/profileEdit')
 									}}
 								>
-									<img src={pencil} alt="연필" css={imgIcon} />
+									<img
+										src={pencil}
+										style={{ paddingBottom: '5px', borderBottom: '2px solid white' }}
+										alt="연필"
+										css={imgIcon}
+									/>
 								</div>
 							</div>
 							<div className="info">
