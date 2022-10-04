@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
+import { imgBigIcon } from 'style/commonStyle'
+import check from 'assets/image/check.webp'
 import gradeS from 'assets/image/gradeS.webp'
 import gradeA from 'assets/image/gradeA.webp'
 import gradeB from 'assets/image/gradeB.webp'
@@ -60,7 +62,9 @@ export default function Card(props: any) {
 						</div>
 					</div>
 				</div>
-				<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
+				<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>
+					<img src={check} alt="" css={imgBigIcon} />
+				</div>
 				{type === 0 ? (
 					<div className="cardInfo">
 						<div className="textInfo">
@@ -154,11 +158,25 @@ const type0InfoCSS = css`
 `
 const type1CSS = css`
 	filter: brightness(0.5);
+	position: relative;
+	height: 214px;
+	width: 143px;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: 13px solid #f4f4f4;
+	margin: 10px;
 `
 const type1InfoCSS = css`
-	position: relative;
-	top: -9vh;
-	left: 4.5vh;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 190px;
+	/* top: -9vh; */
+	/* left: 4.5vh; */
 `
 const displayNoneCSS = css`
 	display: none;

@@ -42,6 +42,11 @@ const imgIcon = css({
 	width: 20,
 	height: 20,
 })
+// 아이콘용 이미지 크기 조절
+const imgBigIcon = css({
+	width: 40,
+	height: 40,
+})
 
 // 페이지 풀 사이즈로 키우기
 const fullDisplay = css({
@@ -64,4 +69,14 @@ const centerRowCSS = css`
 	align-items: center;
 `
 
-export { normalBtn, textBtn, input, textarea, imgIcon, fullDisplay, centerColCSS, centerRowCSS }
+export {
+	normalBtn,
+	textBtn,
+	input,
+	textarea,
+	imgIcon,
+	fullDisplay,
+	centerColCSS,
+	centerRowCSS,
+	imgBigIcon,
+}
