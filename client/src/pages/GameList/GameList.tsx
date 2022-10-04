@@ -13,6 +13,7 @@ import game from 'actions/api/game'
 import { setIsChecked, setRoomList } from 'store/modules/game'
 import { useBGM } from 'actions/hooks/useBGM'
 import { useModal } from 'actions/hooks/useModal'
+import { fullDisplay } from 'style/commonStyle'
 
 export default function GameList() {
 	const navigate = useNavigate()
@@ -48,8 +49,8 @@ export default function GameList() {
 
 	return (
 		<Layout>
-			<main>
-				<h2>게임방 목록입니다</h2>
+			<main css={fullDisplay}>
+				<h2>게임리스트</h2>
 				<button onClick={makeRoom}>방만들기</button>
 				<div css={roomListCSS}>
 					{roomList.length
