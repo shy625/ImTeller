@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import GameCard from 'pages/Game/gameCard'
-import { players } from 'store/modules/game'
 import { useBGM } from 'actions/hooks/useBGM'
 
 export default function GameResult(props: any) {
 	const dispatch = useDispatch()
-	const { turnResult, submitCards } = props
+	const { turnResult, submitCards, choiceCards } = props
 
 	const table = useSelector((state: any) => state.table)
 	useBGM('result')
@@ -17,7 +16,7 @@ export default function GameResult(props: any) {
 
 	const cardOwner = (cardId) => {
 		let nickname
-		let isTeller
+		let isTeller = false
 		submitCards.map((subCard: any) => {
 			if (cardId === subCard.cardId) {
 				nickname = subCard.nickname
@@ -25,26 +24,24 @@ export default function GameResult(props: any) {
 			}
 		})
 		return (
-			<div>
-				{isTeller ? '텔러 :' : ''}
-				{nickname}
+			<div style={isTeller ? { backgroundColor: 'red' } : null}>
+				{nickname} +{turnResult[nickname]}
 			</div>
 		)
 	}
 
 	const bets = (cardId) => {
 		let result = []
-		submitCards.map((subCard) => {
-			if (cardId === subCard.cardId) {
-				result.push({ nickname: subCard.nickname, score: turnResult[subCard.nickname] })
+		for (let nickname in choiceCards) {
+			if (choiceCards[nickname] === cardId) {
+				result.push(nickname)
 			}
-		})
+		}
 		return (
 			<div>
 				{result.map((player) => (
-					<div key={player.nickname}>
-						<p>{player.nickname}</p>
-						<p>{player.score}</p>
+					<div key={player}>
+						<p>{player}</p>
 					</div>
 				))}
 			</div>

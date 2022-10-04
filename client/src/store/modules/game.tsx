@@ -195,23 +195,25 @@ export const items = createSlice({
 		},
 	],
 	reducers: {
-		removeItem(state, action) {
-			const copy = state.filter((item) => item.cardId !== action.payload)
-			return copy
-		},
 		setItems(state, action) {
 			return action.payload
 		},
 	},
 })
-export const { removeItem, setItems } = items.actions
+export const { setItems } = items.actions
 
 export const itemState = createSlice({
 	name: 'itemState',
-	initialState: [],
+	initialState: [{ cardId: 98, nickname: 'MoCCo', effect: 2, effectNum: 20 }],
 	reducers: {
 		setItemState(state, action) {
-			return action.payload
+			const copy = []
+			for (let item of action.payload.items) {
+				if (item.nickname !== action.payload.nickname) {
+					copy.push(item)
+				}
+			}
+			return copy
 		},
 	},
 })
@@ -251,9 +253,12 @@ export const selectedCards = createSlice({
 				}
 			}
 		},
+		clearSelectedCards(state) {
+			return []
+		},
 	},
 })
-export const { setSelectedCards } = selectedCards.actions
+export const { clearSelectedCards, setSelectedCards } = selectedCards.actions
 
 export const teller = createSlice({
 	name: 'teller',
