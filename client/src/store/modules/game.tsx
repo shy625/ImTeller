@@ -187,21 +187,16 @@ export const items = createSlice({
 	name: 'items',
 	initialState: [
 		{
-			itemId: 1,
+			cardId: 1,
 			grade: 'S',
 			effect: 2,
 			effectNum: 60,
-		},
-		{
-			itemId: 2,
-			grade: 'A',
-			effect: 5,
-			effectNum: 2.5,
+			used: false,
 		},
 	],
 	reducers: {
 		removeItem(state, action) {
-			const copy = state.filter((item) => item.itemId !== action.payload.itemId)
+			const copy = state.filter((item) => item.cardId !== action.payload)
 			return copy
 		},
 		setItems(state, action) {
@@ -209,7 +204,7 @@ export const items = createSlice({
 		},
 	},
 })
-export const { removeItem } = items.actions
+export const { removeItem, setItems } = items.actions
 
 export const itemState = createSlice({
 	name: 'itemState',

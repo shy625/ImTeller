@@ -15,28 +15,13 @@ import item6 from 'assets/image/item6.webp'
 export default function Item(props: any) {
 	const dispatch = useDispatch()
 
-	const { itemId, grade, effect, effectNum } = props.item
+	const { cardId, grade, effect, effectNum } = props.item
 	const [effectPre, effectPost, effectName] = itemDetail(effect, effectNum) // effectPre는 hover했을 때
-	const [isDeal, setIsDeal] = useState(false)
 
 	const src = { 1: item1, 2: item2, 3: item3, 4: item4, 5: item5, 6: item6 }[effect]
 
-	useEffect(() => {
-		if (props.isDeal) {
-			setIsDeal(true)
-		}
-	}, [props.isDeal])
-
-	const onClick = (event) => {
-		if (isDeal) return
-		if (event.detail !== 2) return
-
-		dispatch(setItemState([effect, effectNum]))
-		dispatch(removeItem(itemId))
-	}
-
 	return (
-		<div onClick={onClick}>
+		<div style={{ width: '50px' }}>
 			<img src={src} alt={effectPre} title={effectName} />
 			<div>{effectNum}</div>
 		</div>

@@ -82,8 +82,6 @@ export default function GameTeller(props: any) {
 		}
 	}
 
-	console.log(players)
-
 	return (
 		<div>
 			<div>
@@ -97,14 +95,13 @@ export default function GameTeller(props: any) {
 					</>
 				) : null}
 
-				{isImteller && phase === 'phase1' ? (
+				{phase === 'phase1' && isImteller && (
 					<div>
 						<label htmlFor="description"></label>
 						<input id="description" type="text" onChange={(e) => setDescrip(e.target.value)} />
 					</div>
-				) : (
-					<span>{tellerMsg}</span>
 				)}
+				{phase === 'phase2' && !isImteller && <span>{tellerMsg}</span>}
 
 				{isSubmit ? null : (phase === 'phase1' && isImteller) ||
 				  (phase === 'phase2' && !isImteller) ? (
@@ -129,7 +126,7 @@ export default function GameTeller(props: any) {
 			</div>
 
 			<div>
-				<Items />
+				<Items client={client} roomId={roomId} />
 			</div>
 		</div>
 	)
