@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import Layout from 'layout/layout'
 import Loading from 'components/loading'
+import { useModal } from 'actions/hooks/useModal'
 import user from 'actions/api/user'
 import { setEmail } from 'store/modules/user'
 import { setCurrentUser } from 'store/modules/user'
@@ -16,6 +17,8 @@ export default function Login(props: any) {
 	const [pwFind, setPwFind] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 
+	const [setModalState, setModalMsg] = useModal()
+
 	const passwordFilter = (event) => {
 		const { value } = event.target
 		const filtered = value.replace(/[^0-9a-zA-Z~!@#$%^&*()=|+]/g, '')
@@ -27,9 +30,16 @@ export default function Login(props: any) {
 		const email: any = document.querySelector('#email')
 		const password: any = document.querySelector('#password')
 
-		if (!email.value) return alert('이메일 입력하셈')
-		if (!password.value) return alert('비밀번호 입력하셈')
-
+		if (!email.value) {
+			setModalMsg('이메일을 입력해주세요')
+			setModalState('alert')
+			return
+		}
+		if (!password.value) {
+			setModalMsg('비밀번호를 입력해주세요')
+			setModalState('alert')
+			return
+		}
 		const credentials = {
 			email: email.value,
 			password: password.value,
@@ -55,7 +65,7 @@ export default function Login(props: any) {
 				}
 			})
 			.catch((error) => {
-				setAuthError(error.data.response)
+				setAuthError('잘못된 아이디 혹은 비밀번호입니다.')
 				console.log('어떤 에러가 나오나')
 				console.log(error)
 			})
@@ -65,9 +75,12 @@ export default function Login(props: any) {
 		if (isLoading) return
 		const email: any = document.querySelector('#email')
 
-		if (!email.value) return alert('이메일 입력하셈')
+		if (!email.value) {
+			setModalMsg('이메일을 입력해주세요')
+			setModalState('alert')
+			return
+		}
 		setIsLoading(true)
-
 		const credentials = {
 			email: email.value,
 		}
@@ -75,8 +88,9 @@ export default function Login(props: any) {
 		user
 			.sendPassword(credentials)
 			.then((result) => {
-				if (result.data == '비밀번호 변경 메일을 전송했습니다.') {
-					alert('이메일확인해보면 비번갔음')
+				if (result.data.response == '비밀번호 변경 메일을 전송했습니다.') {
+					setModalMsg('이메일 주소로 비밀번호 변경 메일을 전송했습니다. ')
+					setModalState('alert')
 					setPwFind(false)
 				}
 				setIsLoading(false)

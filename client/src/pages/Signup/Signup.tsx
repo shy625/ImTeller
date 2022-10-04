@@ -60,7 +60,7 @@ export default function Signup(props: any) {
 
 	const checkNick = () => {
 		if (nickValid) {
-			setModalMsg('닉네임 규칙을 지켜주세요')
+			setModalMsg('닉네임은 5글자 이상이어야 합니다')
 			setModalState('alert')
 			return
 		}
@@ -95,11 +95,13 @@ export default function Signup(props: any) {
 		if (!emailChecked) {
 			setModalMsg('이메일 중복을 체크해주세요')
 			setModalState('alert')
+			setIsLoading(false)
 			return
 		}
 		if (!nickChecked) {
 			setModalMsg('닉네임 중복을 체크해주세요')
 			setModalState('alert')
+			setIsLoading(false)
 			return
 		}
 
@@ -112,9 +114,8 @@ export default function Signup(props: any) {
 			.signup(credentials)
 			.then((result) => {
 				if (result.data.response === '가입 성공') {
+					alert('회원가입에 성공했습니다. 이메일을 확인해 주세요')
 					setIsLoading(false)
-					setModalMsg('회원가입에 성공했습니다. 이메일을 확인해 주세요')
-					setModalState('alert')
 					navigate('/', { replace: true })
 				}
 			})

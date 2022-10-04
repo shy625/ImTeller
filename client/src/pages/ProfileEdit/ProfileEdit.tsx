@@ -52,9 +52,17 @@ export default function ProfileEdit(props: any) {
 
 	const checkNick = () => {
 		setNickError('')
-		if (nickValid) return alert('닉네임 규칙지키세요')
+		if (nickValid) {
+			setModalMsg('닉네임은 5글자 이상이어야 합니다')
+			setModalState('alert')
+			return
+		}
 		const nickname: any = document.querySelector('#nickname')
-		if (!nickname.value) return alert('닉네임 입력하셈')
+		if (!nickname.value) {
+			setModalMsg('닉네임을 입력해주세요')
+			setModalState('alert')
+			return
+		}
 		if (nickname.value === currentUser.nickname) {
 			return setNickChecked(true)
 		}
