@@ -302,12 +302,18 @@ public class RoomRepository {
                 .isTeller(true).build();
         roomList.get(sessionId).getStatus().replace(tellerDto.getNickname(), true);
         // 텔러 손패에서 낸 카드 제거
+        System.out.println("텔러 이름 : " + tellerDto.getNickname());
         List<GameCardDto> tellerHand = roomList.get(sessionId).getHand().get(tellerDto.getNickname());
+
         for (GameCardDto gameCard: tellerHand) {
+            System.out.println("게임카드 : " + gameCard.getCardId());
+            System.out.println("같은지 여부 : " + (gameCard.getCardId() == tellerDto.getCardId()));
             if (gameCard.getCardId() == tellerDto.getCardId()) {
                 roomList.get(sessionId).getHand().get(tellerDto.getNickname()).remove(gameCard);
+                break;
             }
         }
+        System.out.println("저장될 카드 :" + table.getNickname() + table.getCardId());
         roomList.get(sessionId).getTable().add(table);
     }
 
