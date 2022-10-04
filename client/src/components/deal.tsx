@@ -37,8 +37,8 @@ export default function Deal(props: any) {
 			<div>
 				{designerNickname}
 				<br />
-				현재 입찰가 : {finalBidPrice}
-				<br />
+				{/* 현재 입찰가 : {finalBidPrice}
+				<br /> */}
 				즉시 구매가 : {instantPrice}
 				<br />
 				{finishedAt}

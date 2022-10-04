@@ -10,7 +10,7 @@ export default function AlertModal(props: any) {
 
 	return (
 		<div>
-			{modalMsg}
+			<div>{modalMsg}</div>
 			<button
 				onClick={() => {
 					dispatch(setModalState(''))

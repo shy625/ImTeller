@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import Layout from 'layout/layout'
 import user from 'actions/api/user'
+import Loading from 'components/loading'
 
 export default function Signup(props: any) {
 	const navigate = useNavigate()
@@ -124,7 +125,7 @@ export default function Signup(props: any) {
 					{nickValid}
 				</div>
 				<button onClick={onSubmit}>회원가입</button>
-				{isLoading ? '전송중입니다...' : null}
+				{isLoading ? <Loading msg={'전송중입니다.'} /> : null}
 				{authError}
 			</main>
 		</Layout>
