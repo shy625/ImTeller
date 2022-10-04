@@ -67,7 +67,7 @@ export default function Vote() {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const voteList = useSelector((state: any) => state.voteList)
+	const voteList: voteListProps[] = useSelector((state: any) => state.voteList)
 	const currentUser = useSelector((state: any) => state.currentUser)
 	const [setModalState, setModalMsg] = useModal('')
 
@@ -103,7 +103,7 @@ export default function Vote() {
 					<div css={paintListCSS}>
 						{voteList.length
 							? voteList
-									.filter((paint) => paint.isVote !== 2)
+									.filter((paint) => paint.vote.isVoting !== 2)
 									.map((paint, i) => <VoteCard paint={paint} key={i} />)
 							: null}
 					</div>
@@ -144,5 +144,4 @@ const paintListCSS = css`
 	justify-content: center;
 	flex-wrap: wrap;
 	width: 60%;
-	margin-top: 20px;
 `
