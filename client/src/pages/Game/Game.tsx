@@ -212,7 +212,7 @@ export default function Game() {
 				console.log('myitem', content)
 			})
 		} catch {}
-	}, [roomInfo.ready, phase])
+	}, [roomInfo.ready, phase, ws])
 
 	useEffect(() => {
 		console.log(phase)

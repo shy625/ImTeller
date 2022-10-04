@@ -284,4 +284,15 @@ public class RoomService {
         return roomRepository.getMyItems(sessionId, nickname);
     }
 
+    public void startedToFalse(long sessionId) {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                roomRepository.getRoom(sessionId).setStarted(false);
+            }
+        };
+        timer.schedule(timerTask, 10000);
+    }
+
 }

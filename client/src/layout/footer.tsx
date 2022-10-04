@@ -14,4 +14,6 @@ const footerCss = css({
 	justifyContent: 'center',
 	color: 'white',
 	fontFamily: 'Yeongdo-Rg',
+	fontSize: '1.25rem',
+	paddingBottom: '1rem',
 })
