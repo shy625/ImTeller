@@ -30,9 +30,9 @@ public class RankService {
 
     @Transactional(readOnly = true)
     public RankResDto.BestPaint getBestPaint() {
-        int curYear = LocalDate.now().getYear();
-        int curMonth = LocalDate.now().getMonthValue();
-        List<Vote> voteList = voteRepository.findByIsVotingAndCreatedAt(curYear, curMonth);
+        int prevYear = LocalDate.now().minusMonths(1).getYear();
+        int prevMonth = LocalDate.now().minusMonths(1).getMonthValue();
+        List<Vote> voteList = voteRepository.findByIsVotingAndCreatedAt(prevYear, prevMonth);
         if (voteList == null || voteList.size() == 0) {
             return null;
         }
