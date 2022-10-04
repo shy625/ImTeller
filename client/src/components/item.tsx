@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import itemDetail from 'actions/functions/itemDetail'
-import { removeItem } from 'store/modules/game'
 import { setItemState } from 'store/modules/game'
 
 import item1 from 'assets/image/item1.webp'

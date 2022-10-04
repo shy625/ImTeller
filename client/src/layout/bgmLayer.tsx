@@ -35,11 +35,11 @@ export default function BgmLayer(props: any) {
 	}, [bgmSrc])
 
 	useEffect(() => {
-		// if (isEffectOn) {
-		// 	effect.current.load()
-		// } else {
-		// 	effect.current.pause()
-		// }
+		if (isEffectOn) {
+			effect.current.load()
+		} else {
+			effect.current.pause()
+		}
 	}, [isEffectOn])
 
 	useEffect(() => {
