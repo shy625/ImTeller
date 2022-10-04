@@ -3,7 +3,6 @@ import { css } from '@emotion/react'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { css } from '@emotion/react'
 import DealHistory from 'pages/DealDetail/dealHistory'
 import Layout from 'layout/layout'
 
