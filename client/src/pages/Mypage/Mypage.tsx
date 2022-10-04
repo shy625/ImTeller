@@ -89,7 +89,6 @@ export default function Mypage() {
 						<div>
 							<div className="nickname">
 								<div className="name">{nickname}</div>
-<<<<<<< HEAD
 								<div
 									onClick={() => {
 										navigate('/profileEdit')
@@ -102,17 +101,6 @@ export default function Mypage() {
 										css={imgIcon}
 									/>
 								</div>
-=======
-								{isMyMypage ? (
-									<div
-										onClick={() => {
-											navigate('/profileEdit')
-										}}
-									>
-										<img src={pencil} alt="연필" css={imgIcon} />
-									</div>
-								) : null}
->>>>>>> 6bddd013106edefcd82777d9623e683345cef146
 							</div>
 							<div className="info">
 								<div>Lv. {Math.floor(exp / 50) + 1}</div>
