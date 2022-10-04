@@ -136,11 +136,11 @@ public class SocketController {
     // 텔러 카드선택 : 텔러가 선택한 카드와 텔러의 문장이 전달됨
     @MessageMapping("/room/{sessionId}/teller")
     public void teller(@DestinationVariable long sessionId, TellerDto tellerDto) {
+        roomService.stopTimer(sessionId);
         System.out.println("텔러 카드:" + tellerDto.getCardId() + " " + tellerDto.getCardMsg());
         roomService.setPhase(sessionId, 2);
         // 텔러가 제출하면 status 변경
         roomService.saveTellerInfo(sessionId, tellerDto);
-        roomService.stopTimer(sessionId);
 
         // 텔러 정보 전달
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/teller", tellerDto.getCardMsg());
