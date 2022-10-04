@@ -28,7 +28,7 @@ public class Vote extends BaseEntity {
         this.isVoting = b;
     }
 
-    public void updateCoutn(int a ){
+    public void updateCount(int a ){
         this.count += a;
     }
 }

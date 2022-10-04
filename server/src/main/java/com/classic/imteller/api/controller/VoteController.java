@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "투표 API", tags = {"투표"})
@@ -27,7 +28,12 @@ public class VoteController {
     @ApiOperation(value = "투표리스트 반환", notes = "현재 투표중인 모든 그림을 전달받는 API")
     // detailResDto 재활용
     public ResponseEntity<ResponseDto> allOnVotePaints(@RequestHeader(value="Authorization") String email) {
-        List<VoteResDto> Paints = voteService.getVotePaints(email);
+        List<VoteResDto> Paints = new ArrayList<>();
+        if(email==null){
+            Paints = voteService.getVotePaints(email);
+        }else{
+            Paints = voteService.getVoteList();
+        }
         return new ResponseEntity<ResponseDto>(new ResponseDto(Paints), HttpStatus.ACCEPTED);
     }
 
