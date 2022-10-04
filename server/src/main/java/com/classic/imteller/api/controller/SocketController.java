@@ -30,6 +30,9 @@ public class SocketController {
     public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
         Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
+
+        HashMap<String, Boolean> readyMap = roomService.getRoom(sessionId).getReady();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/ready", readyMap);
     }
 
     // 퇴장 : 게임방에서 퇴장
