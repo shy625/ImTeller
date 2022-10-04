@@ -59,7 +59,8 @@ export default function Paint(props: any) {
 
 		const check: any = await connectMetaMask()
 		if (!check) {
-			alert('지갑을 연결하세요')
+			setModalMsg('지갑을 연결하세요')
+			setModalState('alert')
 			setLoading(false)
 			return
 		}
@@ -116,7 +117,8 @@ export default function Paint(props: any) {
 
 		const check: any = await connectMetaMask()
 		if (!check) {
-			alert('지갑을 연결하세요')
+			setModalMsg('지갑을 연결하세요')
+			setModalState('alert')
 			setLoading(false)
 			return
 		}

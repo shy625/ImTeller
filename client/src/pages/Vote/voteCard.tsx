@@ -76,9 +76,13 @@ export default function VoteCard({ paint }: { paint: voteListProps }) {
 						</div>
 						<div className="description">{vote.art.description}</div>
 						<div className="buttons">
-							<button onClick={onVote}>추천하기</button>
+							{like ? (
+								<button onClick={onVote}>추천취소</button>
+							) : (
+								<button onClick={onVote}>추천하기</button>
+							)}
 							{vote.art.owner.nickname === currentUser.nickname ? (
-								<button onClick={cancelRegiser}>취소하기</button>
+								<button onClick={cancelRegiser}>출품취소</button>
 							) : null}
 						</div>
 					</div>

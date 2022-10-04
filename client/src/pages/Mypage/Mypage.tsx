@@ -16,6 +16,7 @@ import { setCardList, setPaintList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 
 import pencil from 'assets/image/pencil.webp'
+import metamaskFox from 'assets/image/MetaMask_Fox.webp'
 import { imgIcon, fullDisplay } from 'style/commonStyle'
 
 export default function Mypage() {
@@ -114,7 +115,10 @@ export default function Mypage() {
 													<input id="wallet" value={currentUser.wallet} disabled></input>
 												</>
 											) : (
-												<button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
+												<div onClick={() => setModalState('addWallet')} css={metamaskBtnCSS}>
+													<img src={metamaskFox} alt="" css={imgIcon}></img>
+													<div>Metamask로 지갑 등록하기</div>
+												</div>
 											)
 										) : null}
 									</div>
@@ -167,4 +171,18 @@ const profileCSS = css`
 `
 const listWrapper = css`
 	width: 60%;
+`
+const metamaskBtnCSS = css`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	border-radius: 3px;
+	margin: 5px 0px 0px 0px;
+	padding: 6px 12px 6px 12px;
+	font-size: 13px;
+	div {
+		margin-left: 5px;
+		margin-right: 3px;
+	}
 `
