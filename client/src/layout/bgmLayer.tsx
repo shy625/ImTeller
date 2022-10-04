@@ -19,11 +19,11 @@ export default function BgmLayer(props: any) {
 	const isMouseEffectOn = useSelector((state: any) => state.isMouseEffectOn)
 
 	useEffect(() => {
-		// if (isBgmOn) {
-		// 	bgm.current.load()
-		// } else {
-		// 	bgm.current.pause()
-		// }
+		if (isBgmOn) {
+			bgm.current.load()
+		} else {
+			bgm.current.pause()
+		}
 	}, [isBgmOn])
 
 	useEffect(() => {

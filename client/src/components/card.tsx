@@ -78,6 +78,7 @@ export default function Card(props: any) {
 		</div>
 	)
 }
+
 const cardWrapperCSS = css`
 	display: flex;
 	flex-direction: column;

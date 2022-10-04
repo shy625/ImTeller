@@ -5,10 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import CardList from 'components/cardList'
-import Card from 'components/card'
 
 import { setModalState } from 'store/modules/util'
-import { setSelectedCards } from 'store/modules/game'
 
 export default function CardSelectModal(props: any) {
 	const dispatch = useDispatch()

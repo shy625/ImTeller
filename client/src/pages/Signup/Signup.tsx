@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Layout from 'layout/layout'
+
 import user from 'actions/api/user'
+import { useModal } from 'actions/hooks/useModal'
 
 export default function Signup(props: any) {
 	const navigate = useNavigate()
@@ -12,6 +14,8 @@ export default function Signup(props: any) {
 	const [emailChecked, setEmailChecked] = useState(false)
 	const [nickChecked, setNickChecked] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
+
+	const [setModalState, setModalMsg] = useModal('')
 
 	const nickFilter = (event) => {
 		setNickChecked(false)
@@ -34,7 +38,11 @@ export default function Signup(props: any) {
 
 	const checkEmail = () => {
 		const email: any = document.querySelector('#email')
-		if (!email.value) return alert('이메일 입력하셈')
+		if (!email.value) {
+			setModalMsg('이메일을 입력해 주세요')
+			setModalState('alert')
+			return
+		}
 
 		const data = { email: email.value }
 		user
@@ -51,9 +59,17 @@ export default function Signup(props: any) {
 	}
 
 	const checkNick = () => {
-		if (nickValid) return alert('닉네임 규칙지키세요')
+		if (nickValid) {
+			setModalMsg('닉네임 규칙을 지켜주세요')
+			setModalState('alert')
+			return
+		}
 		const nickname: any = document.querySelector('#nickname')
-		if (!nickname.value) return alert('닉네임 입력하셈')
+		if (!nickname.value) {
+			setModalMsg('닉네임을 입력해 주세요')
+			setModalState('alert')
+			return
+		}
 
 		const data = { nickname: nickname.value }
 		user
@@ -76,8 +92,16 @@ export default function Signup(props: any) {
 
 		const email: any = document.querySelector('#email')
 		const nickname: any = document.querySelector('#nickname')
-		if (!emailChecked) return alert('이메일 중복체크하셈')
-		if (!nickChecked) return alert('닉네임 중복체크하셈')
+		if (!emailChecked) {
+			setModalMsg('이메일 중복을 체크해주세요')
+			setModalState('alert')
+			return
+		}
+		if (!nickChecked) {
+			setModalMsg('닉네임 중복을 체크해주세요')
+			setModalState('alert')
+			return
+		}
 
 		const credentials = {
 			email: email.value,
@@ -89,7 +113,8 @@ export default function Signup(props: any) {
 			.then((result) => {
 				if (result.data.response === '가입 성공') {
 					setIsLoading(false)
-					alert('회원가입에 성공했습니다. 이메일을 확인해 주세요') // alert modal
+					setModalMsg('회원가입에 성공했습니다. 이메일을 확인해 주세요')
+					setModalState('alert')
 					navigate('/', { replace: true })
 				}
 			})
