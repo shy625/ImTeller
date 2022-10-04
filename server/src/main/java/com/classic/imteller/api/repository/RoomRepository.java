@@ -579,11 +579,10 @@ public class RoomRepository {
                 if (activated.get(i).getEffect() == useItemDto.getEffect()) {
                     if (activated.get(i).getEffectNum() >= useItemDto.getEffectNum()) {
                         chk = false;
-                        break;
                     } else {
                         activated.remove(i);
-                        break;
                     }
+                    break;
                 }
             }
         }
