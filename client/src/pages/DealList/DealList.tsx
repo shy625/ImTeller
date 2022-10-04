@@ -21,14 +21,18 @@ export default function DealList() {
 	return (
 		<Layout>
 			<main>
-				<div css={nav}>
-					<button onClick={onMove}>판매 등록</button>
-					<Search />
-				</div>
 				<div css={centerCSS}>
-					{dealList.map((deal: any) => (
-						<Deal deal={deal} key={deal.dealId} />
-					))}
+					<div css={listWrapper}>
+						<div css={nav}>
+							<button onClick={onMove}>판매 등록</button>
+							<Search />
+						</div>
+						<div css={centerCSS}>
+							{dealList.map((deal: any) => (
+								<Deal deal={deal} key={deal.dealId} />
+							))}
+						</div>
+					</div>
 				</div>
 			</main>
 		</Layout>
@@ -37,7 +41,8 @@ export default function DealList() {
 const centerCSS = css`
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
+	flex-wrap: wrap;
 `
 
 const nav = css`
@@ -45,4 +50,7 @@ const nav = css`
 	flex-direction: row;
 	justify-content: space-between;
 	margin: 30px;
+`
+const listWrapper = css`
+	width: 60%;
 `

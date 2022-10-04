@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import Layout from 'layout/layout'
+import Loading from 'components/loading'
 import user from 'actions/api/user'
 import { setEmail } from 'store/modules/user'
 import { setCurrentUser } from 'store/modules/user'
@@ -54,7 +55,8 @@ export default function Login(props: any) {
 				}
 			})
 			.catch((error) => {
-				setAuthError(error.response.data)
+				setAuthError(error.data.response)
+				console.log('어떤 에러가 나오나')
 				console.log(error)
 			})
 	}
@@ -96,7 +98,7 @@ export default function Login(props: any) {
 				{pwFind ? (
 					<>
 						<button onClick={sendEmail}>임시 비밀번호 전송</button>
-						{isLoading ? '전송중입니다...' : null}
+						{isLoading ? <Loading msg={'전송중입니다.'} /> : null}
 					</>
 				) : (
 					<>

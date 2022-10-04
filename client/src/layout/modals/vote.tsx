@@ -44,7 +44,7 @@ export default function VoteModal(props: any) {
 
 	const onVote = () => {
 		const data = {
-			nickname: currentUser.nickname,
+			userNickname: currentUser.nickname,
 			artId: vote.art.id,
 		}
 		voteApi
@@ -52,9 +52,19 @@ export default function VoteModal(props: any) {
 			.then((result) => {
 				console.log(result)
 				// 내용 온것 반영하기
+				voteApi
+					.paintList()
+					.then((result) => {
+						dispatch(setVoteList(result.data.response))
+						console.log('출품 목록 새로 불러움')
+					})
+					.catch((err) => console.log(err))
+				console.log('좋아요 반영됨')
 				dispatch(setModalState(''))
 			})
 			.catch((error) => {
+				console.log('좋아요 반영안됨')
+				console.log(data)
 				console.log(error)
 			})
 	}
@@ -66,11 +76,8 @@ export default function VoteModal(props: any) {
 			{}
 			{'좋아요 변수명 정해지면 넣기'}
 			<button onClick={() => dispatch(setModalState(''))}>돌아가기</button>
-			{isMyPaint ? (
-				<button onClick={onCancel}>출품 취소하기</button>
-			) : (
-				<button onClick={onVote}>추천하기</button>
-			)}
+			<button onClick={onVote}>추천하기</button>
+			{isMyPaint ? <button onClick={onCancel}>출품 취소하기</button> : null}
 		</div>
 	)
 }
