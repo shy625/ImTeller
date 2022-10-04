@@ -35,6 +35,11 @@ export default function VoteCard({ paint }: { paint: voteListProps }) {
 			})
 			.then((result) => {
 				console.log(result)
+				voteApi.paintList().then((result) => {
+					dispatch(setVoteList(result.data.response))
+					console.log(result)
+					console.log('좋아요 업데이트까지 끝')
+				})
 			})
 	}
 	const cancelRegiser = () => {
@@ -56,9 +61,9 @@ export default function VoteCard({ paint }: { paint: voteListProps }) {
 	}
 	return (
 		<div>
-			<div onClick={onClick}>
+			<div>
 				<div css={cardWrapperCSS}>
-					<div css={type0CSS}>
+					<div css={type0CSS} onClick={onClick}>
 						<img src={vote.art.url} alt="그림" css={paintImageCSS} />
 					</div>
 					<div className="cardInfo">
@@ -126,7 +131,7 @@ const cardWrapperCSS = css`
 	.buttons {
 		display: flex;
 		justify-content: center;
-		width: 169px;
+		width: 170px;
 	}
 	button {
 		outline: 'none';

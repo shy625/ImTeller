@@ -10,8 +10,10 @@ const api = axios.create({
 api.interceptors.request.use(
 	(config) => {
 		const email = localStorage.getItem('email')
-		if (!email) return config
-
+		if (!email) {
+			config.headers.Authorization = `guest`
+			return config
+		}
 		config.headers.Authorization = `${email}`
 		return config
 	},
