@@ -50,7 +50,7 @@ export default function GameList() {
 	return (
 		<Layout>
 			<main css={fullDisplay}>
-				<h2>게임방 목록입니다</h2>
+				<h2>게임리스트</h2>
 				<button onClick={makeRoom}>방만들기</button>
 				<div css={roomListCSS}>
 					{roomList.length

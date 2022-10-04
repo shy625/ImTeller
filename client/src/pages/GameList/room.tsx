@@ -37,6 +37,7 @@ const roomCSS = css({
 	boxSizing: 'border-box',
 	background: 'rgba(255, 255, 255, .3)',
 	borderRadius: 15,
+	border: '5px solid rgb(163, 151, 198)',
 	margin: '1em',
 	padding: '1em',
 	flexGrow: 1,
@@ -75,7 +76,7 @@ const title = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: 3px solid rgb(38, 20, 92);
+	border-bottom: 3px solid rgb(83, 72, 116);
 `
 const name = css`
 	font-size: 20px;
