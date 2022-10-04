@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-
 import React, { useState } from 'react'
 
 export default function rankList(props: any) {
@@ -16,7 +15,6 @@ export default function rankList(props: any) {
 const box = css`
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 `
 
 const title = css`
