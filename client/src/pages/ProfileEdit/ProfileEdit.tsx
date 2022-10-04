@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -8,6 +10,7 @@ import ProfileImage from 'pages/ProfileEdit/profileImage'
 
 import user from 'actions/api/user'
 import { useModal } from 'actions/hooks/useModal'
+import { fullDisplay } from 'style/commonStyle'
 
 export default function ProfileEdit(props: any) {
 	const navigate: any = useNavigate()
@@ -147,7 +150,7 @@ export default function ProfileEdit(props: any) {
 
 	return (
 		<Layout>
-			<main>
+			<main css={fullDisplay}>
 				{!password ? (
 					<PwCertificate setPassword={setPassword} />
 				) : (
