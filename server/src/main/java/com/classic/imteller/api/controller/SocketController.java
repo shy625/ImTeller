@@ -176,12 +176,14 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/others")
     public void others(@DestinationVariable long sessionId, UserCardDto userCardDto) {
         // 제출한 카드 처리
+        System.out.println("인식함");
         boolean chk = roomService.getUserCard(sessionId, userCardDto);
 
         // 유저들에게 제출 상태값 변경된거 전달
         HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
 
+        System.out.println("완료여부:" + chk);
         // 모두가 제출했는지 여부 확인
         if (chk) {
             roomService.stopTimer(sessionId);
