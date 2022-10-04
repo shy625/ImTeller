@@ -114,6 +114,7 @@ export default function Game() {
 			// 시작시 선택카드 제출
 			client.subscribe(`/sub/room/${roomId}/start`, (action) => {
 				console.log('start', action.body)
+				console.log('selectedCard', selectedCard)
 				const content = JSON.parse(action.body)
 				if (!content) return
 				client.publish({

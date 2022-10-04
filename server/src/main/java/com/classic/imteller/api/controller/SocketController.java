@@ -96,10 +96,10 @@ public class SocketController {
             roomRepository.getRoom(sessionId).setTeller(players.get(0));
             for (String player : players) {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-                sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
                 // 아이템도 같이 받아오기
                 List<ItemDto> myItems = roomService.getMyItems(sessionId, selectReqDto.getNickname());
-                sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
             }
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
@@ -248,7 +248,7 @@ public class SocketController {
         List<String> players = roomRepository.getRoom(sessionId).getPlayers();
         for (String player : players) {
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-            sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHands.get(player));
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHands.get(player));
         }
 
         // table에 있는 카드들을 덱의 맨 뒤로 돌리기
@@ -285,7 +285,7 @@ public class SocketController {
             roomService.itemOneCardDraw(sessionId, useItemDto.getNickname());
             List<GameCardDto> newHand = roomService.getHand(sessionId).get(useItemDto.getNickname());
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
-            sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHand);
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHand);
         }
 
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
@@ -294,7 +294,7 @@ public class SocketController {
         // 아이템을 사용한 유저에게 자신의 아이템 상태를 다시 보내줌
         List<ItemDto> myItems= roomRepository.getMyItems(sessionId, useItemDto.getNickname());
         String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
-        sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
+        template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정
