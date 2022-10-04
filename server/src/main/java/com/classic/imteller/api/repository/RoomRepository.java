@@ -302,12 +302,18 @@ public class RoomRepository {
                 .isTeller(true).build();
         roomList.get(sessionId).getStatus().replace(tellerDto.getNickname(), true);
         // 텔러 손패에서 낸 카드 제거
+        System.out.println("텔러 이름 : " + tellerDto.getNickname());
         List<GameCardDto> tellerHand = roomList.get(sessionId).getHand().get(tellerDto.getNickname());
+
         for (GameCardDto gameCard: tellerHand) {
+            System.out.println("게임카드 : " + gameCard.getCardId());
+            System.out.println("같은지 여부 : " + (gameCard.getCardId() == tellerDto.getCardId()));
             if (gameCard.getCardId() == tellerDto.getCardId()) {
                 roomList.get(sessionId).getHand().get(tellerDto.getNickname()).remove(gameCard);
+                break;
             }
         }
+        System.out.println("저장될 카드 :" + table.getNickname() + table.getCardId());
         roomList.get(sessionId).getTable().add(table);
     }
 
@@ -351,19 +357,35 @@ public class RoomRepository {
                 .cardId(userCardDto.getCardId())
                 .cardUrl(userCardDto.getCardUrl())
                 .isTeller(false).build();
-        roomList.get(sessionId).getTable().add(table);
-        roomList.get(sessionId).getStatus().replace(userCardDto.getNickname(), true);
 
-        // 텔러 손패에서 낸 카드 제거
-        List<GameCardDto> userHand = roomList.get(sessionId).getHand().get(userCardDto.getNickname());
-        for (GameCardDto gameCard: userHand) {
-            if (gameCard.getCardId() == userCardDto.getCardId()) {
-                roomList.get(sessionId).getHand().get(userCardDto.getNickname()).remove(gameCard);
+        // 같은 nickname을 가진 table이 이미 존재한다면 add하지 않는다
+        boolean nameChk = true;
+        for (TableDto tmpTable : roomList.get(sessionId).getTable()) {
+            if (tmpTable.getNickname() == userCardDto.getNickname()) {
+                nameChk = false;
+                break;
+            }
+        }
+
+        if (nameChk) {
+            roomList.get(sessionId).getTable().add(table);
+            roomList.get(sessionId).getStatus().replace(userCardDto.getNickname(), true);
+
+            // 텔러 손패에서 낸 카드 제거
+            List<GameCardDto> userHand = roomList.get(sessionId).getHand().get(userCardDto.getNickname());
+            for (GameCardDto gameCard: userHand) {
+                if (gameCard.getCardId() == userCardDto.getCardId()) {
+                    roomList.get(sessionId).getHand().get(userCardDto.getNickname()).remove(gameCard);
+                }
             }
         }
 
         // 모두가 제출했는지 확인하는 부분
         boolean chk = true;
+
+        // 제출 카드 개수로 확인
+        if (roomList.get(sessionId).getPlayers().size() >= roomList.get(sessionId).getTable().size()) return true;
+
         HashMap<String, Boolean> status = roomList.get(sessionId).getStatus();
         for (String key : status.keySet()) {
             if (!status.get(key)) {
