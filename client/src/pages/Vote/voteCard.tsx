@@ -1,22 +1,24 @@
+/** @jsxImportSource @emotion/react */
 import { useSelector, useDispatch } from 'react-redux'
 
+import { css } from '@emotion/react'
 import Layout from 'layout/layout'
 
-import vote from 'actions/api/vote'
+import voteApi from 'actions/api/vote'
 import art from 'actions/api/art'
 import { setVoteList } from 'store/modules/art'
-
+import { voteListProps } from './Vote'
 import { useModal } from 'actions/hooks/useModal'
 import axios from 'axios'
 
-export default function VoteCard(props: any) {
+export default function VoteCard({ paint }: { paint: voteListProps }) {
 	const dispatch = useDispatch()
-	const { vote, like } = props.paint
+	const { vote, like } = paint
 	const currentUser = useSelector((state: any) => state.currentUser)
 	const [setModalState, setModalMsg] = useModal('')
 
 	const onClick = () => {
-		setModalMsg(props.paint)
+		setModalMsg(vote)
 		setModalState('vote')
 	}
 
@@ -25,7 +27,7 @@ export default function VoteCard(props: any) {
 		// 	userNickname: currentUser.nickname,
 		// 	artId: id,
 		// }
-		vote
+		voteApi
 			.vote({
 				userNickname: currentUser.nickname,
 				artId: vote.art.id,
@@ -38,7 +40,7 @@ export default function VoteCard(props: any) {
 		art
 			.cancelRegist(vote.art.id)
 			.then((result) => {
-				vote.paintList().then((result) => {
+				voteApi.paintList().then((result) => {
 					dispatch(setVoteList(result.data.response))
 					console.log(result)
 					console.log('업데이트까지 끝')
@@ -57,7 +59,7 @@ export default function VoteCard(props: any) {
 				<img src={vote.art.url} alt="그림" />
 				{vote.art.title}
 				{vote.art.description}
-				<div>좋아요수{vote.art.count}</div>
+				<div>좋아요수{vote.count}</div>
 			</div>
 			<button onClick={onVote}>추천하기</button>
 			{vote.art.owner.nickname === currentUser.nickname ? (

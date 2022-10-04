@@ -13,7 +13,56 @@ import vote from 'actions/api/vote'
 import art from 'actions/api/art'
 import { useModal } from 'actions/hooks/useModal'
 import { setVoteList, setPaintList } from 'store/modules/art'
-
+export interface voteListProps {
+	vote: vote
+	like: boolean
+}
+interface vote {
+	id: number
+	createdAt: string
+	updatedAt: string
+	art: art
+	count: number
+	isVoting: number
+}
+interface art {
+	id: number
+	createdAt: string
+	updatedAt: string
+	effect: any
+	designer: designer
+	owner: owner
+	ownerNickname: string
+	tokenId: any
+	url: string
+	isVote: number
+	title: string
+	description: string
+	recentPrice: any
+	dealList: any[]
+}
+interface designer {
+	id: number
+	createdAt: string
+	updatedAt: string
+	email: string
+	nickname: string
+	profile: string
+	exp: number
+	win: number
+	lose: number
+}
+interface owner {
+	id: number
+	createdAt: string
+	updatedAt: string
+	email: string
+	nickname: string
+	profile: string
+	exp: number
+	win: number
+	lose: number
+}
 export default function Vote() {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
