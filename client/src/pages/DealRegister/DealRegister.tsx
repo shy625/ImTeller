@@ -12,6 +12,8 @@ import art from 'actions/api/art'
 import deal from 'actions/api/deal'
 import { setCardList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
+import { setSelectedCard } from 'store/modules/art'
+
 import connectMetaMask from 'actions/functions/connectMetaMask'
 import { sellCard } from 'contract/API'
 import { useAppSelector } from 'store/store'
@@ -26,7 +28,7 @@ export default function DealRegister() {
 	console.log('selectedCard', selectedCard)
 
 	const [lowPrice, setLowPrice] = useState(0)
-	const [instantPrice, setInstantPrice] = useState(100000)
+	const [instantPrice, setInstantPrice] = useState(10)
 	const [day, setDay] = useState(1)
 	const [tag, setTag] = useState('')
 
@@ -107,6 +109,8 @@ export default function DealRegister() {
 				console.error(error)
 				setIsLoading(false)
 			})
+
+		dispatch(setSelectedCard({}))
 	}
 
 	return (
@@ -172,7 +176,13 @@ export default function DealRegister() {
 				</div>
 
 				<div>
-					<button onClick={() => navigate(-1)}>뒤로가기</button>
+					<button
+						onClick={() => {
+							navigate(-1), dispatch(setSelectedCard({}))
+						}}
+					>
+						뒤로가기
+					</button>
 					<button onClick={onSubmit}>등록하기</button>
 					{isLoading ? (
 						<Loading msg={'체인에 거래를 등록하는 중입니다. 잠시만 기다려주세요'} />

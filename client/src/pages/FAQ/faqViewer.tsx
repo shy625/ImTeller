@@ -28,4 +28,5 @@ const box = css`
 	flex-direction: column;
 	align-items: center;
 	color: white;
+	font-family: 'GongGothicMedium';
 `

@@ -29,10 +29,11 @@ const deal = {
 			url: `${END_POINT}/${dealId}`,
 		})
 	},
-	bid(dealId) {
+	bid(dealId, data) {
 		return api({
 			method: 'post',
 			url: `${END_POINT}/${dealId}/bid`,
+			data: data,
 		})
 	},
 	cancelBid(dealId, bidId, data) {
@@ -45,7 +46,7 @@ const deal = {
 	dealEnd(dealId, data) {
 		return api({
 			method: 'patch',
-			url: `${END_POINT}/${dealId}/end`,
+			url: `${END_POINT}/${dealId}/complete`,
 			data: data,
 		})
 	},
