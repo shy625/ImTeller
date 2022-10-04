@@ -83,7 +83,7 @@ public class User extends BaseEntity {
     }
 
     public void updateWinningRate() {
-        this.winningRate = (double) this.win / (this.win + this.lose);
+        this.winningRate = (double) this.win / (this.win + this.lose) * 100;
     }
 
     public void updateLevel() {
