@@ -64,4 +64,7 @@ public interface DealRepository extends JpaRepository<Deal, Long> {
             "WHERE u.nickname LIKE %:nickname% AND d.finished_at < :now",
             nativeQuery = true)
     List<Deal> searchByCardOwnerLikeAndFinishedAtBefore(String nickname, LocalDateTime now);
+
+    @Query("select d from Deal d left join fetch d.finalBid b where d.finalBid is not null and d.finishedAt > :base order by b.bidPrice desc")
+    List<Deal> findByFinalBidNotNullAndFinishedAtAfterOrderByFinalBidPrice(LocalDateTime base);
 }
