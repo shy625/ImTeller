@@ -32,7 +32,6 @@ import {
 	setResult,
 	setTeller,
 	setTellerMsg,
-	setItems,
 } from 'store/modules/game'
 import art from 'actions/api/art'
 import { useBGM } from 'actions/hooks/useBGM'
@@ -52,7 +51,6 @@ export default function Game() {
 	const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2이면 gameResult
 	const [turnResult, setTurnResult] = useState<any>([])
 	const [submitCards, setSubmitCards] = useState<any>([])
-	const [userSessionIds, setUserSessionIds] = useState('')
 
 	const [setModalState, setModalMsg] = useModal('')
 
@@ -85,6 +83,7 @@ export default function Game() {
 		} // 새로고침되면 roomInfo 받기
 	}, [roomId])
 
+	// 웹소켓
 	useEffect(() => {
 		const client = useWebSocket({ email })
 		client.onConnect = () => {
@@ -97,7 +96,6 @@ export default function Game() {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
-				setUserSessionIds(content.userSessionIds[nickname])
 				console.log('join', content)
 			})
 			client.subscribe(`/sub/room/${roomId}/exit`, (action) => {
@@ -105,6 +103,84 @@ export default function Game() {
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
 				console.log('exit', content)
+			})
+			// 레디 상태 변경
+			client.subscribe(`/sub/room/${roomId}/ready`, (action) => {
+				const content = JSON.parse(action.body)
+				dispatch(setReady1(content))
+				dispatch(setReady2(content))
+				console.log('ready', content)
+			})
+			// 시작시 선택카드 제출
+			client.subscribe(`/sub/room/${roomId}/start`, (action) => {
+				console.log('start', action.body)
+				console.log('selectedCard', selectedCard)
+				const content = JSON.parse(action.body)
+				if (!content) return
+				client.publish({
+					destination: `/pub/room/${roomId}/select`,
+					body: JSON.stringify({
+						nickname,
+						selectedCard,
+					}),
+				})
+				client.publish({
+					destination: `/pub/room/${roomId}/roominfo`,
+				})
+			})
+			// 페이즈 전환
+			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
+				console.log(action.body)
+				dispatch(setTime(0))
+				dispatch(setPhase(action.body))
+			})
+			// 유저 상태 변화
+			client.subscribe(`/sub/room/${roomId}/status`, (action) => {
+				const content = JSON.parse(action.body)
+				dispatch(setStatus(content))
+			})
+			// 텔러 누군지 받기
+			client.subscribe(`/sub/room/${roomId}/newteller`, (action: any) => {
+				console.log('newTeller', action.body)
+				dispatch(setTeller(action.body))
+			})
+			// 텔러 문구 받기
+			client.subscribe(`/sub/room/${roomId}/teller`, (action) => {
+				console.log('teller', action.body)
+				dispatch(setTellerMsg(action.body))
+			})
+			// 테이블 받기
+			client.subscribe(`/sub/room/${roomId}/table`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('table', content)
+				dispatch(setTable(content))
+			})
+			// 누군가 아이템 사용
+			client.subscribe(`/sub/room/${roomId}/item`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('item', content)
+			})
+			// 결과 받기
+			client.subscribe(`/sub/room/${roomId}/result`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('result', content)
+				setTurnResult(content)
+			})
+			client.subscribe(`/sub/room/${roomId}/totalresult`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('totalresult', content)
+				dispatch(setScore(content))
+				dispatch(setResult(content))
+			})
+			client.subscribe(`/sub/room/${roomId}/submitcards`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('submitcards', content)
+				setSubmitCards(content)
+			})
+			// 새로고침
+			client.subscribe(`/sub/room/${roomId}/roominfo`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('roominfo', content)
 			})
 		}
 		client.activate()
@@ -120,107 +196,33 @@ export default function Game() {
 
 	useEffect(() => {
 		try {
-			// 레디 상태 변경
-			ws.subscribe(`/sub/room/${roomId}/ready`, (action) => {
-				const content = JSON.parse(action.body)
-				dispatch(setReady1(content))
-				dispatch(setReady2(content))
-				console.log('ready', content)
-			})
-			// 시작시 선택카드 제출
-			ws.subscribe(`/sub/room/${roomId}/start`, (action) => {
-				console.log('start', action.body)
-				console.log('selectedCard', selectedCard)
-				const content = JSON.parse(action.body)
-				if (!content) return
-				console.log(selectedCard)
-				ws.publish({
-					destination: `/pub/room/${roomId}/select`,
-					body: JSON.stringify({
-						nickname,
-						selectedCard,
-					}),
-				})
-				ws.publish({
-					destination: `/pub/room/${roomId}/roominfo`,
-				})
-			})
-			// 페이즈 전환
-			ws.subscribe(`/sub/room/${roomId}/phase`, (action) => {
-				console.log(action.body)
-				dispatch(setTime(0))
-				dispatch(setPhase(action.body))
-			})
-			// 유저 상태 변화
-			ws.subscribe(`/sub/room/${roomId}/status`, (action) => {
-				const content = JSON.parse(action.body)
-				dispatch(setStatus(content))
-			})
-			// 카드패 받기
-			ws.subscribe(`/user/${userSessionIds}/room/${roomId}/mycards`, (action) => {
-				const content = JSON.parse(action.body)
-				console.log('mycards', content)
-				dispatch(setGameCards(content))
-			})
+			// 내 패 받기
+			ws.subscribe(
+				`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/mycards`,
+				(action) => {
+					const content = JSON.parse(action.body)
+					console.log('mycards', content)
+					dispatch(setGameCards(content))
+				},
+			)
 			// 내 아이템 받기
-			ws.subscribe(`/user/${userSessionIds}/room/${roomId}/item`, (action) => {
+			ws.subscribe(`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/item`, (action) => {
+				console.log('myitem', action.body)
 				const content = JSON.parse(action.body)
-				console.log('myitem', userSessionIds, content)
-				dispatch(setItems(content))
-			})
-			// 텔러 누군지 받기
-			ws.subscribe(`/sub/room/${roomId}/newteller`, (action: any) => {
-				console.log('newTeller', action.body)
-				dispatch(setTeller(action.body))
-			})
-			// 텔러 문구 받기
-			ws.subscribe(`/sub/room/${roomId}/teller`, (action) => {
-				console.log('teller', action.body)
-				dispatch(setTellerMsg(action.body))
-			})
-			// 테이블 받기
-			ws.subscribe(`/sub/room/${roomId}/table`, (action) => {
-				const content = JSON.parse(action.body)
-				console.log('table', content)
-				dispatch(setTable(content))
-			})
-			// 누군가 아이템 사용
-			ws.subscribe(`/sub/room/${roomId}/item`, (action) => {
-				const content = JSON.parse(action.body)
-				console.log('item', content)
-			})
-			// 결과 받기
-			ws.subscribe(`/sub/room/${roomId}/result`, (action) => {
-				const content = JSON.parse(action.body)
-				console.log('result', content)
-				setTurnResult(content)
-			})
-			ws.subscribe(`/sub/room/${roomId}/totalresult`, (action) => {
-				const content = JSON.parse(action.body)
-				console.log('totalresult', content)
-				dispatch(setScore(content))
-				dispatch(setResult(content))
-			})
-			ws.subscribe(`/sub/room/${roomId}/submitcards`, (action) => {
-				const content = JSON.parse(action.body)
-				console.log('submitcards', content)
-				setSubmitCards(content)
-			})
-			// 새로고침
-			ws.subscribe(`/sub/room/${roomId}/roominfo`, (action) => {
-				const content = JSON.parse(action.body)
-				console.log('roominfo', content)
+				console.log('myitem', content)
 			})
 		} catch {}
-	}, [userSessionIds, selectedCard])
+	}, [roomInfo.ready, phase])
 
 	useEffect(() => {
+		console.log(phase)
 		if (phase === 'phase1') {
-			setState(1)
-			dispatch(setTeller(''))
-			dispatch(setTellerMsg(''))
-			dispatch(clearStatus())
-			dispatch(setTime(30))
+			if (phase !== 'end') {
+				setState(1)
+				dispatch(setTeller(''))
+				dispatch(clearStatus())
+				dispatch(setTime(30))
+			}
 		} else if (phase === 'phase2') {
 			setState(1)
 			dispatch(setTime(30))
