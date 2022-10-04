@@ -246,6 +246,10 @@ public class SocketController {
         List<TableDto> table = roomService.getRoom(sessionId).getTable();
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/submitcards", table);
 
+        // 어떤 플레이어가 어떤 카드를 선택했는지를 담은 choice 전송하기
+        HashMap<String, Long> choice = roomService.getRoom(sessionId).getChoice();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/choicecards", choice);
+
         // 카드 드로우 - phase4 종료시 카드가 6장 미만이면 다시 1장 채워주기
         roomService.oneCardDraw(sessionId);
 
