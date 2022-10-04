@@ -56,15 +56,6 @@ export default function GameTeller(props: any) {
 					cardMsg: descrip,
 				}),
 			})
-			client.publish({
-				destination: `/pub/room/${roomId}/teller`,
-				body: JSON.stringify({
-					nickname,
-					cardId: tellerCard.cardId,
-					cardUrl: tellerCard.cardUrl,
-					cardMsg: descrip,
-				}),
-			})
 			dispatch(setTime(0))
 			return
 		} else {
