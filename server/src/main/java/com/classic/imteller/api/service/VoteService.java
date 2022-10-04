@@ -59,7 +59,7 @@ public class VoteService {
         if(userVoteRepository.existsByUserAndVote(user, vote)){
             UserVote userVote = userVoteRepository.findByUserAndVote(user, vote).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
             userVoteRepository.delete(userVote);
-            vote.updateCoutn(-1);
+            vote.updateCount(-1);
             result= "좋아요 취소";
         }else{
             UserVote userVote = UserVote.builder()
@@ -67,9 +67,22 @@ public class VoteService {
                     .user(user)
                     .build();
             userVoteRepository.save(userVote);
-            vote.updateCoutn(+1);
+            vote.updateCount(+1);
             result= "좋아요";
         }
         return result;
     }
+    public List<VoteResDto> getVoteList() {
+        List<Vote> voteList = voteRepository.findByIsVoting(1);
+        List<VoteResDto> list = new ArrayList<>();
+        for(Vote vote: voteList){
+            VoteResDto voteResDto = VoteResDto.builder()
+                    .vote(vote)
+                    .isLike(false)
+                    .build();
+            list.add(voteResDto);
+        }
+        return list;
+    }
 }
+

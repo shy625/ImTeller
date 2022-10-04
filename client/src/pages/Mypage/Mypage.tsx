@@ -16,7 +16,7 @@ import { setCardList, setPaintList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 
 import pencil from 'assets/image/pencil.webp'
-import { imgIcon } from 'style/commonStyle'
+import { imgIcon, fullDisplay } from 'style/commonStyle'
 
 export default function Mypage() {
 	const navigate = useNavigate()
@@ -82,13 +82,14 @@ export default function Mypage() {
 
 	return (
 		<Layout>
-			<main>
+			<main css={fullDisplay}>
 				<div css={centerCSS}>
 					<div css={profileCSS}>
 						<img src={profile} alt="" css={profileImgCSS} />
 						<div>
 							<div className="nickname">
 								<div className="name">{nickname}</div>
+<<<<<<< HEAD
 								<div
 									onClick={() => {
 										navigate('/profileEdit')
@@ -101,6 +102,17 @@ export default function Mypage() {
 										css={imgIcon}
 									/>
 								</div>
+=======
+								{isMyMypage ? (
+									<div
+										onClick={() => {
+											navigate('/profileEdit')
+										}}
+									>
+										<img src={pencil} alt="연필" css={imgIcon} />
+									</div>
+								) : null}
+>>>>>>> 6bddd013106edefcd82777d9623e683345cef146
 							</div>
 							<div className="info">
 								<div>Lv. {Math.floor(exp / 50) + 1}</div>
@@ -109,14 +121,16 @@ export default function Mypage() {
 									{win + lose === 0 ? 0 : ((win / (win + lose)) * 100).toFixed(1)}%
 								</div>
 								<div>
-									{wallet ? (
-										<>
-											<label htmlFor="wallet">등록된 지갑주소 :</label>
-											<input id="wallet" value={currentUser.wallet} disabled></input>
-										</>
-									) : (
-										<button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
-									)}
+									{isMyMypage ? (
+										wallet ? (
+											<>
+												<label htmlFor="wallet">등록된 지갑주소 :</label>
+												<input id="wallet" value={currentUser.wallet} disabled></input>
+											</>
+										) : (
+											<button onClick={() => setModalState('addWallet')}>지갑 등록하기</button>
+										)
+									) : null}
 								</div>
 							</div>
 						</div>
@@ -129,6 +143,7 @@ export default function Mypage() {
 	)
 }
 const centerCSS = css`
+	margin-top: 20px;
 	display: flex;
 	justify-content: center;
 `
@@ -142,7 +157,7 @@ const profileCSS = css`
 	align-items: center;
 	justify-content: flex-start;
 	color: white;
-	width: 80%;
+	width: 60%;
 	.nickname {
 		font-family: 'GongGothicMedium';
 		font-size: 25px;
