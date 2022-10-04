@@ -193,7 +193,7 @@ const box = css`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 700px;
+	width: 600px;
 	height: 400px;
 `
 const singUpInput = css`
