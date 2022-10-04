@@ -264,10 +264,11 @@ public class SocketController {
                 if (roomService.endCheck(sessionId)) {
                     roomService.stopTimer(sessionId);
                     end(sessionId);
+                } else {
+                    sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
+                    sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
+                    phase1(sessionId);
                 }
-                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
-                sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
-                phase1(sessionId);
             }
         };
         roomService.startTimer(sessionId, m_task);
