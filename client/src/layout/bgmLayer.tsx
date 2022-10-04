@@ -19,11 +19,11 @@ export default function BgmLayer(props: any) {
 	const isMouseEffectOn = useSelector((state: any) => state.isMouseEffectOn)
 
 	useEffect(() => {
-		if (isBgmOn) {
-			bgm.current.load()
-		} else {
-			bgm.current.pause()
-		}
+		// if (isBgmOn) {
+		// 	bgm.current.load()
+		// } else {
+		// 	bgm.current.pause()
+		// }
 	}, [isBgmOn])
 
 	useEffect(() => {
@@ -35,11 +35,11 @@ export default function BgmLayer(props: any) {
 	}, [bgmSrc])
 
 	useEffect(() => {
-		if (isEffectOn) {
-			effect.current.load()
-		} else {
-			effect.current.pause()
-		}
+		// if (isEffectOn) {
+		// 	effect.current.load()
+		// } else {
+		// 	effect.current.pause()
+		// }
 	}, [isEffectOn])
 
 	useEffect(() => {
@@ -73,8 +73,8 @@ export default function BgmLayer(props: any) {
 	return (
 		<div onClick={clickSound}>
 			{props.children}
-			<audio ref={bgm} autoPlay loop></audio>
-			<audio ref={effect} autoPlay></audio>
+			<audio ref={bgm} loop></audio>
+			<audio ref={effect}></audio>
 		</div>
 	)
 }

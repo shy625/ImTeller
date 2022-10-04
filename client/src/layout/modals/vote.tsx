@@ -33,7 +33,7 @@ export default function VoteModal(props: any) {
 		) {
 			setIsMyPaint(true)
 		}
-	}, [paintList])
+	}, [])
 
 	const onCancel = () => {
 		art.cancelRegist(vote.art.id).then((result) => {
@@ -65,7 +65,7 @@ export default function VoteModal(props: any) {
 			<img src={vote.art.url} alt="paintTitle" />
 			{}
 			{'좋아요 변수명 정해지면 넣기'}
-			by. {'제작자 이름'}
+			by. {designer.nickname}
 			<button onClick={() => dispatch(setModalState(''))}>돌아가기</button>
 			{isMyPaint ? (
 				<button onClick={onCancel}>출품 취소하기</button>

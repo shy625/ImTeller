@@ -15,7 +15,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RoomRepository {
     private static final HashMap<Long, Room> roomList = new HashMap<>();
-    private static final List<Long> usingId = new ArrayList<>();
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
     private final ArtRepository artRepository;
@@ -29,15 +28,10 @@ public class RoomRepository {
         return roomList;
     }
 
-    public List<Long> getUsingId () {
-        return usingId;
-    }
-
     @Transactional
     public void createRoom (Room room) {
         try {
             roomList.put(room.getId(), room);
-            usingId.add(room.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,6 +48,13 @@ public class RoomRepository {
             List<String> players = roomList.get(sessionId).getPlayers();
             players.add(joinReqDto.getNickname());
             roomList.get(sessionId).setPlayers(players);
+
+            // 프로필사진
+            HashMap<String, String> profiles = roomList.get(sessionId).getProfiles();
+            User user = userRepository.findByNickname(joinReqDto.getNickname()).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+            profiles.put(joinReqDto.getNickname(), user.getProfile());
+            System.out.println(profiles.get(joinReqDto.getNickname()));
+            roomList.get(sessionId).setProfiles(profiles);
 
             // 레디 여부
             HashMap<String, Boolean> ready = roomList.get(sessionId).getReady();
@@ -92,13 +93,19 @@ public class RoomRepository {
             roomList.get(sessionId).setPlayers(players);
             // 만약 모든 플레이어가 다 나갔다면?
             if (players.size() == 0) {
-                Game game = gameRepository.findBySession(sessionId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                Game game = gameRepository.findBySessionAndIsOpen(sessionId, true).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
+                game.closedRoom();
                 game.deleteSession();
                 gameRepository.save(game);
                 // 게임소켓방에서도 나가기
                 roomList.remove(sessionId);
                 return "ok";
             }
+
+            // profiles에서 없애기
+            HashMap<String, String> newProfiles = roomList.get(sessionId).getProfiles();
+            newProfiles.remove(exitReqDto.getNickname());
+            roomList.get(sessionId).setProfiles(newProfiles);
             // ready에서 없애기
             HashMap<String, Boolean> newReady = roomList.get(sessionId).getReady();
             newReady.remove(exitReqDto.getNickname());
@@ -438,7 +445,7 @@ public class RoomRepository {
             for (TableDto table : tables) {
                 if (choice.get(player) == table.getCardId()){
                     if (table.getNickname().equals(teller)) {
-                        int newScore = scores.get(player) + 3;
+                        int newScore = scores.get(player) + 6;
                         scores.replace(player, newScore);
                         ++answerPlayer;
                     }
@@ -450,9 +457,16 @@ public class RoomRepository {
                 }
             }
         }
-        // 텔러는 특별계산 - 모두가 못맞추거나 다맞추면 0점, 나머지 케이스는 6점
+        // 텔러는 특별계산 - 모두가 못맞추거나 다맞추면 텔러는 0점, 나머지 케이스에서 텔러는 6점
         if (answerPlayer == normalPlayerNum || answerPlayer == 0)  {
             scores.replace(teller, 0);
+            // 나머지 모든사람들에게 추가 4점
+            for (String player : players) {
+                if (!player.equals(teller)) {
+                    int newScore = scores.get(player) + 4;
+                    scores.replace(player, newScore);
+                }
+            }
         }  else {
             scores.replace(teller, 6);
         }

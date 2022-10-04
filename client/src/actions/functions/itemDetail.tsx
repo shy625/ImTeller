@@ -13,7 +13,7 @@ export default function (effect, effectNum) {
 		2: '%',
 		3: '',
 		4: '점',
-		5: '점',
+		5: '%',
 		6: '',
 	}[effect]
 

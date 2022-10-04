@@ -3,6 +3,7 @@ package com.classic.imteller.api.controller;
 import com.classic.imteller.api.dto.ResponseDto;
 import com.classic.imteller.api.dto.vote.ElectReqDto;
 import com.classic.imteller.api.dto.art.VoteReqDto;
+import com.classic.imteller.api.dto.vote.VoteResDto;
 import com.classic.imteller.api.repository.Art;
 import com.classic.imteller.api.service.VoteService;
 import io.swagger.annotations.Api;
@@ -22,11 +23,11 @@ import java.util.List;
 public class VoteController {
     private final VoteService voteService;
 
-    @GetMapping("/paints")
-    @ApiOperation(value = "투표중인 그림 반환", notes = "현재 투표중인 모든 그림을 전달받는 API")
+    @GetMapping(path = "/paints")
+    @ApiOperation(value = "투표리스트 반환", notes = "현재 투표중인 모든 그림을 전달받는 API")
     // detailResDto 재활용
-    public ResponseEntity<ResponseDto> allOnVotePaints() {
-        List<Art> Paints = voteService.getVotePaints();
+    public ResponseEntity<ResponseDto> allOnVotePaints(@RequestHeader(value="Authorization") String email) {
+        List<VoteResDto> Paints = voteService.getVotePaints(email);
         return new ResponseEntity<ResponseDto>(new ResponseDto(Paints), HttpStatus.ACCEPTED);
     }
 
@@ -42,7 +43,6 @@ public class VoteController {
     @ApiOperation(value = "그림 당선처리", notes = "당선된 그림의 nft화 대기를 위해 체크해놓는 API")
     // detailResDto 재활용
     public ResponseEntity<ResponseDto> electedPaint(@RequestBody ElectReqDto electReqDto) {
-        System.out.println(electReqDto.getArtId());
         voteService.electedPaint(electReqDto.getArtId());
         return new ResponseEntity<ResponseDto>(new ResponseDto("민팅 대기 완료"), HttpStatus.ACCEPTED);
     }

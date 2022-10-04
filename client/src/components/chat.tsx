@@ -12,16 +12,14 @@ export default function Chat() {
 	const dispatch = useDispatch()
 
 	const { roomId } = useParams()
-	const { currentRoomId, chats } = useSelector((state: any) => state.chats)
+	const chats = useSelector((state: any) => state.chats)
 	const { nickname } = useSelector((state: any) => state.currentUser)
 	const email = useSelector((state: any) => state.email) || localStorage.getItem('email')
 	const [msgInput, setMsgInput] = useState('')
 	const [ws, setWs] = useState<any>('')
 
 	useEffect(() => {
-		if (roomId !== currentRoomId) {
-			dispatch(clearChat())
-		}
+		dispatch(clearChat())
 	}, [])
 
 	useEffect(() => {
@@ -36,20 +34,10 @@ export default function Chat() {
 		}
 		client.activate()
 		setWs(client)
+		return () => {
+			client.deactivate()
+		}
 	}, [])
-
-	// let stompClient = useWebSocket({
-	// 	email,
-	// 	onConnect(frame, client) {
-	// client.subscribe(`/sub/room/${roomId}/chat`, (response) => {
-	// 	const content = JSON.parse(response.body)
-	// 	const time = new Date()
-	// 	content.time = time.toLocaleString()
-	// 	dispatch(addChat(content))
-	// })
-	// 	},
-	// 	beforeDisconnected() {},
-	// })
 
 	const send = () => {
 		ws.publish({
@@ -65,16 +53,19 @@ export default function Chat() {
 	const isMyMsg = (nick) => {
 		if (nick === nickname) return true
 		return false
-	} // 이 값에 따라서 style 다르게
+	} // 이 값에 따라서 style 다르게. 카톡처럼 내꺼면 오른쪽
 
 	return (
 		<div css={chat}>
 			<div>
 				{chats.length
 					? chats.map((chat, idx) => (
-							<div key={chat.time + String(idx)}>
+							<div
+								key={String(idx) + chat.time}
+								style={isMyMsg(chat.nickname) ? { backgroundColor: 'white' } : null}
+							>
 								<div>{chat.nickname}</div>
-								<div>{chat.msg}</div>
+								<div>{chat.userMsg}</div>
 								<div>{chat.time}</div>
 							</div>
 					  ))
@@ -87,6 +78,9 @@ export default function Chat() {
 						setMsgInput(e.target.value)
 					}}
 					value={msgInput}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter') send()
+					}}
 				/>
 				<div onClick={send}>전송</div>
 			</div>

@@ -1,3 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -112,14 +115,15 @@ export default function DealRegister() {
 
 	return (
 		<Layout>
-			<main>
-				<div>
-					<div>{selectedCard ? <img src={selectedCard.cardImageURL} alt="" /> : null}</div>
-					<button onClick={() => setModalState('dealRegister')}>카드 선택하기</button>
-				</div>
+			<main css={main}>
+				<div css={box}>
+					<div css={card}>
+						<div>{selectedCard ? <img src={selectedCard.cardImageURL} alt="" /> : null}</div>
+						<button onClick={() => setModalState('dealRegister')}>카드 선택하기</button>
+					</div>
 
-				<div>
-					{/* <label htmlFor="lowPrice">최저입찰가</label>
+					<div>
+						{/* <label htmlFor="lowPrice">최저입찰가</label>
 					<input
 						id="lowPrice"
 						type="number"
@@ -127,23 +131,48 @@ export default function DealRegister() {
 						onChange={lowPriceFilter}
 						value={lowPrice}
 					/> */}
-					<label htmlFor="instantPrice">즉시구매가</label>
-					<input
-						id="instantPrice"
-						type="number"
-						min={lowPrice}
-						onChange={instantPriceFilter}
-						value={instantPrice}
-					/>
-					<label htmlFor="finishedAt">판매기간</label>
-					<div onClick={() => setDay(1)} style={day === 1 ? { backgroundColor: 'white' } : null}>
-						1일
+						<div>
+							<label htmlFor="instantPrice">즉시구매가</label>
+							<input
+								id="instantPrice"
+								type="number"
+								min={lowPrice}
+								onChange={instantPriceFilter}
+								value={instantPrice}
+							/>
+						</div>
+						<div>
+							<label htmlFor="finishedAt">판매기간</label>
+							<fieldset>
+								<label>
+									<input type="radio" name="day" value="1" checked />
+									<span>1일</span>
+								</label>
+
+								<label>
+									<input type="radio" name="day" value="2" />
+									<span>2일</span>
+								</label>
+							</fieldset>
+							<span
+								onClick={() => setDay(1)}
+								style={day === 1 ? { backgroundColor: 'white' } : null}
+							>
+								1일
+							</span>
+							<span
+								onClick={() => setDay(2)}
+								style={day === 2 ? { backgroundColor: 'white' } : null}
+							>
+								2일
+							</span>
+						</div>
+						<div>
+							{' '}
+							<label htmlFor="tag">태그</label>
+							<input type="text" onChange={(e) => setTag(e.target.value)} />
+						</div>
 					</div>
-					<div onClick={() => setDay(2)} style={day === 2 ? { backgroundColor: 'white' } : null}>
-						2일
-					</div>
-					<label htmlFor="tag">태그</label>
-					<input type="text" onChange={(e) => setTag(e.target.value)} />
 				</div>
 
 				<div>
@@ -163,3 +192,27 @@ export default function DealRegister() {
 		</Layout>
 	)
 }
+const main = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+const box = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 20px;
+	color: white;
+`
+const card = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: white;
+	margin-right: 30px;
+	img {
+		height: 222px;
+		background-color: white;
+		border-radius: 12px;
+	}
+`

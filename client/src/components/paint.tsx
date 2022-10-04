@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -273,8 +274,8 @@ const paintImageCSS = css`
 `
 const type0InfoCSS = css`
 	display: none;
-	position: absolute;
-	/* top: -240px; // 부모인 paintImgCSS 높이만큼 올려주면 됨 */
+	position: relative;
+	top: -15vh; // 형제인 paintImgCSS 높이만큼 올려주면 됨
 	width: 100%;
 	height: 100%;
 	color: white;

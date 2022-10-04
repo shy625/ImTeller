@@ -62,7 +62,7 @@ public class RoomService {
     }
 
     @Transactional
-    public boolean start(String userSessionId, long sessionId) {
+    public boolean start(long sessionId) {
         Room room = roomRepository.getRoom(sessionId);
         if (room == null) return false;
 
@@ -81,14 +81,7 @@ public class RoomService {
         // 3명 이상인지 확인
         if(players.size() < 3) return false;
 
-        // 방장의 sessionId와 시작요청을 보낸 사람이 같은지 확인
-        HashMap<String, String> usids = room.getUserSessionIds();
-        String leader = room.getLeader();
-        if (usids.get(leader).equals(userSessionId)) {
-            roomRepository.start(sessionId);
-            return true;
-        }
-        else return false;
+        return true;
     }
 
     @Transactional
@@ -158,8 +151,7 @@ public class RoomService {
         } else {
             int laps = roomRepository.getRoom(sessionId).getLaps();
             int typeNum = roomRepository.getRoom(sessionId).getTypeNum();
-            String teller = roomRepository.getRoom(sessionId).getTeller();
-            return (laps == typeNum) && (players.indexOf(teller) == players.size() - 1);
+            return (laps > typeNum);
         }
     }
 

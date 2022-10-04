@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -168,23 +169,27 @@ export default function DealDetail() {
 	return (
 		<Layout>
 			<main>
-				<div css={dealDetailCSS}>
+				<div css={box}>
 					<div>
 						<img src={cardInfo.cardImageURL} alt="" />
 						by. {cardInfo.designerNickname}
 					</div>
-					<hr />
-					<div>
+
+					<div css={explain}>
 						<p>{dealInfo.tag}</p>
-						<p>{dealInfo.cardTitle}</p>
-						<p>{cardInfo.ownerNickname}. 소유</p>
-						<br />
+						<div css={space}>
+							<span>{dealInfo.cardTitle}</span>
+							<span>{cardInfo.ownerNickname}. 소유</span>
+						</div>
+						<hr />
 						{cardInfo.description}
 						<br />
-						{cardInfo.grade} | {effectPre + String(cardInfo.effectNum) + effectPost}
+						<div css={space}>
+							<span css={grade}>{cardInfo.grade}</span>
+							<span>{effectPre + String(cardInfo.effectNum) + effectPost}</span>
+						</div>
 						<br />
 						{day}일 {hour}시간 {min}분 {sec}초 남음
-						<hr />
 						<div>
 							{cardInfo.ownerNickname === currentUser.nickname ? (
 								<div>
@@ -192,8 +197,8 @@ export default function DealDetail() {
 								</div>
 							) : (
 								<>
-									<div>
-										즉시 구매가 {dealInfo.instantPrice}SSF
+									<div css={purchase}>
+										<div>즉시 구매가 {dealInfo.instantPrice}SSF</div>
 										<button onClick={onBuy}>즉시 구매</button>
 									</div>
 									{/* <div>
@@ -214,6 +219,30 @@ export default function DealDetail() {
 		</Layout>
 	)
 }
-const dealDetailCSS = css`
+
+const box = css`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 	color: white;
+	margin: 30px;
+`
+const purchase = css`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border-radius: 5px;
+	border: 1px solid white;
+`
+const space = css`
+	display: flex;
+	justify-content: space-between;
+`
+const explain = css``
+
+const grade = css`
+	border: 3px solid rgb(163, 151, 198);
+	border-radius: 50%;
+	background-color: rgb(163, 151, 198);
+	color: black;
 `

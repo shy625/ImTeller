@@ -16,75 +16,12 @@ export const roomList = createSlice({
 	initialState: [
 		{
 			roomId: 1,
-			roomName: '내가 최고다',
+			roomName: '아쉽지만 오프라인이군요!',
 			isLocked: false,
-			peopleNum: 3,
+			peopleNum: 1,
 			maxPeopleNum: 5,
 			type: 'socre',
 			typeNum: 3,
-		},
-		{
-			roomId: 3,
-			roomName: '가즈아',
-			isLocked: true,
-			peopleNum: 5,
-			maxPeopleNum: 6,
-			type: 'times',
-			typeNum: 30,
-		},
-		{
-			roomId: 4,
-			roomName: '자신있는 사람만 들어와',
-			isLocked: false,
-			peopleNum: 5,
-			maxPeopleNum: 6,
-			type: 'socre',
-			typeNum: 50,
-		},
-		{
-			roomId: 5,
-			roomName: '힘들군',
-			isLocked: true,
-			peopleNum: 5,
-			maxPeopleNum: 6,
-			type: 'socre',
-			typeNum: 5,
-		},
-		{
-			roomId: 10,
-			roomName: '나는 더미데이터',
-			isLocked: true,
-			peopleNum: 5,
-			maxPeopleNum: 6,
-			type: 'times',
-			typeNum: 20,
-		},
-		{
-			roomId: 13,
-			roomName: '곧 사라질 계획이지',
-			isLocked: false,
-			peopleNum: 5,
-			maxPeopleNum: 6,
-			type: 'socre',
-			typeNum: 3,
-		},
-		{
-			roomId: 14,
-			roomName: '우승자리그',
-			isLocked: false,
-			peopleNum: 5,
-			maxPeopleNum: 6,
-			type: 'times',
-			typeNum: 4,
-		},
-		{
-			roomId: 20,
-			roomName: '클래식이 좋아',
-			isLocked: true,
-			peopleNum: 5,
-			maxPeopleNum: 6,
-			type: 'socre',
-			typeNum: 8,
 		},
 	],
 	reducers: {
@@ -98,114 +35,123 @@ export const { setRoomList } = roomList.actions
 export const roomInfo = createSlice({
 	name: 'roomInfo',
 	initialState: {
-		roomId: 1,
-		roomName: 'test room',
-		isLocked: false,
-		peopleNum: 3,
-		maxPeopleNum: 6,
+		activated: [],
+		cards: {},
+		deck: [],
+		hand: {},
+		id: 0,
+		items: {},
+		laps: 0,
+		leader: '',
+		maxNum: 3,
+		nftDeck: [],
+		players: [''],
+		profiles: { nickname: 'profile' },
+		ready: {},
+		roomName: '',
+		score: {},
+		started: false,
+		status: {},
+		table: [],
+		teller: '',
+		timer: {},
+		turn: 0,
 		type: 'score',
 		typeNum: 10,
+		userSessionIds: {},
 	},
 	reducers: {
 		setRoomInfo(state, action) {
 			return action.payload
 		},
+		setReady1(state, action) {
+			state.ready = action.payload
+		},
 	},
 })
-export const { setRoomInfo } = roomInfo.actions
+export const { setRoomInfo, setReady1 } = roomInfo.actions
 
 export const chats = createSlice({
 	name: 'chats',
-	initialState: {
-		currentRoomId: 0,
-		chats: [
-			{
-				nickname: 'test',
-				userMsg: 'testtesttest',
-				time: '9/24/2022, 10:10:10 AM',
-			},
-		],
-	},
+	initialState: [
+		{
+			nickname: 'test',
+			userMsg: 'testtesttest',
+			time: '9/24/2022, 10:10:10 AM',
+		},
+	],
 	reducers: {
 		clearChat(state) {
-			state.chats = []
-		},
-		setCurrentRoomId(state, action) {
-			state.currentRoomId = action.payload
+			return []
 		},
 		addChat(state, action) {
-			state.chats.push(action.payload)
+			state.push(action.payload)
 		},
 	},
 })
-export const { clearChat, setCurrentRoomId, addChat } = chats.actions
+export const { clearChat, addChat } = chats.actions
 
 export const players = createSlice({
 	name: 'players',
 	initialState: [
 		{
-			nickname: '민지',
+			nickname: 'IMTELLER',
 			profile: 'https://newsimg.sedaily.com/2020/11/07/1ZABD2GDRF_5.jpg',
 			ready: false,
 			score: 0,
-			nft: '',
-		},
-		{
-			nickname: '도현',
-			profile:
-				'https://img.danawa.com/prod_img/500000/147/615/img/14615147_1.jpg?shrink=330:330&_v=20220426173016',
-			ready: false,
-			score: 0,
-			nft: '',
-		},
-		{
-			nickname: '보경',
-			profile:
-				'https://img.danawa.com/prod_img/500000/147/615/img/14615147_1.jpg?shrink=330:330&_v=20220426173016',
-			ready: false,
-			score: 0,
-			nft: '',
-		},
-		{
-			nickname: '현영',
-			profile:
-				'https://img.danawa.com/prod_img/500000/147/615/img/14615147_1.jpg?shrink=330:330&_v=20220426173016',
-			ready: false,
-			score: 0,
-			nft: '',
-		},
-		{
-			nickname: '석호',
-			profile: 'https://newsimg.sedaily.com/2020/11/07/1ZABD2GDRF_5.jpg',
-			ready: false,
-			score: 0,
-			nft: '',
-		},
-		{
-			nickname: '수민',
-			profile: 'https://newsimg.sedaily.com/2020/11/07/1ZABD2GDRF_5.jpg',
-			ready: false,
-			score: 0,
-			nft: '',
 		},
 	],
 	reducers: {
 		setPlayers(state, action) {
-			return action.payload
+			let copy = []
+			for (let key in action.payload.profiles) {
+				copy.push({
+					nickname: key,
+					profile: action.payload.profiles[key],
+					score: action.payload.score[key] ? action.payload.score[key] : 0,
+					status: action.payload.status[key] ? action.payload.status[key] : false,
+				})
+			}
+			return copy
 		},
-		addScore(state, action) {
-			state.forEach((player: any) => {
-				for (const p of action.payload) {
-					if (player.nickname === p.nickname) {
-						player.score += p.score
+		setStatus(state, action) {
+			for (let key in action.payload) {
+				for (let player in state) {
+					if (state[player]['nickname'] === key) {
+						state[player]['status'] = action.payload[key]
 						break
 					}
 				}
-			})
+			}
+		},
+		setScore(state, action) {
+			for (let key in action.payload) {
+				for (let player in state) {
+					if (state[player]['nickname'] === key) {
+						state[player]['score'] = action.payload[key]
+					}
+				}
+			}
+		},
+		clearStatus(state: any) {
+			for (let key in state) {
+				state[key].status = false
+			}
+		},
+		setReady2(state: any, action) {
+			for (let key in state) {
+				for (let nickname in action.payload) {
+					console.log(state[key].nickname, action.payload[nickname])
+					if (state[key].nickname === nickname) {
+						state[key].status = action.payload[nickname]
+						break
+					}
+				}
+			}
 		},
 	},
 })
-export const { setPlayers, addScore } = players.actions
+export const { setPlayers, setScore, setStatus, clearStatus, setReady2 } = players.actions
 
 export const time = createSlice({
 	name: 'time',
@@ -262,83 +208,21 @@ export const gameCards = createSlice({
 	initialState: [
 		{
 			cardId: 1,
-			cardTitle: '기본카드1',
-			cardImageURL: 'assets/image/card1',
-			description: '기본카드1.',
-			grade: '',
-			effect: 0,
-			effectDetail: 0,
-			createdDT: 'asdf',
-			recentPrice: 100,
+			cardUrl: 'assets/image/card1',
 		},
 		{
 			cardId: 2,
-			cardTitle: '기본카드2',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드2.',
-			grade: 'S',
-			effect: 1,
-			effectDetail: 10,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 3,
-			cardTitle: '기본카드3',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드3.',
-			grade: 'S',
-			effect: 2,
-			effectDetail: 60,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 4,
-			cardTitle: '기본카드4',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드4.',
-			grade: 'S',
-			effect: 3,
-			effectDetail: 0,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 5,
-			cardTitle: '기본카드5',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드5.',
-			grade: 'S',
-			effect: 4,
-			effectDetail: 3,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 6,
-			cardTitle: '기본카드6',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드6.',
-			grade: 'S',
-			effect: 5,
-			effectDetail: 2.5,
-			createdDT: 'asdf',
-			recentPrice: 100,
+			cardUrl: 'assets/image/card4',
 		},
 	],
 	reducers: {
 		setGameCards(state, action) {
 			return action.payload
 		},
-		addGameCard(state, action) {
-			state.push(action.payload)
-		},
 	},
 })
-export const { setGameCards, addGameCard } = gameCards.actions
+export const { setGameCards } = gameCards.actions
 
-// cardId만 담김
 export const selectedCards = createSlice({
 	name: 'selectedCards',
 	initialState: [],
@@ -357,16 +241,27 @@ export const selectedCards = createSlice({
 })
 export const { setSelectedCards } = selectedCards.actions
 
-export const description = createSlice({
-	name: 'description',
-	initialState: '',
+export const teller = createSlice({
+	name: 'teller',
+	initialState: 'nickname',
 	reducers: {
-		setDescription(state, action) {
+		setTeller(state, action) {
 			return action.payload
 		},
 	},
 })
-export const { setDescription } = description.actions
+export const { setTeller } = teller.actions
+
+export const tellerMsg = createSlice({
+	name: 'tellerMsg',
+	initialState: '',
+	reducers: {
+		setTellerMsg(state, action) {
+			return action.payload
+		},
+	},
+})
+export const { setTellerMsg } = tellerMsg.actions
 
 export const table = createSlice({
 	name: 'table',
@@ -426,28 +321,6 @@ export const table = createSlice({
 			createdDT: 'asdf',
 			recentPrice: 100,
 		},
-		{
-			cardId: 6,
-			cardTitle: '기본카드6',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드6.',
-			grade: 'S',
-			effect: 5,
-			effectDetail: 2.5,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 7,
-			cardTitle: '기본카드7',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드7.',
-			grade: 'A',
-			effect: 6,
-			effectDetail: 0,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
 	],
 	reducers: {
 		setTable(state, action) {
@@ -457,14 +330,13 @@ export const table = createSlice({
 })
 export const { setTable } = table.actions
 
-export const endResult = createSlice({
-	name: 'endResult',
+export const result = createSlice({
+	name: 'result',
 	initialState: [],
 	reducers: {
-		setEndResult(state, action) {
-			action.payload.sort((player) => -player.score)
+		setResult(state, action) {
 			return action.payload
 		},
 	},
 })
-export const { setEndResult } = endResult.actions
+export const { setResult } = result.actions

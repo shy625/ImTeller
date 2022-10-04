@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
+
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 import gradeS from 'assets/image/gradeS.webp'
@@ -37,7 +37,7 @@ export default function Card(props: any) {
 		}
 	}, [selectedCards])
 
-	// 기본적으로 호버시 카드 등급같은 능력 나오게
+	// 기본적으로 호버시 카드 능력 나오게
 	// type 0: 선택 불가능하게
 	// type 1: 카드 선택 모달에서 사용. 선택카드의 경우(selectedCards에 포함) 표시
 

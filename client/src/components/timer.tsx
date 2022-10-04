@@ -1,27 +1,24 @@
 import { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-
-import { setTime } from 'store/modules/game'
+import { useSelector } from 'react-redux'
 
 export default function Timer() {
-	const dispatch = useDispatch()
 	const time = useSelector((state: any) => state.time)
 	const interval = useRef(null)
 	const initialTime = useRef(time)
+	const [viewTime, setViewTime] = useState(0)
+	const roomInfo = useSelector((state: any) => state.roomInfo)
 
 	useEffect(() => {
 		interval.current = setInterval(() => {
 			initialTime.current -= 1
-			dispatch(setTime(initialTime.current))
+			setViewTime(initialTime.current)
 		}, 1000)
 		return () => clearInterval(interval.current)
 	}, [])
 
 	useEffect(() => {
-		if (initialTime.current < 0) {
-			clearInterval(interval.current)
-		}
+		initialTime.current = time
 	}, [time])
 
-	return <div>{time !== -1 ? time + 's' : null}</div>
+	return <div>{viewTime >= 0 ? viewTime + 's' : null}</div>
 }

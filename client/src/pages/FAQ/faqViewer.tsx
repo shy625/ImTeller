@@ -6,13 +6,11 @@ import { fullDisplay } from 'style/commonStyle'
 export default function FaqViewer() {
 	return (
 		<div css={fullDisplay}>
-			<div css={centerCSS}>
-				<div>
-					<h2>Game Rule</h2>
-				</div>
+			<div css={box}>
+				<h2>Game Rule</h2>
 				<iframe
-					width="784"
-					height="441"
+					height="100%"
+					width="80%"
 					src="https://www.youtube.com/embed/LX-FP3Ci3kk"
 					title="YouTube video player"
 					frameBorder="0"
@@ -23,8 +21,10 @@ export default function FaqViewer() {
 		</div>
 	)
 }
-const centerCSS = css`
+const box = css`
 	display: flex;
+	height: 80vh;
+	width: auto;
 	flex-direction: column;
 	align-items: center;
 	color: white;

@@ -12,11 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -86,7 +83,7 @@ public class ArtService {
                     .owner(user)
                     .ownerNickname(user.getNickname())
                     .url("https://imtellercard.s3.ap-northeast-2.amazonaws.com/" + imgPath)
-                    .isVote(false)
+                    .isVote(0)
                     .title(paintSaveReqDto.getPaintTitle())
                     .description(paintSaveReqDto.getDescription()).build();
             artRepository.save(art);
@@ -135,7 +132,7 @@ public class ArtService {
         boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), 1);
 
         if (!chk && art.getOwner().getEmail().equals(email)) {
-            art.updateIsVote(true);
+            art.updateIsVote(1);
             artRepository.save(art);
             Vote vote = Vote.builder()
                 .art(art)
@@ -152,7 +149,7 @@ public class ArtService {
         Art art = artRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         boolean chk = voteRepository.existsByArtIdAndIsVoting(art.getId(), 1);
         if (chk && art.getOwner().getEmail().equals(email)) {
-            art.updateIsVote(false);
+            art.updateIsVote(0);
             artRepository.save(art);
             Vote vote = voteRepository.findByArtIdAndIsVoting(art.getId(), 1).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
             vote.updateIsVoting(0);
@@ -166,12 +163,6 @@ public class ArtService {
     public void insertTokenId(Long artId, Long tokenId) {
         Art art = artRepository.findById(artId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         art.insertNft(tokenId);
-    }
-    @Transactional
-    public void editOwner(String owner, Long tokenId) {
-        Art art = artRepository.findByTokenId(tokenId).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        User user = userRepository.findByNickname(owner).orElseThrow(() -> new CustomException(ErrorCode.POSTS_NOT_FOUND));
-        art.updateOwner(user, user.getNickname());
     }
 
     @Transactional

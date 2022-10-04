@@ -11,7 +11,6 @@ export default function JoinRoomModal(props: any) {
 	const navigate: any = useNavigate()
 	const dispatch = useDispatch()
 
-	const isChecked = useSelector((state: any) => state.isChecked)
 	const [password, setPassword] = useState('')
 	const [authError, setAuthError] = useState('')
 
@@ -27,8 +26,6 @@ export default function JoinRoomModal(props: any) {
 		if (!roomId) {
 			dispatch(setModalState(''))
 			navigate(-1, { replace: true })
-			// } else if (isChecked) {
-			//   dispatch(setModalState(''))
 		} else {
 			onSubmit()
 		}

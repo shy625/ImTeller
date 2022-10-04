@@ -73,7 +73,6 @@ export default function Vote() {
 
 	useEffect(() => {
 		vote.paintList().then((result) => {
-			console.log(result.data.response)
 			dispatch(setVoteList(result.data.response))
 		})
 		art.paintList({ nickname: currentUser.nickname }).then((result) => {

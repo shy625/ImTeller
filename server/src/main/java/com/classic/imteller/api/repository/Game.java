@@ -10,10 +10,15 @@ import javax.persistence.*;
 @Builder
 public class Game extends BaseEntity {
     @Column
-    private long session;
+    private Long session;
+
+    @Column
+    private Boolean isOpen;
 
     // session이 0이되면 이미 없어진 방
     public void deleteSession() {
-        this.session = 0;
+        this.session = 0L;
     }
+
+    public void closedRoom() {this.isOpen = false;}
 }

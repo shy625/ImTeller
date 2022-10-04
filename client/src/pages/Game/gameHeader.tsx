@@ -7,8 +7,6 @@ import Timer from 'components/timer'
 import Setting from 'components/setting'
 
 export default function GameHeader(props: any) {
-	const { setState } = props
-
 	return (
 		<div css={headerCSS}>
 			<RoomInfo />

@@ -22,23 +22,24 @@ public class GameService {
 
     public List<GameRoomDto> getRoomsInfo() {
         HashMap<Long, Room> rooms = roomRepository.getRooms();
-        List<Long> usingId = roomRepository.getUsingId();
         List<GameRoomDto> roomsRes = new ArrayList<>();
 
-        for (long roomId : usingId) {
-            boolean isLock;
-            if (rooms.get(roomId).getRoomPw().equals("")) isLock = false;
-            else isLock = true;
-            GameRoomDto room = GameRoomDto.builder()
-                    .roomId(rooms.get(roomId).getId())
-                    .roomName(rooms.get(roomId).getRoomName())
-                    .isLocked(isLock)
-                    .peopleNum(rooms.get(roomId).getPlayers().size())
-                    .maxPeopleNum(rooms.get(roomId).getMaxNum())
-                    .type(rooms.get(roomId).getType())
-                    .typeNum(rooms.get(roomId).getTypeNum())
-                    .isStarted(rooms.get(roomId).getStarted()).build();
-            roomsRes.add(room);
+        for (long roomId : rooms.keySet()) {
+            if (rooms.get(roomId).getPlayers().size() != 0) {
+                boolean isLock;
+                if (rooms.get(roomId).getRoomPw().equals("")) isLock = false;
+                else isLock = true;
+                GameRoomDto room = GameRoomDto.builder()
+                        .roomId(rooms.get(roomId).getId())
+                        .roomName(rooms.get(roomId).getRoomName())
+                        .isLocked(isLock)
+                        .peopleNum(rooms.get(roomId).getPlayers().size())
+                        .maxPeopleNum(rooms.get(roomId).getMaxNum())
+                        .type(rooms.get(roomId).getType())
+                        .typeNum(rooms.get(roomId).getTypeNum())
+                        .isStarted(rooms.get(roomId).getStarted()).build();
+                roomsRes.add(room);
+            }
         }
 
         // roomId 순서대로 정렬
@@ -49,8 +50,7 @@ public class GameService {
 
     public GameRoomDto getRoomInfo(long roomId) {
         HashMap<Long, Room> rooms = roomRepository.getRooms();
-        List<Long> usingId = roomRepository.getUsingId();
-        if (usingId.contains(roomId)) {
+        if (rooms.keySet().contains(roomId)) {
             boolean isLock;
             if (rooms.get(roomId).getRoomPw().equals("")) isLock = false;
             else isLock = true;
@@ -70,28 +70,26 @@ public class GameService {
 
     public boolean pwCheck(long roomId, GameRoomJoinReqDto gameRoomJoinReqDto) {
         HashMap<Long, Room> rooms = roomRepository.getRooms();
-        List<Long> usingId = roomRepository.getUsingId();
-        if (usingId.contains(roomId)) {
+        if (rooms.keySet().contains(roomId)) {
             return rooms.get(roomId).getRoomPw().equals(gameRoomJoinReqDto.getPassword());
         }
         return false;
     }
 
     private long getRoomId() {
+        HashMap<Long, Room> rooms = roomRepository.getRooms();
         long roomId = 1;
-        List<Long> usingId = roomRepository.getUsingId();
         // 현재 개설되어있는 방 중에서 안쓰는 번호 중 가장 앞번호를 roomId에 할당
         while(true) {
-            if (!usingId.contains(roomId)) break;
+            if (!rooms.keySet().contains(roomId)) break;
             else ++roomId;
         }
-
         return roomId;
     }
 
     @Transactional
     public long createRoom(MakeReqDto roomInfo) {
-        long newRoomId = this.getRoomId();
+        long newRoomId = getRoomId();
 
         Room room = Room.builder()
                 .id(newRoomId)
@@ -101,6 +99,7 @@ public class GameService {
                 .maxNum(roomInfo.getMaxNum())
                 .leader(roomInfo.getLeader())
                 .players(new ArrayList<String>())
+                .profiles(new HashMap<String, String>())
                 .type(roomInfo.getType())
                 .typeNum(roomInfo.getTypeNum())
                 .ready(new HashMap<String, Boolean>())
@@ -124,7 +123,9 @@ public class GameService {
         roomRepository.createRoom(room);
 
         Game newGameRoom = Game.builder()
-                .session(newRoomId).build();
+                .session(newRoomId)
+                .isOpen(true)
+                .build();
         gameRepository.save(newGameRoom);
 
         return newRoomId;
