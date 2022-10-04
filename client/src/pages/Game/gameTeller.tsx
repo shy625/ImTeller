@@ -33,7 +33,7 @@ export default function GameTeller(props: any) {
 	// phase 1에선 텔러만 카드 선택 및 묘사어 적기 다른 인원은 그냥 본인 카드만 보이게
 	// phase 2에선 텔러는 그냥 구경하기, 다른 인원은 본인 카드에서 낚시 카드 선택하기
 	const onSubmit = () => {
-		if (!tellerCard) {
+		if (!tellerCard.cardId) {
 			setModalMsg('선택된 카드가 없습니다.')
 			setModalState('alert')
 			return

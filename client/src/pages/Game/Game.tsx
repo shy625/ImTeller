@@ -19,7 +19,8 @@ import { useModal } from 'actions/hooks/useModal'
 import {
 	setIsChecked,
 	setRoomInfo,
-	setReady,
+	setReady1,
+	setReady2,
 	setPlayers,
 	setScore,
 	setStatus,
@@ -98,7 +99,8 @@ export default function Game() {
 			// 레디 상태 변경
 			client.subscribe(`/sub/room/${roomId}/ready`, (action) => {
 				const content = JSON.parse(action.body)
-				dispatch(setReady(content))
+				dispatch(setReady1(content))
+				dispatch(setReady2(content))
 				console.log('ready', content)
 			})
 			// 시작시 선택카드 제출
@@ -147,30 +149,33 @@ export default function Game() {
 			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
 				console.log(action.body)
 				if (action.body === 'phase1') {
+					dispatch(setTime(0))
 					setState(1)
 					setPhase(1)
 					dispatch(setTeller(''))
 					dispatch(clearStatus())
 					dispatch(setTime(30))
 				} else if (action.body === 'phase2') {
+					dispatch(setTime(0))
 					setState(1)
 					setPhase(2)
-					dispatch(clearStatus())
 					dispatch(setTime(30))
 				} else if (action.body === 'phase3') {
+					dispatch(setTime(0))
 					setState(1)
 					setPhase(3)
 					dispatch(clearStatus())
 					dispatch(setTime(30))
 				} else if (action.body === 'phase4') {
+					dispatch(setTime(0))
 					setState(1)
 					setPhase(4)
-					dispatch(clearStatus())
-					dispatch(setTime(30))
+					dispatch(setTime(10))
 				} else {
+					dispatch(setTime(0))
 					setState(2)
 					setPhase(0)
-					dispatch(clearStatus())
+					dispatch(setTime(15))
 				}
 			})
 			// 유저 상태 변화
@@ -191,7 +196,6 @@ export default function Game() {
 			// 테이블 받기
 			client.subscribe(`/sub/room/${roomId}/table`, (action) => {
 				const content = JSON.parse(action.body)
-				dispatch(setReady(content))
 				console.log('table', content)
 				dispatch(setTable(content))
 			})
@@ -210,12 +214,14 @@ export default function Game() {
 				const content = JSON.parse(action.body)
 				console.log('totalresult', content)
 				dispatch(setScore(content))
+				dispatch(setResult(content))
 			})
 			client.subscribe(`/sub/room/${roomId}/submitcards`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('submitcards', content)
 				setSubmitCards(content)
 			})
+			// 새로고침
 			client.subscribe(`/sub/room/${roomId}/roominfo`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('roominfo', content)
@@ -278,7 +284,7 @@ export default function Game() {
 						<GameResult phase={phase} turnResult={turnResult} submitCards={submitCards} />
 					)
 				) : (
-					<GameEnd />
+					<GameEnd setState={setState} />
 				)}
 			</div>
 

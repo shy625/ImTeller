@@ -64,12 +64,12 @@ export const roomInfo = createSlice({
 		setRoomInfo(state, action) {
 			return action.payload
 		},
-		setReady(state, action) {
+		setReady1(state, action) {
 			state.ready = action.payload
 		},
 	},
 })
-export const { setRoomInfo, setReady } = roomInfo.actions
+export const { setRoomInfo, setReady1 } = roomInfo.actions
 
 export const chats = createSlice({
 	name: 'chats',
@@ -138,9 +138,20 @@ export const players = createSlice({
 				state[key].status = false
 			}
 		},
+		setReady2(state: any, action) {
+			for (let key in state) {
+				for (let nickname in action.payload) {
+					console.log(state[key].nickname, action.payload[nickname])
+					if (state[key].nickname === nickname) {
+						state[key].status = action.payload[nickname]
+						break
+					}
+				}
+			}
+		},
 	},
 })
-export const { setPlayers, setScore, setStatus, clearStatus } = players.actions
+export const { setPlayers, setScore, setStatus, clearStatus, setReady2 } = players.actions
 
 export const time = createSlice({
 	name: 'time',
@@ -324,7 +335,6 @@ export const result = createSlice({
 	initialState: [],
 	reducers: {
 		setResult(state, action) {
-			action.payload.sort((player) => -player.score)
 			return action.payload
 		},
 	},

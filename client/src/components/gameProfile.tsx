@@ -13,7 +13,7 @@ export default function GameProfile(props: any) {
 			<img css={imgSizeCSS} src={player.profile || defaultProfile} alt="프로필이미지" />
 			<div>{player.nickname}</div>
 			<div>{player.score}</div>
-			<div>{player.status ? '✔' : '❌'}</div>
+			<div>{phase !== 4 ? (player.status ? '✔' : '❌') : null}</div>
 		</div>
 	)
 }

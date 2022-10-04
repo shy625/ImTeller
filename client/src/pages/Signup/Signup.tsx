@@ -105,7 +105,7 @@ export default function Signup(props: any) {
 				여긴 Signup
 				<div>
 					<label htmlFor="email">이메일</label>
-					<input id="email" type="email" onChange={emailFilter} placeholder="이메일" />
+					<input id="email" type="email" autoFocus onChange={emailFilter} placeholder="이메일" />
 					<button onClick={checkEmail}>이메일 중복 체크</button>
 					{emailChecked ? '✅' : null}
 				</div>
