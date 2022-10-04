@@ -208,7 +208,6 @@ const makeRoomModalCSS = css`
 		width: 100%;
 		height: 10px;
 		cursor: pointer;
-		animate: 0.2s;
 		box-shadow: 0px 0px 0px #000000;
 		background: #d1e4ff;
 		border-radius: 50px;
@@ -232,7 +231,6 @@ const makeRoomModalCSS = css`
 		width: 100%;
 		height: 10px;
 		cursor: pointer;
-		animate: 0.2s;
 		box-shadow: 0px 0px 0px #000000;
 		background: #d1e4ff;
 		border-radius: 50px;
@@ -251,7 +249,6 @@ const makeRoomModalCSS = css`
 		width: 100%;
 		height: 10px;
 		cursor: pointer;
-		animate: 0.2s;
 		background: transparent;
 		border-color: transparent;
 		color: transparent;
