@@ -100,7 +100,7 @@ const roomNum = css`
 `
 const line = css`
 	font-size: 17px;
-	font-family: 'GongGothicMedium';
+	font-family: 'GmarketSansMedium';
 	display: flex;
 	justify-content: space-between;
 	margin-top: 10px;
