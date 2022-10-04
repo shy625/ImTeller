@@ -65,7 +65,6 @@ export default function VoteModal(props: any) {
 			<img src={vote.art.url} alt="paintTitle" />
 			{}
 			{'좋아요 변수명 정해지면 넣기'}
-			by. {designer.nickname}
 			<button onClick={() => dispatch(setModalState(''))}>돌아가기</button>
 			{isMyPaint ? (
 				<button onClick={onCancel}>출품 취소하기</button>
