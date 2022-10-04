@@ -267,6 +267,9 @@ public class RoomRepository {
     }
 
     public void startTimer (long sessionId, TimerTask task) {
+        // 혹시 모를 오류에 대비해 타이머 종료!
+        roomList.get(sessionId).getTimer().cancel();
+        // 새로운 타이머 초기화
         roomList.get(sessionId).setTimer(new Timer());
 
         int phase = roomList.get(sessionId).getTurn();
@@ -290,8 +293,11 @@ public class RoomRepository {
     }
 
     public void stopTimer (long sessionId) {
+        System.out.println("1: " + roomList.get(sessionId).getTimer());
         roomList.get(sessionId).getTimer().cancel();
+        System.out.println("2: " + roomList.get(sessionId).getTimer());
         roomList.get(sessionId).setTimer(new Timer());
+        System.out.println("3: " + roomList.get(sessionId).getTimer());
     }
 
     public void saveTellerInfo (long sessionId, TellerDto tellerDto) {

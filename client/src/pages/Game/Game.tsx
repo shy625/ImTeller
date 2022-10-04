@@ -130,6 +130,7 @@ export default function Game() {
 			// 시작시 선택카드 제출
 			ws.subscribe(`/sub/room/${roomId}/start`, (action) => {
 				console.log('start', action.body)
+				console.log('selectedCard', selectedCard)
 				const content = JSON.parse(action.body)
 				if (!content) return
 				console.log(selectedCard)
