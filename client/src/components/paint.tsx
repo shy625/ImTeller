@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
-
+import { imgBigIcon } from 'style/commonStyle'
+import check from 'assets/image/check.webp'
 import Loading from 'components/loading'
 
 import art from 'actions/api/art'
@@ -172,7 +173,10 @@ export default function Paint(props: any) {
 
 	return (
 		<div css={cardWrapperCSS}>
-			<div css={type === 1 && selected ? type1CSS : type === 0 ? type0CSS : null} onClick={select}>
+			<div
+				css={type === 1 && selected ? type1CSS : type === 0 ? type0CSS : type1UnselectedCSS}
+				onClick={select}
+			>
 				{/* <img style={{ height: '185px' }} src={paintImageURL} alt="" /> */}
 				<img css={paintImageCSS} src={paintImageURL} alt="" />
 				{isVote == 0 ? (
@@ -211,11 +215,15 @@ export default function Paint(props: any) {
 					</div>
 				) : null}
 			</div>
-			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
-			<div className="cardInfo">
-				<div className="cardTitle">{paintTitle}</div>
-				<div>{content}</div>
+			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>
+				<img src={check} alt="" css={imgBigIcon} />
 			</div>
+			{type ? null : (
+				<div className="cardInfo">
+					<div className="cardTitle">{paintTitle}</div>
+					<div>{content}</div>
+				</div>
+			)}
 			{loading ? <Loading msg={'민팅이 진행중입니다. 잠시만 기다려주세요'} /> : null}
 		</div>
 	)
@@ -269,6 +277,18 @@ const type0CSS = css`
 		}
 	}
 `
+const type1UnselectedCSS = css`
+	position: relative;
+	height: 214px;
+	width: 143px;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: 13px solid #f4f4f4;
+	margin: 10px;
+`
 const paintImageCSS = css`
 	height: 222px;
 	background-color: white;
@@ -305,9 +325,13 @@ const type1CSS = css`
 	margin: 10px;
 `
 const type1InfoCSS = css`
-	/* position: absolute; */
-	top: -9vh;
-	left: 4.5vh;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 190px;
+	/* top: -9vh; */
+	/* left: 4.5vh; */
 	/* width: 100%; */
 	/* height: 100%; */
 `
