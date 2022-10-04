@@ -31,11 +31,17 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "int default 0")
     private int exp;
 
+    @Column(columnDefinition = "INT DEFAULT 1")
+    private Integer level;
+
     @Column(columnDefinition = "int default 0")
     private int win;
 
     @Column(columnDefinition = "int default 0")
     private int lose;
+
+    @Column(columnDefinition = "DOUBLE DEFAULT 0")
+    private Double winningRate;
 
     @JsonIgnore
     @Column(length=256)
@@ -63,13 +69,24 @@ public class User extends BaseEntity {
 
     public void plusWin() {
         ++this.win;
+        updateWinningRate();
     }
 
     public void plusLose() {
         ++this.lose;
+        updateWinningRate();
     }
 
     public void updateExp(int score) {
         this.exp += score;
+        updateLevel();
+    }
+
+    public void updateWinningRate() {
+        this.winningRate = (double) this.win / (this.win + this.lose);
+    }
+
+    public void updateLevel() {
+        this.level = this.exp / 50 + 1;
     }
 }
