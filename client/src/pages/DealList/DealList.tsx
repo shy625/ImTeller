@@ -66,7 +66,7 @@ const button = css`
 	border-radius: 40px;
 	border: 1px solid white;
 	color: #f9f6f6;
-	background: #271975;
+	background: rgb(74, 59, 117);
 	letter-spacing: 1px;
 	text-shadow: 0;
 	font: {
@@ -78,7 +78,7 @@ const button = css`
 	&:hover {
 		font-family: 'GongGothicMedium';
 		color: black;
-		background: #3d27bd;
+		background: rgb(255, 255, 255, 0.6);
 		border: 2px solid black;
 	}
 	&:active {
