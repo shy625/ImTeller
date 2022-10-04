@@ -61,7 +61,11 @@ export default function DealRegister() {
 		setInstantPrice(event.target.value)
 	}
 	const onSubmit = async () => {
-		if (isLoading) return alert('로딩중입니다.')
+		if (isLoading) {
+			setModalMsg('로딩중입니다')
+			setModalState('alert')
+			return
+		}
 		console.log(selectedCard)
 		if (!selectedCard) {
 			setModalMsg('카드를 선택하세요')
@@ -70,7 +74,8 @@ export default function DealRegister() {
 		}
 		const check: any = await connectMetaMask()
 		if (!check) {
-			alert('지갑을 연결하세요')
+			setModalMsg('지갑을 연결하세요')
+			setModalState('alert')
 			setIsLoading(false)
 			return
 		}

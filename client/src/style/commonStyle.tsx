@@ -49,4 +49,19 @@ const fullDisplay = css({
 	minHeight: '100vh',
 })
 
-export { normalBtn, textBtn, input, textarea, imgIcon, fullDisplay }
+// 증간으로 배치 세로로
+const centerColCSS = css`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`
+// 중간으로 배치 가로로
+const centerRowCSS = css`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`
+
+export { normalBtn, textBtn, input, textarea, imgIcon, fullDisplay, centerColCSS, centerRowCSS }
