@@ -131,7 +131,7 @@ const cardWrapperCSS = css`
 	.buttons {
 		display: flex;
 		justify-content: center;
-		width: 169px;
+		width: 170px;
 	}
 	button {
 		outline: 'none';

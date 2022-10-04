@@ -54,7 +54,7 @@ const myPageNavCSS = css`
 	color: white;
 	display: flex;
 	/* margin-left: 100px; */
-	width: 60%;
+	width: 100%;
 	justify-content: space-between;
 	border-bottom: 1px solid white;
 	div {

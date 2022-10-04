@@ -39,9 +39,7 @@ const centerCSS = css`
 	justify-content: center;
 `
 const paintListCSS = css`
-	flex-grow: 1;
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
-	width: 60%;
 `

@@ -84,28 +84,33 @@ export default function Vote() {
 	return (
 		<Layout>
 			<main css={fullDisplay}>
-				<div css={voteCSS}>
-					<div className="voteIntro">
-						<div className="headline">당신의 카드에 투표하세요!</div>
-						<div>
-							한 달에 한 작품씩 가장 많이 추천받은 작품을 무료로 NFT로 변환해 드립니다. <br></br>
-							유저들의 상상력 가득한 그림중에서 가장 매력적인 카드에 투표해 주세요
+				<div css={centerCSS}>
+					<div css={listWrapper}>
+						<div css={voteCSS}>
+							<div className="voteIntro">
+								<div className="headline">당신의 카드에 투표하세요!</div>
+								<div>
+									한 달에 한 작품씩 가장 많이 추천받은 작품을 무료로 NFT로 변환해 드립니다.{' '}
+									<br></br>
+									유저들의 상상력 가득한 그림중에서 가장 매력적인 카드에 투표해 주세요
+								</div>
+								<div>
+									<button css={normalBtn} onClick={() => navigate('/rank')}>
+										지난 투표 결과 확인
+									</button>
+									<button css={normalBtn} onClick={() => setModalState('voteRegister')}>
+										나도 출품하기
+									</button>
+								</div>
+							</div>
+							<div css={paintListCSS}>
+								{voteList.length
+									? voteList
+											.filter((paint) => paint.vote.isVoting !== 2)
+											.map((paint, i) => <VoteCard paint={paint} key={i} />)
+									: null}
+							</div>
 						</div>
-						<div>
-							<button css={normalBtn} onClick={() => navigate('/rank')}>
-								지난 투표 결과 확인
-							</button>
-							<button css={normalBtn} onClick={() => setModalState('voteRegister')}>
-								나도 출품하기
-							</button>
-						</div>
-					</div>
-					<div css={paintListCSS}>
-						{voteList.length
-							? voteList
-									.filter((paint) => paint.vote.isVoting !== 2)
-									.map((paint, i) => <VoteCard paint={paint} key={i} />)
-							: null}
 					</div>
 				</div>
 			</main>
@@ -119,7 +124,7 @@ const voteCSS = css`
 	align-items: center;
 	font-family: 'GmarketSansMedium';
 	.voteIntro {
-		width: 80%;
+		width: 100%;
 		background-color: rgba(255, 255, 255, 0.15);
 		border-radius: 25px;
 		display: flex;
@@ -139,9 +144,17 @@ const voteCSS = css`
 	}
 `
 const paintListCSS = css`
-	flex-grow: 0;
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
+	margin-top: 20px;
+`
+const centerCSS = css`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+`
+const listWrapper = css`
 	width: 60%;
 `
