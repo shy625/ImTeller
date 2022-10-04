@@ -126,7 +126,7 @@ const button = css`
 	width: 100px;
 	height: 36px;
 	border: 1px solid #f7f7f7;
-	background: #392778;
+	background: rgb(74, 59, 117);
 	text-align: center;
 	color: #ececef;
 	border-radius: 0 5px 5px 0;

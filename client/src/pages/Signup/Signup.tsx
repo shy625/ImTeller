@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -5,6 +7,7 @@ import Layout from 'layout/layout'
 import { useModal } from 'actions/hooks/useModal'
 import user from 'actions/api/user'
 import Loading from 'components/loading'
+import { fullDisplay } from 'style/commonStyle'
 
 export default function Signup(props: any) {
 	const navigate = useNavigate()
@@ -127,13 +130,54 @@ export default function Signup(props: any) {
 
 	return (
 		<Layout>
-			<main>
-				여긴 Signup
-				<div>
-					<label htmlFor="email">이메일</label>
-					<input id="email" type="email" autoFocus onChange={emailFilter} placeholder="이메일" />
-					<button onClick={checkEmail}>이메일 중복 체크</button>
-					{emailChecked ? '✅' : null}
+			<main css={fullDisplay}>
+				<div css={box}>
+					<div>
+						<div css={line}>
+							<label css={label} htmlFor="email">
+								이메일
+							</label>
+							<input
+								css={singUpInput}
+								id="email"
+								type="email"
+								autoFocus
+								onChange={emailFilter}
+								placeholder="이메일"
+							/>
+							<button css={checkBtn} onClick={checkEmail}>
+								{' '}
+								중복 체크
+							</button>
+							{emailChecked ? '✅' : null}
+						</div>
+					</div>
+					<div>
+						<div css={line}>
+							<label css={label} htmlFor="nickname">
+								닉네임
+							</label>
+							<input
+								css={singUpInput}
+								id="nickname"
+								type="text"
+								placeholder="닉네임 (5자 이상 입력)"
+								onChange={(event) => {
+									nickFilter(event)
+								}}
+							/>
+							<button css={checkBtn} onClick={checkNick}>
+								중복 체크
+							</button>
+							{nickChecked ? '✅' : null}
+						</div>
+						{nickValid}
+					</div>
+					<button css={Btn} onClick={onSubmit}>
+						회원가입
+					</button>
+					{isLoading ? <Loading msg={'전송중입니다.'} /> : null}
+					{authError}
 				</div>
 				<div>
 					<label htmlFor="nickname">닉네임</label>
@@ -162,3 +206,71 @@ export default function Signup(props: any) {
 		</Layout>
 	)
 }
+const box = css`
+	margin: auto;
+	margin-top: 50px;
+	border-radius: 20px;
+	background-color: rgb(255, 255, 255, 0.5);
+	box-shadow: 5px 5px 5px #6a679e;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 600px;
+	height: 400px;
+`
+const singUpInput = css`
+	border: none;
+	border-bottom: 2px solid #d1d1d4;
+	border-radius: 20px;
+	background: none;
+	padding: 10px;
+	padding-left: 24px;
+	font-weight: 700;
+	width: 100%;
+	transition: 0.2s;
+	margin: 10px;
+`
+const Btn = css`
+	background: #fff;
+	font-size: 14px;
+	margin-top: 20px;
+	padding: 10px 20px;
+	border-radius: 26px;
+	border: 1px solid #d4d3e8;
+	text-transform: uppercase;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	color: #4c489d;
+	box-shadow: 0px 2px 2px #5c5696;
+	cursor: pointer;
+	transition: 0.2s;
+	margin-bottom: 30px;
+`
+const line = css`
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+	align-items: center;
+	font-weight: bold;
+`
+
+const label = css`
+	margin-right: 10px;
+	width: 100px;
+`
+const checkBtn = css`
+	background: #5c5696;
+	font-size: 12px;
+	padding: 10px 12px;
+	border-radius: 26px;
+	border: 1px solid #d4d3e8;
+	text-transform: uppercase;
+	display: flex;
+	align-items: center;
+	color: #dddce8;
+	margin-left: 10px;
+	width: 80px;
+	box-shadow: 0px 2px 2px #d7d6e1;
+`
