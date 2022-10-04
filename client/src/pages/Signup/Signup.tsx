@@ -150,7 +150,13 @@ export default function Signup(props: any) {
 					{nickValid}
 				</div>
 				<button onClick={onSubmit}>회원가입</button>
-				{isLoading ? <Loading msg={'전송중입니다.'} /> : null}
+				{isLoading ? (
+					<Loading
+						msg={
+							'입력하신 이메일로 임시 비밀번호를 전송하는 중입니다. \n전송이 완료된 후 임시 비밀번호로 로그인해주세요'
+						}
+					/>
+				) : null}
 				{authError}
 			</main>
 		</Layout>

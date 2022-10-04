@@ -43,7 +43,7 @@ const makeRoomModalCSS = css`
 	}
 	section {
 		width: 90%;
-		max-width: 600px;
+		max-width: 800px;
 		margin: 0 auto;
 		border-radius: 25px;
 		background-color: #fff;
@@ -62,32 +62,6 @@ const makeRoomModalCSS = css`
 	main {
 		padding: 16px;
 		font-family: 'GmarketSansMedium';
-	}
-	form {
-		display: flex;
-		flex-direction: column;
-	}
-	input {
-		font-family: 'GmarketSansMedium';
-		border-radius: 50px;
-		border-color: #c9c9c9;
-		padding: 8px;
-		margin: 3px 10px 10px 10px;
-	}
-	select {
-		font-family: 'GmarketSansMedium';
-		border-radius: 50px;
-		border-color: #c9c9c9;
-		padding: 8px;
-		margin: 0px 10px 0px 10px;
-	}
-	.options {
-		margin: 20px 20px 3px 20px;
-		display: flex;
-		justify-content: space-between;
-	}
-	.options input {
-		border: none;
 	}
 	footer {
 		padding: 12px 16px;
