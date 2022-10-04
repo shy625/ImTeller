@@ -47,7 +47,7 @@ public class RankService {
 
     @Transactional(readOnly = true)
     public List<RankResDto.LevelRank> getLevelRank() {
-        List<User> userList = userRepository.findTop10ByOrderByLevelDesc();
+        List<User> userList = userRepository.findTop10ByOrderByLevelDescExpDesc();
         if (userList == null || userList.size() == 0) {
             return null;
         }
@@ -65,7 +65,7 @@ public class RankService {
 
     @Transactional(readOnly = true)
     public List<RankResDto.WinningRateRank> getWinningRateRank() {
-        List<User> userList = userRepository.findTop10ByOrderByWinningRateDesc();
+        List<User> userList = userRepository.findTop10ByOrderByWinningRateDescWinDesc();
         if (userList == null || userList.size() == 0) {
             return null;
         }
