@@ -318,6 +318,9 @@ public class SocketController {
         // 각종 변수들 초기화
         roomService.gameEnd(sessionId);
 
+        // 10초 뒤에 방 상태를 false로 바꾸기
+        roomService.startedToFalse(sessionId);
+
         // 끝났음을 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "end");
     }

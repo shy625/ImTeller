@@ -661,8 +661,6 @@ public class RoomRepository {
             }
         }
         roomList.get(sessionId).setReady(readyMap);
-        // 시작여부 초기화
-        roomList.get(sessionId).setStarted(false);
         // cards 변수 초기화
         roomList.get(sessionId).setCards(new HashMap<String, List<Long>>());
         // score 변수 초기화
