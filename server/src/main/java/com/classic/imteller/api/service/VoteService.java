@@ -38,6 +38,18 @@ public class VoteService {
         }
         return list;
     }
+    public List<VoteResDto> getVoteList() {
+        List<Vote> voteList = voteRepository.findByIsVoting(1);
+        List<VoteResDto> list = new ArrayList<>();
+        for(Vote vote: voteList){
+            VoteResDto voteResDto = VoteResDto.builder()
+                    .vote(vote)
+                    .isLike(false)
+                    .build();
+            list.add(voteResDto);
+        }
+        return list;
+    }
 
     @Transactional
     public void electedPaint(Long artId) {
@@ -72,17 +84,6 @@ public class VoteService {
         }
         return result;
     }
-    public List<VoteResDto> getVoteList() {
-        List<Vote> voteList = voteRepository.findByIsVoting(1);
-        List<VoteResDto> list = new ArrayList<>();
-        for(Vote vote: voteList){
-            VoteResDto voteResDto = VoteResDto.builder()
-                    .vote(vote)
-                    .isLike(false)
-                    .build();
-            list.add(voteResDto);
-        }
-        return list;
-    }
+
 }
 
