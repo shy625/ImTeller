@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Layout from 'layout/layout'
-
+import { useModal } from 'actions/hooks/useModal'
 import user from 'actions/api/user'
 import Loading from 'components/loading'
 
