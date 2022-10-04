@@ -1,10 +1,12 @@
 import user from 'actions/api/user'
+// import { useModal } from 'actions/hooks/useModal'
 
 export default function PwCertificate(props: any) {
 	const email = localStorage.getItem('email')
 
 	const checkPw = () => {
 		const passwordTag: any = document.querySelector('#password')
+		// const [setModalState, setModalMsg] = useModal('')
 		const password = passwordTag.value
 		const credentials = {
 			email,
@@ -15,12 +17,15 @@ export default function PwCertificate(props: any) {
 		user
 			.login(credentials)
 			.then((result) => {
+				console.log(result)
 				if (result.data.response === '올바른 비밀번호입니다.') {
 					props.setPassword(password)
 				}
 			})
 			.catch((error) => {
-				alert('잘못된 비밀번호 입니다')
+				// setModalMsg('잘못된 비밀번호입니다')
+				// setModalState('alert')
+				alert('잘못된 비밀번호입니다')
 				console.log(error)
 			})
 	}

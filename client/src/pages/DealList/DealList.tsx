@@ -6,6 +6,7 @@ import { css } from '@emotion/react'
 import Search from 'pages/DealList/search'
 import Layout from 'layout/layout'
 import Deal from 'components/deal'
+import { fullDisplay } from 'style/commonStyle'
 
 export default function DealList() {
 	const navigate = useNavigate()
@@ -20,11 +21,11 @@ export default function DealList() {
 
 	return (
 		<Layout>
-			<main>
+			<main css={fullDisplay}>
 				<div css={centerCSS}>
 					<div css={listWrapper}>
 						<div css={nav}>
-							<button onClick={onMove}>판매 등록</button>
+							<button css={button} onClick={onMove}></button>
 							<Search />
 						</div>
 						<div css={centerCSS}>
@@ -43,6 +44,7 @@ const centerCSS = css`
 	align-items: center;
 	justify-content: center;
 	flex-wrap: wrap;
+	font-family: 'GongGothicMedium';
 `
 
 const nav = css`
@@ -52,5 +54,39 @@ const nav = css`
 	margin: 30px;
 `
 const listWrapper = css`
-	width: 60%;
+	width: 80%;
 `
+
+const button = css`
+	font-family: 'GmarketSansMedium';
+	outline: none;
+	height: 40px;
+	text-align: center;
+	width: 130px;
+	border-radius: 40px;
+	border: 1px solid white;
+	color: #f9f6f6;
+	background: rgb(74, 59, 117);
+	letter-spacing: 1px;
+	text-shadow: 0;
+	font: {
+		size: 12px;
+		weight: bold;
+	}
+	cursor: pointer;
+	transition: all 0.25s ease;
+	&:hover {
+		font-family: 'GongGothicMedium';
+		color: black;
+		background: rgb(255, 255, 255, 0.6);
+		border: 2px solid black;
+	}
+	&:active {
+		//letter-spacing: 2px;
+		letter-spacing: 2px;
+	}
+	&:after {
+		content: '판매등록';
+	}
+`
+const search = css``

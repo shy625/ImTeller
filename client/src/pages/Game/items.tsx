@@ -14,7 +14,7 @@ export default function Items(props: any) {
 		if (event.detail !== 2) return
 
 		client.publish({
-			destination: `pub/room/${roomId}/item`,
+			destination: `/pub/room/${roomId}/item`,
 			body: JSON.stringify({
 				nickname,
 				cardId: item.cardId,

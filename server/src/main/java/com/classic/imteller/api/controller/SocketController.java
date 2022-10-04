@@ -30,6 +30,9 @@ public class SocketController {
     public void join(@Header("simpSessionId") String userSessionId, @DestinationVariable("sessionId") long sessionId, JoinReqDto joinReqDto) {
         Room room = roomService.joinRoom(userSessionId, sessionId, joinReqDto);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/join", room);
+
+        HashMap<String, Boolean> readyMap = roomService.getRoom(sessionId).getReady();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/ready", readyMap);
     }
 
     // 퇴장 : 게임방에서 퇴장
@@ -90,16 +93,17 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/select")
     public void select(@DestinationVariable long sessionId, SelectReqDto selectReqDto) {
         HashMap<String, List<GameCardDto>> firstHands = roomService.selectCards(sessionId, selectReqDto);
+        HashMap<String, List<ItemDto>> myItems = roomRepository.getRoom(sessionId).getItems();
         if(firstHands != null) {
             List<String> players = roomRepository.getRoom(sessionId).getPlayers();
             // 패를 나눠주고 나서 최초 텔러 설정 (players List의 맨 앞 유저)
             roomRepository.getRoom(sessionId).setTeller(players.get(0));
             for (String player : players) {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-                sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
                 // 아이템도 같이 받아오기
-                List<ItemDto> myItems = roomService.getMyItems(sessionId, selectReqDto.getNickname());
-                sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
+                System.out.println(myItems.get(player).size());
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems.get(player));
             }
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
@@ -133,11 +137,11 @@ public class SocketController {
     // 텔러 카드선택 : 텔러가 선택한 카드와 텔러의 문장이 전달됨
     @MessageMapping("/room/{sessionId}/teller")
     public void teller(@DestinationVariable long sessionId, TellerDto tellerDto) {
+        roomService.stopTimer(sessionId);
         System.out.println("텔러 카드:" + tellerDto.getCardId() + " " + tellerDto.getCardMsg());
         roomService.setPhase(sessionId, 2);
         // 텔러가 제출하면 status 변경
         roomService.saveTellerInfo(sessionId, tellerDto);
-        roomService.stopTimer(sessionId);
 
         // 텔러 정보 전달
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/teller", tellerDto.getCardMsg());
@@ -172,12 +176,14 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/others")
     public void others(@DestinationVariable long sessionId, UserCardDto userCardDto) {
         // 제출한 카드 처리
+        System.out.println("인식함");
         boolean chk = roomService.getUserCard(sessionId, userCardDto);
 
         // 유저들에게 제출 상태값 변경된거 전달
         HashMap<String, Boolean> status = roomService.getUserStatus(sessionId);
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/status", status);
 
+        System.out.println("완료여부:" + chk);
         // 모두가 제출했는지 여부 확인
         if (chk) {
             roomService.stopTimer(sessionId);
@@ -240,6 +246,10 @@ public class SocketController {
         List<TableDto> table = roomService.getRoom(sessionId).getTable();
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/submitcards", table);
 
+        // 어떤 플레이어가 어떤 카드를 선택했는지를 담은 choice 전송하기
+        HashMap<String, Long> choice = roomService.getRoom(sessionId).getChoice();
+        sendingOperations.convertAndSend("/sub/room/" + sessionId + "/choicecards", choice);
+
         // 카드 드로우 - phase4 종료시 카드가 6장 미만이면 다시 1장 채워주기
         roomService.oneCardDraw(sessionId);
 
@@ -248,7 +258,7 @@ public class SocketController {
         List<String> players = roomRepository.getRoom(sessionId).getPlayers();
         for (String player : players) {
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
-            sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHands.get(player));
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHands.get(player));
         }
 
         // table에 있는 카드들을 덱의 맨 뒤로 돌리기
@@ -285,7 +295,7 @@ public class SocketController {
             roomService.itemOneCardDraw(sessionId, useItemDto.getNickname());
             List<GameCardDto> newHand = roomService.getHand(sessionId).get(useItemDto.getNickname());
             String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
-            sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHand);
+            template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", newHand);
         }
 
         List<EffectDto> activatedItems = roomService.getActivated(sessionId);
@@ -294,7 +304,7 @@ public class SocketController {
         // 아이템을 사용한 유저에게 자신의 아이템 상태를 다시 보내줌
         List<ItemDto> myItems= roomRepository.getMyItems(sessionId, useItemDto.getNickname());
         String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(useItemDto.getNickname());
-        sendingOperations.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
+        template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
     }
 
     // 끝 : 게임이 끝나고 최종 우승자를 선정
@@ -311,6 +321,9 @@ public class SocketController {
 
         // 각종 변수들 초기화
         roomService.gameEnd(sessionId);
+
+        // 10초 뒤에 방 상태를 false로 바꾸기
+        roomService.startedToFalse(sessionId);
 
         // 끝났음을 알림
         sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "end");

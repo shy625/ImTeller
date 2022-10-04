@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
+import { imgBigIcon } from 'style/commonStyle'
+import check from 'assets/image/check.webp'
 import gradeS from 'assets/image/gradeS.webp'
 import gradeA from 'assets/image/gradeA.webp'
 import gradeB from 'assets/image/gradeB.webp'
@@ -48,33 +50,33 @@ export default function Card(props: any) {
 	}
 
 	return (
-		<div>
-			<div css={cardWrapperCSS}>
-				<div css={type === 1 && selected ? type1CSS : type0CSS} onClick={select}>
-					<img css={cardImageCSS} src={cardImageURL} alt="" />
-					<div css={!selected ? type0InfoCSS : displayNoneCSS}>
-						<div className="buttons">
-							<div>{grade}</div>
-							<div>{effectName}</div>
-							<div>{`${effectNum} ${effectPost}`}</div>
-						</div>
+		<div css={cardWrapperCSS}>
+			<div css={type === 1 && selected ? type1CSS : type0CSS} onClick={select}>
+				<img css={cardImageCSS} src={cardImageURL} alt="" />
+				<div css={!selected ? type0InfoCSS : displayNoneCSS}>
+					<div className="buttons">
+						<div>{grade}</div>
+						<div>{effectName}</div>
+						<div>{`${effectNum} ${effectPost}`}</div>
 					</div>
 				</div>
-				<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
-				{type === 0 ? (
-					<div className="cardInfo">
-						<div className="textInfo">
-							<div>{description}</div>
-							<div className="cardTitle">{cardTitle}</div>
-							<div>{createdDT.slice(0, 10)}</div>
-							{recentPrice ? <div>{recentPrice} SSF</div> : null}
-						</div>
-						{grade == 'S' ? <img src={gradeS} alt="" /> : null}
-						{grade == 'A' ? <img src={gradeA} alt="" /> : null}
-						{grade == 'B' ? <img src={gradeB} alt="" /> : null}
-					</div>
-				) : null}
 			</div>
+			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>
+				<img src={check} alt="" css={imgBigIcon} />
+			</div>
+			{type === 0 ? (
+				<div className="cardInfo">
+					<div className="textInfo">
+						<div>{description}</div>
+						<div className="cardTitle">{cardTitle}</div>
+						<div>{createdDT.slice(0, 10)}</div>
+						{recentPrice ? <div>{recentPrice} SSF</div> : null}
+					</div>
+					{grade == 'S' ? <img src={gradeS} alt="" /> : null}
+					{grade == 'A' ? <img src={gradeA} alt="" /> : null}
+					{grade == 'B' ? <img src={gradeB} alt="" /> : null}
+				</div>
+			) : null}
 		</div>
 	)
 }
@@ -154,11 +156,25 @@ const type0InfoCSS = css`
 `
 const type1CSS = css`
 	filter: brightness(0.5);
+	position: relative;
+	height: 214px;
+	width: 143px;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: 13px solid #f4f4f4;
+	margin: 10px;
 `
 const type1InfoCSS = css`
-	position: relative;
-	top: -9vh;
-	left: 4.5vh;
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 190px;
+	/* top: -9vh; */
+	/* left: 4.5vh; */
 `
 const displayNoneCSS = css`
 	display: none;

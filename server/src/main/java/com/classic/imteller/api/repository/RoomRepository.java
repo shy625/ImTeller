@@ -267,6 +267,9 @@ public class RoomRepository {
     }
 
     public void startTimer (long sessionId, TimerTask task) {
+        // 혹시 모를 오류에 대비해 타이머 종료!
+        roomList.get(sessionId).getTimer().cancel();
+        // 새로운 타이머 초기화
         roomList.get(sessionId).setTimer(new Timer());
 
         int phase = roomList.get(sessionId).getTurn();
@@ -290,8 +293,11 @@ public class RoomRepository {
     }
 
     public void stopTimer (long sessionId) {
+        System.out.println("1: " + roomList.get(sessionId).getTimer());
         roomList.get(sessionId).getTimer().cancel();
+        System.out.println("2: " + roomList.get(sessionId).getTimer());
         roomList.get(sessionId).setTimer(new Timer());
+        System.out.println("3: " + roomList.get(sessionId).getTimer());
     }
 
     public void saveTellerInfo (long sessionId, TellerDto tellerDto) {
@@ -352,48 +358,42 @@ public class RoomRepository {
     }
 
     public boolean getUserCard (long sessionId, UserCardDto userCardDto) {
+        System.out.println("레포지토리들어옴");
         TableDto table = TableDto.builder()
                 .nickname(userCardDto.getNickname())
                 .cardId(userCardDto.getCardId())
                 .cardUrl(userCardDto.getCardUrl())
                 .isTeller(false).build();
 
+        roomList.get(sessionId).getStatus().replace(userCardDto.getNickname(), true);
+        List<GameCardDto> userHand = roomList.get(sessionId).getHand().get(userCardDto.getNickname());
+
         // 같은 nickname을 가진 table이 이미 존재한다면 add하지 않는다
         boolean nameChk = true;
         for (TableDto tmpTable : roomList.get(sessionId).getTable()) {
-            if (tmpTable.getNickname() == userCardDto.getNickname()) {
+            if (tmpTable.getNickname().equals(userCardDto.getNickname())) {
                 nameChk = false;
                 break;
             }
         }
 
         if (nameChk) {
-            roomList.get(sessionId).getTable().add(table);
-            roomList.get(sessionId).getStatus().replace(userCardDto.getNickname(), true);
-
             // 텔러 손패에서 낸 카드 제거
-            List<GameCardDto> userHand = roomList.get(sessionId).getHand().get(userCardDto.getNickname());
             for (GameCardDto gameCard: userHand) {
                 if (gameCard.getCardId() == userCardDto.getCardId()) {
                     roomList.get(sessionId).getHand().get(userCardDto.getNickname()).remove(gameCard);
+                    break;
                 }
             }
+            roomList.get(sessionId).getTable().add(table);
         }
+
+        System.out.println("손패에 있는지 : " + nameChk);
 
         // 모두가 제출했는지 확인하는 부분
-        boolean chk = true;
-
         // 제출 카드 개수로 확인
-        if (roomList.get(sessionId).getPlayers().size() >= roomList.get(sessionId).getTable().size()) return true;
-
-        HashMap<String, Boolean> status = roomList.get(sessionId).getStatus();
-        for (String key : status.keySet()) {
-            if (!status.get(key)) {
-                chk = false;
-                break;
-            }
-        }
-        return chk;
+        if (roomList.get(sessionId).getPlayers().size() <= roomList.get(sessionId).getTable().size()) return true;
+        else return false;
     }
 
     public HashMap<String, Boolean> getUserStatus (long sessionId) {
@@ -573,11 +573,10 @@ public class RoomRepository {
                 if (activated.get(i).getEffect() == useItemDto.getEffect()) {
                     if (activated.get(i).getEffectNum() >= useItemDto.getEffectNum()) {
                         chk = false;
-                        break;
                     } else {
                         activated.remove(i);
-                        break;
                     }
+                    break;
                 }
             }
         }
@@ -662,8 +661,6 @@ public class RoomRepository {
             }
         }
         roomList.get(sessionId).setReady(readyMap);
-        // 시작여부 초기화
-        roomList.get(sessionId).setStarted(false);
         // cards 변수 초기화
         roomList.get(sessionId).setCards(new HashMap<String, List<Long>>());
         // score 변수 초기화

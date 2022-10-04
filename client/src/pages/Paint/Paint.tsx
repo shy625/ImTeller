@@ -5,7 +5,7 @@ import { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { css } from '@emotion/react'
-
+import { useModal } from 'actions/hooks/useModal'
 import art from 'actions/api/art'
 
 import { setMyPageTab } from 'store/modules/user'
@@ -47,6 +47,8 @@ export default function Paint() {
 	const [text, setText] = useState('')
 	const [restore, setRestore] = useState([])
 	const [index, setIndex] = useState(-1)
+
+	const [setModalState, setModalMsg] = useModal('')
 
 	useEffect(() => {
 		if (isEdit) {
@@ -210,11 +212,13 @@ export default function Paint() {
 	function savePic() {
 		// 이름이나 설명이 비어있으면 안됨
 		if (!email) {
-			alert('로그인 해주세요')
+			setModalMsg('로그인이 필요한 기능입니다')
+			setModalState('alert')
 			return
 		}
 		if (!title) {
-			alert('제목은 비어있을 수 없습니다')
+			setModalMsg('제목은 비어있을 수 없습니다')
+			setModalState('alert')
 			return
 		}
 		let imgDataUrl = canvas.toDataURL('image/png')
@@ -336,7 +340,7 @@ export default function Paint() {
 												onChange={(e) => setLineWidth(parseInt(e.target.value))}
 												type="range"
 												min="1"
-												max="100"
+												max="20"
 												defaultValue={lineWidth}
 											/>
 										</div>
