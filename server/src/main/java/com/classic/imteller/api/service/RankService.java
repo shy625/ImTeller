@@ -30,9 +30,9 @@ public class RankService {
 
     @Transactional(readOnly = true)
     public RankResDto.BestPaint getBestPaint() {
-        int curYear = LocalDate.now().getYear();
-        int curMonth = LocalDate.now().getMonthValue();
-        List<Vote> voteList = voteRepository.findByIsVotingAndCreatedAt(curYear, curMonth);
+        int prevYear = LocalDate.now().minusMonths(1).getYear();
+        int prevMonth = LocalDate.now().minusMonths(1).getMonthValue();
+        List<Vote> voteList = voteRepository.findByIsVotingAndCreatedAt(prevYear, prevMonth);
         if (voteList == null || voteList.size() == 0) {
             return null;
         }
@@ -47,7 +47,7 @@ public class RankService {
 
     @Transactional(readOnly = true)
     public List<RankResDto.LevelRank> getLevelRank() {
-        List<User> userList = userRepository.findTop10ByOrderByLevelDesc();
+        List<User> userList = userRepository.findTop10ByOrderByLevelDescExpDesc();
         if (userList == null || userList.size() == 0) {
             return null;
         }
@@ -65,7 +65,7 @@ public class RankService {
 
     @Transactional(readOnly = true)
     public List<RankResDto.WinningRateRank> getWinningRateRank() {
-        List<User> userList = userRepository.findTop10ByOrderByWinningRateDesc();
+        List<User> userList = userRepository.findTop10ByOrderByWinningRateDescWinDesc();
         if (userList == null || userList.size() == 0) {
             return null;
         }
