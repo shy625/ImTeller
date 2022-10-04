@@ -168,6 +168,7 @@ export default function Login(props: any) {
 }
 const box = css`
 	margin: auto;
+	margin-top: 50px;
 	border-radius: 20px;
 	background-color: rgb(255, 255, 255, 0.5);
 	box-shadow: 5px 5px 5px #6a679e;
@@ -175,8 +176,8 @@ const box = css`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 400px;
-	height: 500px;
+	width: 600px;
+	height: 400px;
 `
 
 const line = css`
