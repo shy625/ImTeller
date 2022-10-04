@@ -93,6 +93,7 @@ public class SocketController {
     @MessageMapping("/room/{sessionId}/select")
     public void select(@DestinationVariable long sessionId, SelectReqDto selectReqDto) {
         HashMap<String, List<GameCardDto>> firstHands = roomService.selectCards(sessionId, selectReqDto);
+        HashMap<String, List<ItemDto>> myItems = roomRepository.getRoom(sessionId).getItems();
         if(firstHands != null) {
             List<String> players = roomRepository.getRoom(sessionId).getPlayers();
             // 패를 나눠주고 나서 최초 텔러 설정 (players List의 맨 앞 유저)
@@ -101,8 +102,8 @@ public class SocketController {
                 String userSessionId = roomRepository.getRoom(sessionId).getUserSessionIds().get(player);
                 template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/mycards", firstHands.get(player));
                 // 아이템도 같이 받아오기
-                List<ItemDto> myItems = roomService.getMyItems(sessionId, selectReqDto.getNickname());
-                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems);
+                System.out.println(myItems.get(player).size());
+                template.convertAndSendToUser(userSessionId, "/room/" + sessionId + "/item", myItems.get(player));
             }
             sendingOperations.convertAndSend("/sub/room/" + sessionId + "/phase", "phase1");
             phase1(sessionId);
