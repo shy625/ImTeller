@@ -81,6 +81,8 @@ public class RoomService {
         // 3명 이상인지 확인
         if(players.size() < 3) return false;
 
+        // 다 안걸리면 시작
+        roomRepository.start(sessionId);
         return true;
     }
 

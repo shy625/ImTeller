@@ -15,7 +15,7 @@ import { setUserDetail } from 'store/modules/user'
 import { setCardList, setPaintList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 
-import pencil from '../../assets/image/pencil.webp'
+import pencil from 'assets/image/pencil.webp'
 import { imgIcon, fullDisplay } from 'style/commonStyle'
 
 export default function Mypage() {

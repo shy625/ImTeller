@@ -29,10 +29,10 @@ public class VoteController {
     // detailResDto 재활용
     public ResponseEntity<ResponseDto> allOnVotePaints(@RequestHeader(value="Authorization") String email) {
         List<VoteResDto> Paints = new ArrayList<>();
-        if(email==null){
-            Paints = voteService.getVotePaints(email);
-        }else{
+        if(email.equals("guest")){
             Paints = voteService.getVoteList();
+        }else{
+            Paints = voteService.getVotePaints(email);
         }
         return new ResponseEntity<ResponseDto>(new ResponseDto(Paints), HttpStatus.ACCEPTED);
     }

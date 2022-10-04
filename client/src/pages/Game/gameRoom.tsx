@@ -15,7 +15,7 @@ export default function GameRoom(props: any) {
 	const dispatch = useDispatch()
 	const { nickname, client, roomId } = props
 
-	const selectedCards = useSelector((state: any) => state.selectedCards)
+	// const selectedCards = useSelector((state: any) => state.selectedCards)
 	const roomInfo = useSelector((state: any) => state.roomInfo)
 
 	const [isReady, setIsReady] = useState(false)
@@ -83,15 +83,14 @@ export default function GameRoom(props: any) {
 			>
 				카드 선택
 			</button>
-			<button
+			{/* <button
 				css={button}
 				onClick={() => {
 					dispatch(setSelectedCards([]))
 				}}
 			>
 				취소
-			</button>
-			{selectedCards}
+			</button> */}
 
 			{isLeader ? (
 				<button onClick={onStart}>게임 시작</button>

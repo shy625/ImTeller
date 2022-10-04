@@ -95,9 +95,9 @@ export const players = createSlice({
 	name: 'players',
 	initialState: [
 		{
-			nickname: 'IMTELLER',
+			nickname: 'SAMPLE',
 			profile: 'https://newsimg.sedaily.com/2020/11/07/1ZABD2GDRF_5.jpg',
-			ready: false,
+			status: false,
 			score: 0,
 		},
 	],
@@ -141,7 +141,6 @@ export const players = createSlice({
 		setReady2(state: any, action) {
 			for (let key in state) {
 				for (let nickname in action.payload) {
-					console.log(state[key].nickname, action.payload[nickname])
 					if (state[key].nickname === nickname) {
 						state[key].status = action.payload[nickname]
 						break
@@ -149,13 +148,33 @@ export const players = createSlice({
 				}
 			}
 		},
+		setSubmit(state, action) {
+			for (let key in state) {
+				if (state[key].nickname === action.payload.nickname) {
+					state[key].status = action.payload.status
+					break
+				}
+			}
+		},
 	},
 })
-export const { setPlayers, setScore, setStatus, clearStatus, setReady2 } = players.actions
+export const { setPlayers, setScore, setStatus, clearStatus, setReady2, setSubmit } =
+	players.actions
+
+export const phase = createSlice({
+	name: 'phase',
+	initialState: 0,
+	reducers: {
+		setPhase(state, action) {
+			return action.payload
+		},
+	},
+})
+export const { setPhase } = phase.actions
 
 export const time = createSlice({
 	name: 'time',
-	initialState: 10,
+	initialState: 0,
 	reducers: {
 		setTime(state, action) {
 			return action.payload
@@ -168,21 +187,16 @@ export const items = createSlice({
 	name: 'items',
 	initialState: [
 		{
-			itemId: 1,
+			cardId: 1,
 			grade: 'S',
 			effect: 2,
 			effectNum: 60,
-		},
-		{
-			itemId: 2,
-			grade: 'A',
-			effect: 5,
-			effectNum: 2.5,
+			used: false,
 		},
 	],
 	reducers: {
 		removeItem(state, action) {
-			const copy = state.filter((item) => item.itemId !== action.payload.itemId)
+			const copy = state.filter((item) => item.cardId !== action.payload)
 			return copy
 		},
 		setItems(state, action) {
@@ -190,7 +204,7 @@ export const items = createSlice({
 		},
 	},
 })
-export const { removeItem } = items.actions
+export const { removeItem, setItems } = items.actions
 
 export const itemState = createSlice({
 	name: 'itemState',
@@ -243,7 +257,7 @@ export const { setSelectedCards } = selectedCards.actions
 
 export const teller = createSlice({
 	name: 'teller',
-	initialState: 'nickname',
+	initialState: '',
 	reducers: {
 		setTeller(state, action) {
 			return action.payload
@@ -265,63 +279,7 @@ export const { setTellerMsg } = tellerMsg.actions
 
 export const table = createSlice({
 	name: 'table',
-	initialState: [
-		{
-			cardId: 1,
-			cardTitle: '기본카드1',
-			cardImageURL: 'assets/image/card1',
-			description: '기본카드1.',
-			grade: '',
-			effect: 0,
-			effectDetail: 0,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 2,
-			cardTitle: '기본카드2',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드2.',
-			grade: 'S',
-			effect: 1,
-			effectDetail: 10,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 3,
-			cardTitle: '기본카드3',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드3.',
-			grade: 'S',
-			effect: 2,
-			effectDetail: 60,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 4,
-			cardTitle: '기본카드4',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드4.',
-			grade: 'S',
-			effect: 3,
-			effectDetail: 0,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-		{
-			cardId: 5,
-			cardTitle: '기본카드5',
-			cardImageURL: 'assets/image/card4',
-			description: '기본카드5.',
-			grade: 'S',
-			effect: 4,
-			effectDetail: 3,
-			createdDT: 'asdf',
-			recentPrice: 100,
-		},
-	],
+	initialState: [],
 	reducers: {
 		setTable(state, action) {
 			return action.payload

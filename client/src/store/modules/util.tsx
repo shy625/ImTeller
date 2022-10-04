@@ -35,7 +35,7 @@ export const { setBgmVolume } = bgmVolume.actions
 
 export const effectSrc = createSlice({
 	name: 'effectSrc',
-	initialState: 'assets/audio/mainBgm.mp3',
+	initialState: 'assets/audio/main.mp3',
 	reducers: {
 		setEffectSrc(state, action) {
 			return action.payload

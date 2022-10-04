@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import GameCard from 'pages/Game/gameCard'
 
+import { setTime } from 'store/modules/game'
 import { useModal } from 'actions/hooks/useModal'
 
 export default function GameChoice(props: any) {
-	const { nickname, phase, client, roomId } = props
+	const { nickname, client, roomId } = props
+	const dispatch = useDispatch()
 
 	const table = useSelector((state: any) => state.table)
 	const teller = useSelector((state: any) => state.teller)
@@ -15,6 +17,7 @@ export default function GameChoice(props: any) {
 	const [setModalState, setModalMsg] = useModal('')
 	const [isImteller, setIsImteller] = useState(false)
 	const [choicedCard, setChoicedCard] = useState<any>({})
+	const [isSubmit, setIsSubmit] = useState(false)
 
 	useEffect(() => {
 		if (teller === nickname) {
@@ -30,6 +33,7 @@ export default function GameChoice(props: any) {
 			return
 		}
 
+		setIsSubmit(true)
 		client.publish({
 			destination: `/pub/room/${roomId}/choice`,
 			body: JSON.stringify({
@@ -38,17 +42,16 @@ export default function GameChoice(props: any) {
 				cardUrl: choicedCard.cardUrl,
 			}),
 		})
+		dispatch(setTime(0))
 	}
 
 	return (
 		<div>
 			<div>
-				{!isImteller && choicedCard.cardUrl ? (
-					<GameCard phase={phase} cardUrl={choicedCard.cardUrl} />
-				) : null}
+				{!isImteller && choicedCard.cardUrl ? <GameCard cardUrl={choicedCard.cardUrl} /> : null}
 				<span>{tellerMsg}</span>
 
-				{!isImteller ? <button onClick={onSubmit}>제출하기</button> : null}
+				{isSubmit ? null : !isImteller ? <button onClick={onSubmit}>제출하기</button> : null}
 
 				{isImteller ? (
 					<div>다른 사람들이 카드를 맞추는 중입니다.</div>
@@ -60,7 +63,7 @@ export default function GameChoice(props: any) {
 			<div>
 				{table.map((card) => (
 					<div key={card.cardId} onClick={() => setChoicedCard(card)}>
-						<GameCard phase={phase} cardUrl={card.cardUrl} />
+						<GameCard cardUrl={card.cardUrl} />
 					</div>
 				))}
 			</div>

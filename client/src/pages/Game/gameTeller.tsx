@@ -5,22 +5,24 @@ import Items from 'pages/Game/items'
 import GameCard from 'pages/Game/gameCard'
 
 import { useModal } from 'actions/hooks/useModal'
-import { setTellerMsg } from 'store/modules/game'
+import { setTime, setSubmit } from 'store/modules/game'
 
 export default function GameTeller(props: any) {
-	// 본인카드 나열, teller면 본인카드랑 그림 묘사 적어서 제출
-	// teller 아니면 그림묘사어 생길때까지 기다리다가 선택해서 제출
 	const dispatch = useDispatch()
-	const { nickname, phase, client, roomId } = props
+	const { nickname, client, roomId } = props
 
 	const gameCards = useSelector((state: any) => state.gameCards)
 	const teller = useSelector((state: any) => state.teller)
 	const tellerMsg = useSelector((state: any) => state.tellerMsg)
+	const players = useSelector((state: any) => state.players)
+	const phase = useSelector((state: any) => state.phase)
 
 	const [setModalState, setModalMsg] = useModal('')
 	const [isImteller, setIsImteller] = useState(false)
 	const [tellerCard, setTellerCard] = useState<any>({})
 	const [descrip, setDescrip] = useState('')
+
+	const [isSubmit, setIsSubmit] = useState(false)
 
 	useEffect(() => {
 		if (teller === nickname) {
@@ -43,7 +45,7 @@ export default function GameTeller(props: any) {
 			setModalState('alert')
 			return
 		}
-		console.log(tellerCard)
+
 		if (isImteller) {
 			client.publish({
 				destination: `/pub/room/${roomId}/teller`,
@@ -54,8 +56,20 @@ export default function GameTeller(props: any) {
 					cardMsg: descrip,
 				}),
 			})
+			client.publish({
+				destination: `/pub/room/${roomId}/teller`,
+				body: JSON.stringify({
+					nickname,
+					cardId: tellerCard.cardId,
+					cardUrl: tellerCard.cardUrl,
+					cardMsg: descrip,
+				}),
+			})
+			dispatch(setTime(0))
 			return
 		} else {
+			setIsSubmit(true)
+			dispatch(setSubmit({ nickname, status: true }))
 			client.publish({
 				destination: `/pub/room/${roomId}/others`,
 				body: JSON.stringify({
@@ -64,38 +78,39 @@ export default function GameTeller(props: any) {
 					cardUrl: tellerCard.cardUrl,
 				}),
 			}) // status에 따라 버튼 안보이게
+			dispatch(setTime(0))
 		}
 	}
 
 	return (
 		<div>
 			<div>
-				{(phase === 1 && isImteller) || (phase === 2 && !isImteller) ? (
+				{(phase === 'phase1' && isImteller) || (phase === 'phase2' && !isImteller) ? (
 					<>
 						{tellerCard ? (
 							<div>
-								<img style={{ height: '30px' }} src={tellerCard.cardUrl} alt="" />
+								<img style={{ height: '100px' }} src={tellerCard.cardUrl} alt="" />
 							</div>
 						) : null}
 					</>
 				) : null}
 
-				{isImteller && phase === 1 ? (
+				{phase === 'phase1' && isImteller && (
 					<div>
 						<label htmlFor="description"></label>
 						<input id="description" type="text" onChange={(e) => setDescrip(e.target.value)} />
 					</div>
-				) : (
-					<span>{tellerMsg}</span>
 				)}
+				{phase === 'phase2' && !isImteller && <span>{tellerMsg}</span>}
 
-				{(phase === 1 && isImteller) || (phase === 2 && !isImteller) ? (
+				{isSubmit ? null : (phase === 'phase1' && isImteller) ||
+				  (phase === 'phase2' && !isImteller) ? (
 					<button onClick={onSubmit}>제출하기</button>
 				) : null}
 
-				{isImteller && phase === 1 ? (
+				{isImteller && phase === 'phase1' ? (
 					<div>당신은 텔러입니다. 한장의 카드를 고르고 작품설명을 적어주세요</div>
-				) : phase === 1 ? (
+				) : phase === 'phase1' ? (
 					<div>텔러가 카드를 선택중입니다.</div>
 				) : !isImteller ? (
 					<div>텔러의 작품설명과 비슷한 카드를 골라주세요</div>
@@ -104,14 +119,14 @@ export default function GameTeller(props: any) {
 
 			<div>
 				{gameCards.map((card) => (
-					<div key={card.id} onClick={() => setTellerCard(card)}>
-						<GameCard phase={phase} cardUrl={card.cardUrl} />
+					<div key={card.cardId} onClick={() => setTellerCard(card)}>
+						<GameCard cardUrl={card.cardUrl} />
 					</div>
 				))}
 			</div>
 
 			<div>
-				<Items />
+				<Items client={client} roomId={roomId} />
 			</div>
 		</div>
 	)
