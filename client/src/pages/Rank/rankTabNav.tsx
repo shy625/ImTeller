@@ -1,44 +1,117 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 export default function RankTabNav(props: any) {
-	const { setTabNo } = props
+	const { setTabNo, tabs, tabNo } = props
 
 	return (
-		<div css={box}>
-			<div
-				onClick={() => {
-					setTabNo(0)
-				}}
-			>
-				NFT
+		<div css={box(tabNo)}>
+			<div className="tab-items">
+				<div
+					className="value"
+					onClick={() => {
+						setTabNo(0)
+					}}
+				>
+					{tabs[0]}
+				</div>
+				<div
+					className="win-rate"
+					onClick={() => {
+						setTabNo(1)
+					}}
+				>
+					{tabs[1]}
+				</div>
+				<div
+					className="level"
+					onClick={() => {
+						setTabNo(2)
+					}}
+				>
+					{tabs[2]}
+				</div>
+				<div
+					className="monthly-nft"
+					onClick={() => {
+						setTabNo(3)
+					}}
+				>
+					{tabs[3]}
+				</div>
 			</div>
-			<div
-				onClick={() => {
-					setTabNo(1)
-				}}
-			>
-				승률
-			</div>
-			<div
-				onClick={() => {
-					setTabNo(2)
-				}}
-			>
-				레벨
-			</div>
-			<div
-				onClick={() => {
-					setTabNo(3)
-				}}
-			>
-				이달의 NFT
-			</div>
+			<div className="hr1" />
 		</div>
 	)
 }
-const box = css`
+
+const box = (tabNo: Number) => css`
 	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
 	margin: 10px;
 	color: white;
-	justify-content: space-around;
+	height: 5rem;
+
+	.tab-items {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		align-items: center;
+		height: 3rem;
+
+		.value,
+		.win-rate,
+		.level,
+		.monthly-nft {
+			font-weight: 200;
+			font-size: 1.5rem;
+			font-family: 'GongGothicMedium';
+		}
+
+		.value {
+			color: ${tabNo === 0 ? 'white' : 'gray'};
+		}
+
+		.win-rate {
+			color: ${tabNo === 1 ? 'white' : 'gray'};
+		}
+
+		.level {
+			color: ${tabNo === 2 ? 'white' : 'gray'};
+		}
+
+		.monthly-nft {
+			color: ${tabNo === 3 ? 'white' : 'gray'};
+		}
+
+		.value:hover {
+			color: ${tabNo === 0 ? 'white' : 'rgba(255, 255, 255, 0.5)'};
+		}
+
+		.win-rate:hover {
+			color: ${tabNo === 1 ? 'white' : 'rgba(255, 255, 255, 0.5)'};
+		}
+
+		.level:hover {
+			color: ${tabNo === 2 ? 'white' : 'rgba(255, 255, 255, 0.5)'};
+		}
+
+		.monthly-nft:hover {
+			color: ${tabNo === 3 ? 'white' : 'rgba(255, 255, 255, 0.5)'};
+		}
+
+		.value:active,
+		.win-rate:active,
+		.level:active,
+		.monthly-nft:active {
+			color: rgba(255, 255, 255, 1);
+		}
+	}
+
+	.hr1 {
+		margin: 0 auto;
+		height: 2px;
+		width: 70vw;
+		background-color: rgba(255, 255, 255, 0.1);
+	}
 `
