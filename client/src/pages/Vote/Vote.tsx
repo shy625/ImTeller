@@ -139,7 +139,7 @@ const voteCSS = css`
 	}
 `
 const paintListCSS = css`
-	flex-grow: 1;
+	flex-grow: 0;
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;

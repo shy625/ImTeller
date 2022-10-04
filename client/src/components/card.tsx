@@ -53,9 +53,11 @@ export default function Card(props: any) {
 				<div css={type === 1 && selected ? type1CSS : type0CSS} onClick={select}>
 					<img css={cardImageCSS} src={cardImageURL} alt="" />
 					<div css={!selected ? type0InfoCSS : displayNoneCSS}>
-						<div>{grade}</div>
-						<div>{effectName}</div>
-						<div>{`${effectNum} ${effectPost}`}</div>
+						<div className="buttons">
+							<div>{grade}</div>
+							<div>{effectName}</div>
+							<div>{`${effectNum} ${effectPost}`}</div>
+						</div>
 					</div>
 				</div>
 				<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>✔</div>
