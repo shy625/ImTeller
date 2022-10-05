@@ -121,3 +121,14 @@ export const loading = createSlice({
 	},
 })
 export const { setLoading } = loading.actions
+
+export const mainTab = createSlice({
+	name: 'mainTab',
+	initialState: '',
+	reducers: {
+		setMainTab(state, action) {
+			return action.payload
+		},
+	},
+})
+export const { setMainTab } = mainTab.actions

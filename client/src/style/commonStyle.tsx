@@ -50,10 +50,10 @@ const imgBigIcon = css({
 })
 
 // 페이지 풀 사이즈로 키우기
-const fullDisplay = css({
-	height: 'auto',
-	minHeight: '100vh',
-})
+const fullDisplay = css`
+	height: auto;
+	min-height: 100vh;
+`
 
 // 증간으로 배치 세로로
 const centerColCSS = css`

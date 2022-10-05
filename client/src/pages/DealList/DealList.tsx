@@ -1,13 +1,16 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
 import Search from 'pages/DealList/search'
 import Layout from 'layout/layout'
 import Deal from 'components/deal'
 import { fullDisplay } from 'style/commonStyle'
+import { setMainTab } from 'store/modules/util'
 
 export default function DealList() {
 	const dealList = useSelector((state: any) => state.dealList)
 	const currentUser = useSelector((state: any) => state.currentUser)
+	const dispatch = useDispatch()
+	dispatch(setMainTab('deal'))
 
 	return (
 		<Layout>
