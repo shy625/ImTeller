@@ -12,6 +12,10 @@ import { setDealDetail } from 'store/modules/art'
 import { purchaseCard, cancelDeal } from 'contract/API'
 import { setModalMsg, setModalState } from 'store/modules/util'
 
+import gradeS from 'assets/image/gradeS.webp'
+import gradeA from 'assets/image/gradeA.webp'
+import gradeB from 'assets/image/gradeB.webp'
+
 export default function DealDetail() {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -32,7 +36,7 @@ export default function DealDetail() {
 	const [sec, setSec] = useState(0)
 	const [loading, setLoading] = useState(false)
 
-	const [effectPre, effectPost] = itemDetail(cardInfo.effect, cardInfo.effectDetail)
+	const [effectPre, effectPost] = itemDetail(cardInfo.effect, cardInfo.effectNum)
 
 	useEffect(() => {
 		deal
@@ -163,53 +167,63 @@ export default function DealDetail() {
 			})
 		setLoading(false)
 	}
-
 	return (
 		<Layout>
-			<main>
+			<main css={centerCSS}>
 				<div css={box}>
-					<div>
-						<img src={cardInfo.cardImageURL} alt="" />
-						by. {cardInfo.designerNickname}
-					</div>
-
-					<div css={explain}>
-						<p>{dealInfo.tag && dealInfo.tag.split(' ').map((tag) => `#${tag}`)}</p>
-						<div css={space}>
-							<span>{dealInfo.cardTitle}</span>
-							<span>{cardInfo.ownerNickname}. 소유</span>
+					<div css={rowFelxCSS}>
+						<div css={type0CSS}>
+							<img src={cardInfo.cardImageURL} alt="" css={cardImageCSS} />
 						</div>
-						<hr />
-						{cardInfo.description}
-						<br />
-						<div css={space}>
-							<span css={grade}>{cardInfo.grade}</span>
-							<span>{effectPre + (cardInfo.effectNum ? cardInfo.effectNum : '') + effectPost}</span>
-						</div>
-						<br />
-						{day}일 {hour}시간 {min}분 {sec}초 남음
-						<div>
-							{cardInfo.ownerNickname === currentUser.nickname ? (
+						<div css={explain}>
+							<span id="tag">#{dealInfo.tag}</span>
+							<div css={spaceTitle}>
+								<div id="title">{cardInfo.cardTitle}</div>
+								<div id="designer">Designed by. {cardInfo.designerNickname}</div>
+								<div id="name">Owner. {cardInfo.ownerNickname}</div>
+							</div>
+							<hr />
+							<div css={descriptionCSS}>{cardInfo.description}</div>
+							<div css={space}>
+								{cardInfo.grade == 'S' ? <img src={gradeS} alt="" css={grade} /> : null}
+								{cardInfo.grade == 'A' ? <img src={gradeA} alt="" css={grade} /> : null}
+								{cardInfo.grade == 'B' ? <img src={gradeB} alt="" css={grade} /> : null}
+								{cardInfo.effectNum ? (
+									<span>{effectPre + ' ' + String(cardInfo.effectNum) + effectPost}</span>
+								) : (
+									<span>{effectPre}</span>
+								)}
+							</div>
+							{diffTime.current < 0 ? (
+								<div>종료된 경매</div>
+							) : (
 								<div>
-									<button onClick={onCancel}>판매 취소</button>
+									{day}일 {hour}시간 {min}분 {sec}초 남음
 								</div>
-							) : diffTime.current >= 0 ? (
-								<>
-									<div css={purchase}>
-										<div>즉시 구매가 {dealInfo.instantPrice}SSF</div>
-										<button onClick={onBuy}>즉시 구매</button>
+							)}
+							<div>
+								{cardInfo.ownerNickname === currentUser.nickname ? (
+									<div>
+										<button onClick={onCancel}>판매 취소</button>
 									</div>
-									{/* <div>
-										최고 입찰가 {dealInfo.finalBidPrice}SSF
-										<button>입찰</button>
-									</div> */}
-								</>
-							) : null}
+								) : diffTime.current < 0 ? null : (
+									<div css={purchase}>
+										<button onClick={onBuy} css={normalBtn}>
+											{dealInfo.instantPrice} SSF 즉시 구매
+										</button>
+									</div>
+								)}
+								{/* <div>
+							최고 입찰가 {dealInfo.finalBidPrice}SSF
+							<button>입찰</button>
+						</div> */}
+							</div>
 						</div>
+					</div>
+					<div id="history">
+						<DealHistory dealHistoryList={dealHistoryList} />
 					</div>
 				</div>
-				<hr />
-				<DealHistory dealHistoryList={dealHistoryList} />
 				{loading ? (
 					<Loading msg={'체인에서 거래를 취소하는 중입니다.  잠시만 기다려주세요'} />
 				) : null}
@@ -217,30 +231,114 @@ export default function DealDetail() {
 		</Layout>
 	)
 }
-
-const box = css`
+const centerCSS = css`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
+	align-items: center;
+	min-height: 90vh;
+`
+const rowFelxCSS = css`
+	display: flex;
+`
+const box = css`
+	width: 700px;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	color: white;
 	margin: 30px;
+	font-family: 'GmarketSansMedium';
+	#history {
+		width: 100%;
+		margin: 20px 0px 0px 0px;
+	}
 `
 const purchase = css`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	border-radius: 5px;
-	border: 1px solid white;
+	margin: 10px 0px 0px 0px;
+	#priceTitle {
+		font-size: 13px;
+	}
+`
+const spaceTitle = css`
+	display: flex;
+	flex-direction: column;
+	margin: 10px 0px 10px 0px;
 `
 const space = css`
 	display: flex;
-	justify-content: space-between;
+	align-items: center;
+	margin: 10px 0px 10px 0px;
 `
-const explain = css``
+const explain = css`
+	margin: 40px 40px 0px 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	hr {
+		width: 100%;
+	}
+	#title {
+		font-size: 20px;
+		font-family: 'GongGothicMedium';
+	}
+	#designer {
+		margin-top: 10px;
+		font-size: 13px;
+	}
+	#name {
+		font-size: 13px;
+	}
+	#tag {
+		background-color: rgba(255, 255, 255, 0.15);
+		border-radius: 50px;
+		padding: 4px 5px 4px 5px;
+		font-size: 13px;
+		margin-bottom: 10px;
+		width: min-content;
+	}
+`
 
 const grade = css`
-	border: 3px solid rgb(163, 151, 198);
-	border-radius: 50%;
-	background-color: rgb(163, 151, 198);
-	color: black;
+	width: 40px;
+	margin: 0px 10px 5px 5px;
+`
+const type0CSS = css`
+	position: relative;
+	width: 248px;
+	height: 367px;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border: 20px solid #f4f4f4;
+	margin: 40px 10px 20px 40px;
+`
+const cardImageCSS = css`
+	width: 250px;
+	height: 370px;
+	background-color: white;
+	border-radius: 6px;
+`
+const descriptionCSS = css`
+	white-space: pre;
+	width: 300px;
+	margin: 20px 0px 10px 0px;
+`
+const normalBtn = css`
+	outline: 'none';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	border: 0px;
+	padding: 10px 20px 10px 20px;
+	margin: 0px 10px 5px 10px;
+	color: #1b5198;
+	background-color: #d1e4ff;
+	border-radius: 12px;
+	font-size: 18px;
+	width: '8em';
+	font-family: 'GongGothicMedium';
 `

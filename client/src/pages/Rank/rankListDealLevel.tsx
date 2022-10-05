@@ -12,10 +12,12 @@ export default function rankListDealLevel({ rankList }: { rankList: rankListProp
 			<div css={list}>
 				<table>
 					<thead>
-						<th>순위</th>
-						<th>닉네임</th>
-						<th>레벨</th>
-						<th>플레이 횟수</th>
+						<tr>
+							<th>순위</th>
+							<th>닉네임</th>
+							<th>레벨</th>
+							<th>플레이 횟수</th>
+						</tr>
 					</thead>
 					<tbody>
 						{levelRankList ? (
@@ -55,22 +57,21 @@ const list = css`
 	align-items: flex-start;
 	color: white;
 	table {
-		margin-top: 30px;
+		margin-top: 15px;
 		width: 100%;
 	}
 	th {
-		line-height: 8vh;
+		line-height: 6vh;
 		border-bottom: 1px solid #aaa;
-	}
-	thead {
 		font-family: 'GmarketSansMedium';
-		font-size: 30px;
+		font-size: 20px;
 	}
 	tbody {
 		font-family: 'GmarketSansMedium';
 	}
 	td {
-		line-height: 5vh;
+		line-height: 5.5vh;
+		font-size: 15px;
 		text-align: center;
 	}
 `
