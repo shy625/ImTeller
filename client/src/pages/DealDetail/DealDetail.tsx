@@ -176,7 +176,7 @@ export default function DealDetail() {
 							<img src={cardInfo.cardImageURL} alt="" css={cardImageCSS} />
 						</div>
 						<div css={explain}>
-							<span id="tag">#{dealInfo.tag}</span>
+							{dealInfo.tag && <span id="tag">#{dealInfo.tag}</span>}
 							<div css={spaceTitle}>
 								<div id="title">{cardInfo.cardTitle}</div>
 								<div id="designer">Designed by. {cardInfo.designerNickname}</div>
@@ -204,11 +204,13 @@ export default function DealDetail() {
 							<div>
 								{cardInfo.ownerNickname === currentUser.nickname ? (
 									<div>
-										<button onClick={onCancel}>판매 취소</button>
+										<button onClick={onCancel} css={bigBtn}>
+											판매 취소
+										</button>
 									</div>
 								) : diffTime.current < 0 ? null : (
 									<div css={purchase}>
-										<button onClick={onBuy} css={normalBtn}>
+										<button onClick={onBuy} css={bigBtn}>
 											{dealInfo.instantPrice} SSF 즉시 구매
 										</button>
 									</div>
@@ -298,7 +300,7 @@ const explain = css`
 		padding: 4px 5px 4px 5px;
 		font-size: 13px;
 		margin-bottom: 10px;
-		width: min-content;
+		width: max-content;
 	}
 `
 
@@ -309,7 +311,7 @@ const grade = css`
 const type0CSS = css`
 	position: relative;
 	width: 248px;
-	height: 367px;
+	height: 365px;
 	border-radius: 20px;
 	display: flex;
 	flex-direction: column;
@@ -325,11 +327,11 @@ const cardImageCSS = css`
 	border-radius: 6px;
 `
 const descriptionCSS = css`
-	white-space: pre;
+	white-space: pre-line;
 	width: 300px;
 	margin: 20px 0px 10px 0px;
 `
-const normalBtn = css`
+const bigBtn = css`
 	outline: 'none';
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 	border: 0px;
@@ -339,6 +341,6 @@ const normalBtn = css`
 	background-color: #d1e4ff;
 	border-radius: 12px;
 	font-size: 18px;
-	width: '8em';
+	width: 280px;
 	font-family: 'GongGothicMedium';
 `
