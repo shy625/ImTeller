@@ -1,13 +1,9 @@
-/** @jsxImportSource @emotion/react */
-
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import art from 'actions/api/art'
 import { setCardList } from 'store/modules/art'
-import { setSelectedCards } from 'store/modules/game'
 import { useModal } from 'actions/hooks/useModal'
 // import nftGrade from 'actions/functions/nftGrade'
 
