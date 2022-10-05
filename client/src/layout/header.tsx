@@ -43,7 +43,7 @@ export default function Header() {
 		<div css={headerCss}>
 			<div css={logoTitleContainer}>
 				{/* <img src={logo} alt="로고" css={logoIconCss} /> */}
-				<div css={logoTitleCSS} onClick={() => navigate('/')}>
+				<div css={logoTitleCss} onClick={() => navigate('/')}>
 					ImTeller
 				</div>
 			</div>
@@ -69,7 +69,7 @@ export default function Header() {
 					<div className="faq-underline" />
 				</div>
 				{currentUser.nickname ? (
-					<div css={loginCSS}>
+					<div css={loginCss}>
 						<Profile nickname={currentUser.nickname} profile={currentUser.profile} />
 						<div className="logout" onClick={logout} css={textBtn}>
 							로그아웃
@@ -90,7 +90,7 @@ export default function Header() {
 		</div>
 	)
 }
-const headerCSS = css({
+const headerCss = css({
 	display: 'flex',
 	color: 'white',
 	alignItems: 'center',
