@@ -176,7 +176,7 @@ export default function DealDetail() {
 							<img src={cardInfo.cardImageURL} alt="" css={cardImageCSS} />
 						</div>
 						<div css={explain}>
-							<p>{dealInfo.tag}</p>
+							<span id="tag">#{dealInfo.tag}</span>
 							<div css={spaceTitle}>
 								<div id="title">{cardInfo.cardTitle}</div>
 								<div id="designer">Designed by. {cardInfo.designerNickname}</div>
@@ -274,7 +274,7 @@ const space = css`
 	margin: 10px 0px 10px 0px;
 `
 const explain = css`
-	margin: 40px 10px 0px 40px;
+	margin: 40px 40px 0px 20px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -292,6 +292,14 @@ const explain = css`
 	#name {
 		font-size: 13px;
 	}
+	#tag {
+		background-color: rgba(255, 255, 255, 0.15);
+		border-radius: 50px;
+		padding: 4px 5px 4px 5px;
+		font-size: 13px;
+		margin-bottom: 10px;
+		width: min-content;
+	}
 `
 
 const grade = css`
@@ -308,7 +316,7 @@ const type0CSS = css`
 	align-items: center;
 	justify-content: center;
 	border: 20px solid #f4f4f4;
-	margin: 40px 10px 0px 40px;
+	margin: 40px 10px 20px 40px;
 `
 const cardImageCSS = css`
 	width: 250px;
