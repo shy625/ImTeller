@@ -14,7 +14,12 @@ const Setting = () => {
 }
 export default Setting
 
-const imgSize = css({
-	width: '2em',
-	margin: 10,
-})
+const imgSize = css`
+	width: 2em;
+	margin: 10px;
+
+	&:hover {
+		transform: scale(1.1, 1.1) rotate(15deg);
+		transition: all ease 0.2s;
+	}
+`
