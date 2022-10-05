@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-
+import { normalBtn } from 'style/commonStyle'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -121,102 +121,174 @@ export default function DealRegister() {
 		<Layout>
 			<main css={main}>
 				<div css={box}>
-					<div css={card}>
-						<div>{selectedCard ? <img src={selectedCard.cardImageURL} alt="" /> : null}</div>
-						<button onClick={() => setModalState('dealRegister')}>카드 선택하기</button>
-					</div>
-
 					<div>
-						{/* <label htmlFor="lowPrice">최저입찰가</label>
-					<input
-						id="lowPrice"
-						type="number"
-						max={instantPrice}
-						onChange={lowPriceFilter}
-						value={lowPrice}
-					/> */}
-						<div>
-							<label htmlFor="instantPrice">즉시구매가</label>
+						<div css={rowFelxCSS}>
+							<div css={card}>
+								<div>{selectedCard ? <img src={selectedCard.cardImageURL} alt="" /> : null}</div>
+							</div>
+							<div>
+								<button onClick={() => setModalState('dealRegister')} css={bigBtn}>
+									카드 선택하기
+								</button>
+								{/* <label htmlFor="lowPrice">최저입찰가</label>
 							<input
-								id="instantPrice"
+								id="lowPrice"
 								type="number"
-								min={lowPrice}
-								onChange={instantPriceFilter}
-								value={instantPrice}
-							/>
+								max={instantPrice}
+								onChange={lowPriceFilter}
+								value={lowPrice}
+							/> */}
+								<div>
+									<label htmlFor="instantPrice">즉시구매가</label>
+									<input
+										id="instantPrice"
+										type="number"
+										min={lowPrice}
+										onChange={instantPriceFilter}
+										value={instantPrice}
+									/>
+								</div>
+								<div className="options">
+									<label>판매기간</label>
+									<label>
+										<input
+											onChange={() => setDay(1)}
+											type="radio"
+											name="day"
+											value="1"
+											checked={day === 1}
+										/>
+										1일
+									</label>
+									<label>
+										<input
+											onChange={() => setDay(2)}
+											type="radio"
+											name="day"
+											value="2"
+											checked={day === 2}
+										/>
+										2일
+									</label>
+								</div>
+								<div>
+									<label htmlFor="tag">태그</label>
+									<input
+										type="text"
+										onChange={(e) => setTag(e.target.value)}
+										placeholder="태그를 입력해주세요"
+									/>
+								</div>
+								<button onClick={onSubmit} css={bigBtn}>
+									등록하기
+								</button>
+							</div>
 						</div>
 						<div>
-							<label htmlFor="finishedAt">판매기간</label>
-							<fieldset>
-								<label>
-									<input type="radio" name="day" value="1" checked />
-									<span>1일</span>
-								</label>
-
-								<label>
-									<input type="radio" name="day" value="2" />
-									<span>2일</span>
-								</label>
-							</fieldset>
-							<span
-								onClick={() => setDay(1)}
-								style={day === 1 ? { backgroundColor: 'white' } : null}
+							<button
+								id="back"
+								onClick={() => {
+									navigate(-1), dispatch(setSelectedCard({}))
+								}}
+								css={normalBtn}
 							>
-								1일
-							</span>
-							<span
-								onClick={() => setDay(2)}
-								style={day === 2 ? { backgroundColor: 'white' } : null}
-							>
-								2일
-							</span>
-						</div>
-						<div>
-							{' '}
-							<label htmlFor="tag">태그</label>
-							<input type="text" onChange={(e) => setTag(e.target.value)} />
+								뒤로가기
+							</button>
 						</div>
 					</div>
 				</div>
 
-				<div>
-					<button
-						onClick={() => {
-							navigate(-1), dispatch(setSelectedCard({}))
-						}}
-					>
-						뒤로가기
-					</button>
-					<button onClick={onSubmit}>등록하기</button>
-					{isLoading ? (
-						<Loading msg={'체인에 거래를 등록하는 중입니다. 잠시만 기다려주세요'} />
-					) : null}
-				</div>
+				{isLoading ? (
+					<Loading msg={'체인에 거래를 등록하는 중입니다. 잠시만 기다려주세요'} />
+				) : null}
 			</main>
 		</Layout>
 	)
 }
+const rowFelxCSS = css`
+	display: flex;
+	align-items: center;
+`
 const main = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	min-height: 90vh;
 `
 const box = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin: 20px;
+	margin: 40px 20px 20px 20px;
 	color: white;
+	input[type='text'] {
+		/* display: none; */
+		padding: 10px 10px;
+		margin: 10px;
+		box-sizing: border-box;
+		border: none;
+		border-radius: 12px;
+		color: black;
+		font-family: 'GmarketSansMedium';
+		background-color: white;
+		width: 100%;
+	}
+	input[type='number'] {
+		/* display: none; */
+		padding: 10px 10px;
+		margin: 10px;
+		box-sizing: border-box;
+		border: none;
+		border-radius: 12px;
+		color: black;
+		font-family: 'GmarketSansMedium';
+		background-color: white;
+		width: 100%;
+	}
+	label {
+		font-family: 'GongGothicMedium';
+		margin: 10px 0px 0px 10px;
+	}
+	.options {
+		display: flex;
+		justify-content: space-between;
+		margin: 10px 0px 15px 0px;
+	}
+	.options label {
+		font-family: 'GongGothicMedium';
+	}
+	#back {
+		margin-top: 40px;
+	}
 `
 const card = css`
+	position: relative;
+	width: 248px;
+	height: 365px;
+	border-radius: 20px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	color: white;
-	margin-right: 30px;
+	justify-content: center;
+	border: 20px solid #f4f4f4;
+	margin: 10px;
 	img {
-		height: 222px;
+		width: 250px;
+		height: 370px;
 		background-color: white;
-		border-radius: 12px;
+		border-radius: 5px;
 	}
+`
+const bigBtn = css`
+	outline: 'none';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	border: 0px;
+	padding: 10px 20px 10px 20px;
+	margin: 30px 10px 25px 10px;
+	color: #1b5198;
+	background-color: #d1e4ff;
+	border-radius: 12px;
+	font-size: 18px;
+	width: 100%;
+	font-family: 'GongGothicMedium';
 `
