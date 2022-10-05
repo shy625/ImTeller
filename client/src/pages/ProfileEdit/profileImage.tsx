@@ -67,6 +67,8 @@ const centerCSS = css`
 	#image {
 		width: 300px;
 		margin-top: 5vh;
+		border-radius: 60%;
+		margin-bottom: 10px;
 	}
 	input[type='file'] {
 		/* display: none; */
