@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { css } from '@emotion/react'
 
 import { useWebSocket } from 'actions/hooks/useWebSocket'
 import { clearChat, addChat } from 'store/modules/game'
-import { css } from '@emotion/react'
 
 export default function Chat() {
 	const dispatch = useDispatch()
@@ -54,7 +54,7 @@ export default function Chat() {
 	} // 이 값에 따라서 style 다르게. 카톡처럼 내꺼면 오른쪽
 
 	return (
-		<div css={chat}>
+		<div css={chatCSS}>
 			<div>
 				{chats.length
 					? chats.map((chat, idx) => (
@@ -85,7 +85,7 @@ export default function Chat() {
 		</div>
 	)
 }
-const chat = css({
+const chatCSS = css({
 	border: '1px solid black',
 	width: '30%',
 	height: '80vh',
