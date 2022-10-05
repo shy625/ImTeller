@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { setPhase } from 'store/modules/game'
-
 export default function GameEnd(props: any) {
 	const { setState, client, roomId } = props
-	const dispatch = useDispatch()
 
 	const result = useSelector((state: any) => state.result)
 	const [endResult, setEndResult] = useState<any>([])
