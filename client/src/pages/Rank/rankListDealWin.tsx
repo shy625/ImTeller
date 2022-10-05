@@ -12,11 +12,13 @@ export default function rankListDealWin({ rankList }: { rankList: rankListProps 
 			<div css={list}>
 				<table>
 					<thead>
-						<th>순위</th>
-						<th>닉네임</th>
-						<th>승률</th>
-						<th>승리</th>
-						<th>패배</th>
+						<tr>
+							<th>순위</th>
+							<th>닉네임</th>
+							<th>승률</th>
+							<th>승리</th>
+							<th>패배</th>
+						</tr>
 					</thead>
 					<tbody>
 						{winningRateRankList ? (
@@ -57,22 +59,21 @@ const list = css`
 	align-items: flex-start;
 	color: white;
 	table {
-		margin-top: 30px;
+		margin-top: 15px;
 		width: 100%;
 	}
 	th {
-		line-height: 8vh;
+		line-height: 6vh;
 		border-bottom: 1px solid #aaa;
-	}
-	thead {
 		font-family: 'GmarketSansMedium';
-		font-size: 30px;
+		font-size: 20px;
 	}
 	tbody {
 		font-family: 'GmarketSansMedium';
 	}
 	td {
-		line-height: 5vh;
+		line-height: 5.5vh;
 		text-align: center;
+		font-size: 15px;
 	}
 `
