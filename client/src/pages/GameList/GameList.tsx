@@ -1,12 +1,9 @@
-/** @jsxImportSource @emotion/react */
-
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import Layout from 'layout/layout'
-import Pagination from 'pages/GameList/pagination'
 import Room from 'pages/GameList/room'
 
 import game from 'actions/api/game'
@@ -58,7 +55,7 @@ export default function GameList() {
 						<div css={roomListCSS}>
 							{roomList.length
 								? roomList.map((room: any) => (
-										<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.isLocked)}>
+										<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.locked)}>
 											<Room room={room} />
 										</div>
 								  ))

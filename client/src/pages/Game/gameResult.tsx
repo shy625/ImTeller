@@ -1,23 +1,32 @@
-import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import GameCard from 'pages/Game/gameCard'
-import { players } from 'store/modules/game'
+import Item from 'components/item'
 import { useBGM } from 'actions/hooks/useBGM'
 
 export default function GameResult(props: any) {
 	const dispatch = useDispatch()
-	const { turnResult, submitCards } = props
+	const { turnResult, submitCards, choiceCards } = props
 
 	const table = useSelector((state: any) => state.table)
+	const itemState = useSelector((state: any) => state.itemState)
+
 	useBGM('result')
 
-	// 카드 주인하고 table에 있던 카드가 매칭되어 누가 주인이였는지 알게 해야함
-	// 추가된 점수를 알 수 있도록 해야함
+	const itemUse = (nickname) => {
+		const use = []
+		itemState.map((item) => {
+			if (item.nickname === nickname) {
+				use.push(<Item key={item.cardId} item={item} style={{ width: '30px' }} />)
+			}
+		})
+		console.log(use)
+		return use
+	}
 
 	const cardOwner = (cardId) => {
 		let nickname
-		let isTeller
+		let isTeller = false
 		submitCards.map((subCard: any) => {
 			if (cardId === subCard.cardId) {
 				nickname = subCard.nickname
@@ -25,26 +34,24 @@ export default function GameResult(props: any) {
 			}
 		})
 		return (
-			<div>
-				{isTeller ? '텔러 :' : ''}
-				{nickname}
+			<div style={isTeller ? { backgroundColor: 'red' } : null}>
+				{nickname} +{turnResult[nickname]} {itemUse(nickname)}
 			</div>
 		)
 	}
 
 	const bets = (cardId) => {
 		let result = []
-		submitCards.map((subCard) => {
-			if (cardId === subCard.cardId) {
-				result.push({ nickname: subCard.nickname, score: turnResult[subCard.nickname] })
+		for (let nickname in choiceCards) {
+			if (choiceCards[nickname] === cardId) {
+				result.push(nickname)
 			}
-		})
+		}
 		return (
 			<div>
 				{result.map((player) => (
-					<div key={player.nickname}>
-						<p>{player.nickname}</p>
-						<p>{player.score}</p>
+					<div key={player}>
+						<p>{player}</p>
 					</div>
 				))}
 			</div>

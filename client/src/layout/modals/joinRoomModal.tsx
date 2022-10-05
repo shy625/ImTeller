@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -53,10 +52,9 @@ export default function JoinRoomModal(props: any) {
 					<header>방 입장하기</header>
 					<main>
 						<div>{authError}</div>
-						<input onChange={(e) => setPassword(e.target.value)} type="password" />
+						<input onChange={(e) => setPassword(e.target.value)} type="password" autoFocus />
 					</main>
 					<footer>
-						<button onClick={onSubmit}>입장</button>
 						<button
 							onClick={() => {
 								dispatch(setModalState(''))
@@ -65,6 +63,7 @@ export default function JoinRoomModal(props: any) {
 						>
 							취소
 						</button>
+						<button onClick={onSubmit}>입장</button>
 					</footer>
 				</section>
 			</div>

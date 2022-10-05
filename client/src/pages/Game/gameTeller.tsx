@@ -5,7 +5,7 @@ import Items from 'pages/Game/items'
 import GameCard from 'pages/Game/gameCard'
 
 import { useModal } from 'actions/hooks/useModal'
-import { setTime, setSubmit } from 'store/modules/game'
+import { setTime } from 'store/modules/game'
 
 export default function GameTeller(props: any) {
 	const dispatch = useDispatch()
@@ -59,8 +59,7 @@ export default function GameTeller(props: any) {
 			dispatch(setTime(0))
 			return
 		} else {
-			setIsSubmit(true)
-			dispatch(setSubmit({ nickname, status: true }))
+			// dispatch(setSubmit({ nickname, status: true }))
 			client.publish({
 				destination: `/pub/room/${roomId}/others`,
 				body: JSON.stringify({
@@ -71,6 +70,7 @@ export default function GameTeller(props: any) {
 			}) // status에 따라 버튼 안보이게
 			dispatch(setTime(0))
 		}
+		setIsSubmit(true)
 	}
 
 	return (
@@ -78,7 +78,7 @@ export default function GameTeller(props: any) {
 			<div>
 				{(phase === 'phase1' && isImteller) || (phase === 'phase2' && !isImteller) ? (
 					<>
-						{tellerCard ? (
+						{tellerCard && !isSubmit ? (
 							<div>
 								<img style={{ height: '100px' }} src={tellerCard.cardUrl} alt="" />
 							</div>
@@ -100,7 +100,11 @@ export default function GameTeller(props: any) {
 				) : null}
 
 				{isImteller && phase === 'phase1' ? (
-					<div>당신은 텔러입니다. 한장의 카드를 고르고 작품설명을 적어주세요</div>
+					!isSubmit ? (
+						<div>당신은 텔러입니다. 한장의 카드를 고르고 작품설명을 적어주세요</div>
+					) : (
+						<div>다른 인원이 선택중입니다</div>
+					)
 				) : phase === 'phase1' ? (
 					<div>텔러가 카드를 선택중입니다.</div>
 				) : !isImteller ? (

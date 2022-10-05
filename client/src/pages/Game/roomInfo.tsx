@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'
@@ -7,22 +6,22 @@ import back from 'assets/image/arrow.webp'
 
 const RoomInfo = (props: any) => {
 	const navigate = useNavigate()
-	const { roomId, roomName, isLocked, peopleNum, maxPeopleNum, type, typeNum } = useSelector(
+	const { roomName, leader, players, maxNum, type, typeNum } = useSelector(
 		(state: any) => state.roomInfo,
 	)
-
 	return (
 		<div css={infos}>
 			<div css={backBtn} onClick={() => navigate(-1)}>
 				<img src={back} alt="뒤로 가기" css={imgSize} />
 			</div>
 			<div>{roomName}</div>
-			<div>{isLocked ? '비공개' : '공개'}</div>
+			<div>방장 : {leader}</div>
 			<div>
-				{typeNum} {type === 'score' ? '점수' : '라운드'}
+				종료 조건 : {typeNum}
+				{type === 'score' ? '점수' : '라운드'}
 			</div>
 			<div>
-				{peopleNum} / {maxPeopleNum}
+				{players.length} / {maxNum}
 			</div>
 		</div>
 	)

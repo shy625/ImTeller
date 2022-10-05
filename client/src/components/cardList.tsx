@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import Card from 'components/card'
 import Paint from 'components/paint'
 import { css } from '@emotion/react'

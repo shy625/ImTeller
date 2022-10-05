@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useSelector, useDispatch } from 'react-redux'
 
 import { css } from '@emotion/react'

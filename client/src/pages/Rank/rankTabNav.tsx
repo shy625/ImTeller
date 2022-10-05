@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 export default function RankTabNav(props: any) {
 	const { setTabNo, tabs, tabNo } = props

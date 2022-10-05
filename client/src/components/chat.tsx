@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -66,7 +64,7 @@ export default function Chat() {
 							>
 								<div>{chat.nickname}</div>
 								<div>{chat.userMsg}</div>
-								<div>{chat.time}</div>
+								<div>{chat.time ? chat.time : null}</div>
 							</div>
 					  ))
 					: null}

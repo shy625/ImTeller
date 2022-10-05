@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -22,6 +20,7 @@ import {
 	setReady1,
 	setReady2,
 	setPlayers,
+	addChat,
 	setScore,
 	setStatus,
 	clearStatus,
@@ -32,6 +31,9 @@ import {
 	setResult,
 	setTeller,
 	setTellerMsg,
+	setItems,
+	setItemState,
+	clearSelectedCards,
 } from 'store/modules/game'
 import art from 'actions/api/art'
 import { useBGM } from 'actions/hooks/useBGM'
@@ -42,15 +44,20 @@ export default function Game() {
 
 	const { nickname } = useSelector((state: any) => state.currentUser)
 	const email = useSelector((state: any) => state.email)
+	const isChecked = useSelector((state: any) => state.isChecked)
 	const players = useSelector((state: any) => state.players)
 	const selectedCard = useSelector((state: any) => state.selectedCards)
 	const roomInfo = useSelector((state: any) => state.roomInfo)
 	const phase = useSelector((state: any) => state.phase) // state가 1일때 작동. 1: 텔러 2: 낚시그림선택 3: 텔러맞추기 4: 결과
+	const items = useSelector((state: any) => state.items)
+	const itemState = useSelector((state: any) => state.itemState)
 
 	const [ws, setWs] = useState<any>('')
 	const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2이면 gameResult
 	const [turnResult, setTurnResult] = useState<any>([])
 	const [submitCards, setSubmitCards] = useState<any>([])
+	const [choiceCards, setChoiceCards] = useState<any>([])
+	const [userSessionIds, setUserSessionIds] = useState('')
 
 	const [setModalState, setModalMsg] = useModal('')
 
@@ -73,14 +80,19 @@ export default function Game() {
 			})
 		return () => {
 			window.removeEventListener('beforeunload', blockRefresh)
+			setState(0)
+			dispatch(setPhase(0))
+			dispatch(clearSelectedCards())
 		}
 	}, [])
 
 	useEffect(() => {
-		setModalState('joinRoom')
+		if (!isChecked) {
+			setModalState('joinRoom')
+		}
 		return () => {
 			dispatch(setIsChecked(false))
-		} // 새로고침되면 roomInfo 받기
+		}
 	}, [roomId])
 
 	// 웹소켓
@@ -96,12 +108,14 @@ export default function Game() {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
+				setUserSessionIds(content.userSessionIds[nickname])
 				console.log('join', content)
 			})
 			client.subscribe(`/sub/room/${roomId}/exit`, (action) => {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
+				setUserSessionIds(content.userSessionIds[nickname])
 				console.log('exit', content)
 			})
 			// 레디 상태 변경
@@ -110,23 +124,6 @@ export default function Game() {
 				dispatch(setReady1(content))
 				dispatch(setReady2(content))
 				console.log('ready', content)
-			})
-			// 시작시 선택카드 제출
-			client.subscribe(`/sub/room/${roomId}/start`, (action) => {
-				console.log('start', action.body)
-				console.log('selectedCard', selectedCard)
-				const content = JSON.parse(action.body)
-				if (!content) return
-				client.publish({
-					destination: `/pub/room/${roomId}/select`,
-					body: JSON.stringify({
-						nickname,
-						selectedCard,
-					}),
-				})
-				client.publish({
-					destination: `/pub/room/${roomId}/roominfo`,
-				})
 			})
 			// 페이즈 전환
 			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
@@ -159,6 +156,7 @@ export default function Game() {
 			client.subscribe(`/sub/room/${roomId}/item`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('item', content)
+				dispatch(setItemState({ items: content, nickname }))
 			})
 			// 결과 받기
 			client.subscribe(`/sub/room/${roomId}/result`, (action) => {
@@ -177,9 +175,17 @@ export default function Game() {
 				console.log('submitcards', content)
 				setSubmitCards(content)
 			})
+			client.subscribe(`/sub/room/${roomId}/choicecards`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('choice', content)
+				setChoiceCards(content)
+			})
 			// 새로고침
 			client.subscribe(`/sub/room/${roomId}/roominfo`, (action) => {
 				const content = JSON.parse(action.body)
+				dispatch(setRoomInfo(content))
+				dispatch(setPlayers(content))
+				setUserSessionIds(content.userSessionIds[nickname])
 				console.log('roominfo', content)
 			})
 		}
@@ -194,34 +200,61 @@ export default function Game() {
 		}
 	}, [])
 
+	// userSessionId 최신화가 필요한 구독
 	useEffect(() => {
 		try {
-			// 내 패 받기
-			ws.subscribe(
-				`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/mycards`,
-				(action) => {
-					const content = JSON.parse(action.body)
-					console.log('mycards', content)
-					dispatch(setGameCards(content))
-				},
-			)
+			// 카드패 받기
+			ws.subscribe(`/user/${userSessionIds}/room/${roomId}/mycards`, (action) => {
+				const content = JSON.parse(action.body)
+				console.log('mycards', content)
+				dispatch(setGameCards(content))
+			})
 			// 내 아이템 받기
-			ws.subscribe(`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/item`, (action) => {
-				console.log('myitem', action.body)
+			ws.subscribe(`/user/${userSessionIds}/room/${roomId}/item`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('myitem', content)
+				dispatch(setItems(content))
 			})
 		} catch {}
-	}, [roomInfo.ready, phase, ws])
+	}, [userSessionIds, roomId])
 
+	// selectedCard 최신화가 필요한 구독
+	let start
+	useEffect(() => {
+		try {
+			// 시작시 선택카드 제출
+			start = ws.subscribe(`/sub/room/${roomId}/start`, (action) => {
+				console.log('start', action.body)
+				const content = JSON.parse(action.body)
+				if (!content) return
+				ws.publish({
+					destination: `/pub/room/${roomId}/select`,
+					body: JSON.stringify({
+						nickname,
+						selectedCard,
+					}),
+				})
+			})
+		} catch {}
+		return () => {
+			if (start) {
+				start.unsubscribe()
+			}
+		}
+	}, [selectedCard, roomInfo.ready])
+
+	// 페이즈별 상태 최신화
 	useEffect(() => {
 		console.log(phase)
 		if (phase === 'phase1') {
-			if (phase !== 'end') {
-				setState(1)
-				dispatch(setTeller(''))
-				dispatch(clearStatus())
-				dispatch(setTime(30))
+			setState(1)
+			dispatch(setTeller(''))
+			dispatch(setTellerMsg(''))
+			dispatch(clearStatus())
+			dispatch(setItemState({ items: [], nickname }))
+			dispatch(setTime(30))
+			if (items.length) {
+				dispatch(addChat({ nickname: '겜비서', userMsg: '더블클릭해 아이템을 사용해보세요' }))
 			}
 		} else if (phase === 'phase2') {
 			setState(1)
@@ -229,15 +262,28 @@ export default function Game() {
 		} else if (phase === 'phase3') {
 			setState(1)
 			dispatch(clearStatus())
-			dispatch(setTime(30))
+			dispatch(setTime(calculateTime()))
 		} else if (phase === 'phase4') {
 			setState(1)
 			dispatch(setTime(10))
 		} else if (phase === 'end') {
 			setState(2)
 			dispatch(setTime(15))
+			dispatch(setItemState({ items: [], nickname }))
+			dispatch(addChat({ nickname: '겜비서', userMsg: '게임이 종료되었습니다' }))
 		}
 	}, [phase])
+
+	// 아이템 유무에 따른 시간 계산
+	const calculateTime = () => {
+		let timeItem = 0
+		itemState.map((item) => {
+			if (item.effect === 1) {
+				timeItem = Math.max(timeItem, item.effectNum)
+			}
+		})
+		return 30 - timeItem
+	}
 
 	return (
 		<main css={roomBg}>
@@ -245,13 +291,15 @@ export default function Game() {
 				<GameHeader />
 			</div>
 
-			<div css={players}>
-				{players.map((player: any) => (
-					<div key={player.nickname} css={playerOne}>
-						<GameProfile player={player} />
-					</div>
-				))}
-			</div>
+			{state !== 2 ? (
+				<div css={players}>
+					{players.map((player: any) => (
+						<div key={player.nickname} css={playerOne}>
+							<GameProfile player={player} />
+						</div>
+					))}
+				</div>
+			) : null}
 
 			<div>
 				{state === 0 ? (
@@ -262,10 +310,14 @@ export default function Game() {
 					) : phase === 'phase3' ? (
 						<GameChoice nickname={nickname} client={ws} roomId={roomId} />
 					) : (
-						<GameResult turnResult={turnResult} submitCards={submitCards} />
+						<GameResult
+							turnResult={turnResult}
+							submitCards={submitCards}
+							choiceCards={choiceCards}
+						/>
 					)
 				) : (
-					<GameEnd setState={setState} />
+					<GameEnd setState={setState} client={ws} roomId={roomId} />
 				)}
 			</div>
 

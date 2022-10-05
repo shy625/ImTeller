@@ -1,14 +1,14 @@
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Item from 'components/item'
-import { removeItem, setItemState } from 'store/modules/game'
+import { addChat } from 'store/modules/game'
+import itemDetail from 'actions/functions/itemDetail'
 
 export default function Items(props: any) {
 	const dispatch = useDispatch()
 	const { client, roomId } = props
-	const items = useSelector((state: any) => state.items)
 	const { nickname } = useSelector((state: any) => state.currentUser)
+	const items = useSelector((state: any) => state.items)
 
 	const onClick = (event, item) => {
 		if (event.detail !== 2) return
@@ -23,8 +23,15 @@ export default function Items(props: any) {
 				effectNum: item.effectNum,
 			}),
 		})
-		console.log('아이템 사용')
-		dispatch(removeItem(item.cardId))
+		const [effectPre, effectPost, effectName] = itemDetail(item.effect, item.effectNum)
+		dispatch(
+			addChat({
+				nickname: '겜비서',
+				userMsg: `${effectName} 아이템을 사용했습니다. (${effectPre}${
+					item.effectNum ? item.effect : ''
+				}${effectPost})`,
+			}),
+		)
 	}
 
 	return (
@@ -32,13 +39,14 @@ export default function Items(props: any) {
 			{items
 				.filter((item) => !item.used)
 				.map((item) => (
-					<Item
+					<div
 						onClick={(e) => {
 							onClick(e, item)
 						}}
-						item={item}
 						key={item.cardId}
-					/>
+					>
+						<Item item={item} />
+					</div>
 				))}
 		</div>
 	)
