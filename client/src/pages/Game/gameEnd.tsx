@@ -53,16 +53,6 @@ export default function GameEnd(props: any) {
 			<div css={resultInfoCSS}>
 				<div>
 					{endResult[0] && (
-						<div css={profileInfo1CSS}>
-							<img src={getProfile(endResult[0][1])} alt="" css={profileImgCSS} />
-							<div>
-								{endResult[0][1]} : {endResult[0][0]}
-							</div>
-						</div>
-					)}
-				</div>
-				<div>
-					{endResult[0] && (
 						<div css={profileInfo2CSS}>
 							<img src={getProfile(endResult[1][1])} alt="" css={profileImgCSS} />
 							<div>
@@ -72,11 +62,21 @@ export default function GameEnd(props: any) {
 					)}
 				</div>
 				<div>
+					{endResult[0] && (
+						<div css={profileInfo1CSS}>
+							<img src={getProfile(endResult[0][1])} alt="" css={profileImgCSS} />
+							<div>
+								{endResult[0][1]} : {endResult[0][0]}점
+							</div>
+						</div>
+					)}
+				</div>
+				<div>
 					{endResult[2] && (
 						<div css={profileInfo3CSS}>
 							<img src={getProfile(endResult[2][1])} alt="" css={profileImgCSS} />
 							<div>
-								{endResult[2][1]} : {endResult[2][0]}
+								{endResult[2][1]} : {endResult[2][0]}점
 							</div>
 						</div>
 					)}
@@ -90,7 +90,7 @@ export default function GameEnd(props: any) {
 							<div>{idx + 4}등</div>
 							<img src={getProfile(result[1])} alt="" />
 							<div>
-								{result[1]} : {result[0]}
+								{result[1]} : {result[0]}점
 							</div>
 						</div>
 					))}
@@ -113,7 +113,7 @@ const profileImgCSS = css`
 `
 const podiumCSS = css`
 	position: relative;
-	margin-top: 100px;
+	margin-top: 300px;
 `
 const resultInfoCSS = css`
 	position: absolute;
@@ -129,16 +129,19 @@ const profileInfo1CSS = css`
 	flex-direction: column;
 	align-items: center;
 	margin: 0px 45px 0px 45px;
+	transform: translateY(-120px);
 `
 const profileInfo2CSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	margin: 0px 45px 0px 45px;
+	transform: translateY(-20px);
 `
 const profileInfo3CSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	margin: 0px 45px 0px 45px;
+	transform: translateY(10px);
 `
