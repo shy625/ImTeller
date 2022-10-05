@@ -121,14 +121,3 @@ export const loading = createSlice({
 	},
 })
 export const { setLoading } = loading.actions
-
-export const rankTabNo = createSlice({
-	name: 'rankTabNo',
-	initialState: 0,
-	reducers: {
-		setRankTabNo(state, action) {
-			return action.payload
-		},
-	},
-})
-export const { setRankTabNo } = rankTabNo.actions
