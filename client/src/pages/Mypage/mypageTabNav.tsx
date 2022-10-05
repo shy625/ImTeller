@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setMyPageTab } from 'store/modules/user'
 import { css } from '@emotion/react'
 
@@ -9,12 +9,14 @@ export default function MypageTabNav(props: any) {
 	const dispatch = useDispatch()
 
 	const { isMyMypage } = props
+	const myPageTab = useSelector((state: any) => state.myPageTab)
 
 	return (
 		<div css={centerCSS}>
-			<div css={myPageNavCSS}>
+			<div css={myPageNavCSS(myPageTab)}>
 				<div className="myPageLine">
 					<div
+						className="nft"
 						onClick={() => {
 							dispatch(setMyPageTab(0))
 						}}
@@ -23,6 +25,7 @@ export default function MypageTabNav(props: any) {
 					</div>
 					{isMyMypage ? (
 						<div
+							className="paint"
 							onClick={() => {
 								dispatch(setMyPageTab(1))
 							}}
@@ -48,8 +51,8 @@ const centerCSS = css`
 	display: flex;
 	justify-content: center;
 `
-const myPageNavCSS = css`
-	font-family: 'LeferiPoint-WhiteObliqueA';
+const myPageNavCSS = (myPageTab: Number) => css`
+	font-family: 'GongGothicMedium';
 	color: white;
 	display: flex;
 	/* margin-left: 100px; */
@@ -76,5 +79,13 @@ const myPageNavCSS = css`
 	.myPageLine {
 		display: flex;
 		align-items: center;
+	}
+
+	.nft {
+		color: ${myPageTab === 0 ? 'white' : 'gray'};
+	}
+
+	.paint {
+		color: ${myPageTab === 1 ? 'white' : 'gray'};
 	}
 `
