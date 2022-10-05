@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { rankListProps, dealRankProps } from './Rank'
 export default function rankListDeal({ rankList }: { rankList: rankListProps }) {
@@ -18,6 +17,7 @@ export default function rankListDeal({ rankList }: { rankList: rankListProps }) 
 							<div className="cardInfo">
 								<div id="title">{rank.cardTitle}</div>
 								<div id="buyer">구매자 {rank.buyerNickname}</div>
+								<div id="designer">designed by</div>
 								<div id="designer">by. {rank.designerNickname}</div>
 								<div id="price">{rank.price} SSF</div>
 								{/* <div>{rank.dealedAt.slice(0, 10)}</div> */}
@@ -58,8 +58,11 @@ const cardCSS = css`
 	#title {
 		font-family: 'GongGothicMedium';
 		font-size: 20px;
+		text-align: center;
 	}
-
+	#designer {
+		font-size: 13px;
+	}
 	.cardInfo div {
 		overflow: hidden;
 		text-overflow: ellipsis;
