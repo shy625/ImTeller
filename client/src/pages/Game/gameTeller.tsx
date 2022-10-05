@@ -5,7 +5,7 @@ import Items from 'pages/Game/items'
 import GameCard from 'pages/Game/gameCard'
 
 import { useModal } from 'actions/hooks/useModal'
-import { setTime, setSubmit } from 'store/modules/game'
+import { setTime } from 'store/modules/game'
 
 export default function GameTeller(props: any) {
 	const dispatch = useDispatch()
@@ -59,7 +59,7 @@ export default function GameTeller(props: any) {
 			dispatch(setTime(0))
 			return
 		} else {
-			dispatch(setSubmit({ nickname, status: true }))
+			// dispatch(setSubmit({ nickname, status: true }))
 			client.publish({
 				destination: `/pub/room/${roomId}/others`,
 				body: JSON.stringify({

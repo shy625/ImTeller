@@ -8,13 +8,15 @@ export default function GameEnd(props: any) {
 	const dispatch = useDispatch()
 
 	const result = useSelector((state: any) => state.result)
+	const players = useSelector((state: any) => state.players)
+
 	const [endResult, setEndResult] = useState<any>([])
 
 	useEffect(() => {
 		setTimeout(() => {
 			setState(0)
 		}, 10000)
-	})
+	}, [])
 
 	useEffect(() => {
 		const confirm = client.subscribe(`/sub/room/${roomId}/roominfo`, (action) => {
@@ -41,7 +43,7 @@ export default function GameEnd(props: any) {
 	}, [])
 
 	// 1, 2, 3 등은 시상대에 올리기
-	// profile로 하기
+	// endresult 0에는 점수, 1에는 닉네임
 	return (
 		<div>
 			<div>1등 {endResult[0] && `${endResult[0][1]} : ${endResult[0][0]}`}</div>

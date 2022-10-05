@@ -22,6 +22,7 @@ import {
 	setReady1,
 	setReady2,
 	setPlayers,
+	addChat,
 	setScore,
 	setStatus,
 	clearStatus,
@@ -50,6 +51,7 @@ export default function Game() {
 	const selectedCard = useSelector((state: any) => state.selectedCards)
 	const roomInfo = useSelector((state: any) => state.roomInfo)
 	const phase = useSelector((state: any) => state.phase) // state가 1일때 작동. 1: 텔러 2: 낚시그림선택 3: 텔러맞추기 4: 결과
+	const items = useSelector((state: any) => state.items)
 	const itemState = useSelector((state: any) => state.itemState)
 
 	const [ws, setWs] = useState<any>('')
@@ -253,6 +255,9 @@ export default function Game() {
 			dispatch(clearStatus())
 			dispatch(setItemState({ items: [], nickname }))
 			dispatch(setTime(30))
+			if (items.length) {
+				dispatch(addChat({ nickname: '겜비서', userMsg: '더블클릭해 아이템을 사용해보세요' }))
+			}
 		} else if (phase === 'phase2') {
 			setState(1)
 			dispatch(setTime(30))
@@ -267,6 +272,7 @@ export default function Game() {
 			setState(2)
 			dispatch(setTime(15))
 			dispatch(setItemState({ items: [], nickname }))
+			dispatch(addChat({ nickname: '겜비서', userMsg: '게임이 종료되었습니다' }))
 		}
 	}, [phase])
 
@@ -287,13 +293,15 @@ export default function Game() {
 				<GameHeader />
 			</div>
 
-			<div css={players}>
-				{players.map((player: any) => (
-					<div key={player.nickname} css={playerOne}>
-						<GameProfile player={player} />
-					</div>
-				))}
-			</div>
+			{state !== 2 ? (
+				<div css={players}>
+					{players.map((player: any) => (
+						<div key={player.nickname} css={playerOne}>
+							<GameProfile player={player} />
+						</div>
+					))}
+				</div>
+			) : null}
 
 			<div>
 				{state === 0 ? (

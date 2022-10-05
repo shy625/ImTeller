@@ -158,8 +158,7 @@ export const players = createSlice({
 		},
 	},
 })
-export const { setPlayers, setScore, setStatus, clearStatus, setReady2, setSubmit } =
-	players.actions
+export const { setPlayers, setScore, setStatus, clearStatus, setReady2 } = players.actions
 
 export const phase = createSlice({
 	name: 'phase',

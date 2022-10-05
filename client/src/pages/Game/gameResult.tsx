@@ -14,6 +14,17 @@ export default function GameResult(props: any) {
 
 	useBGM('result')
 
+	const itemUse = (nickname) => {
+		const use = []
+		itemState.map((item) => {
+			if (item.nickname === nickname) {
+				use.push(<Item key={item.cardId} item={item} style={{ width: '30px' }} />)
+			}
+		})
+		console.log(use)
+		return use
+	}
+
 	const cardOwner = (cardId) => {
 		let nickname
 		let isTeller = false
@@ -46,17 +57,6 @@ export default function GameResult(props: any) {
 				))}
 			</div>
 		)
-	}
-
-	const itemUse = (nickname) => {
-		const use = []
-		itemState.map((item) => {
-			if (item.nickname === nickname) {
-				use.push(<Item key={item.cardId} item={item} style={{ width: '30px' }} />)
-			}
-		})
-		console.log(use)
-		return use
 	}
 
 	return (
