@@ -48,33 +48,35 @@ export default function Card(props: any) {
 	}
 
 	return (
-		<div css={cardWrapperCSS}>
-			<div css={type === 1 && selected ? type1CSS : type0CSS} onClick={select}>
-				<img css={cardImageCSS} src={cardImageURL} alt="" />
-				<div css={!selected ? type0InfoCSS : displayNoneCSS}>
-					<div className="buttons">
-						<div>{grade}</div>
-						<div>{effectName}</div>
-						<div>{`${effectNum} ${effectPost}`}</div>
+		<div>
+			<div css={cardWrapperCSS}>
+				<div css={type === 1 && selected ? type1CSS : type0CSS} onClick={select}>
+					<img css={cardImageCSS} src={cardImageURL} alt="" />
+					<div css={!selected ? type0InfoCSS : displayNoneCSS}>
+						<div className="buttons">
+							<div>{grade}</div>
+							<div>{effectName}</div>
+							<div>{`${effectNum} ${effectPost}`}</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>
-				<img src={check} alt="" css={imgBigIcon} />
-			</div>
-			{type === 0 ? (
-				<div className="cardInfo">
-					<div className="textInfo">
-						<div>{description}</div>
-						<div className="cardTitle">{cardTitle}</div>
-						<div>{createdDT.slice(0, 10)}</div>
-						{recentPrice ? <div>{recentPrice} SSF</div> : null}
-					</div>
-					{grade == 'S' ? <img src={gradeS} alt="" /> : null}
-					{grade == 'A' ? <img src={gradeA} alt="" /> : null}
-					{grade == 'B' ? <img src={gradeB} alt="" /> : null}
+				<div css={type === 1 && selected ? type1InfoCSS : displayNoneCSS}>
+					<img src={check} alt="" css={imgBigIcon} />
 				</div>
-			) : null}
+				{type === 0 ? (
+					<div className="cardInfo">
+						<div className="textInfo">
+							<div>{description}</div>
+							<div className="cardTitle">{cardTitle}</div>
+							<div>{createdDT.slice(0, 10)}</div>
+							{recentPrice ? <div>{recentPrice} SSF</div> : null}
+						</div>
+						{grade == 'S' ? <img src={gradeS} alt="" /> : null}
+						{grade == 'A' ? <img src={gradeA} alt="" /> : null}
+						{grade == 'B' ? <img src={gradeB} alt="" /> : null}
+					</div>
+				) : null}
+			</div>
 		</div>
 	)
 }

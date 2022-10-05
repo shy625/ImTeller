@@ -178,21 +178,6 @@ export default function Signup(props: any) {
 					{isLoading ? <Loading msg={'전송중입니다.'} /> : null}
 					{authError}
 				</div>
-				<div>
-					<label htmlFor="nickname">닉네임</label>
-					<input
-						id="nickname"
-						type="text"
-						placeholder="닉네임"
-						onChange={(event) => {
-							nickFilter(event)
-						}}
-					/>
-					<button onClick={checkNick}>닉네임 중복 체크</button>
-					{nickChecked ? '✅' : null}
-					{nickValid}
-				</div>
-				<button onClick={onSubmit}>회원가입</button>
 				{isLoading ? (
 					<Loading
 						msg={

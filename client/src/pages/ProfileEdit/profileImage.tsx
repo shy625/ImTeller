@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { useSelector } from 'react-redux'
 
 import Layout from 'layout/layout'

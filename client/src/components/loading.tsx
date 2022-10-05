@@ -30,8 +30,6 @@ const loadingCSS = css`
 	.msg {
 		color: white;
 		font-family: 'GongGothicMedium';
-		white-space: pre;
-		text-align: center;
 	}
 	img {
 		width: 400px;

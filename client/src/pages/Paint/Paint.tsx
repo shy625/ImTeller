@@ -337,7 +337,7 @@ export default function Paint() {
 												onChange={(e) => setLineWidth(parseInt(e.target.value))}
 												type="range"
 												min="1"
-												max="20"
+												max="100"
 												defaultValue={lineWidth}
 											/>
 										</div>

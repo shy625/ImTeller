@@ -2,8 +2,6 @@ import Card from 'components/card'
 import Paint from 'components/paint'
 import { css } from '@emotion/react'
 
-import { useState } from 'react'
-
 interface CardListProps {
 	cardList: any[]
 	isCard?: boolean
@@ -89,32 +87,6 @@ export default function CardList(props: CardListProps) {
 const centerCSS = css`
 	display: flex;
 	justify-content: center;
-	.window button {
-		outline: none;
-		cursor: pointer;
-		border: 0;
-		padding: 6px 12px;
-		margin: 0px 10px 5px 10px;
-		color: #1b5198;
-		background-color: #d1e4ff;
-		border-radius: 12px;
-		font-size: 13px;
-		width: 30px;
-		font-family: 'GongGothicMedium';
-		height: 30px;
-	}
-	.container {
-		width: 500px;
-	}
-	.window {
-		/* overflow: hidden; */
-		/* position: relative; */
-		/* width: 500px; */
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-	}
 `
 const paintListCSS = css`
 	display: flex;
