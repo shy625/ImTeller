@@ -33,7 +33,7 @@ export default Room
 const roomCSS = css({
 	width: '300px',
 	boxSizing: 'border-box',
-	background: 'rgba(255, 255, 255, .3)',
+	background: '#a9a9a9',
 	borderRadius: 15,
 	border: '5px solid rgb(163, 151, 198)',
 	margin: '1em',
