@@ -224,7 +224,7 @@ export default function ProfileEdit(props: any) {
 								}}
 								css={Btn100CSS}
 							>
-								수정하기
+								저장하기
 							</button>
 							<button
 								onClick={() => {
@@ -300,7 +300,7 @@ const Btn100CSS = css`
 	color: #1b5198;
 	background-color: #d1e4ff;
 	border-radius: 12px;
-	font-size: 13px;
+	font-size: 15px;
 	width: 100%;
 	font-family: 'GongGothicMedium';
 `
@@ -313,6 +313,6 @@ const BtnCSS = css`
 	color: #1b5198;
 	background-color: #d1e4ff;
 	border-radius: 12px;
-	font-size: 13px;
+	font-size: 15px;
 	font-family: 'GongGothicMedium';
 `
