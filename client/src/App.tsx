@@ -35,6 +35,7 @@ export default function App() {
 							<Route path="/mypage/:nick" element={<Mypage />} />
 
 							<Route path="/game" element={<GameList />} />
+							<Route path="/game/*" element={<GameList />} />
 
 							<Route path="/deal" element={<DealList />} />
 							<Route path="/deal/:dealId" element={<DealDetail />} />
