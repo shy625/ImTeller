@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import GameCard from 'pages/Game/gameCard'
+import Item from 'components/item'
 import { useBGM } from 'actions/hooks/useBGM'
 
 export default function GameResult(props: any) {
@@ -9,10 +10,9 @@ export default function GameResult(props: any) {
 	const { turnResult, submitCards, choiceCards } = props
 
 	const table = useSelector((state: any) => state.table)
-	useBGM('result')
+	const itemState = useSelector((state: any) => state.itemState)
 
-	// 카드 주인하고 table에 있던 카드가 매칭되어 누가 주인이였는지 알게 해야함
-	// 추가된 점수를 알 수 있도록 해야함
+	useBGM('result')
 
 	const cardOwner = (cardId) => {
 		let nickname
@@ -25,7 +25,7 @@ export default function GameResult(props: any) {
 		})
 		return (
 			<div style={isTeller ? { backgroundColor: 'red' } : null}>
-				{nickname} +{turnResult[nickname]}
+				{nickname} +{turnResult[nickname]} {itemUse(nickname)}
 			</div>
 		)
 	}
@@ -46,6 +46,17 @@ export default function GameResult(props: any) {
 				))}
 			</div>
 		)
+	}
+
+	const itemUse = (nickname) => {
+		const use = []
+		itemState.map((item) => {
+			if (item.nickname === nickname) {
+				use.push(<Item key={item.cardId} item={item} style={{ width: '30px' }} />)
+			}
+		})
+		console.log(use)
+		return use
 	}
 
 	return (

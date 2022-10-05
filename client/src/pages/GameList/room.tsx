@@ -3,14 +3,14 @@
 import { css } from '@emotion/react'
 
 const Room = (props: any) => {
-	const { roomId, roomName, isLocked, peopleNum, maxPeopleNum, type, typeNum } = props.room
+	const { roomId, roomName, locked, peopleNum, maxPeopleNum, type, typeNum } = props.room
 
 	return (
 		<div css={roomCSS}>
 			<div css={outBox}>
 				<div css={sideBox}>
 					<div css={roomNum}>{roomId}</div>
-					<div>{isLocked ? '비공개' : '공개'}</div>
+					<div>{locked ? '비공개' : '공개'}</div>
 				</div>
 				<div css={main}>
 					<div css={title}>

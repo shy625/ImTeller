@@ -58,7 +58,7 @@ export default function GameList() {
 						<div css={roomListCSS}>
 							{roomList.length
 								? roomList.map((room: any) => (
-										<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.isLocked)}>
+										<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.locked)}>
 											<Room room={room} />
 										</div>
 								  ))

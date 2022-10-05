@@ -13,8 +13,7 @@ export default function GameEnd(props: any) {
 	useEffect(() => {
 		setTimeout(() => {
 			setState(0)
-			dispatch(setPhase(''))
-		}, 15000)
+		}, 10000)
 	})
 
 	useEffect(() => {
@@ -40,7 +39,7 @@ export default function GameEnd(props: any) {
 			setEndResult([])
 		}
 	}, [])
-	console.log(endResult.slice(3))
+
 	// 1, 2, 3 등은 시상대에 올리기
 	// profile로 하기
 	return (

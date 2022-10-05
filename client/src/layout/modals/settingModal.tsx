@@ -105,7 +105,7 @@ export default function SettingModal(props: any) {
 							}}
 						/>
 						<hr />
-						<label htmlFor="isMouseEffectOn">마우스 효과</label>
+						<label htmlFor="isMouseEffectOn">마우스 효과음</label>
 						<div id="isMouseEffectOn">
 							<div
 								onClick={() => dispatch(setIsMouseEffectOn(true))}

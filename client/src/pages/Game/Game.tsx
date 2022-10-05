@@ -45,6 +45,7 @@ export default function Game() {
 
 	const { nickname } = useSelector((state: any) => state.currentUser)
 	const email = useSelector((state: any) => state.email)
+	const isChecked = useSelector((state: any) => state.isChecked)
 	const players = useSelector((state: any) => state.players)
 	const selectedCard = useSelector((state: any) => state.selectedCards)
 	const roomInfo = useSelector((state: any) => state.roomInfo)
@@ -86,7 +87,9 @@ export default function Game() {
 	}, [])
 
 	useEffect(() => {
-		setModalState('joinRoom')
+		if (!isChecked) {
+			setModalState('joinRoom')
+		}
 		return () => {
 			dispatch(setIsChecked(false))
 		}
@@ -105,12 +108,14 @@ export default function Game() {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
+				setUserSessionIds(content.userSessionIds[nickname])
 				console.log('join', content)
 			})
 			client.subscribe(`/sub/room/${roomId}/exit`, (action) => {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
+				setUserSessionIds(content.userSessionIds[nickname])
 				console.log('exit', content)
 			})
 			// 레디 상태 변경
@@ -195,6 +200,7 @@ export default function Game() {
 		}
 	}, [])
 
+	// userSessionId 최신화가 필요한 구독
 	useEffect(() => {
 		try {
 			// 카드패 받기
@@ -204,15 +210,15 @@ export default function Game() {
 				dispatch(setGameCards(content))
 			})
 			// 내 아이템 받기
-			ws.subscribe(`/user/${roomInfo.userSessionIds[nickname]}/room/${roomId}/item`, (action) => {
-				console.log('myitem', action.body)
+			ws.subscribe(`/user/${userSessionIds}/room/${roomId}/item`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('item', content)
+				console.log('myitem', content)
 				dispatch(setItems(content))
 			})
 		} catch {}
 	}, [userSessionIds, roomId])
 
+	// selectedCard 최신화가 필요한 구독
 	let start
 	useEffect(() => {
 		try {
@@ -237,6 +243,7 @@ export default function Game() {
 		}
 	}, [selectedCard, roomInfo.ready])
 
+	// 페이즈별 상태 최신화
 	useEffect(() => {
 		console.log(phase)
 		if (phase === 'phase1') {
@@ -256,13 +263,14 @@ export default function Game() {
 		} else if (phase === 'phase4') {
 			setState(1)
 			dispatch(setTime(10))
-			dispatch(setItemState({ items: [], nickname }))
 		} else if (phase === 'end') {
 			setState(2)
 			dispatch(setTime(15))
+			dispatch(setItemState({ items: [], nickname }))
 		}
 	}, [phase])
 
+	// 아이템 유무에 따른 시간 계산
 	const calculateTime = () => {
 		let timeItem = 0
 		itemState.map((item) => {
