@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { css } from '@emotion/react'
 
 import user from 'actions/api/user'
+import { setUserDetail } from 'store/modules/user'
 import { setModalState, setModalMsg } from 'store/modules/util'
 
 export default function AddWalletModal(props: any) {
 	const navigate: any = useNavigate()
 	const dispatch = useDispatch()
+	const { nick } = useParams()
 
 	const [wallet, setWallet] = useState([])
 	const [error, setError] = useState('')
@@ -45,7 +47,6 @@ export default function AddWalletModal(props: any) {
 				if (result.data.response === '지갑 주소를 등록했습니다.') {
 					dispatch(setModalMsg(result.data.response))
 					dispatch(setModalState('alert'))
-					navigate(-1)
 				}
 			})
 			.catch((error) => {

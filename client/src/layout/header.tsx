@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
@@ -39,14 +39,14 @@ export default function Header() {
 	}, [])
 
 	return (
-		<div css={headerCss}>
+		<div css={headerCSS}>
 			<div>
 				{/* <img src={logo} alt="로고" css={logoIconCss} /> */}
-				<div css={logoTitleCss} onClick={() => navigate('/')}>
+				<div css={logoTitleCSS} onClick={() => navigate('/')}>
 					ImTeller
 				</div>
 			</div>
-			<div css={navBarCss}>
+			<div css={navBarCSS}>
 				<div onClick={() => navigate('/game')} css={textBtn}>
 					게임
 				</div>
@@ -63,18 +63,18 @@ export default function Header() {
 					FAQ
 				</div>
 				{currentUser.nickname ? (
-					<div css={loginCss}>
+					<div css={loginCSS}>
 						<Profile nickname={currentUser.nickname} profile={currentUser.profile} />
 						<div onClick={logout} css={textBtn}>
 							로그아웃
 						</div>
 					</div>
 				) : (
-					<div css={loginCss}>
-						<div onClick={() => navigate('/login')} css={loginBtnCss}>
+					<div css={loginCSS}>
+						<div onClick={() => navigate('/login')} css={loginBtnCSS}>
 							로그인
 						</div>
-						<div onClick={() => navigate('/signup')} css={loginBtnCss}>
+						<div onClick={() => navigate('/signup')} css={loginBtnCSS}>
 							회원가입
 						</div>
 					</div>
@@ -84,30 +84,30 @@ export default function Header() {
 		</div>
 	)
 }
-const headerCss = css({
+const headerCSS = css({
 	display: 'flex',
 	color: 'white',
 	alignItems: 'center',
 	fontFamily: 'LeferiPoint-WhiteObliqueA',
 	justifyContent: 'space-between',
 })
-const navBarCss = css({
+const navBarCSS = css({
 	display: 'flex',
 	width: 800,
 	margin: 10,
 	justifyContent: 'space-between',
 	alignItems: 'center',
 })
-const loginCss = css({
+const loginCSS = css({
 	display: 'flex',
 	alignItems: 'center',
 	marginRight: 20,
 })
-const loginBtnCss = css({
+const loginBtnCSS = css({
 	margin: 5,
 	cursor: "url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto",
 })
-const logoTitleCss = css({
+const logoTitleCSS = css({
 	fontFamily: 'Yeongdo-Rg',
 	fontSize: 30,
 	textAlign: 'center',

@@ -20,7 +20,6 @@ import NotFound404 from 'pages/NotFound404/NotFound404'
 import BgmLayer from 'layout/bgmLayer'
 import ModalLayer from 'layout/modalLayer'
 
-import './App.css'
 import 'style/fonts.css'
 
 export default function App() {

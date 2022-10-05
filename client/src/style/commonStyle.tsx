@@ -41,6 +41,7 @@ const textarea = css`
 const imgIcon = css({
 	width: 20,
 	height: 20,
+	cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;`,
 })
 // 아이콘용 이미지 크기 조절
 const imgBigIcon = css({
