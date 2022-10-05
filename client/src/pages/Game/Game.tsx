@@ -97,6 +97,7 @@ export default function Game() {
 
 	// 웹소켓
 	useEffect(() => {
+		if (!isChecked) return
 		const client = useWebSocket({ email })
 		client.onConnect = () => {
 			client.publish({
@@ -198,7 +199,7 @@ export default function Game() {
 			})
 			client.deactivate()
 		}
-	}, [])
+	}, [isChecked])
 
 	// userSessionId 최신화가 필요한 구독
 	useEffect(() => {
