@@ -1,12 +1,7 @@
 import { css } from '@emotion/react'
 
 export default function Footer() {
-	return (
-		<div css={footerCss}>
-			Team Classic
-			<div></div>
-		</div>
-	)
+	return <div css={footerCss}>Team Classic</div>
 }
 const footerCss = css({
 	display: 'flex',

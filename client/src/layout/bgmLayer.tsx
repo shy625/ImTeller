@@ -29,6 +29,7 @@ export default function BgmLayer(props: any) {
 
 	useEffect(() => {
 		bgm.current.src = bgmSrc
+		bgm.current.load()
 	}, [bgmSrc])
 
 	useEffect(() => {
@@ -70,8 +71,8 @@ export default function BgmLayer(props: any) {
 	return (
 		<div onClick={clickSound}>
 			{props.children}
-			<audio ref={bgm} loop></audio>
-			<audio ref={effect}></audio>
+			<audio ref={bgm} autoPlay loop></audio>
+			<audio ref={effect} autoPlay></audio>
 		</div>
 	)
 }

@@ -135,8 +135,6 @@ export const selectedCard = createSlice({
 	initialState: {} as any,
 	reducers: {
 		setSelectedCard(state, action) {
-			console.log('setSelectedCard', setSelectedCard)
-
 			return action.payload
 		},
 	},

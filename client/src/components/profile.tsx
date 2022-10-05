@@ -23,10 +23,10 @@ const profileCss = css({
 	justifyContent: 'center',
 	margin: 10,
 	marginRight: 20,
-	cursor: 'pointer',
+	cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto`,
 })
 const profileImgCss = css({
 	width: 35,
-	borderRadius: 50,
+	borderRadius: '100%',
 	margin: 10,
 })

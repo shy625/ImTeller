@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 
-import Header from './header'
-import Footer from './footer'
+import Header from 'layout/header'
+import Footer from 'layout/footer'
 export default function Layout(props: any) {
 	return (
 		<div css={backgroundCSS}>

@@ -8,6 +8,7 @@ import gradeA from 'assets/image/gradeA.webp'
 import gradeB from 'assets/image/gradeB.webp'
 
 import { setSelectedCards } from 'store/modules/game'
+import { setSelectedCard } from 'store/modules/art'
 import itemDetail from 'actions/functions/itemDetail'
 
 export default function Card(props: any) {
@@ -26,11 +27,14 @@ export default function Card(props: any) {
 	const dispatch = useDispatch()
 
 	const selectedCards = useSelector((state: any) => state.selectedCards)
+	const selectedCard = useSelector((state: any) => state.selectedCard)
 	const [selected, setSelected] = useState(false)
 	const [effectPre, effectPost, effectName] = itemDetail(effect, effectNum)
 
 	useEffect(() => {
-		if (selectedCards.includes(cardId)) {
+		if (type === 1 && selectedCards.includes(cardId)) {
+			setSelected(true)
+		} else if (type === 2 && selectedCard === cardId) {
 			setSelected(true)
 		} else {
 			setSelected(false)
@@ -39,11 +43,15 @@ export default function Card(props: any) {
 
 	// 기본적으로 호버시 카드 능력 나오게
 	// type 0: 선택 불가능하게
-	// type 1: 카드 선택 모달에서 사용. 선택카드의 경우(selectedCards에 포함) 표시
+	// type 1: 카드 선택 모달에서 사용.
+	// type 2: 딜 등록에서 사용
 
 	const select = () => {
 		if (type === 1) {
 			dispatch(setSelectedCards(cardId))
+		}
+		if (type === 2) {
+			dispatch(setSelectedCard(cardId))
 		}
 	}
 

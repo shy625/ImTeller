@@ -174,7 +174,7 @@ export default function DealDetail() {
 					</div>
 
 					<div css={explain}>
-						<p>{dealInfo.tag}</p>
+						<p>{dealInfo.tag && dealInfo.tag.split(' ').map((tag) => `#${tag}`)}</p>
 						<div css={space}>
 							<span>{dealInfo.cardTitle}</span>
 							<span>{cardInfo.ownerNickname}. 소유</span>
@@ -184,7 +184,7 @@ export default function DealDetail() {
 						<br />
 						<div css={space}>
 							<span css={grade}>{cardInfo.grade}</span>
-							<span>{effectPre + String(cardInfo.effectNum) + effectPost}</span>
+							<span>{effectPre + (cardInfo.effectNum ? cardInfo.effectNum : '') + effectPost}</span>
 						</div>
 						<br />
 						{day}일 {hour}시간 {min}분 {sec}초 남음
@@ -193,7 +193,7 @@ export default function DealDetail() {
 								<div>
 									<button onClick={onCancel}>판매 취소</button>
 								</div>
-							) : (
+							) : diffTime.current >= 0 ? (
 								<>
 									<div css={purchase}>
 										<div>즉시 구매가 {dealInfo.instantPrice}SSF</div>
@@ -204,7 +204,7 @@ export default function DealDetail() {
 										<button>입찰</button>
 									</div> */}
 								</>
-							)}
+							) : null}
 						</div>
 					</div>
 				</div>
