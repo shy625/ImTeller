@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import rank from 'actions/api/rank'
 import { setRankList } from 'store/modules/rank'
+import { setMainTab } from 'store/modules/util'
 
 import Layout from 'layout/layout'
 import RankTabNav from './rankTabNav'
@@ -48,6 +49,7 @@ export default function Rank() {
 	const [tabList, setTabList] = useState()
 	const tabs = ['오늘의 거래', '승률', '레벨', '이달의 NFT']
 	const dispatch = useDispatch()
+	dispatch(setMainTab('rank'))
 	const tempDummy = {
 		paintTitle: '핑크백조',
 		paintImageURL:

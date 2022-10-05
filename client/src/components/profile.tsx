@@ -17,16 +17,22 @@ export default function Profile(props: any) {
 		</div>
 	)
 }
-const profileCss = css({
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	margin: 10,
-	marginRight: 20,
-	cursor: 'pointer',
-})
-const profileImgCss = css({
-	width: 35,
-	borderRadius: 50,
-	margin: 10,
-})
+const profileCss = css`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 10px;
+	margin-right: 20px;
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+
+	&:hover {
+		transform: scale(1.1, 1.1) rotate(-5deg);
+		transition: all ease 0.2s;
+	}
+`
+
+const profileImgCss = css`
+	width: 35px;
+	border-radius: 50px;
+	margin: 10px;
+`

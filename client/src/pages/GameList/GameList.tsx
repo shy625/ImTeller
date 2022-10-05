@@ -8,6 +8,7 @@ import Room from 'pages/GameList/room'
 
 import game from 'actions/api/game'
 import { setIsChecked, setRoomList } from 'store/modules/game'
+import { setMainTab } from 'store/modules/util'
 import { useBGM } from 'actions/hooks/useBGM'
 import { useModal } from 'actions/hooks/useModal'
 import { fullDisplay } from 'style/commonStyle'
@@ -16,6 +17,7 @@ export default function GameList() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [setModalState, setModalMsg] = useModal('')
+	dispatch(setMainTab('game'))
 
 	const roomList = useSelector((state: any) => state.roomList)
 	const currentUser = useSelector((state: any) => state.currentUser)

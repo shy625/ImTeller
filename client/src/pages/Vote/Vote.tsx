@@ -12,6 +12,7 @@ import vote from 'actions/api/vote'
 import art from 'actions/api/art'
 import { useModal } from 'actions/hooks/useModal'
 import { setVoteList, setPaintList } from 'store/modules/art'
+import { setMainTab } from 'store/modules/util'
 export interface voteListProps {
 	vote: vote
 	like: boolean
@@ -65,6 +66,7 @@ interface owner {
 export default function Vote() {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+	dispatch(setMainTab('vote'))
 
 	const voteList: voteListProps[] = useSelector((state: any) => state.voteList)
 	const currentUser = useSelector((state: any) => state.currentUser)
