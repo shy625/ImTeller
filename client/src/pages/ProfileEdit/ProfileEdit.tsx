@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import Layout from 'layout/layout'
 import PwCertificate from 'pages/ProfileEdit/pwCertificate'
 import ProfileImage from 'pages/ProfileEdit/profileImage'
+import { css } from '@emotion/react'
+import { normalBtn, fullDisplay } from 'style/commonStyle'
 
 import user from 'actions/api/user'
 import { useModal } from 'actions/hooks/useModal'
@@ -148,80 +150,169 @@ export default function ProfileEdit(props: any) {
 
 	return (
 		<Layout>
-			<main>
+			<main css={fullDisplay}>
 				{!password ? (
 					<PwCertificate setPassword={setPassword} />
 				) : (
-					<>
-						<div>
+					<div css={centerCSS}>
+						<div css={centerLeftCSS}>
 							<ProfileImage />
 							<label htmlFor="nickname">닉네임</label>
-							<input
-								id="nickname"
-								type="text"
-								defaultValue={currentUser.nickname || ''}
-								placeholder={currentUser.nickname}
-								required
-								onChange={(event) => {
-									nickFilter(event)
-								}}
-							/>
-							<button onClick={checkNick}>닉네임 중복 체크</button>
-							{nickChecked ? '✅' : nickError}
-							{nickValid}
-						</div>
-						{isChangePw ? (
-							<div>
-								<label htmlFor="password">비밀번호</label>
+							<div css={width100CSS}>
 								<input
-									onChange={(e) => {
-										passwordFilter(e)
-										pwMatch()
-									}}
-									type="password"
-									id="password1"
+									id="nickname"
+									type="text"
+									defaultValue={currentUser.nickname || ''}
+									placeholder={currentUser.nickname}
 									required
-									placeholder="비밀번호를 입력해주세요"
-								/>
-								{pwValid}
-								<label htmlFor="password2">비밀번호 재입력</label>
-								<input
-									onChange={(e) => {
-										pwMatch()
+									onChange={(event) => {
+										nickFilter(event)
 									}}
-									type="password"
-									id="password2"
-									required
-									placeholder="비밀번호를 다시 입력해주세요"
 								/>
-								{pwChecked}
+								<div css={validCSS}>
+									<button onClick={checkNick} css={normalBtn}>
+										중복 체크
+									</button>
+									<span>{nickChecked ? '✅' : nickError}</span>
+									<span css={validTextCSS}>{nickValid}</span>
+								</div>
 							</div>
-						) : null}
-						<button
-							onClick={() => {
-								setIsChangePw(!isChangePw)
-							}}
-						>
-							{isChangePw ? '비밀번호 변경하지 않기' : '비밀번호 변경하기'}
-						</button>
-						<button
-							onClick={(event) => {
-								onSubmit(event)
-							}}
-						>
-							수정하기
-						</button>
-					</>
+							<div className="remainder">
+								<button
+									onClick={() => {
+										setIsChangePw(!isChangePw)
+									}}
+									css={normalBtn}
+								>
+									{isChangePw ? '비밀번호 변경하지 않기' : '비밀번호 변경하기'}
+								</button>
+								{isChangePw ? (
+									<div className="changePW">
+										<div css={centerLeftCSS}>
+											<label htmlFor="password">비밀번호</label>
+											<input
+												onChange={(e) => {
+													passwordFilter(e)
+													pwMatch()
+												}}
+												type="password"
+												id="password1"
+												required
+												placeholder="비밀번호를 입력해주세요"
+											/>
+											<div css={validTextCSS}>{pwValid}</div>
+										</div>
+										<div css={centerLeftCSS}>
+											<label htmlFor="password2">비밀번호 재입력</label>
+											<input
+												onChange={(e) => {
+													pwMatch()
+												}}
+												type="password"
+												id="password2"
+												required
+												placeholder="비밀번호를 다시 입력해주세요"
+											/>
+											<div css={validTextCSS}>{pwChecked}</div>
+										</div>
+									</div>
+								) : null}
+							</div>
+							<button
+								onClick={(event) => {
+									onSubmit(event)
+								}}
+								css={Btn100CSS}
+							>
+								수정하기
+							</button>
+							<button
+								onClick={() => {
+									navigate(-1)
+								}}
+								css={BtnCSS}
+							>
+								&lt; 뒤로
+							</button>
+						</div>
+					</div>
 				)}
-
-				<button
-					onClick={() => {
-						navigate(-1)
-					}}
-				>
-					뒤로
-				</button>
 			</main>
 		</Layout>
 	)
 }
+const centerCSS = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: white;
+	font-family: 'GongGothicMedium';
+	#image {
+		width: 300px;
+	}
+	input {
+		/* display: none; */
+		padding: 10px 10px;
+		margin: 10px;
+		box-sizing: border-box;
+		border: none;
+		border-radius: 12px;
+		color: black;
+		font-family: 'GmarketSansMedium';
+		background-color: white;
+		width: 100%;
+	}
+	label {
+		margin-left: 10px;
+	}
+	.remainder {
+		width: 100%;
+	}
+	.changePW {
+		width: 100%;
+	}
+	/* .changePW input {
+		width: 100%;
+	} */
+`
+const centerLeftCSS = css`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+`
+const validTextCSS = css`
+	margin-left: 10px;
+	font-size: 13px;
+`
+const validCSS = css`
+	margin: 0px 0px 20px 0px;
+`
+const width100CSS = css`
+	width: 100%;
+`
+const Btn100CSS = css`
+	outline: 'none';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	border: 0px;
+	padding: 10px 20px 10px 20px;
+	margin: 30px 10px 5px 10px;
+	color: #1b5198;
+	background-color: #d1e4ff;
+	border-radius: 12px;
+	font-size: 13px;
+	width: 100%;
+	font-family: 'GongGothicMedium';
+`
+const BtnCSS = css`
+	outline: 'none';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	border: 0px;
+	padding: 6px 10px 6px 10px;
+	margin: 40px 10px 5px 10px;
+	color: #1b5198;
+	background-color: #d1e4ff;
+	border-radius: 12px;
+	font-size: 13px;
+	font-family: 'GongGothicMedium';
+`
