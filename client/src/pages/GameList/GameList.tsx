@@ -25,10 +25,7 @@ export default function GameList() {
 	useBGM('gameList')
 
 	useEffect(() => {
-		game.roomList().then((result) => {
-			console.log(result.data.response)
-			dispatch(setRoomList(result.data.response))
-		})
+		refresh()
 	}, [])
 
 	const makeRoom = () => {
@@ -44,6 +41,14 @@ export default function GameList() {
 		}
 		dispatch(setIsChecked(!isLocked))
 		navigate(`/game/${roomId}`)
+		useBGM('game')
+	}
+
+	const refresh = () => {
+		game.roomList().then((result) => {
+			console.log(result.data.response)
+			dispatch(setRoomList(result.data.response))
+		})
 	}
 
 	return (
@@ -53,6 +58,9 @@ export default function GameList() {
 					<div css={listWrapper}>
 						<button onClick={makeRoom} css={button}>
 							방만들기
+						</button>
+						<button onClick={refresh} css={button}>
+							새로고침
 						</button>
 						<div css={roomListCSS}>
 							{roomList.length

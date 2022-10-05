@@ -70,7 +70,7 @@ export default function Chat() {
 								style={isMyMsg(chat.nickname) ? { backgroundColor: 'rgb(255,255,255,0.5)' } : null}
 							>
 								<div className="profileBox">
-									<img className="profile" src={getProfile(chat.nickname)} alt="" />
+									<img className="profile" src={getProfile(chat.nickname)} title={chat.time} />
 								</div>
 								<div className="vertical">
 									<div className="name">{chat.nickname}</div>
@@ -103,10 +103,9 @@ export default function Chat() {
 
 const chatCSS = css`
 	border-radius: 15px;
-	background-color: rgb(0, 0, 0, 0.5);
+	background-color: rgb(0, 0, 0, 0.4);
 	padding: 5px;
-	width: 30%;
-	height: 60vh;
+	height: 70vh;
 	color: white;
 	position: relative;
 
@@ -150,16 +149,16 @@ const chatCSS = css`
 	.line {
 		position: absolute;
 		bottom: 0;
+		left: -4px;
 		display: flex;
-		flex-direction: row;
 		align-items: center;
-		justify-content: center;
-		width: 100%auto;
+		justify-content: space-evenly;
+		width: 100%;
 		height: 50px;
 
 		.input {
 			align-items: stretch;
-			width: 20vw;
+			width: 80%;
 			height: 30px;
 			border-radius: 20px;
 			background-color: white;
@@ -170,8 +169,8 @@ const chatCSS = css`
 		}
 
 		.btn {
-			height: 30px;
-			width: 30px;
+			height: 33px;
+			width: 33px;
 			border: 0px;
 			border-radius: 70%;
 		}

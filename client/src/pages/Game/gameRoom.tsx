@@ -5,13 +5,11 @@ import { css } from '@emotion/react'
 import art from 'actions/api/art'
 import { setCardList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
-// import nftGrade from 'actions/functions/nftGrade'
 
 export default function GameRoom(props: any) {
 	const dispatch = useDispatch()
 	const { nickname, client, roomId } = props
 
-	// const selectedCards = useSelector((state: any) => state.selectedCards)
 	const roomInfo = useSelector((state: any) => state.roomInfo)
 
 	const [isReady, setIsReady] = useState(false)

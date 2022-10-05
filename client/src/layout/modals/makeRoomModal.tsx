@@ -21,6 +21,14 @@ export default function MakeRoomModal(props: any) {
 	const [typeNumScore, setTypeNumScore] = useState(50)
 	const [roomPw, setRoomPw] = useState('')
 
+	const roomNameFilter = (event) => {
+		if (event.target.value.length > 30) {
+			event.target.value = event.target.value.slice(0, 30)
+		}
+		setRoomName(event.target.value)
+	}
+	console.log(roomName)
+
 	const onSubmit = (event) => {
 		event.preventDefault()
 		if (!roomName || !maxNum) return
@@ -61,9 +69,15 @@ export default function MakeRoomModal(props: any) {
 					<main>
 						<form>
 							<input
-								onChange={(e) => setRoomName(e.target.value)}
+								onChange={roomNameFilter}
 								placeholder="방 제목"
 								autoFocus
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') onSubmit(e)
+									if (e.key === 'Escape') {
+										dispatch(setModalState(''))
+									}
+								}}
 							></input>
 							<label htmlFor="max">최대 인원수</label>
 							<select id="max" defaultValue={3} onChange={(e: any) => setMaxNum(e.target.value)}>

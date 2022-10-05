@@ -37,6 +37,7 @@ import {
 } from 'store/modules/game'
 import art from 'actions/api/art'
 import { useBGM } from 'actions/hooks/useBGM'
+import { setBgmSrc } from 'store/modules/util'
 
 export default function Game() {
 	const dispatch = useDispatch()
@@ -51,6 +52,8 @@ export default function Game() {
 	const phase = useSelector((state: any) => state.phase) // state가 1일때 작동. 1: 텔러 2: 낚시그림선택 3: 텔러맞추기 4: 결과
 	const items = useSelector((state: any) => state.items)
 	const itemState = useSelector((state: any) => state.itemState)
+	const isBgmOn = useSelector((state: any) => state.isBgmOn)
+	const bgmVolume = useSelector((state: any) => state.bgmVolume)
 
 	const [ws, setWs] = useState<any>('')
 	const [state, setState] = useState(0) // 0 이면 gameRoom, 1이면 gamePlay, 2이면 gameResult
@@ -58,10 +61,24 @@ export default function Game() {
 	const [submitCards, setSubmitCards] = useState<any>([])
 	const [choiceCards, setChoiceCards] = useState<any>([])
 	const [userSessionIds, setUserSessionIds] = useState('')
+	const [bgm, setBgm] = useState<any>('')
 
 	const [setModalState, setModalMsg] = useModal('')
 
-	useBGM('game')
+	// 게임화면에선 useBGM이 안먹힌다...
+	useEffect(() => {
+		const newBgm = new Audio(require('assets/audio/game.mp3'))
+		setBgm(newBgm)
+		return () => {
+			if (newBgm) newBgm.pause()
+		}
+	}, [])
+	useEffect(() => {
+		if (!bgm) return
+		if (isBgmOn) bgm.play()
+		if (!isBgmOn) bgm.pause()
+		bgm.volume = bgmVolume / 100
+	}, [bgm, isBgmOn, bgmVolume])
 
 	// 새로고침 방지
 	const blockRefresh = (event) => {
@@ -202,21 +219,31 @@ export default function Game() {
 	}, [isChecked])
 
 	// userSessionId 최신화가 필요한 구독
+	let mycards
+	let item
 	useEffect(() => {
 		try {
 			// 카드패 받기
-			ws.subscribe(`/user/${userSessionIds}/room/${roomId}/mycards`, (action) => {
+			mycards = ws.subscribe(`/user/${userSessionIds}/room/${roomId}/mycards`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('mycards', content)
 				dispatch(setGameCards(content))
 			})
 			// 내 아이템 받기
-			ws.subscribe(`/user/${userSessionIds}/room/${roomId}/item`, (action) => {
+			item = ws.subscribe(`/user/${userSessionIds}/room/${roomId}/item`, (action) => {
 				const content = JSON.parse(action.body)
 				console.log('myitem', content)
 				dispatch(setItems(content))
 			})
 		} catch {}
+		return () => {
+			if (mycards) {
+				mycards.unsubscribe()
+			}
+			if (item) {
+				item.unsubscribe()
+			}
+		}
 	}, [userSessionIds, roomId])
 
 	// selectedCard 최신화가 필요한 구독
@@ -292,38 +319,42 @@ export default function Game() {
 				<GameHeader />
 			</div>
 
-			{state !== 2 ? (
-				<div css={players}>
-					{players.map((player: any) => (
-						<div key={player.nickname} css={playerOne}>
-							<GameProfile player={player} />
-						</div>
-					))}
-				</div>
-			) : null}
-
-			<div>
-				{state === 0 ? (
-					<GameRoom nickname={nickname} client={ws} roomId={roomId} />
-				) : state === 1 ? (
-					phase === 'phase1' || phase === 'phase2' ? (
-						<GameTeller nickname={nickname} client={ws} roomId={roomId} />
-					) : phase === 'phase3' ? (
-						<GameChoice nickname={nickname} client={ws} roomId={roomId} />
-					) : (
-						<GameResult
-							turnResult={turnResult}
-							submitCards={submitCards}
-							choiceCards={choiceCards}
-						/>
-					)
-				) : (
-					<GameEnd setState={setState} client={ws} roomId={roomId} />
-				)}
+			<div css={playerBoxCSS}>
+				{state !== 2 ? (
+					<div css={playersCSS}>
+						{players.map((player: any) => (
+							<div key={player.nickname} css={playerOne}>
+								<GameProfile player={player} />
+							</div>
+						))}
+					</div>
+				) : null}
 			</div>
 
-			<div>
-				<Chat />
+			<div css={gameContainerCSS}>
+				<div css={mainComponentCSS}>
+					{state === 0 ? (
+						<GameRoom nickname={nickname} client={ws} roomId={roomId} />
+					) : state === 1 ? (
+						phase === 'phase1' || phase === 'phase2' ? (
+							<GameTeller nickname={nickname} client={ws} roomId={roomId} />
+						) : phase === 'phase3' ? (
+							<GameChoice nickname={nickname} client={ws} roomId={roomId} />
+						) : (
+							<GameResult
+								turnResult={turnResult}
+								submitCards={submitCards}
+								choiceCards={choiceCards}
+							/>
+						)
+					) : (
+						<GameEnd setState={setState} client={ws} roomId={roomId} />
+					)}
+				</div>
+
+				<div css={chatCSS}>
+					<Chat />
+				</div>
 			</div>
 		</main>
 	)
@@ -335,9 +366,14 @@ const roomBg = css({
 	backgroundSize: 'cover',
 })
 
-const players = css({
+const playerBoxCSS = css({
 	display: 'flex',
 	justifyContent: 'space-evenly',
+})
+
+const playersCSS = css({
+	display: 'flex',
+	justifyContent: 'center',
 	flexWrap: 'wrap',
 	width: '65%',
 })
@@ -350,4 +386,18 @@ const playerOne = css({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
+})
+
+const mainComponentCSS = css({
+	display: 'flex',
+	justifyContent: 'space-between',
+})
+
+const gameContainerCSS = css({
+	display: 'flex',
+	width: '55vw',
+})
+
+const chatCSS = css({
+	width: '35vw',
 })

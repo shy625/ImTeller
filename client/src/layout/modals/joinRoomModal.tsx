@@ -52,7 +52,18 @@ export default function JoinRoomModal(props: any) {
 					<header>방 입장하기</header>
 					<main>
 						<div>{authError}</div>
-						<input onChange={(e) => setPassword(e.target.value)} type="password" autoFocus />
+						<input
+							onChange={(e) => setPassword(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') onSubmit()
+								if (e.key === 'Escape') {
+									dispatch(setModalState(''))
+									navigate(-1, { replace: true })
+								}
+							}}
+							type="password"
+							autoFocus
+						/>
 					</main>
 					<footer>
 						<button

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
@@ -43,7 +43,7 @@ export default function Header() {
 		<div css={headerCss}>
 			<div css={logoTitleContainer}>
 				{/* <img src={logo} alt="로고" css={logoIconCss} /> */}
-				<div css={logoTitleCss} onClick={() => navigate('/')}>
+				<div css={logoTitleCSS} onClick={() => navigate('/')}>
 					ImTeller
 				</div>
 			</div>
@@ -69,7 +69,7 @@ export default function Header() {
 					<div className="faq-underline" />
 				</div>
 				{currentUser.nickname ? (
-					<div css={loginCss}>
+					<div css={loginCSS}>
 						<Profile nickname={currentUser.nickname} profile={currentUser.profile} />
 						<div className="logout" onClick={logout} css={textBtn}>
 							로그아웃
@@ -90,7 +90,7 @@ export default function Header() {
 		</div>
 	)
 }
-const headerCss = css({
+const headerCSS = css({
 	display: 'flex',
 	color: 'white',
 	alignItems: 'center',

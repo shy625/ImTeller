@@ -29,6 +29,7 @@ export default function Mypage() {
 	const paintList = useSelector((state: any) => state.paintList)
 	const cardList = useSelector((state: any) => state.cardList)
 	const myPageTab = useSelector((state: any) => state.myPageTab)
+	const modalState = useSelector((state: any) => state.modalState)
 
 	const [isMyMypage, setIsMyMypage] = useState(false)
 	const [setModalState, setModalMsg] = useModal()
@@ -42,11 +43,12 @@ export default function Mypage() {
 			.userDetail({ nickname: nick })
 			.then((result) => {
 				dispatch(setUserDetail(result.data.response))
+				console.log(result.data.response.wallet)
 			})
 			.catch((error) => {
 				console.error(error)
 			})
-	}, [nick, nickname])
+	}, [nick, nickname, modalState])
 
 	useEffect(() => {
 		if (myPageTab === 0) {
@@ -96,7 +98,13 @@ export default function Mypage() {
 												navigate('/profileEdit')
 											}}
 										>
-											<img src={pencil} alt="연필" css={imgIcon} />
+											<img
+												src={pencil}
+												alt="연필"
+												css={imgIcon}
+												title="회원정보 수정"
+												style={{ borderBottom: '2px solid white', padding: '2px' }}
+											/>
 										</div>
 									) : null}
 								</div>
@@ -110,8 +118,10 @@ export default function Mypage() {
 										{isMyMypage ? (
 											wallet ? (
 												<>
-													<label htmlFor="wallet">등록된 지갑주소 :</label>
-													<input id="wallet" value={currentUser.wallet} disabled></input>
+													<label htmlFor="wallet">등록된 지갑주소 : </label>
+													<span id="wallet" css={walletCSS}>
+														{wallet}
+													</span>
 												</>
 											) : (
 												<div onClick={() => setModalState('addWallet')} css={metamaskBtnCSS}>
@@ -184,4 +194,8 @@ const metamaskBtnCSS = css`
 		margin-left: 5px;
 		margin-right: 3px;
 	}
+`
+
+const walletCSS = css`
+	width: 120%;
 `
