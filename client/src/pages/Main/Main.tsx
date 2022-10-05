@@ -1,15 +1,16 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import Layout from 'layout/layout'
 import Timer from 'components/timer'
-import { css, keyframes } from '@emotion/react'
+import { css } from '@emotion/react'
 import { fullDisplay } from 'style/commonStyle'
+import { setMainTab } from 'store/modules/util'
 
 export default function Main() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
+	dispatch(setMainTab(''))
 
 	const goToGameList = () => {
 		navigate('/game')

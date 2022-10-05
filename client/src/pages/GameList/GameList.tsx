@@ -8,6 +8,7 @@ import Room from 'pages/GameList/room'
 
 import game from 'actions/api/game'
 import { setIsChecked, setRoomList } from 'store/modules/game'
+import { setMainTab } from 'store/modules/util'
 import { useBGM } from 'actions/hooks/useBGM'
 import { useModal } from 'actions/hooks/useModal'
 import { fullDisplay } from 'style/commonStyle'
@@ -16,6 +17,7 @@ export default function GameList() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [setModalState, setModalMsg] = useModal('')
+	dispatch(setMainTab('game'))
 
 	const roomList = useSelector((state: any) => state.roomList)
 	const currentUser = useSelector((state: any) => state.currentUser)
@@ -54,20 +56,26 @@ export default function GameList() {
 			<main css={fullDisplay}>
 				<div css={centerCSS}>
 					<div css={listWrapper}>
-						<button onClick={makeRoom} css={button}>
-							방만들기
-						</button>
-						<button onClick={refresh} css={button}>
-							새로고침
-						</button>
 						<div css={roomListCSS}>
 							{roomList.length
 								? roomList.map((room: any) => (
-										<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.locked)}>
+										<div
+											className="room"
+											key={room.roomId}
+											onClick={() => joinRoom(room.roomId, room.locked)}
+										>
 											<Room room={room} />
 										</div>
 								  ))
 								: null}
+						</div>
+						<div className="btns">
+							<button onClick={makeRoom} css={button}>
+								방만들기
+							</button>
+							<button onClick={refresh} css={button}>
+								새로고침
+							</button>
 						</div>
 					</div>
 				</div>
@@ -76,11 +84,34 @@ export default function GameList() {
 	)
 }
 
-const roomListCSS = css({
-	display: 'flex',
-	justifyContent: 'center',
-	flexWrap: 'wrap',
-})
+const roomListCSS = css`
+	display: grid;
+	grid-template-rows: repeat(auto-fill, minmax(150px, auto));
+	grid-template-columns: repeat(auto-fill, minmax(320px, auto));
+	grid-gap: 0.5rem;
+	background-color: rgba(239, 238, 245, 0.15);
+	border-radius: 1rem;
+	width: 100%;
+	height: 65vh;
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 16px;
+		border-radius: 5px;
+		background-color: white;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: #15212f;
+		border-radius: 5px;
+	}
+
+	.room {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+`
 const centerCSS = css`
 	display: flex;
 	align-items: center;
@@ -89,10 +120,16 @@ const centerCSS = css`
 	font-family: 'GongGothicMedium';
 `
 const listWrapper = css`
-	width: 70%;
+	width: 80%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+
+	.btns {
+		display: flex;
+		margin-top: 1rem;
+		margin-left: auto;
+	}
 `
 const button = css`
 	outline: 'none';

@@ -39,6 +39,7 @@ import {
 	modalMsg,
 	modalResult,
 	loading,
+	mainTab,
 } from 'store/modules/util'
 import { rankList, rankTabNo } from './modules/rank'
 
@@ -86,6 +87,7 @@ const store = configureStore({
 		modalMsg: modalMsg.reducer,
 		modalResult: modalResult.reducer,
 		loading: loading.reducer,
+		mainTab: mainTab.reducer,
 
 		rankTabNo: rankTabNo.reducer,
 		rankList: rankList.reducer,
