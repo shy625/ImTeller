@@ -1,11 +1,7 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { bestPaintProps } from './Rank'
 
-import PolygonLeft from 'assets/image/PolygonLeft.png'
-import PolygonRight from 'assets/image/PolygonRight.png'
+import PolygonLeft from 'assets/image/PolygonLeft.webp'
+import PolygonRight from 'assets/image/PolygonRight.webp'
 // export default function rankOne({ rankList }: { rankList: bestPaintProps | null }) {
 export default function rankOne(props: any) {
 	const { paintTitle, paintImageURL, designerNickname } = props.rankList

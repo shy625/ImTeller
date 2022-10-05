@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { css } from '@emotion/react'
+import podium from 'assets/image/podium.webp'
 
 export default function GameEnd(props: any) {
 	const { setState, client, roomId } = props
@@ -42,9 +44,10 @@ export default function GameEnd(props: any) {
 	// 1, 2, 3 등은 시상대에 올리기
 	// endresult 0에는 점수, 1에는 닉네임
 	return (
-		<div>
-			<div>1등 {endResult[0] && `${endResult[0][1]} : ${endResult[0][0]}`}</div>
+		<div css={gameResultCSS}>
+			<img src={podium} alt="" />
 			<div>2등 {endResult[1] && `${endResult[1][1]} : ${endResult[1][0]}`}</div>
+			<div>1등 {endResult[0] && `${endResult[0][1]} : ${endResult[0][0]}`}</div>
 			<div>3등 {endResult[2] && `${endResult[2][1]} : ${endResult[2][0]}`}</div>
 
 			{endResult.slice(3).length ? (
@@ -60,3 +63,10 @@ export default function GameEnd(props: any) {
 		</div>
 	)
 }
+const gameResultCSS = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-family: 'GongGothicMedium';
+`
