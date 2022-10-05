@@ -1,6 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
-import { useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import poo from 'assets/image/blind.webp'

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import Layout from 'layout/layout'
 import { fullDisplay, centerColCSS } from 'style/commonStyle'

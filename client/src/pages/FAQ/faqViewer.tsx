@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 import { css } from '@emotion/react'
 import { fullDisplay } from 'style/commonStyle'

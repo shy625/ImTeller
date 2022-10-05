@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { css } from '@emotion/react'
 
 import { setModalState, setModalMsg, setModalResult } from 'store/modules/util'
 
