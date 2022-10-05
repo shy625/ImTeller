@@ -6,7 +6,6 @@ export default function Timer() {
 	const interval = useRef(null)
 	const initialTime = useRef(time)
 	const [viewTime, setViewTime] = useState(0)
-	const roomInfo = useSelector((state: any) => state.roomInfo)
 
 	useEffect(() => {
 		interval.current = setInterval(() => {

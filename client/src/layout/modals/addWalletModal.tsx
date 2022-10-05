@@ -1,9 +1,7 @@
-/** @jsxImportSource @emotion/react */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
-import { centerColCSS } from 'style/commonStyle'
 
 import user from 'actions/api/user'
 import { setModalState, setModalMsg } from 'store/modules/util'

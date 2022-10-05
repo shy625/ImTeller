@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 
 function Pagination({ total, limit, page, setPage }: any) {

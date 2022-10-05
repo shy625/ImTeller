@@ -1,6 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 import AddWalletModal from 'layout/modals/addWalletModal'
