@@ -13,6 +13,8 @@ export default function Chat() {
 	const chats = useSelector((state: any) => state.chats)
 	const { nickname } = useSelector((state: any) => state.currentUser)
 	const email = useSelector((state: any) => state.email) || localStorage.getItem('email')
+	const roomInfo = useSelector((state: any) => state.roomInfo)
+
 	const [msgInput, setMsgInput] = useState('')
 	const [ws, setWs] = useState<any>('')
 
@@ -53,6 +55,10 @@ export default function Chat() {
 		return false
 	} // 이 값에 따라서 style 다르게. 카톡처럼 내꺼면 오른쪽
 
+	const getProfile = (nickname) => {
+		return roomInfo.profiles[nickname]
+	} // 프로필 url 가져오기
+
 	return (
 		<div css={chatCSS}>
 			<div>
@@ -62,6 +68,7 @@ export default function Chat() {
 								key={String(idx) + chat.time}
 								style={isMyMsg(chat.nickname) ? { backgroundColor: 'white' } : null}
 							>
+								<img src={getProfile(chat.nickname)} alt="" />
 								<div>{chat.nickname}</div>
 								<div>{chat.userMsg}</div>
 								<div>{chat.time ? chat.time : null}</div>
