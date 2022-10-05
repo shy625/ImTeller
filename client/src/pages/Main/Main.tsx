@@ -11,20 +11,28 @@ export default function Main() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
+	const goToGameList = () => {
+		navigate('/game')
+	}
+
 	return (
 		<Layout>
 			<div css={fullDisplay}>
 				<div className="cardLoc" css={cardCss}>
 					<div className="card">ImTeller</div>
-					<div className="blur"></div>
+					<div className="text">
+						<p>내가 직접 그린 NFT카드와 함께</p>
+						<p>자신만의 독특한 방법으로</p>
+						<p>그림을 설명해보세요!</p>
+
+						<br />
+						<p>그렇지만!!</p>
+						<p>너무 쉽게 설명하면 안돼요!!</p>
+						<button css={button} onClick={goToGameList}>
+							시작하기
+						</button>
+					</div>
 				</div>
-				<button
-					onClick={() => {
-						navigate('/game')
-					}}
-				>
-					시작하기
-				</button>
 				<Timer />
 			</div>
 		</Layout>
@@ -34,15 +42,14 @@ const cardCss = css`
 	min-height: 100vh;
 	display: flex;
 	align-items: center;
-	flex-direction: column;
-	padding-top: 2rem;
-	padding-bottom: 2rem;
+	flex-direction: row;
+	justify-content: space-evenly;
 	box-sizing: border-box;
 
 	.card {
 		background: #191c29;
-		width: 43vh;
-		height: 65vh;
+		width: var(--card-width);
+		height: var(--card-height);
 		padding: 3px;
 		position: relative;
 		border-radius: 32px;
@@ -50,106 +57,67 @@ const cardCss = css`
 		align-items: center;
 		text-align: center;
 		display: flex;
-		font-size: 1.5em;
+		font-size: 4rem;
 		color: rgb(88 199 250 / 0%);
 		cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
-		font-family: cursive;
-		z-index: 100;
+		font-family: Yeongdo-Rg;
+		transform-style: preserve-3d;
 	}
 
 	.card:hover {
 		color: rgb(88 199 250 / 100%);
 		transition: color 1s;
 	}
-	.card:hover.blur {
+
+	.card:hover:after {
 		animation: none;
 		opacity: 0;
 	}
 
-	.blur {
+	.card::after {
 		position: absolute;
 		content: '';
-		top: 15vh;
+		top: calc(var(--card-height) / 6);
 		left: 0;
 		right: 0;
 		z-index: 1;
-		width: 43vh;
-		height: 65vh;
+		height: 100%;
+		width: 100%;
 		margin: 0 auto;
 		transform: scale(0.8);
-		filter: blur(12vh);
-		background-image: linear-gradient(45deg, #5ddcff, #3c67e3 43%, #4e00c2);
+		filter: blur(calc(var(--card-height) / 6));
+		background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
 		opacity: 1;
 		transition: opacity 0.5s;
-		// animation: spin 2.5s linear infinite;
+		animation: spin 2.5s linear infinite;
+		transform: translateZ(-1px);
+	}
+
+	.text {
+		text-align: center;
+		color: white;
+		font-family: 'GongGothicMedium';
+		font-size: 1.5rem;
+		line-height: 1rem;
 	}
 `
-// const moving = keyframes`
-// spin
-// 0% {
-//   --rotate: 0deg;
-// }
-// 100% {
-//   --rotate: 360deg;
-// }
-// `
-// const magicCardCss = css({
-//   position: 'relative',
-//   background: '#191c29',
-//   width: 500,
-//   height: 740,
-//   padding: 3,
-//   borderRadius: 32,
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   textAlign: 'center',
-//   display: 'flex',
-//   fontSize: '1.5em',
-//   color: 'rgb(88 199 250 / 0%)',
-//   cursor: 'pointer',
 
-//   '&:hover': {
-//     color: 'rgb(88 199 250 / 100%)',
-//     transition: 'color 1s',
-//   },
+const button = css`
+	outline: 'none';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	border: 0px;
+	padding: 6px 20px 6px 20px;
+	margin: 20px;
+	color: #1b5198;
+	background-color: #d1e4ff;
+	border-radius: 40px;
+	font-size: 1.5rem;
+	width: 160px;
+	height: 55px;
+	font-family: 'GongGothicMedium';
 
-//   '&:hover:before, &:hover:after': {
-//     animation: 'none',
-//     opacity: 0,
-//   },
-//   '&:before': {
-//     content: '',
-//     width: '104%',
-//     height: '102%',
-//     borderRadius: 8,
-//     backgroundImage: `linear-gradient(
-//     var(--rotate)
-//     , #5ddcff, #3c67e3 43%, #4e00c2)`,
-//     position: 'absolute',
-//     zIndex: -1,
-//     top: '-1%',
-//     left: '-2%',
-//     animation: 'spin 2.5s linear infinite',
-//   },
-//   '&:after': {
-//     content: '',
-//     width: '100%',
-//     height: '100%',
-//     borderRadius: 8,
-//     backgroundImage: `linear-gradient(
-//     var(--rotate)
-//     , #5ddcff, #3c67e3 43%, #4e00c2)`,
-//     position: 'absolute',
-//     zIndex: -1,
-//     top: 'calc(740 / 6)',
-//     left: 0,
-//     right: 0,
-//     margin: '0 auto',
-//     transform: 'scale(0.8)',
-//     animation: 'spin 2.5s linear infinite',
-//     filter: 'blur(calc(740 / 6))',
-//     opacity: 1,
-//     transition: 'opacity .5s',
-//   },
-//   animation: `${moving}`,
-// })
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
+`
