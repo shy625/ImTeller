@@ -59,18 +59,20 @@ export default function Chat() {
 				{chats.length
 					? chats.map((chat, idx) => (
 							<div
+								css={msg}
 								key={String(idx) + chat.time}
-								style={isMyMsg(chat.nickname) ? { backgroundColor: 'white' } : null}
+								style={isMyMsg(chat.nickname) ? { backgroundColor: 'rgb(255,255,255,0.5)' } : null}
 							>
 								<div>{chat.nickname}</div>
 								<div>{chat.userMsg}</div>
-								<div>{chat.time ? chat.time : null}</div>
+								{/* <div>{chat.time ? chat.time : null}</div> */}
 							</div>
 					  ))
 					: null}
 			</div>
-			<div>
+			<div css={line}>
 				<input
+					css={input}
 					type="text"
 					onChange={(e) => {
 						setMsgInput(e.target.value)
@@ -80,13 +82,46 @@ export default function Chat() {
 						if (e.key === 'Enter') send()
 					}}
 				/>
-				<div onClick={send}>전송</div>
+				<button css={btn} onClick={send}>
+					+
+				</button>
 			</div>
 		</div>
 	)
 }
-const chat = css({
-	border: '1px solid black',
-	width: '30%',
-	height: '80vh',
-})
+// const chat = css({
+// 	border: '1px solid black',
+// 	border-radius:'10xp',
+// 	width: '30%',
+// 	height: '80vh',
+// })
+
+const chat = css`
+	border-radius: 15px;
+	background-color: rgb(0, 0, 0, 0.5);
+	width: 30%;
+	height: 60vh;
+`
+const line = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%auto;
+`
+const msg = css`
+	margin: 5px;
+	border-radius: 15px;
+	display: flex;
+	flex-direction: row;
+`
+const input = css`
+	align-items: stretch;
+	width: 20vw;
+	border-radius: 20px;
+	background-color: white;
+	margin: 5px;
+`
+const btn = css`
+	border-radius: 50%;
+`
