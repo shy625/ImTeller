@@ -1,0 +1,78 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { rankListProps, winningRateRankProps } from './Rank'
+export default function rankListDealWin({ rankList }: { rankList: rankListProps }) {
+	const winningRateRankList: winningRateRankProps[] = rankList.winningRateRankList
+	console.log('rankList', typeof rankList)
+	console.log(rankList[0])
+	return (
+		<div css={box}>
+			<div css={list}>
+				<table>
+					<thead>
+						<th>순위</th>
+						<th>닉네임</th>
+						<th>승률</th>
+						<th>승리</th>
+						<th>패배</th>
+					</thead>
+					<tbody>
+						{winningRateRankList ? (
+							winningRateRankList.map((rank, i) => (
+								<tr key={i}>
+									<td>{i + 1}위</td>
+									<td>{rank.nickname}</td>
+									<td>{rank.winningRate}</td>
+									<td>{rank.win}</td>
+									<td>{rank.lose}</td>
+								</tr>
+							))
+						) : (
+							<tr>해당하는 데이터가 없습니다</tr>
+						)}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	)
+}
+const box = css`
+	display: flex;
+	flex-direction: column;
+	margin: 2rem;
+`
+
+const list = css`
+	width: 100%;
+	height: 70vh;
+	/* background-color: rgba(239, 238, 245, 0.3); */
+	border-radius: 1rem;
+	box-shadow: 2px 2px 16px;
+	margin-bottom: 1rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+	color: white;
+	table {
+		margin-top: 30px;
+		width: 100%;
+	}
+	th {
+		line-height: 8vh;
+		border-bottom: 1px solid #aaa;
+	}
+	thead {
+		font-family: 'GmarketSansMedium';
+		font-size: 30px;
+	}
+	tbody {
+		font-family: 'GmarketSansMedium';
+	}
+	td {
+		line-height: 5vh;
+		text-align: center;
+	}
+`

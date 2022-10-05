@@ -47,7 +47,7 @@ export default function CardList(props: CardListProps) {
 						<div className="window">
 							<button onClick={moveLeft}>&lt;</button>
 							<div className="container">
-								<div css={paintListCSS}>
+								<div css={type ? paintList1CSS : paintList0CSS}>
 									{cardList.slice(page, page + limit).map((card) => {
 										return <Card card={card} type={type} key={card.cardId} />
 									})}
@@ -56,7 +56,7 @@ export default function CardList(props: CardListProps) {
 							<button onClick={moveRight}>&gt;</button>
 						</div>
 					) : (
-						<div css={paintListCSS}>
+						<div css={type ? paintList1CSS : paintList0CSS}>
 							{cardList.map((card) => {
 								return <Card card={card} type={type} key={card.cardId} />
 							})}
@@ -66,7 +66,7 @@ export default function CardList(props: CardListProps) {
 					<div className="window">
 						<button onClick={moveLeft}>&lt;</button>
 						<div className="container">
-							<div css={paintListCSS}>
+							<div css={type ? paintList1CSS : paintList0CSS}>
 								{cardList.slice(page, page + limit).map((paint) => {
 									return <Paint paint={paint} type={type} key={paint.paintId} />
 								})}
@@ -75,7 +75,7 @@ export default function CardList(props: CardListProps) {
 						<button onClick={moveRight}>&gt;</button>
 					</div>
 				) : (
-					<div css={paintListCSS}>
+					<div css={type ? paintList1CSS : paintList0CSS}>
 						{cardList.map((paint) => {
 							return <Paint paint={paint} type={type} key={paint.paintId} />
 						})}
@@ -117,7 +117,12 @@ const centerCSS = css`
 		width: 100%;
 	}
 `
-const paintListCSS = css`
+const paintList0CSS = css`
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+`
+const paintList1CSS = css`
 	display: flex;
 	justify-content: center;
 	/* flex-wrap: wrap; */

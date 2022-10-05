@@ -135,9 +135,10 @@ export default function ProfileEdit(props: any) {
 			.profileEdit(formdata)
 			.then((result) => {
 				if (result.data.response === '사용자의 정보를 변경했습니다.') {
+					// setModalMsg('회원정보가 수정되었습니다')
+					// setModalState('alert')
+					alert('회원정보가 수정되었습니다')
 					navigate(-1, { replace: true })
-					setModalMsg('회원정보가 수정되었습니다')
-					setModalState('alert')
 				}
 			})
 			.catch((error) => {
