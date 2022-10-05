@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import Card from 'components/card'
-
+import { useState } from 'react'
 import { setModalState } from 'store/modules/util'
 import { setSelectedCard } from 'store/modules/art'
 

@@ -1,12 +1,9 @@
-/** @jsxImportSource @emotion/react */
-
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
 
 import Layout from 'layout/layout'
-import Pagination from 'pages/GameList/pagination'
 import Room from 'pages/GameList/room'
 
 import game from 'actions/api/game'
@@ -50,16 +47,21 @@ export default function GameList() {
 	return (
 		<Layout>
 			<main css={fullDisplay}>
-				<h2>게임리스트</h2>
-				<button onClick={makeRoom}>방만들기</button>
-				<div css={roomListCSS}>
-					{roomList.length
-						? roomList.map((room: any) => (
-								<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.isLocked)}>
-									<Room room={room} />
-								</div>
-						  ))
-						: null}
+				<div css={centerCSS}>
+					<div css={listWrapper}>
+						<button onClick={makeRoom} css={button}>
+							방만들기
+						</button>
+						<div css={roomListCSS}>
+							{roomList.length
+								? roomList.map((room: any) => (
+										<div key={room.roomId} onClick={() => joinRoom(room.roomId, room.locked)}>
+											<Room room={room} />
+										</div>
+								  ))
+								: null}
+						</div>
+					</div>
 				</div>
 			</main>
 		</Layout>
@@ -68,5 +70,68 @@ export default function GameList() {
 
 const roomListCSS = css({
 	display: 'flex',
+	justifyContent: 'center',
 	flexWrap: 'wrap',
 })
+const centerCSS = css`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	font-family: 'GongGothicMedium';
+`
+const listWrapper = css`
+	width: 70%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+const button = css`
+	outline: 'none';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	border: 5px solid rgb(163, 151, 198);
+	padding: 6px 20px 6px 20px;
+	margin: 0px 10px 5px 10px;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.6);
+	border-radius: 20px;
+	font-size: 25px;
+	width: 160px;
+	height: 70px;
+	font-family: 'GongGothicMedium';
+	:hover {
+		box-shadow: 1px 2px 2px 2px rgba(255, 255, 255, 0.2);
+	}
+	/* font-family: 'GmarketSansMedium';
+	outline: none;
+	height: 40px;
+	text-align: center;
+	width: 130px;
+	border-radius: 40px;
+	border: 1px solid white;
+	color: #f9f6f6;
+	background: rgb(74, 59, 117);
+	letter-spacing: 1px;
+	text-shadow: 0;
+	font: {
+		size: 12px;
+		weight: bold;
+	}
+	cursor: pointer;
+	transition: all 0.25s ease;
+	&:hover {
+		font-family: 'GongGothicMedium';
+		color: black;
+		background: rgb(255, 255, 255, 0.6);
+		border: 2px solid black;
+	}
+	&:active {
+		//letter-spacing: 2px;
+		letter-spacing: 2px;
+	} */
+`
+const right = css`
+	width: 80%;
+	display: flex;
+	justify-content: end;
+`

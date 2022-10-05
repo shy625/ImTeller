@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,25 +17,29 @@ export default function MakeRoomModal(props: any) {
 	const [isLocked, setIsLocked] = useState(false)
 	const [maxNum, setMaxNum] = useState(6)
 	const [type, setType] = useState('times')
-	const [typeNum, setTypeNum] = useState(10)
+	const [typeNumRound, setTypeNumRound] = useState(2)
+	const [typeNumScore, setTypeNumScore] = useState(50)
 	const [roomPw, setRoomPw] = useState('')
 
 	const onSubmit = (event) => {
 		event.preventDefault()
 		if (!roomName || !maxNum) return
 
-		const roomInfo = {
+		const roomInfo: any = {
 			roomName,
 			roomPw,
 			maxNum,
 			type,
-			typeNum,
 			leader: currentUser.nickname,
+		}
+		if (type === 'score') {
+			roomInfo.typeNum = typeNumScore
+		} else {
+			roomInfo.typeNum = typeNumRound
 		}
 		if (!isLocked) {
 			roomInfo.roomPw = ''
 		}
-		// console.log(roomInfo)
 		game
 			.make(roomInfo)
 			.then((result) => {
@@ -57,7 +60,11 @@ export default function MakeRoomModal(props: any) {
 					<header>방 만들기</header>
 					<main>
 						<form>
-							<input onChange={(e) => setRoomName(e.target.value)} placeholder="방 제목"></input>
+							<input
+								onChange={(e) => setRoomName(e.target.value)}
+								placeholder="방 제목"
+								autoFocus
+							></input>
 							<label htmlFor="max">최대 인원수</label>
 							<select id="max" defaultValue={3} onChange={(e: any) => setMaxNum(e.target.value)}>
 								<option value={3}>3명</option>
@@ -88,17 +95,17 @@ export default function MakeRoomModal(props: any) {
 							</div>
 							{type == 'score' ? (
 								<input
-									onChange={(e: any) => setTypeNum(e.target.value)}
+									onChange={(e: any) => setTypeNumScore(e.target.value)}
 									placeholder="승리 점수"
-									defaultValue={50}
+									defaultValue={typeNumScore}
 								></input>
 							) : (
 								<>
 									<label htmlFor="round">라운드 수</label>
 									<select
 										id="round"
-										defaultValue={2}
-										onChange={(e: any) => setTypeNum(e.target.value)}
+										onChange={(e: any) => setTypeNumRound(e.target.value)}
+										defaultValue={typeNumRound}
 									>
 										<option value={2}>2라운드</option>
 										<option value={3}>3라운드</option>
@@ -135,7 +142,6 @@ export default function MakeRoomModal(props: any) {
 						</form>
 					</main>
 					<footer>
-						<button onClick={onSubmit}>생성</button>
 						<button
 							onClick={() => {
 								dispatch(setModalState(''))
@@ -143,6 +149,7 @@ export default function MakeRoomModal(props: any) {
 						>
 							취소
 						</button>
+						<button onClick={onSubmit}>생성</button>
 					</footer>
 				</section>
 			</div>

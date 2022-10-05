@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -20,7 +18,6 @@ import saveIcon from 'assets/image/save.webp'
 
 // style
 import { input, textarea, imgIcon, normalBtn, fullDisplay } from 'style/commonStyle'
-import axios from 'axios'
 
 export default function Paint() {
 	const navigate = useNavigate()

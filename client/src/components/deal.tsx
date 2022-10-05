@@ -1,12 +1,20 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { normalBtn } from 'style/commonStyle'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Deal(props: any) {
 	const navigate = useNavigate()
 	const currentUser = useSelector((state: any) => state.currentUser)
+
+	const interval = useRef(null)
+	const diffTime = useRef(0)
+	const [day, setDay] = useState(0)
+	const [hour, setHour] = useState(0)
+	const [min, setMin] = useState(0)
+	const [sec, setSec] = useState(0)
+	const [finished, setFinished] = useState(false)
 
 	const {
 		dealId,
@@ -22,7 +30,22 @@ export default function Deal(props: any) {
 		grade,
 		effect,
 	} = props.deal
-
+	useEffect(() => {
+		interval.current = setInterval(() => {
+			const now = new Date()
+			const finish = new Date(finishedAt.replace(' ', 'T'))
+			diffTime.current = Math.floor((finish.getTime() - now.getTime()) / 1000)
+			const d = Math.floor(diffTime.current / (24 * 60 * 60))
+			const h = Math.floor((diffTime.current - d * 24 * 60 * 60) / (60 * 60))
+			const m = Math.floor((diffTime.current - (d * 24 + h) * 60 * 60) / 60)
+			const s = diffTime.current - (d * 24 * 60 + h * 60 + m) * 60
+			setDay(d)
+			setHour(h)
+			setMin(m)
+			setSec(s)
+		}, 1000)
+		return () => clearInterval(interval.current)
+	}, [])
 	const goDetail = () => {
 		if (!currentUser.nickname) return navigate('/login')
 		navigate(`/deal/${dealId}`)
@@ -35,19 +58,25 @@ export default function Deal(props: any) {
 			</div>
 			<div css={explain}>
 				<div css={title}>{cardTitle}</div>
+				<br />
 				<div css={body}>
-					<br />
-					<div css={left}> Designed by.</div>
-					<br />
-					<div css={right}>{designerNickname}</div>
-					<br />
-					<div css={left}>Price</div>
-					<br />
-					<div css={right}>{instantPrice} SSF</div>
-					<br />
-					<div css={left}>Ends in </div>
-					<br />
-					<div css={right}>{finishedAt}</div>
+					<div id="designer" css={designer}>
+						<div>by. {designerNickname}</div>
+					</div>
+					<div id="price" css={price}>
+						<div>{instantPrice} SSF</div>
+					</div>
+					<div id="date" css={price}>
+						<div>
+							{diffTime.current < 0 ? (
+								<div>종료된 경매</div>
+							) : (
+								<div>
+									{day}일 {hour}시간 {min}분 {sec}초 남음
+								</div>
+							)}
+						</div>
+					</div>
 				</div>
 				<button css={normalBtn} onClick={goDetail}>
 					상세보기
@@ -58,8 +87,8 @@ export default function Deal(props: any) {
 }
 
 const box = css`
+	width: 390px;
 	display: flex;
-	flex-direction: row;
 	align-items: center;
 	color: black;
 	margin: 10px;
@@ -92,23 +121,31 @@ const explain = css`
 	flex-direction: column;
 	align-items: center;
 	margin: 10px;
+	width: 190px;
 `
 const title = css`
 	font-size: 20px;
-	font-weight: bold;
 `
 const body = css`
+	width: 100%;
 	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
 `
 
-const right = css`
-	font-size: 17px;
-	float: right;
-	margin-bottom: 5px;
-`
-
-const left = css`
+const designer = css`
 	font-family: 'GmarketSansMedium';
 	font-size: 13px;
-	float: left;
+	margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+`
+const price = css`
+	font-family: 'GmarketSansMedium';
+	font-size: 15px;
+	margin-bottom: 5px;
+	display: flex;
+	align-items: center;
 `

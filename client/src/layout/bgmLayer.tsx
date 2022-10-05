@@ -1,8 +1,5 @@
-/** @jsxImportSource @emotion/react */
-
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { css } from '@emotion/react'
 
 export default function BgmLayer(props: any) {
 	const bgm: any = useRef()
@@ -35,11 +32,11 @@ export default function BgmLayer(props: any) {
 	}, [bgmSrc])
 
 	useEffect(() => {
-		// if (isEffectOn) {
-		// 	effect.current.load()
-		// } else {
-		// 	effect.current.pause()
-		// }
+		if (isEffectOn) {
+			effect.current.load()
+		} else {
+			effect.current.pause()
+		}
 	}, [isEffectOn])
 
 	useEffect(() => {

@@ -13,17 +13,33 @@ export default function GameChoice(props: any) {
 	const table = useSelector((state: any) => state.table)
 	const teller = useSelector((state: any) => state.teller)
 	const tellerMsg = useSelector((state: any) => state.tellerMsg)
+	const itemState = useSelector((state: any) => state.itemState)
 
-	const [setModalState, setModalMsg] = useModal('')
 	const [isImteller, setIsImteller] = useState(false)
 	const [choicedCard, setChoicedCard] = useState<any>({})
 	const [isSubmit, setIsSubmit] = useState(false)
+
+	const [blind, setBlind] = useState(false)
+	const [blindDetail, setBlindDetail] = useState(0)
+	const [darkmode, setDarkmode] = useState(false)
+
+	const [setModalState, setModalMsg] = useModal('')
 
 	useEffect(() => {
 		if (teller === nickname) {
 			setIsImteller(true)
 		}
 	}, [teller, nickname])
+
+	useEffect(() => {
+		itemState.map((item) => {
+			if (item.effect === 6) setDarkmode(true)
+			if (item.effect === 2) {
+				setBlind(true)
+				setBlindDetail(Math.max(blindDetail, item.effectNum))
+			}
+		})
+	}, [])
 
 	const onSubmit = () => {
 		if (isImteller) return
@@ -48,7 +64,14 @@ export default function GameChoice(props: any) {
 	return (
 		<div>
 			<div>
-				{!isImteller && choicedCard.cardUrl ? <GameCard cardUrl={choicedCard.cardUrl} /> : null}
+				{!isImteller && choicedCard.cardUrl ? (
+					<GameCard
+						cardUrl={choicedCard.cardUrl}
+						blind={blind}
+						blindDetail={blindDetail}
+						darkmode={darkmode}
+					/>
+				) : null}
 				<span>{tellerMsg}</span>
 
 				{isSubmit ? null : !isImteller ? <button onClick={onSubmit}>제출하기</button> : null}
@@ -63,7 +86,12 @@ export default function GameChoice(props: any) {
 			<div>
 				{table.map((card) => (
 					<div key={card.cardId} onClick={() => setChoicedCard(card)}>
-						<GameCard cardUrl={card.cardUrl} />
+						<GameCard
+							cardUrl={card.cardUrl}
+							blind={blind}
+							blindDetail={blindDetail}
+							darkmode={darkmode}
+						/>
 					</div>
 				))}
 			</div>

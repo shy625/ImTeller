@@ -46,18 +46,27 @@ export default function JoinRoomModal(props: any) {
 	}
 
 	return (
-		<div>
-			<input onChange={(e) => setPassword(e.target.value)} type="password" />
-			<button onClick={onSubmit}>입장</button>
-			<button
-				onClick={() => {
-					dispatch(setModalState(''))
-					navigate(-1, { replace: true })
-				}}
-			>
-				취소
-			</button>
-			{authError}
+		<div css={joinRoomModalCSS}>
+			<div className="openModal modal">
+				<section>
+					<header>방 입장하기</header>
+					<main>
+						<div>{authError}</div>
+						<input onChange={(e) => setPassword(e.target.value)} type="password" autoFocus />
+					</main>
+					<footer>
+						<button
+							onClick={() => {
+								dispatch(setModalState(''))
+								navigate(-1, { replace: true })
+							}}
+						>
+							취소
+						</button>
+						<button onClick={onSubmit}>입장</button>
+					</footer>
+				</section>
+			</div>
 		</div>
 	)
 }
