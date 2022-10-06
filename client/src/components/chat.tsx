@@ -105,6 +105,7 @@ const chatCSS = css`
 	border-radius: 15px;
 	background-color: rgb(0, 0, 0, 0.4);
 	padding: 5px;
+	width: 400px;
 	height: 70vh;
 	color: white;
 	position: relative;
