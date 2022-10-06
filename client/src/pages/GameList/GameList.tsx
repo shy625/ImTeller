@@ -162,7 +162,7 @@ const button = css`
 		size: 12px;
 		weight: bold;
 	}
-	cursor: pointer;
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 	transition: all 0.25s ease;
 	&:hover {
 		font-family: 'GongGothicMedium';

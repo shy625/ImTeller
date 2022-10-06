@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import Layout from 'layout/layout'
-import Timer from 'components/timer'
 import { css } from '@emotion/react'
 import { fullDisplay } from 'style/commonStyle'
 import { setMainTab } from 'store/modules/util'
@@ -34,7 +33,6 @@ export default function Main() {
 						</button>
 					</div>
 				</div>
-				<Timer />
 			</div>
 		</Layout>
 	)

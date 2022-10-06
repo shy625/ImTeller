@@ -68,13 +68,14 @@ export default function GameChoice(props: any) {
 				{isImteller ? (
 					<div>다른 사람들이 카드를 맞추는 중입니다.</div>
 				) : (
-					<div>작품설명으로 텔러의 그림을 맞춰주세요.</div>
+					<div>작품명으로 텔러의 그림을 맞춰주세요.</div>
 				)}
 			</div>
 
 			<div css={selectCSS}>
 				{!isImteller && choicedCard.cardUrl ? (
 					<GameCard
+						choice={true}
 						cardUrl={choicedCard.cardUrl}
 						blind={blind}
 						blindDetail={blindDetail}
@@ -84,60 +85,85 @@ export default function GameChoice(props: any) {
 				<span>{tellerMsg}</span>
 
 				{isSubmit ? null : !isImteller ? (
-					<button onClick={onSubmit} css={submitBtnCSS}>
+					<button css={submitBtnCSS} onClick={onSubmit}>
 						제출하기
 					</button>
 				) : null}
 			</div>
 
-			<div css={cardCSS}>
-				{table.map((card) => (
-					<div key={card.cardId} onClick={() => setChoicedCard(card)}>
-						<GameCard
-							cardUrl={card.cardUrl}
-							blind={blind}
-							blindDetail={blindDetail}
-							darkmode={darkmode}
-						/>
-					</div>
-				))}
+			<div css={tableCSS}>
+				<div css={cardCSS}>
+					{table.map((card) => (
+						<div css={cardOneCSS} key={card.cardId} onClick={() => setChoicedCard(card)}>
+							<GameCard
+								cardUrl={card.cardUrl}
+								blind={blind}
+								blindDetail={blindDetail}
+								darkmode={darkmode}
+							/>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 	)
 }
 
-const choiceContainerCSS = css`
-	font-family: GmarketSansMedium;
-	color: white;
-`
+const choiceContainerCSS = css({
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'space-between',
+	alignItems: 'center',
+	fontFamily: 'GmarketSansMedium',
+	color: 'white',
+	width: '100%',
+})
 
 const msgCSS = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	min-height: 1vh;
+`
+const selectedCardCSS = css`
+	width: 30px;
+	margin: 0 10px;
 `
 const selectCSS = css`
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	align-items: center;
-
-	button {
-		height: 30px;
-		width: 100px;
-		font-size: 15px;
-	}
+	width: 100%;
+	min-height: 12vh;
 `
 const submitBtnCSS = css`
-	width: 10em;
-	height: 4em;
+	max-width: 120px;
+	height: 30px;
 	border: 0;
 	border-radius: 12px;
-	margin: 1em;
-	font-family: GmarketSansMedium;
-	padding: 10px 10px,
+	border: none;
+	margin: 5%;
+	background-color: #d1e4ff;
+	font-family: GongGothicMedium;
+
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
 `
+const tableCSS = css({
+	display: 'flex',
+	justifyContent: 'space-between',
+	alignItems: 'center',
+	width: '100%',
+})
 const cardCSS = css({
 	display: 'flex',
-	width: '100px',
+	justifyContent: 'space-evenly',
+	flexWrap: 'wrap',
+	width: '90%',
+})
+const cardOneCSS = css({
+	width: '23%',
 })

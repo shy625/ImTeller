@@ -51,7 +51,6 @@ export default function VoteModal(props: any) {
 			.vote(data)
 			.then((result) => {
 				console.log(result)
-				// 내용 온것 반영하기
 				voteApi
 					.paintList()
 					.then((result) => {
@@ -59,12 +58,9 @@ export default function VoteModal(props: any) {
 						console.log('출품 목록 새로 불러움')
 					})
 					.catch((err) => console.log(err))
-				console.log('좋아요 반영됨')
 				dispatch(setModalState(''))
 			})
 			.catch((error) => {
-				console.log('좋아요 반영안됨')
-				console.log(data)
 				console.log(error)
 			})
 	}
@@ -116,7 +112,6 @@ const voteModalCSS = css`
 		margin: 0 auto;
 		border-radius: 25px;
 		background-color: #fff;
-		/* 팝업이 열릴때 스르륵 열리는 효과 */
 		animation: modal-show 0.3s;
 		overflow: hidden;
 	}
@@ -161,7 +156,7 @@ const voteModalCSS = css`
 	}
 	button {
 		outline: none;
-		cursor: pointer;
+		cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 		border: 0;
 		padding: 6px 12px;
 		margin: 0px 10px 5px 10px;

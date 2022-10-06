@@ -15,6 +15,7 @@ export default function DealRegisterModal(props: any) {
 		dispatch(setSelectedCard(card))
 		dispatch(setModalState(''))
 	}
+
 	// 카드 carousel
 	let limit = 3
 	const numPages = Math.ceil(cardList.length / limit) || 1
@@ -37,6 +38,7 @@ export default function DealRegisterModal(props: any) {
 			setPage((num + 1) * 6)
 		}
 	}
+
 	return (
 		<div css={registerModalCSS}>
 			<div className="openModal modal">
@@ -67,6 +69,7 @@ export default function DealRegisterModal(props: any) {
 		</div>
 	)
 }
+
 const registerModalCSS = css`
 	.modal {
 		display: none;
@@ -102,7 +105,7 @@ const registerModalCSS = css`
 	}
 	.window button {
 		outline: none;
-		cursor: pointer;
+		cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 		border: 0;
 		padding: 6px 12px;
 		margin: 0px 10px 5px 10px;
@@ -134,7 +137,7 @@ const registerModalCSS = css`
 	}
 	button {
 		outline: none;
-		cursor: pointer;
+		cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 		border: 0;
 		padding: 6px 12px;
 		margin: 0px 10px 5px 10px;

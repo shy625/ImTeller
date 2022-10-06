@@ -10,6 +10,12 @@ export default function GameEnd(props: any) {
 	const roomInfo = useSelector((state: any) => state.roomInfo)
 
 	const [endResult, setEndResult] = useState<any>([])
+	// const result = {
+	// 	tester: 10,
+	// 	MoCCo: 6,
+	// 	IMTELLER: 12,
+	// 	tester2: 9,
+	// }
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -48,54 +54,58 @@ export default function GameEnd(props: any) {
 	// 1, 2, 3 등은 시상대에 올리기
 	// endresult 0에는 점수, 1에는 닉네임
 	return (
-		<div css={gameResultCSS}>
-			<img src={podium} alt="" css={podiumCSS} />
-			<div css={resultInfoCSS}>
-				<div>
-					{endResult[0] && (
-						<div css={profileInfo2CSS}>
-							<img src={getProfile(endResult[1][1])} alt="" css={profileImgCSS} />
-							<div>
-								{endResult[1][1]} : {endResult[1][0]}
+		<div>
+			<div css={gameResultCSS}>
+				<img src={podium} alt="" css={podiumCSS} />
+				<div css={resultInfoCSS}>
+					<div>
+						{endResult[0] && (
+							<div css={profileInfo2CSS}>
+								<img src={getProfile(endResult[1][1])} alt="" css={profileImgCSS} />
+								<div>
+									{endResult[1][1]} : {endResult[1][0]}
+								</div>
 							</div>
-						</div>
-					)}
-				</div>
-				<div>
-					{endResult[0] && (
-						<div css={profileInfo1CSS}>
-							<img src={getProfile(endResult[0][1])} alt="" css={profileImgCSS} />
-							<div>
-								{endResult[0][1]} : {endResult[0][0]}점
+						)}
+					</div>
+					<div>
+						{endResult[0] && (
+							<div css={profileInfo1CSS}>
+								<img src={getProfile(endResult[0][1])} alt="" css={profileImgCSS} />
+								<div>
+									{endResult[0][1]} : {endResult[0][0]}점
+								</div>
 							</div>
-						</div>
-					)}
-				</div>
-				<div>
-					{endResult[2] && (
-						<div css={profileInfo3CSS}>
-							<img src={getProfile(endResult[2][1])} alt="" css={profileImgCSS} />
-							<div>
-								{endResult[2][1]} : {endResult[2][0]}점
+						)}
+					</div>
+					<div>
+						{endResult[2] && (
+							<div css={profileInfo3CSS}>
+								<img src={getProfile(endResult[2][1])} alt="" css={profileImgCSS} />
+								<div>
+									{endResult[2][1]} : {endResult[2][0]}점
+								</div>
 							</div>
-						</div>
-					)}
+						)}
+					</div>
 				</div>
 			</div>
 
-			{endResult.slice(3).length ? (
-				<div css={verticalCenterCSS}>
-					{endResult.slice(3).map((result, idx) => (
-						<div key={result[1]} css={verticalCenterCSS}>
-							<div>{idx + 4}등</div>
-							<img src={getProfile(result[1])} alt="" />
-							<div>
-								{result[1]} : {result[0]}점
+			<div>
+				{endResult.slice(3).length ? (
+					<div css={remainCSS}>
+						{endResult.slice(3).map((result, idx) => (
+							<div key={result[1]} css={verticalCenterCSS}>
+								<div>{idx + 4}등</div>
+								<img src={getProfile(result[1])} alt="" />
+								<div>
+									{result[1]} : {result[0]}점
+								</div>
 							</div>
-						</div>
-					))}
-				</div>
-			) : null}
+						))}
+					</div>
+				) : null}
+			</div>
 		</div>
 	)
 }
@@ -105,6 +115,7 @@ const gameResultCSS = css`
 	align-items: center;
 	justify-content: center;
 	font-family: 'GongGothicMedium';
+	color: white;
 `
 
 const profileImgCSS = css`
@@ -118,11 +129,6 @@ const podiumCSS = css`
 const resultInfoCSS = css`
 	position: absolute;
 	display: flex;
-`
-const verticalCenterCSS = css`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 `
 const profileInfo1CSS = css`
 	display: flex;
@@ -144,4 +150,17 @@ const profileInfo3CSS = css`
 	align-items: center;
 	margin: 0px 45px 0px 45px;
 	transform: translateY(10px);
+`
+const remainCSS = css`
+	display: flex;
+	justify-content: space-evenly;
+`
+const verticalCenterCSS = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	img {
+		width: 10vw;
+	}
 `

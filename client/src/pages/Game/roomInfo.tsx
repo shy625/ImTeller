@@ -9,9 +9,17 @@ const RoomInfo = (props: any) => {
 	const { id, roomName, leader, players, maxNum, type, typeNum } = useSelector(
 		(state: any) => state.roomInfo,
 	)
+
+	const onOut = () => {
+		const result = confirm('게임에서 나가시겠습니까?')
+		if (result) {
+			navigate(-1)
+		}
+	}
+
 	return (
 		<div css={infos}>
-			<div css={backBtn} onClick={() => navigate(-1)}>
+			<div css={backBtn} onClick={onOut}>
 				<img src={back} alt="뒤로 가기" css={imgSize} />
 			</div>
 			<div css={roomInfoCSS}>

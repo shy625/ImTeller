@@ -18,17 +18,16 @@ export default function GameProfile(props: any) {
 	)
 }
 
-const imgSizeCSS = css({
-	borderRadius: '100%',
-	width: '4em',
-	aspectRatio: '1 / 1',
-	objectFit: 'cover',
-})
-
 const profileCSS = css({
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
 	fontFamily: 'GongGothicMedium',
 	color: 'white',
+})
+const imgSizeCSS = css({
+	borderRadius: '100%',
+	width: '4em',
+	aspectRatio: '1 / 1',
+	objectFit: 'cover',
 })

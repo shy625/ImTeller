@@ -48,7 +48,7 @@ const Button = css({
 
 	'&:hover': {
 		background: '#fff7e7',
-		cursor: 'pointer',
+		cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto`,
 	},
 
 	'&[disabled]': {
@@ -71,7 +71,7 @@ const ButtonNum = css({
 	'&:hover': {
 		background: '#fff7e7',
 		opacity: 0.5,
-		cursor: 'pointer',
+		cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto`,
 	},
 
 	'&[aria-current]': {

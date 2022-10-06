@@ -10,93 +10,20 @@ import card7 from 'assets/image/card55.webp'
 
 export const cardList = createSlice({
 	name: 'cardList',
-	// initialState: [
-	// 	{
-	// 		cardId: 1,
-	// 		cardTitle: '기본카드1',
-	// 		cardImageURL: card1,
-	// 		description: '기본카드1.',
-	// 		grade: 'B',
-	// 		effect: 4,
-	// 		effectNum: 0,
-	// 		createdDT: 'asdf',
-	// 		recentPrice: 100,
-	// 		tokenId: 1,
-	// 	},
-	// 	{
-	// 		cardId: 2,
-	// 		cardTitle: '기본카드2',
-	// 		cardImageURL: card2,
-	// 		description: '기본카드2.',
-	// 		grade: 'S',
-	// 		effect: 1,
-	// 		effectNum: 10,
-	// 		createdDT: 'asdf',
-	// 		recentPrice: 100,
-	// 		tokenId: 1,
-	// 	},
-	// 	{
-	// 		cardId: 3,
-	// 		cardTitle: '기본카드3',
-	// 		cardImageURL: card3,
-	// 		description: '기본카드3.',
-	// 		grade: 'S',
-	// 		effect: 2,
-	// 		effectNum: 60,
-	// 		createdDT: 'asdf',
-	// 		recentPrice: 100,
-	// 		tokenId: 1,
-	// 	},
-	// 	{
-	// 		cardId: 4,
-	// 		cardTitle: '기본카드4',
-	// 		cardImageURL: card4,
-	// 		description: '기본카드4.',
-	// 		grade: 'S',
-	// 		effect: 3,
-	// 		effectNum: 0,
-	// 		createdDT: 'asdf',
-	// 		recentPrice: 100,
-	// 		tokenId: 1,
-	// 	},
-	// 	{
-	// 		cardId: 5,
-	// 		cardTitle: '기본카드5',
-	// 		cardImageURL: card5,
-	// 		description: '기본카드5.',
-	// 		grade: 'S',
-	// 		effect: 4,
-	// 		effectNum: 3,
-	// 		createdDT: 'asdf',
-	// 		recentPrice: 100,
-	// 		tokenId: 1,
-	// 	},
-	// 	{
-	// 		cardId: 6,
-	// 		cardTitle: '기본카드6',
-	// 		cardImageURL: card6,
-	// 		description: '기본카드6.',
-	// 		grade: 'S',
-	// 		effect: 5,
-	// 		effectNum: 2.5,
-	// 		createdDT: 'asdf',
-	// 		recentPrice: 100,
-	// 		tokenId: 1,
-	// 	},
-	// 	{
-	// 		cardId: 7,
-	// 		cardTitle: '기본카드7',
-	// 		cardImageURL: card7,
-	// 		description: '기본카드7.',
-	// 		grade: 'A',
-	// 		effect: 6,
-	// 		effectNum: 0,
-	// 		createdDT: 'asdf',
-	// 		recentPrice: 100,
-	// 		tokenId: 1,
-	// 	},
-	// ],
-	initialState: [],
+	initialState: [
+		// {
+		// 	cardId: 1,
+		// 	cardTitle: '기본카드1',
+		// 	cardImageURL: card1,
+		// 	description: '기본카드1.',
+		// 	grade: 'B',
+		// 	effect: 4,
+		// 	effectNum: 0,
+		// 	createdDT: 'asdf',
+		// 	recentPrice: 100,
+		// 	tokenId: 1,
+		// },
+	],
 	reducers: {
 		setCardList(state, action) {
 			return action.payload
@@ -108,20 +35,13 @@ export const { setCardList } = cardList.actions
 export const paintList = createSlice({
 	name: 'paintList',
 	initialState: [
-		{
-			paintId: 1,
-			paintTitle: '기본카드1',
-			paintImageURL: card1,
-			description: '기본카드1.',
-			isVote: false,
-		},
-		{
-			paintId: 2,
-			paintTitle: '기본카드2',
-			paintImageURL: card2,
-			description: '기본카드2.',
-			isVote: false,
-		},
+		// {
+		// 	paintId: 1,
+		// 	paintTitle: '기본카드1',
+		// 	paintImageURL: card1,
+		// 	description: '기본카드1.',
+		// 	isVote: false,
+		// },
 	],
 	reducers: {
 		setPaintList(state, action) {
@@ -156,34 +76,20 @@ export const { setSelectedPaint } = selectedPaint.actions
 export const dealList = createSlice({
 	name: 'dealList',
 	initialState: [
-		{
-			cardId: '1',
-			cardImageURL: card1,
-			dealId: 1,
-			designerId: 1,
-			description: '기본그림1',
-			designerNickname: 'test',
-			finalBidPrice: 700,
-			finishedAt: '2022-09-28 16:04:30',
-			instantPrice: 1000,
-			effect: 1,
-			grade: 'S',
-			tag: 'tag',
-		},
-		{
-			cardId: '1',
-			cardImageURL: card2,
-			dealId: 2,
-			designerId: 2,
-			description: '기본그림2',
-			designerNickname: 'testtest',
-			finalBidPrice: 800,
-			finishedAt: '2022-09-28 16:04:30',
-			instantPrice: 1500,
-			effect: 1,
-			grade: 'A',
-			tag: 'tag',
-		},
+		// {
+		// 	cardId: '1',
+		// 	cardImageURL: card1,
+		// 	dealId: 1,
+		// 	designerId: 1,
+		// 	description: '기본그림1',
+		// 	designerNickname: 'test',
+		// 	finalBidPrice: 700,
+		// 	finishedAt: '2022-09-28 16:04:30',
+		// 	instantPrice: 1000,
+		// 	effect: 1,
+		// 	grade: 'S',
+		// 	tag: 'tag',
+		// },
 	],
 	reducers: {
 		setDealList(state, action) {
@@ -248,3 +154,23 @@ export const voteList = createSlice({
 	},
 })
 export const { setVoteList } = voteList.actions
+
+export const queryState = createSlice({
+	name: 'queryState',
+	initialState: [0, 0, 0],
+	reducers: {
+		setQueryState(state, action) {
+			return action.payload
+		},
+		setTarget(state, action) {
+			state[0] = action.payload
+		},
+		setSort(state, action) {
+			state[1] = action.payload
+		},
+		setStatus(state, action) {
+			state[2] = action.payload
+		},
+	},
+})
+export const { setQueryState, setTarget, setSort, setStatus } = queryState.actions

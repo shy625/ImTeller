@@ -23,20 +23,20 @@ export default function GameTeller(props: any) {
 	const [setModalState, setModalMsg] = useModal('')
 	const [isImteller, setIsImteller] = useState(false)
 	const [tellerCard, setTellerCard] = useState<any>({
-		cardId: 1,
-		cardUrl: card,
+		// cardId: 1,
+		// cardUrl: card,
 	})
 	const [descrip, setDescrip] = useState('')
 
 	const [isSubmit, setIsSubmit] = useState(false)
 
-	// useEffect(() => {
-	// 	if (teller === nickname) {
-	// 		setIsImteller(true)
-	// 	} else {
-	// 		setIsImteller(false)
-	// 	}
-	// }, [teller, nickname])
+	useEffect(() => {
+		if (teller === nickname) {
+			setIsImteller(true)
+		} else {
+			setIsImteller(false)
+		}
+	}, [teller, nickname])
 
 	// phase 1에선 텔러만 카드 선택 및 묘사어 적기 다른 인원은 그냥 본인 카드만 보이게
 	// phase 2에선 텔러는 그냥 구경하기, 다른 인원은 본인 카드에서 낚시 카드 선택하기
@@ -52,6 +52,7 @@ export default function GameTeller(props: any) {
 			return
 		}
 
+		setIsSubmit(true)
 		if (isImteller) {
 			client.publish({
 				destination: `/pub/room/${roomId}/teller`,
@@ -72,10 +73,9 @@ export default function GameTeller(props: any) {
 					cardId: tellerCard.cardId,
 					cardUrl: tellerCard.cardUrl,
 				}),
-			}) // status에 따라 버튼 안보이게
+			})
 			dispatch(setTime(0))
 		}
-		setIsSubmit(true)
 	}
 
 	return (
@@ -83,14 +83,14 @@ export default function GameTeller(props: any) {
 			<div css={msgCSS}>
 				{isImteller && phase === 'phase1' ? (
 					!isSubmit ? (
-						<div>당신은 텔러입니다. 한장의 카드를 고르고 작품설명을 적어주세요</div>
+						<div>당신은 텔러입니다. 한장의 카드를 고르고 작품명을 적어주세요.</div>
 					) : (
-						<div>다른 인원이 선택중입니다</div>
+						<div>다른 인원이 선택중입니다.</div>
 					)
 				) : phase === 'phase1' ? (
 					<div>텔러가 카드를 선택중입니다.</div>
 				) : !isImteller ? (
-					<div>텔러의 작품설명과 비슷한 카드를 골라주세요</div>
+					<div>텔러의 작품명과 비슷한 카드를 골라주세요.</div>
 				) : null}
 			</div>
 
@@ -112,11 +112,18 @@ export default function GameTeller(props: any) {
 							css={submitInputCSS}
 							id="description"
 							type="text"
-							onChange={(e) => setDescrip(e.target.value)}
+							value={descrip}
+							onChange={(e) => setDescrip(e.target.value.slice(0, 20))}
 						/>
 					</div>
 				)}
-				{phase === 'phase2' && !isImteller && <div>{tellerMsg}</div>}
+				{phase === 'phase2' ? (
+					!isImteller ? (
+						<div>{tellerMsg}</div>
+					) : (
+						<div>다른 인원이 비슷한 카드를 고르는 중입니다.</div>
+					)
+				) : null}
 
 				{isSubmit ? null : (phase === 'phase1' && isImteller) ||
 				  (phase === 'phase2' && !isImteller) ? (
@@ -152,22 +159,22 @@ const tellerContainerCSS = css({
 	color: 'white',
 	width: '100%',
 })
-
 const msgCSS = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	min-height: 1vh;
 `
 const selectedCardCSS = css`
 	width: 30px;
 	margin: 0 10px;
 `
-
 const selectCSS = css`
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
 	width: 100%;
+	min-height: 12vh;
 `
 const submitBtnCSS = css`
 	max-width: 120px;
@@ -177,7 +184,8 @@ const submitBtnCSS = css`
 	border: none;
 	margin: 5%;
 	background-color: #d1e4ff;
-	font-family: LeferiBaseType-RegularA;
+	font-family: GongGothicMedium;
+
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 	&:hover {
 		color: #d1e4ff;

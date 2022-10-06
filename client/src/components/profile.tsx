@@ -10,20 +10,20 @@ export default function Profile(props: any) {
 			onClick={() => {
 				navigate(`/mypage/${nickname}`)
 			}}
-			css={profileCss}
+			css={profileCSS}
 		>
-			<img src={profile} alt="" css={profileImgCss} title={nickname} />
+			<img src={profile} alt="" css={profileImgCSS} title={nickname} />
 			<div>{nickname}</div>
 		</div>
 	)
 }
-const profileCss = css`
+
+const profileCSS = css`
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin: 10px;
 	margin-right: 20px;
-	aspectRatio: '1 / 1',
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 
 	&:hover {
@@ -31,9 +31,10 @@ const profileCss = css`
 		transition: all ease 0.2s;
 	}
 `
-
-const profileImgCss = css`
+const profileImgCSS = css`
 	width: 35px;
-	border-radius: 50px;
+	height: 35px;
+	border-radius: 50%;
 	margin: 10px;
+	aspectratio: 1 / 1;
 `

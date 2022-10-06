@@ -91,7 +91,7 @@ const centerCSS = css`
 	justify-content: center;
 	.window button {
 		outline: none;
-		cursor: pointer;
+		cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 		border: 0;
 		padding: 6px 12px;
 		margin: 0px 10px 5px 10px;

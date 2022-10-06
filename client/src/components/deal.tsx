@@ -1,8 +1,8 @@
-import { css } from '@emotion/react'
+import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { normalBtn } from 'style/commonStyle'
-import { useState, useEffect, useRef } from 'react'
+import { css } from '@emotion/react'
 
 export default function Deal(props: any) {
 	const navigate = useNavigate()
