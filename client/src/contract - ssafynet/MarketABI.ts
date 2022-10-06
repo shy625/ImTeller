@@ -3,7 +3,13 @@ import Web3 from 'web3'
 
 const marketABI: AbiItem[] = [
 	{
-		inputs: [],
+		inputs: [
+			{
+				internalType: 'address',
+				name: '_cardAddress',
+				type: 'address',
+			},
+		],
 		stateMutability: 'nonpayable',
 		type: 'constructor',
 	},
@@ -143,5 +149,5 @@ const marketABI: AbiItem[] = [
 ]
 export const web3 = new Web3(window.ethereum)
 
-export const marketAddress = '0x612f4A87e6ab0607Ac56a4993Af9F4280e526782'
+export const marketAddress = '0x04cE1391332Bb978fC1d8D5D476D86E91f4C6FED'
 export const marketContract = new web3.eth.Contract(marketABI, marketAddress)
