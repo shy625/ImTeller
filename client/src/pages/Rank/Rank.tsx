@@ -46,7 +46,6 @@ export interface bestPaintProps {
 }
 export default function Rank() {
 	const [tabNo, setTabNo] = useState(0)
-	const [tabList, setTabList] = useState()
 	const tabs = ['오늘의 거래', '승률', '레벨', '이달의 NFT']
 	const dispatch = useDispatch()
 	dispatch(setMainTab('rank'))
@@ -93,6 +92,7 @@ export default function Rank() {
 		</Layout>
 	)
 }
+
 const main = css`
 	height: 100%;
 	display: flex;

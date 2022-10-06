@@ -50,20 +50,20 @@ const list = css`
 	margin-bottom: 1rem;
 	display: grid;
 	grid-template-columns: 1fr, 1fr, 1fr;
-	grid-gap: 0.5rem;
-	justify-content: center;
+	justify-content: safe center;
 	align-items: center;
-	overflow-y: auto;
+	grid-gap: 0.5rem;
+	overflow: auto;
 
 	&::-webkit-scrollbar {
 		width: 8px;
-		height: 16px;
-		border-radius: 5px;
+		height: 8px;
+		border-radius: 3px;
 		background-color: #3e525f;
 	}
 	&::-webkit-scrollbar-thumb {
 		background-color: #ffffff;
-		border-radius: 5px;
+		border-radius: 3px;
 	}
 `
 const cardCSS = css`
@@ -83,7 +83,7 @@ const cardCSS = css`
 	.cardInfo {
 		display: flex;
 		flex-direction: column;
-		margin-right: 1rem;
+		margin: 2rem;
 
 		div {
 			overflow: hidden;
