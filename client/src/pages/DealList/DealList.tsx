@@ -21,7 +21,7 @@ export default function DealList() {
 							<Search />
 						</div>
 
-						<div css={centerCSS}>
+						<div css={centerListCSS}>
 							{dealList.map((deal: any) => (
 								<Deal deal={deal} key={deal.dealId} />
 							))}
@@ -33,6 +33,16 @@ export default function DealList() {
 	)
 }
 const centerCSS = css`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	font-family: 'GongGothicMedium';
+`
+
+const centerListCSS = css`
+	height: 65vh;
+	background-color: red;
 	display: flex;
 	align-items: center;
 	justify-content: center;
