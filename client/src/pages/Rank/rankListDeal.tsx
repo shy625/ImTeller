@@ -48,11 +48,9 @@ const list = css`
 	border-radius: 1rem;
 	box-shadow: 2px 2px 16px white;
 	margin-bottom: 1rem;
-	display: grid;
-	grid-template-columns: 1fr, 1fr, 1fr;
-	justify-content: safe center;
+	display: flex;
+	justify-content: 'safe center';
 	align-items: center;
-	grid-gap: 0.5rem;
 	overflow: auto;
 
 	&::-webkit-scrollbar {
@@ -72,6 +70,7 @@ const cardCSS = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	margin: auto;
 	#title {
 		font-family: 'GongGothicMedium';
 		font-size: 1.75rem;

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 
-const FaqTabViewer = () => {
+const GameVideo = () => {
 	return (
 		<div css={Box}>
 			<div css={Data}>
@@ -47,4 +47,4 @@ const Data = css`
 	}
 `
 
-export default FaqTabViewer
+export default GameVideo

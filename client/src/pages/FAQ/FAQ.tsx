@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import Layout from 'layout/layout'
 import FaqNavBar from 'pages/FAQ/FaqNavBar'
-import FaqTabViewer from 'pages/FAQ/FaqTabViewer'
+import GameVideo from 'pages/FAQ/GameVideo'
 import GameDetail from 'pages/FAQ/GameDetail'
 import ItemDetail from 'pages/FAQ/ItemDetail'
 import ArtDetail from 'pages/FAQ/ArtDetail'
@@ -21,7 +21,7 @@ export default function FAQ() {
 				<div css={fullDisplay}>
 					<div css={box}>
 						<FaqNavBar faqTab={faqTab} setFaqTab={setFaqTab} />
-						{faqTab === 'video' && <FaqTabViewer />}
+						{faqTab === 'video' && <GameVideo />}
 						{faqTab === 'game' && <GameDetail />}
 						{faqTab === 'item' && <ItemDetail />}
 						{faqTab === 'art' && <ArtDetail />}
