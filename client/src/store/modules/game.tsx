@@ -162,7 +162,7 @@ export const { setPlayers, setScore, setStatus, clearStatus, setReady2 } = playe
 
 export const phase = createSlice({
 	name: 'phase',
-	initialState: 0,
+	initialState: '',
 	reducers: {
 		setPhase(state, action) {
 			return action.payload
@@ -272,7 +272,7 @@ export const { setTeller } = teller.actions
 
 export const tellerMsg = createSlice({
 	name: 'tellerMsg',
-	initialState: '',
+	initialState: 'asdfasdfasdf',
 	reducers: {
 		setTellerMsg(state, action) {
 			return action.payload

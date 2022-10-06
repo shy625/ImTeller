@@ -74,7 +74,7 @@ export default function Chat() {
 								</div>
 								<div className="vertical">
 									<div className="name">{chat.nickname}</div>
-									<div className="content">{chat.userMsg}</div>
+									<p className="content">{chat.userMsg}</p>
 								</div>
 								{/* <div>{chat.time ? chat.time : null}</div> */}
 							</div>
@@ -108,6 +108,13 @@ const chatCSS = css`
 	height: 70vh;
 	color: white;
 	position: relative;
+	margin: 1em;
+
+	.chat {
+		height: 90%;
+		overflow: auto;
+		border-radius: 10px;
+	}
 
 	.msg {
 		padding: 3px;
@@ -152,9 +159,10 @@ const chatCSS = css`
 		left: -4px;
 		display: flex;
 		align-items: center;
-		justify-content: space-evenly;
-		width: 100%;
+		justify-content: space-between;
+		width: 96%;
 		height: 50px;
+		margin: 0 5px;
 
 		.input {
 			align-items: stretch;
