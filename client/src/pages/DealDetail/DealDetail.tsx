@@ -12,6 +12,8 @@ import { setDealDetail } from 'store/modules/art'
 import { purchaseCard, cancelDeal } from 'contract/API'
 import { setModalMsg, setModalState } from 'store/modules/util'
 
+import connectMetaMask from 'actions/functions/connectMetaMask'
+
 import gradeS from 'assets/image/gradeS.webp'
 import gradeA from 'assets/image/gradeA.webp'
 import gradeB from 'assets/image/gradeB.webp'
@@ -35,6 +37,7 @@ export default function DealDetail() {
 	const [min, setMin] = useState(0)
 	const [sec, setSec] = useState(0)
 	const [loading, setLoading] = useState(false)
+	const [dealType, setDealType] = useState('')
 
 	const [effectPre, effectPost] = itemDetail(cardInfo.effect, cardInfo.effectNum)
 
@@ -83,7 +86,24 @@ export default function DealDetail() {
 		return cancelDeal(currentUser.wallet, dealAddress)
 	}
 
-	const onCancel = () => {
+	const onCancel = async () => {
+		if (loading) return
+		setDealType('취소')
+		setLoading(true)
+		const check: any = await connectMetaMask()
+		if (!check) {
+			setModalMsg('지갑을 연결하세요')
+			setModalState('alert')
+			setLoading(false)
+			return
+		}
+		if (check !== currentUser.wallet) {
+			setModalMsg('등록된 지갑주소와 동일한 메타마스크 지갑주소를 연결해야 합니다')
+			setModalState('alert')
+			setLoading(false)
+			return
+		}
+		setLoading(true)
 		cancelNft(currentUser.wallet, dealInfo.dealAddress)
 			.then((result) => {
 				console.log(result)
@@ -110,8 +130,23 @@ export default function DealDetail() {
 			})
 	}
 
-	const onBuy = () => {
+	const onBuy = async () => {
 		if (loading) return
+		setDealType('거래')
+		setLoading(true)
+		const check: any = await connectMetaMask()
+		if (!check) {
+			setModalMsg('지갑을 연결하세요')
+			setModalState('alert')
+			setLoading(false)
+			return
+		}
+		if (check !== currentUser.wallet) {
+			setModalMsg('등록된 지갑주소와 동일한 메타마스크 지갑주소를 연결해야 합니다')
+			setModalState('alert')
+			setLoading(false)
+			return
+		}
 		setLoading(true)
 		// bid type 0은 입찰, 1은 즉시구매 - 근데 뭐든지 넣어도 상관없음
 		const data = {
@@ -131,7 +166,7 @@ export default function DealDetail() {
 				setModalMsg('예기치 못한 오류로 구매가 이루어지지 않았습니다.')
 				setModalState('alert')
 			})
-		buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice)
+		await buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice)
 			.then((result) => {
 				console.log(result)
 				deal
@@ -166,6 +201,7 @@ export default function DealDetail() {
 				setModalState('alert')
 			})
 		setLoading(false)
+		setDealType('')
 	}
 	return (
 		<Layout>
@@ -227,7 +263,7 @@ export default function DealDetail() {
 					</div>
 				</div>
 				{loading ? (
-					<Loading msg={'체인에서 거래를 취소하는 중입니다.  잠시만 기다려주세요'} />
+					<Loading msg={`체인에서 ${dealType}가 진행중입니다.  잠시만 기다려주세요`} />
 				) : null}
 			</main>
 		</Layout>

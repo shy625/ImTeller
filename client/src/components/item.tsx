@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux'
+import { css } from '@emotion/react'
 
 import itemDetail from 'actions/functions/itemDetail'
 
@@ -18,9 +19,24 @@ export default function Item(props: any) {
 	const src = { 1: item1, 2: item2, 3: item3, 4: item4, 5: item5, 6: item6 }[effect]
 
 	return (
-		<div style={{ width: '50px' }}>
+		<div css={itemCSS}>
 			<img src={src} alt={effectPre} title={effectName} />
-			<div>{effectNum}</div>
+			<p>{effectNum}</p>
 		</div>
 	)
 }
+
+const itemCSS = css`
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	align-items: center;
+	margin: 5px 3px 8px 3px;
+
+	img {
+		width: 100%;
+	}
+	p {
+		margin: 0;
+	}
+`

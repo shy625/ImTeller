@@ -162,7 +162,7 @@ export const { setPlayers, setScore, setStatus, clearStatus, setReady2 } = playe
 
 export const phase = createSlice({
 	name: 'phase',
-	initialState: 0,
+	initialState: 'phase2',
 	reducers: {
 		setPhase(state, action) {
 			return action.payload
@@ -218,16 +218,33 @@ export const itemState = createSlice({
 })
 export const { setItemState } = itemState.actions
 
+import test from 'assets/image/card1.webp'
 export const gameCards = createSlice({
 	name: 'gameCards',
 	initialState: [
 		{
 			cardId: 1,
-			cardUrl: 'assets/image/card1',
+			cardUrl: test,
 		},
 		{
 			cardId: 2,
-			cardUrl: 'assets/image/card4',
+			cardUrl: test,
+		},
+		{
+			cardId: 2,
+			cardUrl: test,
+		},
+		{
+			cardId: 2,
+			cardUrl: test,
+		},
+		{
+			cardId: 2,
+			cardUrl: test,
+		},
+		{
+			cardId: 2,
+			cardUrl: test,
 		},
 	],
 	reducers: {
@@ -272,7 +289,7 @@ export const { setTeller } = teller.actions
 
 export const tellerMsg = createSlice({
 	name: 'tellerMsg',
-	initialState: '',
+	initialState: 'asdfasdfasdf',
 	reducers: {
 		setTellerMsg(state, action) {
 			return action.payload

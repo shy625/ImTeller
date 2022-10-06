@@ -14,7 +14,7 @@ export default function Search() {
 	const [keyword, setKeyword] = useState('')
 	const [target, setTarget] = useState(0) // 검색 조건. 0작품명, 1제작자, 2소유자
 	const [sort, setSort] = useState(0) // 정렬 조건. 0기본순, 1최신순
-	const [status, setStatus] = useState(0) // 정렬조건2. 0전체, 1진행중, 2완료
+	const [status, setStatus] = useState(1) // 정렬조건2. 0전체, 1진행중, 2완료
 
 	const currentUser = useSelector((state: any) => state.currentUser)
 
@@ -86,13 +86,13 @@ export default function Search() {
 							</option>
 						</select>
 						<select css={select} name="status" onChange={(e: any) => setStatus(e.target.value)}>
-							<option css={option} value={0}>
+							<option css={option} value={0} selected={status === 0}>
 								전체
 							</option>
-							<option css={option} value={1}>
+							<option css={option} value={1} selected={status === 1}>
 								경매진행중
 							</option>
-							<option css={option} value={2}>
+							<option css={option} value={2} selected={status === 2}>
 								경매완료
 							</option>
 						</select>

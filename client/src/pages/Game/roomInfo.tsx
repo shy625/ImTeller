@@ -23,7 +23,7 @@ const RoomInfo = (props: any) => {
 				<div>
 					<div css={roomInfoBlockCSS}>
 						{typeNum}
-						{type === 'score' ? '점수' : '라운드'}
+						{type === 'score' ? '점' : '라운드'}
 					</div>
 					<div css={roomInfoBlockCSS}>
 						{players.length}명 / {maxNum}명
@@ -48,7 +48,6 @@ const imgSize = css`
 	width: 2em;
 	margin: 15px 9px 9px 9px;
 `
-
 const roomInfoCSS = css`
 	display: flex;
 	align-items: center;
