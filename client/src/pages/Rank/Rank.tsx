@@ -78,7 +78,7 @@ export default function Rank() {
 		0: <RankListDeal rankList={rankList} />,
 		1: <RankListDealWin rankList={rankList} />,
 		2: <RankListDealLevel rankList={rankList} />,
-		3: <RankOne rankList={tempDummy} />,
+		3: <RankOne rankList={rankList} />,
 	}
 	return (
 		<Layout>
