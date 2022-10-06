@@ -22,6 +22,7 @@ export default function Header() {
 		dispatch(setLogout())
 		dispatch(setEmail(''))
 		localStorage.setItem('email', '')
+		navigate('/')
 	}
 
 	useEffect(() => {
