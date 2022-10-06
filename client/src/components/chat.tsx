@@ -123,6 +123,16 @@ const chatCSS = css`
 		height: 90%;
 		overflow: auto;
 		border-radius: 10px;
+		// &::-webkit-scrollbar {
+		// 	width: 8px;
+		// 	height: 8px;
+		// 	border-radius: 3px;
+		// 	background-color: #3e525f;
+		// }
+		// &::-webkit-scrollbar-thumb {
+		// 	background-color: #ffffff;
+		// 	border-radius: 3px;
+		// }
 	}
 
 	.msg {
@@ -175,7 +185,7 @@ const chatCSS = css`
 		align-items: center;
 		width: 96%;
 		height: 8%;
-		margin: 0 10px;
+		margin: 10px;
 
 		.input {
 			align-items: stretch;

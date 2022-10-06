@@ -132,6 +132,6 @@ const nickCSS = css({
 const itemCSS = css({
 	display: 'flex',
 	overflow: 'hidden',
-	width: '40%',
+	width: '35px',
 })
 const betsCSS = css``
