@@ -80,7 +80,7 @@ export default function MakeRoomModal(props: any) {
 								}}
 							></input>
 							<label htmlFor="max">최대 인원수</label>
-							<select id="max" defaultValue={3} onChange={(e: any) => setMaxNum(e.target.value)}>
+							<select id="max" defaultValue={6} onChange={(e: any) => setMaxNum(e.target.value)}>
 								<option value={3}>3명</option>
 								<option value={4}>4명</option>
 								<option value={5}>5명</option>

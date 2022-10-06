@@ -8,46 +8,44 @@ export default function GameCard(props: any) {
 
 	return (
 		<div style={{ position: 'relative' }}>
-			<img
-				style={{ filter: darkmode ? 'grayscale(100%)' : null }}
-				css={gameCardCSS}
-				src={cardUrl}
-				alt=""
-			/>
+			<img style={{ filter: darkmode ? 'grayscale(100%)' : null }} css={cardImgCSS} src={cardUrl} />
 			{blind && blindDetail >= 20 ? (
-				<div css={poo1CSS}>
-					<img src={poo} title="똥" />
+				<div>
+					<img css={poo1CSS} src={poo} title="똥" />
 				</div>
 			) : null}
 			{blind && blindDetail >= 40 ? (
-				<div css={poo2CSS}>
-					<img src={poo} title="똥" />
+				<div>
+					<img css={poo2CSS} src={poo} title="똥" />
 				</div>
 			) : null}
 			{blind && blindDetail >= 60 ? (
-				<div css={poo3CSS}>
-					<img src={poo} title="똥" />
+				<div>
+					<img css={poo3CSS} src={poo} title="똥" />
 				</div>
 			) : null}
 		</div>
 	)
 }
 
-const gameCardCSS = css`
-	height: 200px;
+const cardImgCSS = css`
+	width: 100%;
 `
 const poo1CSS = css`
 	position: absolute;
-	left: 5px;
-	top: 0px;
+	width: 35%;
+	left: 9%;
+	top: 5%;
 `
 const poo2CSS = css`
 	position: absolute;
-	top: 65px;
-	left: 30px;
+	width: 35%;
+	left: 32%;
+	top: 35%;
 `
 const poo3CSS = css`
 	position: absolute;
-	top: 125px;
-	left: 55px;
+	width: 35%;
+	left: 55%;
+	top: 65%;
 `

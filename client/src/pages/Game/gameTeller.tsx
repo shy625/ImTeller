@@ -8,9 +8,6 @@ import GameCard from 'pages/Game/gameCard'
 import { useModal } from 'actions/hooks/useModal'
 import { setTime } from 'store/modules/game'
 
-import { normalBtn } from 'style/commonStyle'
-import { input } from 'style/commonStyle'
-
 import card from 'assets/image/card1.webp'
 
 export default function GameTeller(props: any) {
@@ -33,13 +30,13 @@ export default function GameTeller(props: any) {
 
 	const [isSubmit, setIsSubmit] = useState(false)
 
-	useEffect(() => {
-		if (teller === nickname) {
-			setIsImteller(true)
-		} else {
-			setIsImteller(false)
-		}
-	}, [teller, nickname])
+	// useEffect(() => {
+	// 	if (teller === nickname) {
+	// 		setIsImteller(true)
+	// 	} else {
+	// 		setIsImteller(false)
+	// 	}
+	// }, [teller, nickname])
 
 	// phase 1에선 텔러만 카드 선택 및 묘사어 적기 다른 인원은 그냥 본인 카드만 보이게
 	// phase 2에선 텔러는 그냥 구경하기, 다른 인원은 본인 카드에서 낚시 카드 선택하기
@@ -112,7 +109,7 @@ export default function GameTeller(props: any) {
 					<div>
 						<label htmlFor="description"></label>
 						<input
-							css={input}
+							css={submitInputCSS}
 							id="description"
 							type="text"
 							onChange={(e) => setDescrip(e.target.value)}
@@ -132,7 +129,7 @@ export default function GameTeller(props: any) {
 			<div css={tableCSS}>
 				<div css={cardCSS}>
 					{gameCards.map((card) => (
-						<div key={card.cardId} onClick={() => setTellerCard(card)}>
+						<div css={cardOneCSS} key={card.cardId} onClick={() => setTellerCard(card)}>
 							<GameCard cardUrl={card.cardUrl} />
 						</div>
 					))}
@@ -168,23 +165,34 @@ const selectedCardCSS = css`
 
 const selectCSS = css`
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	align-items: center;
-
-	// button {
-	// 	height: 30px;
-	// 	width: 100px;
-	// 	font-size: 15px;
-	// }
+	width: 100%;
 `
 const submitBtnCSS = css`
-	width: 10em;
-	height: 4em;
+	max-width: 120px;
+	height: 30px;
 	border: 0;
 	border-radius: 12px;
-	margin: 1em;
-	padding: 10px 10px,
+	border: none;
+	margin: 5%;
+	background-color: #d1e4ff;
+	font-family: LeferiBaseType-RegularA;
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
+`
+const submitInputCSS = css`
+	width: 100%;
+	height: 30px;
+	border: 0;
+	border-radius: 12px;
+	border: none;
+	padding: 0;
+	margin: 5%;
+	font-family: GongGothicMedium;
 `
 
 const tableCSS = css({
@@ -196,7 +204,13 @@ const tableCSS = css({
 
 const cardCSS = css({
 	display: 'flex',
-	width: '100px',
+	justifyContent: 'space-evenly',
+	flexWrap: 'wrap',
+	width: '90%',
+})
+
+const cardOneCSS = css({
+	width: '23%',
 })
 
 const itemCSS = css({

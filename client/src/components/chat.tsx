@@ -92,6 +92,7 @@ export default function Chat() {
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') send()
 					}}
+					autoFocus
 				/>
 				<button className="btn" onClick={send}>
 					+
@@ -104,12 +105,11 @@ export default function Chat() {
 const chatCSS = css`
 	border-radius: 15px;
 	background-color: rgb(0, 0, 0, 0.4);
-	padding: 5px;
-	width: 400px;
-	height: 70vh;
+	// padding: 5px;
+	width: 100%;
+	height: 100%;
 	color: white;
 	position: relative;
-	margin: 1em;
 
 	.chat {
 		height: 90%;

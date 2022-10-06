@@ -23,6 +23,7 @@ const profileCss = css`
 	justify-content: center;
 	margin: 10px;
 	margin-right: 20px;
+	aspectRatio: '1 / 1',
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 
 	&:hover {
