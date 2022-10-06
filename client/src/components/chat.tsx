@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { css } from '@emotion/react'
@@ -11,6 +11,7 @@ import jenkins from 'assets/image/jenkins.webp'
 export default function Chat() {
 	const dispatch = useDispatch()
 
+	const scrollRef = useRef<null | HTMLDivElement>(null)
 	const { roomId } = useParams()
 	const chats = useSelector((state: any) => state.chats)
 	const { nickname } = useSelector((state: any) => state.currentUser)
@@ -40,8 +41,13 @@ export default function Chat() {
 			client.deactivate()
 		}
 	}, [])
-
+	useEffect(() => {
+		if (scrollRef.current) {
+			scrollRef.current.scrollIntoView({ behavior: 'smooth' })
+		}
+	}, [chats])
 	const send = () => {
+		if (!msgInput) return
 		ws.publish({
 			destination: `/pub/room/${roomId}/chat`,
 			body: JSON.stringify({
@@ -63,29 +69,34 @@ export default function Chat() {
 
 	return (
 		<div css={chatCSS}>
-			<div className="chat">
-				{chats.length
-					? chats.map((chat, idx) => (
-							<div
-								className="msg"
-								key={String(idx) + chat.time}
-								style={isMyMsg(chat.nickname) ? { backgroundColor: 'rgb(255,255,255,0.5)' } : null}
-							>
-								<div className="profileBox">
-									<img
-										className="profile"
-										src={chat.nickname === '겜비서' ? jenkins : getProfile(chat.nickname)}
-										title={chat.time}
-									/>
+			<div className="box">
+				<div className="chat">
+					{chats.length
+						? chats.map((chat, idx) => (
+								<div
+									className="msg"
+									key={String(idx) + chat.time}
+									style={
+										isMyMsg(chat.nickname) ? { backgroundColor: 'rgb(255,255,255,0.5)' } : null
+									}
+								>
+									<div className="profileBox">
+										<img
+											className="profile"
+											src={chat.nickname === '겜비서' ? jenkins : getProfile(chat.nickname)}
+											title={chat.time}
+										/>
+									</div>
+									<div className="vertical">
+										<div className="name">{chat.nickname}</div>
+										<p className="content">{chat.userMsg}</p>
+									</div>
+									{/* <div>{chat.time ? chat.time : null}</div> */}
 								</div>
-								<div className="vertical">
-									<div className="name">{chat.nickname}</div>
-									<p className="content">{chat.userMsg}</p>
-								</div>
-								{/* <div>{chat.time ? chat.time : null}</div> */}
-							</div>
-					  ))
-					: null}
+						  ))
+						: null}
+					<div ref={scrollRef}></div>
+				</div>
 			</div>
 			<div className="line">
 				<input
@@ -111,18 +122,32 @@ export default function Chat() {
 const chatCSS = css`
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	/* justify-content: space-between; */
+	align-items: center;
 	border-radius: 15px;
 	background-color: rgb(0, 0, 0, 0.4);
 	width: 100%;
 	height: 100%;
 	color: white;
 	position: relative;
-
-	.chat {
+	.box {
+		position: absolute;
 		height: 90%;
-		overflow: auto;
+		width: 100%;
+		overflow: hidden;
 		border-radius: 10px;
+	}
+	.chat {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		/* height: 90%;
+		overflow: auto;
+		border-radius: 10px; */
+
 		// &::-webkit-scrollbar {
 		// 	width: 8px;
 		// 	height: 8px;
@@ -136,7 +161,7 @@ const chatCSS = css`
 	}
 
 	.msg {
-		padding: 3px;
+		/* padding: 3px; */
 		margin: 5px;
 		border-radius: 15px;
 		display: flex;
