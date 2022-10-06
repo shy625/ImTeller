@@ -2,7 +2,8 @@ import { css } from '@emotion/react'
 import { rankListProps, dealRankProps } from './Rank'
 export default function rankListDeal({ rankList }: { rankList: rankListProps }) {
 	// export default function rankListDeal(props: any[]) {
-	const dealRankList: dealRankProps[] = rankList.dealRankList.slice(0, 3)
+	let dealRankList: dealRankProps[] = rankList.dealRankList
+	if (rankList.dealRankList) dealRankList = dealRankList.slice(0, 3)
 	// console.log('rankList', typeof rankList)
 	// console.log(rankList[0])
 	return (

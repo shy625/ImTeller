@@ -13,6 +13,11 @@ const normalBtn = css`
 	font-size: 13px;
 	width: '8em';
 	font-family: 'GongGothicMedium';
+
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
 `
 // text만 적혀있는 버튼
 const textBtn = css`
