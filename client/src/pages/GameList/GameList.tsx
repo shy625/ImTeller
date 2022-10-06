@@ -86,7 +86,7 @@ export default function GameList() {
 
 const roomListCSS = css`
 	display: grid;
-	grid-template-rows: repeat(auto-fill, minmax(150px, auto));
+	grid-template-rows: repeat(auto-fill, minmax(145px, auto));
 	grid-template-columns: repeat(auto-fill, minmax(320px, auto));
 	grid-gap: 0.5rem;
 	background-color: rgba(239, 238, 245, 0.15);
@@ -102,7 +102,7 @@ const roomListCSS = css`
 		background-color: white;
 	}
 	&::-webkit-scrollbar-thumb {
-		background-color: #15212f;
+		background-color: #3e525f;
 		border-radius: 5px;
 	}
 
