@@ -23,9 +23,9 @@ export default function DealRegisterModal(props: any) {
 	const moveLeft = () => {
 		let num: number = Math.floor(page / limit)
 		if (num === 0) {
-			setPage((numPages - 1) * 6)
+			setPage((numPages - 1) * limit)
 		} else {
-			setPage((num - 1) * 6)
+			setPage((num - 1) * limit)
 		}
 	}
 	// 오른쪽
