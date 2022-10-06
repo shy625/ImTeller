@@ -4,7 +4,7 @@ import PolygonLeft from 'assets/image/PolygonLeft.webp'
 import PolygonRight from 'assets/image/PolygonRight.webp'
 // export default function rankOne({ rankList }: { rankList: bestPaintProps | null }) {
 export default function rankOne(props: any) {
-	const { paintTitle, paintImageURL, designerNickname } = props.rankList
+	const { paintTitle, paintImageURL, designerNickname } = props.rankList.bestPaint
 
 	return (
 		<div css={box}>
