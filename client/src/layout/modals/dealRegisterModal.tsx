@@ -35,7 +35,7 @@ export default function DealRegisterModal(props: any) {
 		if (num === numPages - 1) {
 			setPage(0)
 		} else {
-			setPage((num + 1) * 6)
+			setPage((num + 1) * limit)
 		}
 	}
 
@@ -178,5 +178,4 @@ const paintListCSS = css`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	flex-wrap: wrap;
 `
