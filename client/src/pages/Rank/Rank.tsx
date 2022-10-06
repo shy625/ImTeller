@@ -94,6 +94,7 @@ export default function Rank() {
 	)
 }
 const main = css`
+	height: 100%;
 	display: flex;
 	justify-content: center;
 `

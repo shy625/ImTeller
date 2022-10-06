@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import { rankListProps, dealRankProps } from './Rank'
 export default function rankListDeal({ rankList }: { rankList: rankListProps }) {
 	// export default function rankListDeal(props: any[]) {
-	const dealRankList: dealRankProps[] = rankList.dealRankList
+	const dealRankList: dealRankProps[] = rankList.dealRankList.slice(0, 3)
 	// console.log('rankList', typeof rankList)
 	// console.log(rankList[0])
 	return (
@@ -11,16 +11,20 @@ export default function rankListDeal({ rankList }: { rankList: rankListProps }) 
 				{dealRankList ? (
 					dealRankList.map((rank, i) => (
 						<div key={i} css={cardCSS}>
+							<div className="cardInfo">
+								<div id="rank">{i + 1}.</div>
+								<div id="title">{rank.cardTitle}</div>
+								<div className="buyer">Buyer</div>
+								<div className="buyer-content">
+									<p>{rank.buyerNickname}</p>
+								</div>
+								<div className="price">Price</div>
+								<div className="price-content">
+									<p>{rank.price.toLocaleString()} SSF</p>
+								</div>
+							</div>
 							<div css={type0CSS}>
 								<img src={rank.cardImageURL} alt="" css={imgCSS} />
-							</div>
-							<div className="cardInfo">
-								<div id="title">{rank.cardTitle}</div>
-								<div id="buyer">구매자 {rank.buyerNickname}</div>
-								<div id="designer">designed by</div>
-								<div id="designer">by. {rank.designerNickname}</div>
-								<div id="price">{rank.price} SSF</div>
-								{/* <div>{rank.dealedAt.slice(0, 10)}</div> */}
 							</div>
 						</div>
 					))
@@ -39,48 +43,112 @@ const box = css`
 
 const list = css`
 	width: 100%;
-	height: 70vh;
-	background-color: rgba(239, 238, 245, 0.3);
+	height: 65vh;
 	border-radius: 1rem;
-	box-shadow: 2px 2px 16px;
+	box-shadow: 2px 2px 16px white;
 	margin-bottom: 1rem;
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: 1fr, 1fr, 1fr;
+	grid-gap: 0.5rem;
 	justify-content: center;
 	align-items: center;
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 16px;
+		border-radius: 5px;
+		background-color: #3e525f;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: #ffffff;
+		border-radius: 5px;
+	}
 `
 const cardCSS = css`
 	margin: 10px;
 	font-family: 'GmarketSansMedium';
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: center;
 	#title {
 		font-family: 'GongGothicMedium';
-		font-size: 20px;
+		font-size: 1.75rem;
 		text-align: center;
 	}
 	#designer {
 		font-size: 13px;
 	}
-	.cardInfo div {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		word-break: break-all;
-		width: 130px;
+	.cardInfo {
+		display: flex;
+		flex-direction: column;
+		margin-right: 1rem;
+
+		div {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 160px;
+			min-width: 0;
+			flex-basis: 50%;
+			display: flex;
+			justify-content: right;
+			color: white;
+		}
+
+		.buyer,
+		.price {
+			display: block;
+			padding-left: 1rem;
+			width: 144px;
+		}
+
+		.buyer-content {
+			display: flex;
+			justify-content: right;
+
+			p {
+				text-align: right;
+				width: 130px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				margin: 10px 0;
+			}
+		}
+
+		.price-content {
+			display: flex;
+			justify-content: right;
+			text-overflow: ellipsis;
+
+			p {
+				margin: 10px 0;
+			}
+		}
+
+		#rank {
+			display: flex;
+			justify-content: left;
+			font-size: 2rem;
+			font-weight: 600;
+		}
+
+		#title {
+			margin-bottom: 1rem;
+		}
 	}
 `
 const imgCSS = css`
-	width: 125px;
-	height: 185px;
+	width: 200px;
+	height: 296px;
 	background-color: white;
 	border-radius: 6px;
 `
 const type0CSS = css`
 	position: relative;
-	height: 185px;
-	width: 125px;
+	height: 296px;
+	width: 200px;
 	border-radius: 20px;
 	display: flex;
 	flex-direction: column;
