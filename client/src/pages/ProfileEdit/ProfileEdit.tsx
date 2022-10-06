@@ -173,7 +173,7 @@ export default function ProfileEdit(props: any) {
 									<button onClick={checkNick} css={normalBtn}>
 										중복 체크
 									</button>
-									<span>{nickChecked ? '✅' : nickError}</span>
+									<span>{nickChecked ? '✔' : nickError}</span>
 									<span css={validTextCSS}>{nickValid}</span>
 								</div>
 							</div>

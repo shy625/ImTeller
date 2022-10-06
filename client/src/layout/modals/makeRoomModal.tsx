@@ -27,7 +27,6 @@ export default function MakeRoomModal(props: any) {
 		}
 		setRoomName(event.target.value)
 	}
-	console.log(roomName)
 
 	const onSubmit = (event) => {
 		event.preventDefault()

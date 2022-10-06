@@ -6,6 +6,8 @@ import { css } from '@emotion/react'
 import { useWebSocket } from 'actions/hooks/useWebSocket'
 import { clearChat, addChat } from 'store/modules/game'
 
+import jenkins from 'assets/image/jenkins.webp'
+
 export default function Chat() {
 	const dispatch = useDispatch()
 
@@ -70,7 +72,11 @@ export default function Chat() {
 								style={isMyMsg(chat.nickname) ? { backgroundColor: 'rgb(255,255,255,0.5)' } : null}
 							>
 								<div className="profileBox">
-									<img className="profile" src={getProfile(chat.nickname)} title={chat.time} />
+									<img
+										className="profile"
+										src={chat.nickname === '겜비서' ? jenkins : getProfile(chat.nickname)}
+										title={chat.time}
+									/>
 								</div>
 								<div className="vertical">
 									<div className="name">{chat.nickname}</div>
@@ -103,9 +109,11 @@ export default function Chat() {
 }
 
 const chatCSS = css`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	border-radius: 15px;
 	background-color: rgb(0, 0, 0, 0.4);
-	// padding: 5px;
 	width: 100%;
 	height: 100%;
 	color: white;
@@ -119,12 +127,14 @@ const chatCSS = css`
 
 	.msg {
 		padding: 3px;
-		margin-top: 3px;
+		margin: 5px;
 		border-radius: 15px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+
 		.profileBox {
+			display: flex;
 			width: 40px;
 			height: 40px;
 			border-radius: 60%;
@@ -139,6 +149,7 @@ const chatCSS = css`
 		.vertical {
 			display: flex;
 			flex-direction: column;
+			max-width: 80%;
 
 			.name {
 				font-family: 'GmarketSansMedium';
@@ -152,28 +163,27 @@ const chatCSS = css`
 				padding: 3px 0;
 			}
 		}
+		.profile {
+		}
 	}
 
 	.line {
+		display: flex;
+		justify-content: space-between;
 		position: absolute;
 		bottom: 0;
-		left: -4px;
-		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		width: 96%;
-		height: 50px;
-		margin: 0 5px;
+		height: 8%;
+		margin: 0 10px;
 
 		.input {
 			align-items: stretch;
-			width: 80%;
+			width: 88%;
 			height: 30px;
 			border-radius: 20px;
 			background-color: white;
-			margin: 5px;
 			border: 0px;
-			padding-left: 10px;
 			font-family: 'GmarketSansMedium';
 		}
 

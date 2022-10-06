@@ -41,7 +41,7 @@ const roomCSS = css({
 	flexGrow: 1,
 	flexShrink: 1,
 	flexBasis: '40%',
-	cursor: 'pointer',
+	cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto`,
 	'&:hover': {
 		boxShadow: '2px 2px 2px 2px rgba(255, 255, 255, 0.2)',
 	},
@@ -78,9 +78,9 @@ const title = css`
 `
 const name = css`
 	font-size: 20px;
-
 	display: flex;
 	justify-content: space-between;
+	overflow: hidden;
 `
 const roomNum = css`
 	float: left;

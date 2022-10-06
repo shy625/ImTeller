@@ -26,6 +26,7 @@ import {
 	dealList,
 	dealDetail,
 	voteList,
+	queryState,
 } from 'store/modules/art'
 import {
 	bgmSrc,
@@ -75,6 +76,7 @@ const store = configureStore({
 		dealList: dealList.reducer,
 		dealDetail: dealDetail.reducer,
 		voteList: voteList.reducer,
+		queryState: queryState.reducer,
 
 		bgmSrc: bgmSrc.reducer,
 		isBgmOn: isBgmOn.reducer,

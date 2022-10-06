@@ -58,6 +58,6 @@ const itemsCSS = css`
 	border-radius: 30px;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	height: 60vh;
 `

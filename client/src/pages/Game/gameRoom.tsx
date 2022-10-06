@@ -105,6 +105,7 @@ const main = css({
 	display: 'flex',
 	justifyContent: 'space-around',
 	alignItems: 'center',
+	height: '70vh',
 })
 
 const gameRoomBtn = css({

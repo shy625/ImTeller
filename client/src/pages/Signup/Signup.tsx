@@ -148,7 +148,7 @@ export default function Signup(props: any) {
 								{' '}
 								중복 체크
 							</button>
-							{emailChecked ? '✅' : null}
+							{emailChecked ? '✔' : null}
 						</div>
 					</div>
 					<div>
@@ -168,7 +168,7 @@ export default function Signup(props: any) {
 							<button css={checkBtn} onClick={checkNick}>
 								중복 체크
 							</button>
-							{nickChecked ? '✅' : null}
+							{nickChecked ? '✔' : null}
 						</div>
 						{nickValid}
 					</div>
@@ -220,7 +220,7 @@ const Btn = css`
 	align-items: center;
 	color: #4c489d;
 	box-shadow: 0px 2px 2px #5c5696;
-	cursor: pointer;
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
 	transition: 0.2s;
 	margin-bottom: 30px;
 `

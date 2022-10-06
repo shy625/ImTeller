@@ -31,7 +31,7 @@ const itemCSS = css`
 	flex-direction: column;
 	justify-content: start;
 	align-items: center;
-	margin: 5px 3px 8px 3px;
+	margin: 3px;
 
 	img {
 		width: 100%;

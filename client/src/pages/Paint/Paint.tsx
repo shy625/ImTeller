@@ -430,14 +430,14 @@ const palette = css({
 const colorDot = css({
 	width: '20px',
 	height: '20px',
-	cursor: 'pointer',
+	cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto`,
 	border: '2px solid white',
 	margin: '2px',
 })
 const btn = css({
 	border: 'none',
 	backgroundColor: 'transparent',
-	cursor: 'pointer',
+	cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto`,
 })
 const form = css({
 	display: 'flex',

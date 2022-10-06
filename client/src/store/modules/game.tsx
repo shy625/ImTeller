@@ -32,6 +32,7 @@ export const roomList = createSlice({
 })
 export const { setRoomList } = roomList.actions
 
+import test from 'assets/image/card1.webp'
 export const roomInfo = createSlice({
 	name: 'roomInfo',
 	initialState: {
@@ -45,8 +46,9 @@ export const roomInfo = createSlice({
 		leader: '',
 		maxNum: 3,
 		nftDeck: [],
-		players: [''],
-		profiles: { nickname: 'profile' },
+		players: [],
+		// profiles: { MoCCo: test, tester: test, IMTELLER: test, terter2: test },
+		profiles: {},
 		ready: {},
 		roomName: '',
 		score: {},
@@ -162,7 +164,7 @@ export const { setPlayers, setScore, setStatus, clearStatus, setReady2 } = playe
 
 export const phase = createSlice({
 	name: 'phase',
-	initialState: 'phase2',
+	initialState: 0,
 	reducers: {
 		setPhase(state, action) {
 			return action.payload
@@ -173,7 +175,7 @@ export const { setPhase } = phase.actions
 
 export const time = createSlice({
 	name: 'time',
-	initialState: 0,
+	initialState: 5,
 	reducers: {
 		setTime(state, action) {
 			return action.payload
@@ -185,13 +187,13 @@ export const { setTime } = time.actions
 export const items = createSlice({
 	name: 'items',
 	initialState: [
-		{
-			cardId: 1,
-			grade: 'S',
-			effect: 2,
-			effectNum: 60,
-			used: false,
-		},
+		// {
+		// 	cardId: 1,
+		// 	grade: 'S',
+		// 	effect: 2,
+		// 	effectNum: 60,
+		// 	used: false,
+		// },
 	],
 	reducers: {
 		setItems(state, action) {
@@ -203,7 +205,11 @@ export const { setItems } = items.actions
 
 export const itemState = createSlice({
 	name: 'itemState',
-	initialState: [{ cardId: 98, nickname: 'MoCCo', effect: 2, effectNum: 20 }],
+	initialState: [
+		// { cardId: 2, nickname: 'MoCCo', effect: 2, effectNum: 20 },
+		// { cardId: 2, nickname: 'MoCCo', effect: 2, effectNum: 20 },
+		// { cardId: 2, nickname: 'MoCCo', effect: 2, effectNum: 20 },
+	],
 	reducers: {
 		setItemState(state, action) {
 			const copy = []
@@ -218,7 +224,6 @@ export const itemState = createSlice({
 })
 export const { setItemState } = itemState.actions
 
-import test from 'assets/image/card1.webp'
 export const gameCards = createSlice({
 	name: 'gameCards',
 	initialState: [
@@ -231,7 +236,7 @@ export const gameCards = createSlice({
 			cardUrl: test,
 		},
 		{
-			cardId: 2,
+			cardId: 3,
 			cardUrl: test,
 		},
 		{
@@ -289,7 +294,7 @@ export const { setTeller } = teller.actions
 
 export const tellerMsg = createSlice({
 	name: 'tellerMsg',
-	initialState: 'asdfasdfasdf',
+	initialState: '', //////////////////////////////////////////////
 	reducers: {
 		setTellerMsg(state, action) {
 			return action.payload
@@ -311,7 +316,7 @@ export const { setTable } = table.actions
 
 export const result = createSlice({
 	name: 'result',
-	initialState: [],
+	initialState: {},
 	reducers: {
 		setResult(state, action) {
 			return action.payload

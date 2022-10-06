@@ -149,6 +149,7 @@ const centerCSS = css`
 `
 const profileImgCSS = css`
 	width: 150px;
+	height: 150px;
 	border-radius: 50%;
 	margin: 50px 50px 30px 10px;
 `
