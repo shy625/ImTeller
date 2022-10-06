@@ -65,6 +65,7 @@ export default function DealRegister() {
 			setModalState('alert')
 			return
 		}
+		setIsLoading(true)
 		console.log(selectedCard)
 		if (!selectedCard) {
 			setModalMsg('카드를 선택하세요')
@@ -115,6 +116,7 @@ export default function DealRegister() {
 			})
 
 		dispatch(setSelectedCard({}))
+		setIsLoading(false)
 	}
 
 	return (
