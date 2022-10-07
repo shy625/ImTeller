@@ -1,19 +1,21 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
 import { css } from '@emotion/react'
 import { fullDisplay, normalBtn } from 'style/commonStyle'
+
+import rank from 'actions/api/rank'
+import vote from 'actions/api/vote'
+import art from 'actions/api/art'
+import { setRankList, setRankTabNo } from 'store/modules/rank'
 
 import Layout from 'layout/layout'
 import VoteCard from 'pages/Vote/voteCard'
 
-import vote from 'actions/api/vote'
-import art from 'actions/api/art'
 import { useModal } from 'actions/hooks/useModal'
 import { setVoteList, setPaintList } from 'store/modules/art'
 import { setMainTab } from 'store/modules/util'
-import { setRankTabNo } from 'store/modules/rank'
+
 export interface voteListProps {
 	vote: vote
 	like: boolean
@@ -84,6 +86,9 @@ export default function Vote() {
 	}, [])
 
 	const goRank = () => {
+		rank.rankList().then((result) => {
+			dispatch(setRankList(result.data.response))
+		})
 		dispatch(setRankTabNo(3))
 		navigate('/rank')
 	}
