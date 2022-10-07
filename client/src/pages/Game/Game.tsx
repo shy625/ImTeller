@@ -322,15 +322,13 @@ export default function Game() {
 			</div>
 
 			<div css={playerBoxCSS}>
-				{state !== 2 ? (
-					<div css={playersCSS}>
-						{players.map((player: any) => (
-							<div key={player.nickname} css={playerOne}>
-								<GameProfile player={player} />
-							</div>
-						))}
-					</div>
-				) : null}
+				<div css={playersCSS}>
+					{players.map((player: any) => (
+						<div key={player.nickname} css={playerOne}>
+							<GameProfile player={player} />
+						</div>
+					))}
+				</div>
 			</div>
 
 			<div css={gameContainerCSS}>
@@ -396,6 +394,7 @@ const gameContainerCSS = css({
 	flexDirection: 'row',
 	justifyContent: 'space-between',
 	width: '100%',
+	height: '80vh',
 })
 
 const mainComponentCSS = css({
