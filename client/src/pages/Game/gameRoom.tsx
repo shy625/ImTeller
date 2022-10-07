@@ -72,6 +72,7 @@ export default function GameRoom(props: any) {
 	return (
 		<div css={main}>
 			<button
+				className="select"
 				css={{ ...normalBtn, ...gameRoomBtn }}
 				onClick={() => {
 					setModalState('cardSelect')
@@ -89,11 +90,11 @@ export default function GameRoom(props: any) {
 			</button> */}
 
 			{isLeader ? (
-				<button css={{ ...normalBtn, ...gameRoomBtn }} onClick={onStart}>
+				<button className="start" css={{ ...normalBtn, ...gameRoomBtn }} onClick={onStart}>
 					게임 시작
 				</button>
 			) : (
-				<button css={{ ...normalBtn, ...gameRoomBtn }} onClick={onReady}>
+				<button className="ready" css={{ ...normalBtn, ...gameRoomBtn }} onClick={onReady}>
 					{isReady ? '준비 취소' : '준비'}
 				</button>
 			)}
@@ -101,19 +102,30 @@ export default function GameRoom(props: any) {
 	)
 }
 
-const main = css({
-	display: 'flex',
-	justifyContent: 'space-around',
-	alignItems: 'center',
-	height: '70vh',
-})
+const main = css`
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	height: 70vh;
 
-const gameRoomBtn = css({
-	width: '10em',
-	height: '4em',
-	border: 0,
-	borderRadius: 15,
-	margin: '1em',
-	fontFamily: 'GmarketSansMedium',
-	cursor: `url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto`,
-})
+	.select,
+	.start,
+	.ready {
+		font-size: 1rem;
+	}
+`
+
+const gameRoomBtn = css`
+	width: 10em;
+	height: 4em;
+	border: 0;
+	border-radius: 15px;
+	margin: 1em;
+	font-family: 'GmarketSansMedium';
+	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brushClick.png'), auto;
+
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
+`

@@ -7,6 +7,7 @@ import { useWebSocket } from 'actions/hooks/useWebSocket'
 import { clearChat, addChat } from 'store/modules/game'
 
 import jenkins from 'assets/image/jenkins.webp'
+import Send from 'assets/image/send.png'
 
 export default function Chat() {
 	const dispatch = useDispatch()
@@ -111,9 +112,9 @@ export default function Chat() {
 					}}
 					autoFocus
 				/>
-				<button className="btn" onClick={send}>
-					+
-				</button>
+				<div className="btn" onClick={send}>
+					<img src={Send} alt="전송버튼" />
+				</div>
 			</div>
 		</div>
 	)
@@ -127,12 +128,12 @@ const chatCSS = css`
 	border-radius: 15px;
 	background-color: rgb(0, 0, 0, 0.4);
 	width: 100%;
-	height: 100%;
+	height: 90%;
 	color: white;
 	position: relative;
 	.box {
 		position: absolute;
-		height: 90%;
+		height: 100%;
 		width: 100%;
 		overflow: hidden;
 		border-radius: 10px;
@@ -144,25 +145,25 @@ const chatCSS = css`
 		overflow-y: auto;
 		display: flex;
 		flex-direction: column;
-		/* height: 90%;
+		height: 90%;
 		overflow: auto;
-		border-radius: 10px; */
+		border-radius: 10px;
 
-		// &::-webkit-scrollbar {
-		// 	width: 8px;
-		// 	height: 8px;
-		// 	border-radius: 3px;
-		// 	background-color: #3e525f;
-		// }
-		// &::-webkit-scrollbar-thumb {
-		// 	background-color: #ffffff;
-		// 	border-radius: 3px;
-		// }
+		&::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+			border-radius: 3px;
+			background-color: #3e525f;
+		}
+		&::-webkit-scrollbar-thumb {
+			background-color: #ffffff;
+			border-radius: 3px;
+		}
 	}
 
 	.msg {
 		/* padding: 3px; */
-		margin: 5px;
+		margin: 2px;
 		border-radius: 15px;
 		display: flex;
 		flex-direction: row;
@@ -188,7 +189,8 @@ const chatCSS = css`
 
 			.name {
 				font-family: 'GmarketSansMedium';
-				font-size: 18px;
+				font-size: 1rem;
+				margin-top: 1rem;
 			}
 			.content {
 				font-family: 'GmarketSansMedium';
@@ -196,6 +198,7 @@ const chatCSS = css`
 				word-break: break-all;
 				position: relative;
 				padding: 3px 0;
+				margin: 0.5rem 0;
 			}
 		}
 		.profile {
@@ -204,7 +207,7 @@ const chatCSS = css`
 
 	.line {
 		display: flex;
-		justify-content: space-between;
+		justify-content: space-around;
 		position: absolute;
 		bottom: 0;
 		align-items: center;
@@ -214,6 +217,7 @@ const chatCSS = css`
 
 		.input {
 			align-items: stretch;
+			padding-left: 0.5rem;
 			width: 88%;
 			height: 30px;
 			border-radius: 20px;
@@ -223,10 +227,19 @@ const chatCSS = css`
 		}
 
 		.btn {
-			height: 33px;
-			width: 33px;
-			border: 0px;
-			border-radius: 70%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			img {
+				height: 2rem;
+				width: 2rem;
+			}
+
+			img:hover {
+				transform: scale(1.2, 1.2) rotate(15deg);
+				transition: all ease 0.1s;
+			}
 		}
 	}
 `
