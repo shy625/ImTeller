@@ -151,10 +151,29 @@ const voteCSS = css`
 	}
 `
 const paintListCSS = css`
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
 	margin-top: 20px;
+	display: grid;
+	grid-template-rows: repeat(auto-fill, minmax(370px, 370px));
+	grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
+	grid-gap: 0.5rem;
+	justify-content: center;
+	background-color: rgba(239, 238, 245, 0.15);
+	border-radius: 1rem;
+	width: 100%;
+	height: 58vh;
+	overflow-y: auto;
+	padding: 1rem;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+		border-radius: 5px;
+		background-color: #3e525f;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: #ffffff;
+		border-radius: 5px;
+	}
 `
 const centerCSS = css`
 	display: flex;

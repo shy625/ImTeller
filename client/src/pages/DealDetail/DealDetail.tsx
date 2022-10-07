@@ -379,4 +379,9 @@ const bigBtn = css`
 	font-size: 18px;
 	width: 280px;
 	font-family: 'GongGothicMedium';
+
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
 `

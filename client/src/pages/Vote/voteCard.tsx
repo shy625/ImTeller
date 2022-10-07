@@ -81,7 +81,9 @@ export default function VoteCard({ paint }: { paint: voteListProps }) {
 								<button onClick={onVote}>추천하기</button>
 							)}
 							{vote.art.owner.nickname === currentUser.nickname ? (
-								<button onClick={cancelRegiser}>출품취소</button>
+								<button className="btn" onClick={cancelRegiser}>
+									출품취소
+								</button>
 							) : null}
 						</div>
 					</div>
@@ -148,6 +150,11 @@ const cardWrapperCSS = css`
 		font-size: 13px;
 		width: '8em';
 		font-family: 'GongGothicMedium';
+
+		&:hover {
+			color: #d1e4ff;
+			background-color: #112137;
+		}
 	}
 `
 const type0CSS = css`

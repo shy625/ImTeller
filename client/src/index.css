@@ -6,6 +6,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	cursor: url('https://imtellercard.s3.ap-northeast-2.amazonaws.com/brush.png'), auto;
+	overflow: hidden;
 }
 
 code {

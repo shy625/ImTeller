@@ -133,7 +133,7 @@ export default function Search() {
 							</option>
 						</select>
 					</div>
-					<button css={button} onClick={onMove}>
+					<button className="test" css={button} onClick={onMove}>
 						판매등록
 					</button>
 				</div>

@@ -21,7 +21,7 @@ export default function DealList() {
 							<Search />
 						</div>
 
-						<div css={centerCSS}>
+						<div css={centerListCSS}>
 							{dealList.map((deal: any) => (
 								<Deal deal={deal} key={deal.dealId} />
 							))}
@@ -38,6 +38,32 @@ const centerCSS = css`
 	justify-content: center;
 	flex-wrap: wrap;
 	font-family: 'GongGothicMedium';
+`
+
+const centerListCSS = css`
+	margin-top: 1rem;
+	width: 100%;
+	height: 65vh;
+	background-color: rgba(239, 238, 245, 0.15);
+	border-radius: 1rem;
+	display: grid;
+	grid-template-rows: repeat(auto-fill, minmax(320px, 320px));
+	grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+	grid-gap: 0.5rem;
+	justify-content: center;
+	font-family: 'GongGothicMedium';
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+		border-radius: 5px;
+		background-color: #3e525f;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: #ffffff;
+		border-radius: 5px;
+	}
 `
 
 const nav = css`

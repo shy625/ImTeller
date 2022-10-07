@@ -13,6 +13,11 @@ const normalBtn = css`
 	font-size: 13px;
 	width: '8em';
 	font-family: 'GongGothicMedium';
+
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
 `
 // text만 적혀있는 버튼
 const textBtn = css`
@@ -51,8 +56,7 @@ const imgBigIcon = css({
 
 // 페이지 풀 사이즈로 키우기
 const fullDisplay = css`
-	height: auto;
-	min-height: 100vh;
+	height: calc(100vh - 95px - 43px);
 `
 
 // 증간으로 배치 세로로
