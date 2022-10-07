@@ -25,9 +25,9 @@ const profileCSS = css({
 	fontFamily: 'GongGothicMedium',
 	color: 'white',
 })
-const imgSizeCSS = css({
-	borderRadius: '100%',
-	width: '4em',
-	aspectRatio: '1 / 1',
-	objectFit: 'cover',
-})
+const imgSizeCSS = css`
+	border-radius: 100%;
+	width: 4em;
+	aspect-ratio: 1 / 1;
+	object-fit: cover';
+`
