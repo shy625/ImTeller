@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { rankListProps, levelRankListProps } from './Rank'
 export default function rankListDealLevel({ rankList }: { rankList: rankListProps }) {
 	const levelRankList: levelRankListProps[] = rankList.levelRankList
-	console.log('rankList', typeof rankList)
-	console.log(rankList[0])
+	// console.log('rankList', typeof rankList)
+	// console.log(rankList[0])
 	return (
 		<div css={box}>
 			<div css={list}>

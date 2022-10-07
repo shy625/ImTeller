@@ -15,12 +15,12 @@ export default function PwCertificate(props: any) {
 			email,
 			password,
 		}
-		console.log(credentials)
+		// console.log(credentials)
 
 		user
 			.login(credentials)
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				if (result.data.response === '올바른 비밀번호입니다.') {
 					props.setPassword(password)
 				}
@@ -29,7 +29,7 @@ export default function PwCertificate(props: any) {
 				// setModalMsg('잘못된 비밀번호입니다')
 				// setModalState('alert')
 				alert('잘못된 비밀번호입니다')
-				console.log(error)
+				console.error(error)
 			})
 	}
 

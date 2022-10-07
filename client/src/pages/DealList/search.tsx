@@ -32,7 +32,7 @@ export default function Search() {
 			status: queryState[2],
 		}
 		deal.dealList(params).then((result) => {
-			console.log(result.data.response)
+			// console.log(result.data.response)
 			dispatch(setDealList(result.data.response))
 		})
 	}, [queryState])
@@ -56,7 +56,7 @@ export default function Search() {
 			status: queryState[2],
 		}
 		deal.dealList(params).then((result) => {
-			console.log(result.data.response)
+			// console.log(result.data.response)
 			dispatch(setDealList(result.data.response))
 		})
 	}

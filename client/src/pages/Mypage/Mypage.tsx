@@ -43,7 +43,7 @@ export default function Mypage() {
 			.userDetail({ nickname: nick })
 			.then((result) => {
 				dispatch(setUserDetail(result.data.response))
-				console.log(result.data.response.wallet)
+				// console.log(result.data.response.wallet)
 			})
 			.catch((error) => {
 				console.error(error)
@@ -55,7 +55,7 @@ export default function Mypage() {
 			art
 				.cardList({ nickname: nick })
 				.then((result) => {
-					console.log(result.data)
+					// console.log(result.data)
 					dispatch(setCardList(result.data.response))
 				})
 				.catch((error) => {

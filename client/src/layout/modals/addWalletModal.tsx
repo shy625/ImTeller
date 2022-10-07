@@ -43,7 +43,7 @@ export default function AddWalletModal(props: any) {
 		user
 			.addWallet({ email: localStorage.getItem('email'), wallet })
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				if (result.data.response === '지갑 주소를 등록했습니다.') {
 					dispatch(setModalMsg(result.data.response))
 					dispatch(setModalState('alert'))

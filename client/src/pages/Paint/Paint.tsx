@@ -269,7 +269,7 @@ export default function Paint() {
 					}
 				})
 				.catch((error) => {
-					console.log(error)
+					console.error(error)
 				})
 		} else {
 			const dataUpdate: any = new FormData()

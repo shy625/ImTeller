@@ -41,7 +41,7 @@ export default function GameEnd(props: any) {
 			endResult.push([result[nickname], nickname])
 		}
 		endResult.sort().reverse()
-		console.log(endResult)
+		// console.log(endResult)
 		return () => {
 			setEndResult([])
 		}

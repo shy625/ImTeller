@@ -17,7 +17,7 @@ export default function CardList(props: CardListProps) {
 	// 카드 carousel
 	let limit = 3
 	const numPages = Math.ceil(cardList.length / limit) || 1
-	console.log('numPages', numPages)
+	// console.log('numPages', numPages)
 	// 왼쪽
 	const moveLeft = () => {
 		let num: number = Math.floor(page / limit)
@@ -30,7 +30,7 @@ export default function CardList(props: CardListProps) {
 	// 오른쪽
 	const moveRight = () => {
 		let num: number = Math.floor(page / limit)
-		console.log('page', page)
+		// console.log('page', page)
 		if (num === numPages - 1) {
 			setPage(0)
 		} else {

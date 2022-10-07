@@ -46,7 +46,7 @@ export default function Paint(props: any) {
 		if (!result) return
 		art.paintDelete(paintId).then((result) => {
 			art.paintList({ nickname: currentUser.nickname }).then((result) => {
-				console.log(result)
+				// console.log(result)
 				dispatch(setPaintList(result.data.response))
 			})
 		})
@@ -80,7 +80,7 @@ export default function Paint(props: any) {
 		art
 			.createNft({ artId: paintId, tokenId })
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				dispatch(setMyPageTab(0))
 				setLoading(false)
 				setModalMsg('민팅에 성공했습니다.')
@@ -103,7 +103,7 @@ export default function Paint(props: any) {
 		art
 			.cardList({ nickname: currentUser.nickname })
 			.then((result) => {
-				console.log(result.data)
+				// console.log(result.data)
 				dispatch(setCardList(result.data.response))
 			})
 			.catch((error) => {
@@ -138,7 +138,7 @@ export default function Paint(props: any) {
 		art
 			.createNft({ artId: paintId, tokenId })
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				dispatch(setMyPageTab(0))
 				setLoading(false)
 				setModalMsg('민팅에 성공했습니다.')
@@ -161,7 +161,7 @@ export default function Paint(props: any) {
 		art
 			.cardList({ nickname: currentUser.nickname })
 			.then((result) => {
-				console.log(result.data)
+				// console.log(result.data)
 				dispatch(setCardList(result.data.response))
 			})
 			.catch((error) => {

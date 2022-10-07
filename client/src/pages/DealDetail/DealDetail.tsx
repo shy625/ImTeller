@@ -45,11 +45,11 @@ export default function DealDetail() {
 		deal
 			.dealDetail(dealId)
 			.then((result) => {
-				console.log(result.data)
+				// console.log(result.data)
 				dispatch(setDealDetail(result.data.response))
 			})
 			.catch((err) => {
-				console.log(err)
+				console.error(err)
 			})
 	}, [])
 
@@ -106,13 +106,13 @@ export default function DealDetail() {
 		setLoading(true)
 		cancelNft(currentUser.wallet, dealInfo.dealAddress)
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				deal
 					.cancelDeal(dealInfo.dealId)
 					.then((result) => {
 						setModalMsg('취소가 성공적으로 이루어졌습니다.')
 						setModalState('alert')
-						console.log(result)
+						// console.log(result)
 						navigate('/deal')
 					})
 					.catch((error) => {
@@ -126,7 +126,7 @@ export default function DealDetail() {
 				setModalMsg('예기치 못한 오류로 취소가 이루어지지 않았습니다.')
 				setModalState('alert')
 				navigate(`/deal/${dealId}`)
-				console.log(error)
+				console.error(error)
 			})
 	}
 
@@ -157,25 +157,25 @@ export default function DealDetail() {
 		deal
 			.bid(dealId, data)
 			.then((result) => {
-				console.log(result)
-				console.log('bid 성공적으로 보냄')
+				// console.log(result)
+				// console.log('bid 성공적으로 보냄')
 			})
 			.catch((err) => {
-				console.log(err)
+				console.error(err)
 				setLoading(false)
 				setModalMsg('예기치 못한 오류로 구매가 이루어지지 않았습니다.')
 				setModalState('alert')
 			})
 		await buyNft(currentUser.wallet, dealInfo.dealAddress, dealInfo.instantPrice)
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				deal
 					.dealEnd(dealInfo.dealId, {
 						bidderNickname: currentUser.nickname,
 						tokenId: cardInfo.tokenId,
 					})
 					.then((result) => {
-						console.log(result.data)
+						// console.log(result.data)
 						setLoading(false)
 						setModalMsg('거래가 성공적으로 이루어졌습니다')
 						setModalState('alert')
@@ -187,14 +187,14 @@ export default function DealDetail() {
 					})
 			})
 			.catch((err) => {
-				console.log(err)
+				console.error(err)
 				deal
 					.dealEnd(null, null)
 					.then((result) => {
-						console.log(result)
+						// console.log(result)
 					})
 					.catch((err) => {
-						console.log(err)
+						console.error(err)
 					})
 				setLoading(false)
 				setModalMsg('예기치 못한 오류로 구매가 이루어지지 않았습니다.')

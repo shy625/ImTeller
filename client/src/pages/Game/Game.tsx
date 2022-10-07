@@ -126,27 +126,27 @@ export default function Game() {
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
 				setUserSessionIds(content.userSessionIds[nickname])
-				console.log('join', content)
+				// console.log('join', content)
 			})
 			client.subscribe(`/sub/room/${roomId}/exit`, (action) => {
 				const content = JSON.parse(action.body)
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
 				setUserSessionIds(content.userSessionIds[nickname])
-				console.log('exit', content)
+				// console.log('exit', content)
 			})
 			// 레디 상태 변경
 			client.subscribe(`/sub/room/${roomId}/ready`, (action) => {
 				const content = JSON.parse(action.body)
 				dispatch(setReady1(content))
 				dispatch(setReady2(content))
-				console.log('ready', content)
+				// console.log('ready', content)
 			})
 			// 페이즈 전환
 			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
-				console.log(action.body)
 				dispatch(setTime(0))
 				dispatch(setPhase(action.body))
+				console.log(action.body)
 			})
 			// 유저 상태 변화
 			client.subscribe(`/sub/room/${roomId}/status`, (action) => {

@@ -24,7 +24,7 @@ export default function DealRegister() {
 	const currentUser = useAppSelector((state) => state.currentUser)
 	const selectedCard = useAppSelector((state) => state.selectedCard)
 
-	console.log('selectedCard', selectedCard)
+	// console.log('selectedCard', selectedCard)
 
 	const [lowPrice, setLowPrice] = useState(0)
 	const [instantPrice, setInstantPrice] = useState(10)
@@ -37,14 +37,10 @@ export default function DealRegister() {
 
 	useEffect(() => {
 		art.cardList({ nickname: currentUser.nickname }).then((result) => {
-			console.log(result)
+			// console.log(result)
 			dispatch(setCardList(result.data.response))
 		})
 	}, [])
-
-	useEffect(() => {
-		console.log(selectedCard)
-	}, [selectedCard])
 
 	const lowPriceFilter = (event) => {
 		if (event.target.value > instantPrice) {
@@ -66,7 +62,6 @@ export default function DealRegister() {
 			return
 		}
 		setIsLoading(true)
-		console.log(selectedCard)
 		if (!selectedCard) {
 			setModalMsg('카드를 선택하세요')
 			setModalState('alert')
@@ -89,7 +84,6 @@ export default function DealRegister() {
 		const contractId = await sellCard(check, selectedCard.tokenId, instantPrice).catch((err) => {
 			setIsLoading(false)
 		})
-		console.log(contractId)
 
 		let date: any = new Date()
 		date = date.setDate(date.getDate() + day)
@@ -106,7 +100,7 @@ export default function DealRegister() {
 		deal
 			.register(data)
 			.then((result) => {
-				console.log(result.data.response)
+				// console.log(result.data.response)
 				navigate(`/deal/${result.data.response}`)
 				setIsLoading(false)
 			})

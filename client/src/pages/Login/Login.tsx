@@ -47,8 +47,8 @@ export default function Login(props: any) {
 			email: email.value,
 			password: password.value,
 		}
-		console.log('실행됨')
-		console.log(credentials)
+		// console.log('실행됨')
+		// console.log(credentials)
 		user
 			.login(credentials)
 			.then((result) => {
@@ -58,19 +58,18 @@ export default function Login(props: any) {
 					user
 						.currentUser()
 						.then((result) => {
-							console.log(result.data)
+							// console.log(result.data)
 							dispatch(setCurrentUser(result.data.response))
 							navigate(-1, { replace: true })
 						})
 						.catch((error) => {
-							console.log(error)
+							console.error(error)
 						})
 				}
 			})
 			.catch((error) => {
 				setAuthError('잘못된 아이디 혹은 비밀번호입니다.')
-				console.log('어떤 에러가 나오나')
-				console.log(error)
+				console.error(error)
 			})
 	}
 
@@ -99,7 +98,7 @@ export default function Login(props: any) {
 				setIsLoading(false)
 			})
 			.catch((error) => {
-				console.log(error)
+				console.error(error)
 				setAuthError(error.data)
 				setIsLoading(false)
 			})
