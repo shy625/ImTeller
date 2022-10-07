@@ -208,7 +208,7 @@ const tableCSS = css({
 	justifyContent: 'space-between',
 	alignItems: 'center',
 	width: '100%',
-	maxHeight: '65vh',
+	height: '60vh',
 })
 
 const cardCSS = css({

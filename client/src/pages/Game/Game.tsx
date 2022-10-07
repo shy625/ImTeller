@@ -172,7 +172,7 @@ export default function Game() {
 			// 누군가 아이템 사용
 			client.subscribe(`/sub/room/${roomId}/item`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('item', content)
+				// console.log('item', content)
 				dispatch(setItemState({ items: content, nickname }))
 			})
 			// 결과 받기
