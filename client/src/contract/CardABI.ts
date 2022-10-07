@@ -456,5 +456,5 @@ const cardABI: AbiItem[] = [
 ]
 export const web3 = new Web3(window.ethereum)
 
-export const cardAddress = '0xd3b204C0919776d8Df8370d039346687D31e2c38'
+export const cardAddress = '0xc84f66f19F2F64dE65A653ad08888e16f19eA1B7'
 export const cardContract = new web3.eth.Contract(cardABI, cardAddress)

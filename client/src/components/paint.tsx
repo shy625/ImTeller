@@ -11,7 +11,6 @@ import { setMyPageTab } from 'store/modules/user'
 import { setSelectedPaint, setPaintList, setCardList } from 'store/modules/art'
 import { useModal } from 'actions/hooks/useModal'
 import connectMetaMask from 'actions/functions/connectMetaMask'
-
 import { createCard, mintCard } from 'contract/API'
 
 export default function Paint(props: any) {

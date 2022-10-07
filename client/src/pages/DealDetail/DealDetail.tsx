@@ -9,7 +9,6 @@ import deal from 'actions/api/deal'
 import itemDetail from 'actions/functions/itemDetail'
 import Loading from 'components/loading'
 import { setDealDetail } from 'store/modules/art'
-import { purchaseCard, cancelDeal } from 'contract/API'
 import { setModalMsg, setModalState } from 'store/modules/util'
 
 import connectMetaMask from 'actions/functions/connectMetaMask'
@@ -17,6 +16,7 @@ import connectMetaMask from 'actions/functions/connectMetaMask'
 import gradeS from 'assets/image/gradeS.webp'
 import gradeA from 'assets/image/gradeA.webp'
 import gradeB from 'assets/image/gradeB.webp'
+import { purchaseCard, cancelDeal } from 'contract/API'
 
 export default function DealDetail() {
 	const dispatch = useDispatch()
