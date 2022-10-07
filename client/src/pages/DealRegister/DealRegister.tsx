@@ -85,8 +85,8 @@ export default function DealRegister() {
 			setIsLoading(false)
 		})
 
-		let date: any = new Date()
-		date = date.setDate(date.getDate() + day)
+		const now = new Date()
+		let date: any = new Date(now.setDate(now.getDate() + day))
 		date = date.toISOString().substring(0, 19)
 		const data = {
 			artId: selectedCard.cardId,
