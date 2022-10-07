@@ -165,8 +165,8 @@ const verticalCenterCSS = css`
 	align-items: center;
 
 	img {
-		width: 10vw;
-		height: 10vw;
+		width: 8vw;
+		height: 8vw;
 		border-radius: 50%;
 	}
 `

@@ -298,7 +298,7 @@ export default function Game() {
 			dispatch(setTime(10))
 		} else if (phase === 'end') {
 			setState(2)
-			dispatch(setTime(15))
+			dispatch(setTime(10))
 			dispatch(setItemState({ items: [], nickname }))
 			dispatch(addChat({ nickname: '겜비서', userMsg: '게임이 종료되었습니다' }))
 		}
