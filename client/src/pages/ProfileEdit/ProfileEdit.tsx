@@ -72,7 +72,7 @@ export default function ProfileEdit(props: any) {
 		user
 			.checkNickname({ nickname: nickname.value })
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				if (result.data.response == '사용가능한 닉네임입니다.') {
 					setNickChecked(true)
 				}

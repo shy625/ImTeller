@@ -23,11 +23,7 @@ export default function GameList() {
 	const currentUser = useSelector((state: any) => state.currentUser)
 	const isBgmOn = useSelector((state: any) => state.isBgmOn)
 
-	useEffect(() => {
-		if (isBgmOn) {
-			useBGM('gameList')
-		}
-	}, [])
+	useBGM('gameList')
 
 	useEffect(() => {
 		refresh()
@@ -51,7 +47,7 @@ export default function GameList() {
 
 	const refresh = () => {
 		game.roomList().then((result) => {
-			console.log(result.data.response)
+			// console.log(result.data.response)
 			dispatch(setRoomList(result.data.response))
 		})
 	}

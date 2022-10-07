@@ -78,7 +78,7 @@ export default function Vote() {
 			dispatch(setVoteList(result.data.response))
 		})
 		art.paintList({ nickname: currentUser.nickname }).then((result) => {
-			console.log(result)
+			// console.log(result)
 			dispatch(setPaintList(result.data.response))
 		})
 	}, [])

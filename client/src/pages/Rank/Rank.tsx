@@ -60,18 +60,18 @@ export default function Rank() {
 		designerNickname: '전문가준비생',
 	}
 	const rankList: rankListProps = useSelector((state: any) => state.rankList)
-	console.log('랭크리스트', rankList)
+	// console.log('랭크리스트', rankList)
 
 	useEffect(() => {
 		const getRank = async () => {
 			await rank
 				.rankList()
 				.then((result) => {
-					console.log('랭킹 목록 불러옴')
-					console.log('반환값', result.data.response)
+					// console.log('랭킹 목록 불러옴')
+					// console.log('반환값', result.data.response)
 					dispatch(setRankList(result.data.response))
 				})
-				.catch((err) => console.log(err))
+				.catch((err) => console.error(err))
 		}
 		getRank()
 	}, [rankTabNo])

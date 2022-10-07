@@ -13,7 +13,7 @@ export const { setBgmSrc } = bgmSrc.actions
 
 export const isBgmOn = createSlice({
 	name: 'isBgmOn',
-	initialState: false,
+	initialState: true,
 	reducers: {
 		setIsBgmOn(state, action) {
 			return action.payload

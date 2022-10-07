@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { rankListProps, winningRateRankProps } from './Rank'
 export default function rankListDealWin({ rankList }: { rankList: rankListProps }) {
 	const winningRateRankList: winningRateRankProps[] = rankList.winningRateRankList
-	console.log('rankList', typeof rankList)
-	console.log(rankList[0])
+	// console.log('rankList', typeof rankList)
+	// console.log(rankList[0])
 	return (
 		<div css={box}>
 			<div css={list}>

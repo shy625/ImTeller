@@ -157,6 +157,7 @@ const tableCSS = css({
 	justifyContent: 'space-between',
 	alignItems: 'center',
 	width: '100%',
+	height: '60vh',
 })
 const cardCSS = css({
 	display: 'flex',

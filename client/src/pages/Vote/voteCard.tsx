@@ -33,11 +33,11 @@ export default function VoteCard({ paint }: { paint: voteListProps }) {
 				artId: vote.art.id,
 			})
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				voteApi.paintList().then((result) => {
 					dispatch(setVoteList(result.data.response))
-					console.log(result)
-					console.log('좋아요 업데이트까지 끝')
+					// console.log(result)
+					// console.log('좋아요 업데이트까지 끝')
 				})
 			})
 	}
@@ -47,15 +47,15 @@ export default function VoteCard({ paint }: { paint: voteListProps }) {
 			.then((result) => {
 				voteApi.paintList().then((result) => {
 					dispatch(setVoteList(result.data.response))
-					console.log(result)
-					console.log('업데이트까지 끝')
+					// console.log(result)
+					// console.log('업데이트까지 끝')
 				})
 				setModalMsg('출품이 성공적으로 취소되었습니다.')
 				setModalState('alert')
-				console.log('출품 취소 성공')
+				// console.log('출품 취소 성공')
 			})
 			.catch((err) => {
-				console.log(err)
+				console.error(err)
 			})
 	}
 	return (

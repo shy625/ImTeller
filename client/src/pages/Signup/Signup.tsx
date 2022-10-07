@@ -50,7 +50,7 @@ export default function Signup(props: any) {
 		user
 			.checkEmail(data)
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				if (result.data.response === '사용가능한 이메일입니다.') {
 					setEmailChecked(true)
 				}
@@ -77,7 +77,7 @@ export default function Signup(props: any) {
 		user
 			.checkNickname(data)
 			.then((result) => {
-				console.log(result)
+				// console.log(result)
 				if (result.data.response === '사용가능한 닉네임입니다.') {
 					setNickChecked(true)
 				}

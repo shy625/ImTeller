@@ -157,7 +157,7 @@ export const { setVoteList } = voteList.actions
 
 export const queryState = createSlice({
 	name: 'queryState',
-	initialState: [0, 0, 0],
+	initialState: [0, 0, 1],
 	reducers: {
 		setQueryState(state, action) {
 			return action.payload

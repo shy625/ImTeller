@@ -6,8 +6,6 @@ export default function (selectedCardList) {
 	let cardGrade = { S: 0, A: 0, B: 0, C: 0 }
 	let result: string = ''
 
-	console.log(1, selectedCardList)
-
 	if (!selectedCardList.length) return result
 
 	for (let cardId of selectedCardList) {

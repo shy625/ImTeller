@@ -35,7 +35,7 @@ export default function GameCard(props: any) {
 
 const cardImgCSS = (choice) => css`
 	width: ${choice ? '30px' : '100%'};
-	border-radius: 15px;
+	border-radius: 5%;
 `
 const poo1CSS = css`
 	position: absolute;

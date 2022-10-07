@@ -22,7 +22,6 @@ export default function Header() {
 		dispatch(setLogout())
 		dispatch(setEmail(''))
 		localStorage.setItem('email', '')
-		navigate('/')
 	}
 
 	useEffect(() => {
@@ -32,7 +31,7 @@ export default function Header() {
 				dispatch(setCurrentUser(result.data.response))
 			})
 			.catch((error) => {
-				console.log(error)
+				console.error(error)
 			})
 		let email = localStorage.getItem('email')
 		if (email) {
