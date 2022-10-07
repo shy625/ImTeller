@@ -14,8 +14,8 @@ import { useModal } from 'actions/hooks/useModal'
 import { setSelectedCard } from 'store/modules/art'
 
 import connectMetaMask from 'actions/functions/connectMetaMask'
-import { sellCard } from 'contract/API'
 import { useAppSelector } from 'store/store'
+import { sellCard } from 'contract/API'
 
 export default function DealRegister() {
 	const navigate = useNavigate()
