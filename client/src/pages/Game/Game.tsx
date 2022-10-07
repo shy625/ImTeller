@@ -146,7 +146,7 @@ export default function Game() {
 			client.subscribe(`/sub/room/${roomId}/phase`, (action) => {
 				dispatch(setTime(0))
 				dispatch(setPhase(action.body))
-				console.log(action.body)
+				// console.log(action.body)
 			})
 			// 유저 상태 변화
 			client.subscribe(`/sub/room/${roomId}/status`, (action) => {
@@ -155,18 +155,18 @@ export default function Game() {
 			})
 			// 텔러 누군지 받기
 			client.subscribe(`/sub/room/${roomId}/newteller`, (action: any) => {
-				console.log('newTeller', action.body)
+				// console.log('newTeller', action.body)
 				dispatch(setTeller(action.body))
 			})
 			// 텔러 문구 받기
 			client.subscribe(`/sub/room/${roomId}/teller`, (action) => {
-				console.log('teller', action.body)
+				// console.log('teller', action.body)
 				dispatch(setTellerMsg(action.body))
 			})
 			// 테이블 받기
 			client.subscribe(`/sub/room/${roomId}/table`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('table', content)
+				// console.log('table', content)
 				dispatch(setTable(content))
 			})
 			// 누군가 아이템 사용
@@ -178,23 +178,23 @@ export default function Game() {
 			// 결과 받기
 			client.subscribe(`/sub/room/${roomId}/result`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('result', content)
+				// console.log('result', content)
 				setTurnResult(content)
 			})
 			client.subscribe(`/sub/room/${roomId}/totalresult`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('totalresult', content)
+				// console.log('totalresult', content)
 				dispatch(setScore(content))
 				dispatch(setResult(content))
 			})
 			client.subscribe(`/sub/room/${roomId}/submitcards`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('submitcards', content)
+				// console.log('submitcards', content)
 				setSubmitCards(content)
 			})
 			client.subscribe(`/sub/room/${roomId}/choicecards`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('choice', content)
+				// console.log('choice', content)
 				setChoiceCards(content)
 			})
 			// 새로고침
@@ -203,7 +203,7 @@ export default function Game() {
 				dispatch(setRoomInfo(content))
 				dispatch(setPlayers(content))
 				setUserSessionIds(content.userSessionIds[nickname])
-				console.log('roominfo', content)
+				// console.log('roominfo', content)
 			})
 		}
 		client.activate()
@@ -223,16 +223,15 @@ export default function Game() {
 	useEffect(() => {
 		try {
 			// 카드패 받기
-			console.log(userSessionIds, roomId)
 			mycards = ws.subscribe(`/user/${userSessionIds}/room/${roomId}/mycards`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('mycards', content)
+				// console.log('mycards', content)
 				dispatch(setGameCards(content))
 			})
 			// 내 아이템 받기
 			item = ws.subscribe(`/user/${userSessionIds}/room/${roomId}/item`, (action) => {
 				const content = JSON.parse(action.body)
-				console.log('myitem', content)
+				// console.log('myitem', content)
 				dispatch(setItems(content))
 			})
 		} catch {}
@@ -251,9 +250,8 @@ export default function Game() {
 	useEffect(() => {
 		try {
 			// 시작시 선택카드 제출
-			console.log(roomId)
 			start = ws.subscribe(`/sub/room/${roomId}/start`, (action) => {
-				console.log('start', action.body)
+				// console.log('start', action.body)
 				const content = JSON.parse(action.body)
 				if (!content) return
 				ws.publish({
@@ -274,7 +272,6 @@ export default function Game() {
 
 	// // 페이즈별 상태 최신화
 	useEffect(() => {
-		console.log(phase)
 		if (phase === 'phase1') {
 			setState(1)
 			dispatch(setTeller(''))
