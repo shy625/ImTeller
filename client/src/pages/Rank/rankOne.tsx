@@ -4,13 +4,20 @@ import PolygonLeft from 'assets/image/PolygonLeft.webp'
 import PolygonRight from 'assets/image/PolygonRight.webp'
 // export default function rankOne({ rankList }: { rankList: bestPaintProps | null }) {
 export default function rankOne(props: any) {
-	const { paintTitle, paintImageURL, designerNickname } = props.rankList.bestPaint
+	let paintTitle = ''
+	let paintImageURL = ''
+	let designerNickname = ''
+	if (props.rankList && props.rankList.bestPaint) {
+		paintTitle = props.rankList.bestPaint.paintTitle
+		paintImageURL = props.rankList.bestPaint.paintImageURL
+		designerNickname = props.rankList.bestPaint.designerNickname
+	}
 
 	return (
 		<div css={box}>
 			<div css={list}>
 				<img src={PolygonLeft} alt="" css={left} />
-				{props ? (
+				{props.rankList && props.rankList.bestPaint && props.rankList.bestPaint.paintTitle ? (
 					<div css={cardCSS}>
 						<div css={type0CSS}>
 							<img src={paintImageURL} alt="" css={imgCSS} />

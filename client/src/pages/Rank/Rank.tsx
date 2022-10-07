@@ -89,7 +89,12 @@ export default function Rank() {
 				<div css={fullDisplay}>
 					<div css={box}>
 						<RankTabNav tabNo={rankTabNo} tabs={tabs}></RankTabNav>
-						{rankList && tabsList[rankTabNo]}
+						{rankTabNo !== 4 && rankList && tabsList[rankTabNo]}
+						{rankTabNo === 4 &&
+							rankList &&
+							rankList.bestPaint &&
+							rankList.bestPaint.paintTitle &&
+							tabsList[rankTabNo]}
 					</div>
 				</div>
 			</main>
