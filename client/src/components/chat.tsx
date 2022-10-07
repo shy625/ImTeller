@@ -128,7 +128,7 @@ const chatCSS = css`
 	border-radius: 15px;
 	background-color: rgb(0, 0, 0, 0.4);
 	width: 100%;
-	height: 90%;
+	height: 100%;
 	color: white;
 	position: relative;
 	.box {

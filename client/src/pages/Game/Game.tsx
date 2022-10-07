@@ -393,6 +393,7 @@ const gameContainerCSS = css({
 	flexDirection: 'row',
 	justifyContent: 'space-between',
 	width: '100%',
+	height: '75vh',
 })
 
 const mainComponentCSS = css({
