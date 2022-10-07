@@ -38,7 +38,7 @@ export default function Main() {
 	)
 }
 const cardCss = css`
-	min-height: 100vh;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	flex-direction: row;
@@ -54,7 +54,6 @@ const cardCss = css`
 		border-radius: 32px;
 		justify-content: center;
 		align-items: center;
-		text-align: center;
 		display: flex;
 		font-size: 4rem;
 		color: rgb(88 199 250 / 0%);

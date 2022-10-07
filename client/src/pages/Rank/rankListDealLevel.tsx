@@ -23,10 +23,10 @@ export default function rankListDealLevel({ rankList }: { rankList: rankListProp
 						{levelRankList ? (
 							levelRankList.map((rank, i) => (
 								<tr key={i}>
-									<td>{i + 1}위</td>
-									<td>{rank.nickname}</td>
-									<td>{rank.level}</td>
-									<td>{rank.totalGame}</td>
+									<td width="20%">{i + 1}위</td>
+									<td width="40%">{rank.nickname}</td>
+									<td width="20%">{rank.level}</td>
+									<td width="20%">{rank.totalGame}</td>
 								</tr>
 							))
 						) : (
@@ -46,7 +46,7 @@ const box = css`
 
 const list = css`
 	width: 100%;
-	height: 70vh;
+	height: 65vh;
 	/* background-color: rgba(239, 238, 245, 0.3); */
 	border-radius: 1rem;
 	box-shadow: 2px 2px 16px;
@@ -57,11 +57,11 @@ const list = css`
 	align-items: flex-start;
 	color: white;
 	table {
-		margin-top: 15px;
+		margin-top: 5px;
 		width: 100%;
 	}
 	th {
-		line-height: 6vh;
+		line-height: 5vh;
 		border-bottom: 1px solid #aaa;
 		font-family: 'GmarketSansMedium';
 		font-size: 20px;

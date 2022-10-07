@@ -293,4 +293,9 @@ const bigBtn = css`
 	font-size: 18px;
 	width: 100%;
 	font-family: 'GongGothicMedium';
+
+	&:hover {
+		color: #d1e4ff;
+		background-color: #112137;
+	}
 `
