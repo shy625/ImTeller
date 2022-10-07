@@ -40,8 +40,8 @@ export default function GameEnd(props: any) {
 		for (let nickname in result) {
 			endResult.push([result[nickname], nickname])
 		}
-		endResult.sort().reverse()
-		// console.log(endResult)
+		endResult.sort((a: any, b: any) => a[0] - b[0]).reverse()
+		console.log(endResult)
 		return () => {
 			setEndResult([])
 		}
