@@ -165,5 +165,5 @@ const cardCSS = css({
 	width: '90%',
 })
 const cardOneCSS = css({
-	width: '23%',
+	width: '21%',
 })

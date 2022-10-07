@@ -13,6 +13,7 @@ import art from 'actions/api/art'
 import { useModal } from 'actions/hooks/useModal'
 import { setVoteList, setPaintList } from 'store/modules/art'
 import { setMainTab } from 'store/modules/util'
+import { setRankTabNo } from 'store/modules/rank'
 export interface voteListProps {
 	vote: vote
 	like: boolean
@@ -82,6 +83,11 @@ export default function Vote() {
 		})
 	}, [])
 
+	const goRank = () => {
+		dispatch(setRankTabNo(3))
+		navigate('/rank')
+	}
+
 	return (
 		<Layout>
 			<main css={fullDisplay}>
@@ -96,7 +102,7 @@ export default function Vote() {
 									유저들의 상상력 가득한 그림중에서 가장 매력적인 카드에 투표해 주세요
 								</div>
 								<div>
-									<button css={normalBtn} onClick={() => navigate('/rank')}>
+									<button css={normalBtn} onClick={goRank}>
 										지난 투표 결과 확인
 									</button>
 									<button css={normalBtn} onClick={() => setModalState('voteRegister')}>

@@ -29,7 +29,6 @@ export default function BgmLayer(props: any) {
 
 	useEffect(() => {
 		bgm.current.src = bgmSrc
-		bgm.current.load()
 	}, [bgmSrc])
 
 	useEffect(() => {

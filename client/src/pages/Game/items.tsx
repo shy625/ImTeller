@@ -29,7 +29,7 @@ export default function Items(props: any) {
 			addChat({
 				nickname: '겜비서',
 				userMsg: `${effectName} 아이템을 사용했습니다. (${effectPre}${
-					item.effectNum ? item.effect : ''
+					item.effectNum ? item.effectNum : ''
 				}${effectPost})`,
 			}),
 		)

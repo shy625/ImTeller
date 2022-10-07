@@ -3,15 +3,15 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import rank from 'actions/api/rank'
-import { setRankList } from 'store/modules/rank'
+import { setRankList, setRankTabNo } from 'store/modules/rank'
 import { setMainTab } from 'store/modules/util'
 
 import Layout from 'layout/layout'
-import RankTabNav from './rankTabNav'
-import RankListDeal from './rankListDeal'
-import RankListDealWin from './rankListDealWin'
-import RankListDealLevel from './rankListDealLevel'
-import RankOne from './rankOne'
+import RankTabNav from 'pages/Rank/rankTabNav'
+import RankListDeal from 'pages/Rank/rankListDeal'
+import RankListDealWin from 'pages/Rank/rankListDealWin'
+import RankListDealLevel from 'pages/Rank/rankListDealLevel'
+import RankOne from 'pages/Rank/rankOne'
 import { fullDisplay } from 'style/commonStyle'
 
 export interface rankListProps {
@@ -44,11 +44,15 @@ export interface bestPaintProps {
 	paintImageURL: string
 	designerNickname: string
 }
+
 export default function Rank() {
-	const [tabNo, setTabNo] = useState(0)
-	const tabs = ['오늘의 거래', '승률', '레벨', '이달의 NFT']
 	const dispatch = useDispatch()
+	const [tabList, setTabList] = useState()
+	const tabs = ['오늘의 거래', '승률', '레벨', '이달의 NFT']
+	const rankTabNo = useSelector((state: any) => state.rankTabNo)
+
 	dispatch(setMainTab('rank'))
+
 	const tempDummy = {
 		paintTitle: '핑크백조',
 		paintImageURL:
@@ -59,7 +63,6 @@ export default function Rank() {
 	console.log('랭크리스트', rankList)
 
 	useEffect(() => {
-		console.log(tabNo)
 		const getRank = async () => {
 			await rank
 				.rankList()
@@ -71,7 +74,7 @@ export default function Rank() {
 				.catch((err) => console.log(err))
 		}
 		getRank()
-	}, [tabNo])
+	}, [rankTabNo])
 
 	const tabsList = {
 		0: <RankListDeal rankList={rankList} />,
@@ -79,13 +82,14 @@ export default function Rank() {
 		2: <RankListDealLevel rankList={rankList} />,
 		3: <RankOne rankList={rankList} />,
 	}
+
 	return (
 		<Layout>
 			<main css={main}>
 				<div css={fullDisplay}>
 					<div css={box}>
-						<RankTabNav tabNo={tabNo} setTabNo={setTabNo} tabs={tabs}></RankTabNav>
-						{rankList && tabsList[tabNo]}
+						<RankTabNav tabNo={rankTabNo} tabs={tabs}></RankTabNav>
+						{rankList && tabsList[rankTabNo]}
 					</div>
 				</div>
 			</main>

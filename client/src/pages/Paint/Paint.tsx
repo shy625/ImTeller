@@ -44,6 +44,7 @@ export default function Paint() {
 	const [text, setText] = useState('')
 	const [restore, setRestore] = useState([])
 	const [index, setIndex] = useState(-1)
+	const [timestamp, setTimestamp] = useState('')
 
 	const [setModalState, setModalMsg] = useModal('')
 
@@ -75,17 +76,25 @@ export default function Paint() {
 			// 		context.drawImage(img, 0, 0)
 			// 	})
 			// const url = URL.createObjectURL(paint.paintImageURL)
-			img.src = paint.paintImageURL
+			const img = new Image()
+			const time = Date.now()
+			setTimestamp(String(time))
+			img.src = `${paint.paintImageURL}?${timestamp}`
 			img.crossOrigin = 'Anonymous'
 			img.onload = function () {
 				context.drawImage(img, 0, 0)
 			}
+		} else {
+			context.fillStyle = 'white'
+			context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 		}
 	}, [])
 
 	function loadImage() {
 		const img = new Image()
-		img.src = paint.paintImageURL
+		const time = Date.now()
+		setTimestamp(String(time))
+		img.src = `${paint.paintImageURL}?${timestamp}`
 		img.crossOrigin = 'Anonymous'
 		img.onload = function () {
 			ctx.drawImage(img, 0, 0)

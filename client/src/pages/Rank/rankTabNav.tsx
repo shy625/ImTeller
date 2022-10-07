@@ -1,6 +1,10 @@
 import { css } from '@emotion/react'
+import { useDispatch } from 'react-redux'
+import { setRankTabNo } from 'store/modules/rank'
+
 export default function RankTabNav(props: any) {
-	const { setTabNo, tabs, tabNo } = props
+	const { tabs, tabNo } = props
+	const dispatch = useDispatch()
 
 	return (
 		<div css={box(tabNo)}>
@@ -8,7 +12,7 @@ export default function RankTabNav(props: any) {
 				<div
 					className="value"
 					onClick={() => {
-						setTabNo(0)
+						dispatch(setRankTabNo(0))
 					}}
 				>
 					{tabs[0]}
@@ -16,7 +20,7 @@ export default function RankTabNav(props: any) {
 				<div
 					className="win-rate"
 					onClick={() => {
-						setTabNo(1)
+						dispatch(setRankTabNo(1))
 					}}
 				>
 					{tabs[1]}
@@ -24,7 +28,7 @@ export default function RankTabNav(props: any) {
 				<div
 					className="level"
 					onClick={() => {
-						setTabNo(2)
+						dispatch(setRankTabNo(2))
 					}}
 				>
 					{tabs[2]}
@@ -32,7 +36,7 @@ export default function RankTabNav(props: any) {
 				<div
 					className="monthly-nft"
 					onClick={() => {
-						setTabNo(3)
+						dispatch(setRankTabNo(3))
 					}}
 				>
 					{tabs[3]}

@@ -175,7 +175,7 @@ export const { setPhase } = phase.actions
 
 export const time = createSlice({
 	name: 'time',
-	initialState: 5,
+	initialState: 0,
 	reducers: {
 		setTime(state, action) {
 			return action.payload

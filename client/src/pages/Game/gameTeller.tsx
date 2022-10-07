@@ -198,7 +198,7 @@ const submitInputCSS = css`
 	border: 0;
 	border-radius: 12px;
 	border: none;
-	padding: 0;
+	padding-left: 5px;
 	margin: 5%;
 	font-family: GongGothicMedium;
 `
@@ -218,7 +218,7 @@ const cardCSS = css({
 })
 
 const cardOneCSS = css({
-	width: '23%',
+	width: '21%',
 })
 
 const itemCSS = css({

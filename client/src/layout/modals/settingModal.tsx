@@ -75,7 +75,7 @@ export default function SettingModal(props: any) {
 								dispatch(setBgmVolume(e.target.value))
 							}}
 						/>
-						<hr />
+						{/* <hr />
 						<label htmlFor="isEffectOn">효과음 재생</label>
 						<div id="isEffectOn">
 							<div
@@ -102,7 +102,7 @@ export default function SettingModal(props: any) {
 							onChange={(e) => {
 								dispatch(setEffectVolume(e.target.value))
 							}}
-						/>
+						/> */}
 						<hr />
 						<label htmlFor="isMouseEffectOn">마우스 효과음</label>
 						<div id="isMouseEffectOn">

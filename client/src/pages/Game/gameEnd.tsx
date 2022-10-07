@@ -1,25 +1,25 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@emotion/react'
+
+import { setTime } from 'store/modules/game'
+
 import podium from 'assets/image/podium.webp'
 
 export default function GameEnd(props: any) {
+	const dispatch = useDispatch()
+
 	const { setState, client, roomId } = props
 
 	const result = useSelector((state: any) => state.result)
 	const roomInfo = useSelector((state: any) => state.roomInfo)
 
 	const [endResult, setEndResult] = useState<any>([])
-	// const result = {
-	// 	tester: 10,
-	// 	MoCCo: 6,
-	// 	IMTELLER: 12,
-	// 	tester2: 9,
-	// }
 
 	useEffect(() => {
 		setTimeout(() => {
 			setState(0)
+			dispatch(setTime(0))
 		}, 10000)
 	}, [])
 
@@ -63,7 +63,7 @@ export default function GameEnd(props: any) {
 							<div css={profileInfo2CSS}>
 								<img src={getProfile(endResult[1][1])} alt="" css={profileImgCSS} />
 								<div>
-									{endResult[1][1]} : {endResult[1][0]}
+									{endResult[1][1]} : {endResult[1][0]}점
 								</div>
 							</div>
 						)}
@@ -109,6 +109,7 @@ export default function GameEnd(props: any) {
 		</div>
 	)
 }
+
 const gameResultCSS = css`
 	display: flex;
 	flex-direction: column;
@@ -117,10 +118,11 @@ const gameResultCSS = css`
 	font-family: 'GongGothicMedium';
 	color: white;
 `
-
 const profileImgCSS = css`
 	width: 150px;
+	height: 150px;
 	border-radius: 50%;
+	aspectratio: 1 / 1;
 `
 const podiumCSS = css`
 	position: relative;
@@ -154,6 +156,8 @@ const profileInfo3CSS = css`
 const remainCSS = css`
 	display: flex;
 	justify-content: space-evenly;
+	font-family: 'GongGothicMedium';
+	color: white;
 `
 const verticalCenterCSS = css`
 	display: flex;
@@ -161,6 +165,8 @@ const verticalCenterCSS = css`
 	align-items: center;
 
 	img {
-		width: 10vw;
+		width: 8vw;
+		height: 8vw;
+		border-radius: 50%;
 	}
 `
