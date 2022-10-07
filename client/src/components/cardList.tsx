@@ -81,7 +81,7 @@ export default function CardList(props: CardListProps) {
 					</div>
 				)
 			) : (
-				<div>{isCard ? 'NFT' : '그림'} 작품이 없습니다</div>
+				<div className="not-found">{isCard ? 'NFT' : '그림'} 작품이 없습니다</div>
 			)}
 		</div>
 	)
@@ -114,6 +114,11 @@ const centerCSS = css`
 		justify-content: space-between;
 		align-items: center;
 		width: 100%;
+	}
+
+	.not-found {
+		font-family: 'GongGothicMedium';
+		color: white;
 	}
 `
 const paintList0CSS = css`

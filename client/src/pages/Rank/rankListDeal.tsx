@@ -30,7 +30,7 @@ export default function rankListDeal({ rankList }: { rankList: rankListProps }) 
 						</div>
 					))
 				) : (
-					<div>해당하는 데이터가 없습니다</div>
+					<div className="not-found">해당하는 데이터가 없습니다</div>
 				)}
 			</div>
 		</div>
@@ -62,6 +62,11 @@ const list = css`
 	&::-webkit-scrollbar-thumb {
 		background-color: #ffffff;
 		border-radius: 3px;
+	}
+
+	.not-found {
+		font-family: 'GongGothicMedium';
+		color: white;
 	}
 `
 const cardCSS = css`
