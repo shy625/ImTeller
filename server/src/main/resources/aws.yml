@@ -2,8 +2,8 @@
 cloud:
   aws:
     credentials:
-      accessKey: AKIA3MW7LJZMYVSJJHGJ
-      secretKey: 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
+      accessKey: 
+      secretKey: 
     s3:
       bucket: imtellercard
     region:
