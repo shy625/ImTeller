@@ -100,7 +100,7 @@
     </td>
   </tr>
   <tr>
-    <td align="center" width="165"><strong>Server 기술 스택</strong></td>
+    <td align="center" width="165"><strong>Server</strong></td>
     <td>
         <img src="https://img.shields.io/badge/NGINX-009639?style=flat-square&logo=nginx&logoColor=white"/>
         <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white"/>
