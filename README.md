@@ -71,6 +71,11 @@
     
   </tr>
 </table>
+
+<br/>
+
+## 🛠 기술스택 및 자료
+
 <table align="center">
   <tr>
     <td align="center" width="165"><strong>Front-end</strong></td>
